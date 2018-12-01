@@ -1,2 +1,2 @@
 #!/bin/sh
-mix run -e 'AdventOfCode201801b.compute_input_sum()'
+mix run -e 'AdventOfCode201801b.print_first_repeated_sum()'

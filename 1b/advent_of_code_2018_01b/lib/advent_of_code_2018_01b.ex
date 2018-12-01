@@ -53,10 +53,10 @@ defmodule AdventOfCode201801b do
   end
 
   @doc """
-    compute_input_sum: Reads all lines in input.txt, summing them, and finds the
+    print_first_repeated_sum: Reads all lines in input.txt, summing them, and finds the
     first repeated sum, repeating the file as many times as possible.
   """
-  def compute_input_sum() do
+  def print_first_repeated_sum() do
     file_name = Path.expand("./", __DIR__) |> Path.join("input.txt")
     list = File.stream!(file_name)
       |> Stream.map(&String.trim/1)
