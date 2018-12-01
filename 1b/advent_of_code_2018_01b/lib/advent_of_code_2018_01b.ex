@@ -45,8 +45,8 @@ defmodule AdventOfCode201801b do
     compute_input_sum: Reads all lines in input.txt, sums them, and prints the
     sum to console.
   """
-  def compute_input_sum() do
-    file_name = Path.expand("./", __DIR__) |> Path.join("input2.txt")
+  def czompute_input_sum() do
+    file_name = Path.expand("./", __DIR__) |> Path.join("input.txt")
 
     tally = %{
       sum: 0,
@@ -59,6 +59,32 @@ defmodule AdventOfCode201801b do
       |> Enum.reduce(tally, &AdventOfCode201801b.calculate_tally/2)
 
     IO.inspect tally, charlists: :as_lists
+  end
+
+  def compute_input_sum() do
+    file_name = Path.expand("./", __DIR__) |> Path.join("input.txt")
+    list = File.stream!(file_name)
+      |> Stream.map(&String.trim/1)
+    f = first_repeated_sum(list)
+    IO.inspect f
+  end
+
+  def first_repeated_sum(list) do
+    tally = %{
+      sum: 0,
+      seen_map: %{},
+      seen_multiple: [],
+    }
+    first_repeated_sum(list, tally)
+  end
+
+  def first_repeated_sum(list, tally) do
+    tally = list |> Enum.reduce(tally, &AdventOfCode201801b.calculate_tally/2)
+
+    case length(tally.seen_multiple) do
+      0 -> first_repeated_sum(list, tally)
+      _ -> List.first(tally.seen_multiple)
+    end
   end
 
 end
