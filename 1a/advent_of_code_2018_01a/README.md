@@ -1,5 +1,9 @@
 # AdventOfCode201801a
 
+## Star Obtained?
+
+Yes
+
 ## Usage Instructions
 
 `./run.sh` to run the program.
