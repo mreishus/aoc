@@ -13,7 +13,7 @@ defmodule AdventOfCode201801b do
 
   @doc """
     sum_strings_with_operator: Meant to be passed to a Enum.reduce call.
-   
+
     Param 1: string_with_operator (string) formatted like "+1" or "-10".  Sign is mandatory.
     Param 2: sum (integer) Rolling sum.
   """
@@ -27,17 +27,38 @@ defmodule AdventOfCode201801b do
     end
   end
 
+  def calculate_tally(string_with_operator, tally) do
+    sum = sum_strings_with_operator(string_with_operator, tally.sum)
+
+    sum_seen_count = 1 + Map.get(tally.seen_map, sum, 0)
+    seen_map = Map.put(tally.seen_map, sum, sum_seen_count)
+
+    seen_multiple = case sum_seen_count do
+      n when n > 1 -> tally.seen_multiple ++ [sum]
+      _ -> tally.seen_multiple
+    end
+
+    %{ tally | sum: sum, seen_map: seen_map, seen_multiple: seen_multiple }
+  end
+
   @doc """
     compute_input_sum: Reads all lines in input.txt, sums them, and prints the
     sum to console.
   """
   def compute_input_sum() do
-    file_name = Path.expand("./", __DIR__) |> Path.join("input.txt")
-    file_sum = File.stream!(file_name)
-      |> Stream.map(&String.trim/1)
-      |> Enum.reduce(0, &AdventOfCode201801b.sum_strings_with_operator/2)
+    file_name = Path.expand("./", __DIR__) |> Path.join("input2.txt")
 
-    IO.puts file_sum 
+    tally = %{
+      sum: 0,
+      seen_map: %{},
+      seen_multiple: [],
+    }
+
+    tally = File.stream!(file_name)
+      |> Stream.map(&String.trim/1)
+      |> Enum.reduce(tally, &AdventOfCode201801b.calculate_tally/2)
+
+    IO.inspect tally, charlists: :as_lists
   end
 
 end
