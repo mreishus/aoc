@@ -18,15 +18,9 @@ defmodule AdventOfCode201801b do
     Param 2: sum (integer) Rolling sum.
   """
   def sum_strings_with_operator(string_with_operator, sum) do
-    [operator, num_string] = String.split(string_with_operator, "", parts: 2, trim: true)
-    {num, ""} = Integer.parse(num_string)
-    case operator do
-      "-" -> sum - num
-      "+" -> sum + num
-      _ -> sum + num
-    end
+    {num, ""} = Integer.parse(string_with_operator)
+    sum + num
   end
-
 
   @doc """
     calculate_tally: Meant to be passed to a Enum.reduce call. This uses a map called "tally"
