@@ -7,7 +7,7 @@ defmodule AdventOfCode201801b do
     Program reads a text file in "input.txt" comprised of lines like
     "+5", "-100" or "+89". All lines begin with either "-" or "+".
 
-    The program returns the first sum that is reached twice.  It may have to 
+    The program returns the first sum that is reached twice.  It may have to
     loop over the entire list.
   """
 
@@ -52,8 +52,8 @@ defmodule AdventOfCode201801b do
   """
   def print_first_repeated_sum() do
     file_name = Path.expand("./", __DIR__) |> Path.join("input.txt")
-    list = File.stream!(file_name)
-      |> Stream.map(&String.trim/1)
+    {:ok, contents} = File.read(file_name)
+    list = contents |> String.split("\n", trim: true)
     f = first_repeated_sum(list)
     IO.inspect f
   end
@@ -80,4 +80,3 @@ defmodule AdventOfCode201801b do
     end
   end
 end
-

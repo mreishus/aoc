@@ -13,7 +13,7 @@ defmodule AdventOfCode201801a do
 
   @doc """
     sum_strings_with_operator: Meant to be passed to a Enum.reduce call.
-   
+
     Param 1: string_with_operator (string) formatted like "+1" or "-10".  Sign is mandatory.
     Param 2: sum (integer) Rolling sum.
   """
@@ -28,11 +28,12 @@ defmodule AdventOfCode201801a do
   """
   def compute_input_sum() do
     file_name = Path.expand("./", __DIR__) |> Path.join("input.txt")
-    file_sum = File.stream!(file_name)
-      |> Stream.map(&String.trim/1)
+    {:ok, contents} = File.read(file_name)
+    file_sum = contents
+      |> String.split("\n", trim: true)
       |> Enum.reduce(0, &AdventOfCode201801a.sum_strings_with_operator/2)
 
-    IO.puts file_sum 
+    IO.puts file_sum
   end
 
 end
