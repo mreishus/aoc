@@ -27,24 +27,15 @@ defmodule AdventOfCode201802.Part1 do
       |> Enum.reduce(%{}, fn(x, acc) -> Map.put(acc, x, (acc[x] || 0) + 1) end)
   end
 
-  # Given a char counts map, and a desired count, are any of the values in that map the desired_count?
-  # input: %{"h" => 1, "e" => 1, "l" => 2, "o" => 1}, 2
-  # output: true
-  # input: %{"h" => 1, "e" => 1, "l" => 2, "o" => 1}, 3
-  # output: false
-  def char_count_contains_num(char_count, desired_count) do
-    char_count
-      |> Map.values
-      |> Enum.member?(desired_count)
-  end
-
   # Given a string, does it have any character repeated exactly X number of times?
   # input: "hello", 2
   # output: true
   # input: "hello", 3
   # output: false
   def string_has_char_repeated_x_times(str, num), do: 
-    get_char_counts(str) |> char_count_contains_num(num)
+    get_char_counts(str)
+      |> Map.values
+      |> Enum.member?(num)
 
   # Find the checksum of the file by multiplying the number of strings that have
   # any character repeated 2 times by the number of strings that have any character
