@@ -12,17 +12,6 @@ defmodule AdventOfCode201801b do
   """
 
   @doc """
-    sum_strings_with_operator: Meant to be passed to a Enum.reduce call, accumulating a rolling sum.
-
-    Param 1: string_with_operator (string) formatted like "+1" or "-10".  Sign is mandatory.
-    Param 2: sum (integer) Rolling sum.
-  """
-  def sum_strings_with_operator(string_with_operator, sum) do
-    {num, ""} = Integer.parse(string_with_operator)
-    sum + num
-  end
-
-  @doc """
     calculate_tally: Meant to be passed to a Enum.reduce call. This uses a map called "tally"
     as the accumulator, which contains both the current sum and the previous sums we have seen.
 
@@ -32,8 +21,8 @@ defmodule AdventOfCode201801b do
       seen_map (map -> %{integer: integer}) Which sums we have seen and how many times.
       seen_multiple (list of integers) All sums seen multiple times, the most recent at end of the list.
   """
-  def calculate_tally(string_with_operator, tally) do
-    sum = sum_strings_with_operator(string_with_operator, tally.sum)
+  def calculate_tally(num, tally) do
+    sum = num + tally.sum
 
     sum_seen_count = 1 + Map.get(tally.seen_map, sum, 0)
     seen_map = Map.put(tally.seen_map, sum, sum_seen_count)
@@ -53,7 +42,9 @@ defmodule AdventOfCode201801b do
   def print_first_repeated_sum() do
     file_name = Path.expand("./", __DIR__) |> Path.join("input.txt")
     {:ok, contents} = File.read(file_name)
-    list = contents |> String.split("\n", trim: true)
+    list = contents
+      |> String.split("\n", trim: true)
+      |> Enum.map(fn x -> String.to_integer(x) end)
     f = first_repeated_sum(list)
     IO.inspect f
   end
@@ -80,3 +71,14 @@ defmodule AdventOfCode201801b do
     end
   end
 end
+
+defmodule Benchmark do
+  def measure(function) do
+    function
+    |> :timer.tc
+    |> elem(0)
+    |> Kernel./(1_000)
+  end
+end
+
+#IO.inspect Benchmark.measure(fn -> AdventOfCode201801b.print_first_repeated_sum() end)
