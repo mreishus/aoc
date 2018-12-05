@@ -1,6 +1,6 @@
 defmodule AdventOfCode201804 do
   def read_file() do
-    file_name = Path.expand("./", __DIR__) |> Path.join("input_small.txt")
+    file_name = Path.expand("./", __DIR__) |> Path.join("input.txt")
     {:ok, contents} = File.read(file_name)
     contents
       |> String.split("\n", trim: true)
@@ -75,6 +75,17 @@ defmodule AdventOfCode201804 do
     end)
   end
 
+  def get_most_slept_minute_for_guard(guard_id, ranges) do
+    ranges
+      |> Enum.filter(fn x -> x.guard_id == guard_id end)
+      |> Enum.map(fn x -> x.asleep_mins_list end)
+      |> List.flatten()
+      |> Enum.group_by(fn(x) -> x end)
+      |> Enum.reduce(%{}, fn({k, v}, acc) -> Map.put(acc, k, Enum.count(v)) end)
+      |> Map.to_list()
+      |> Enum.max_by(fn {_sleep_minute, occurances} -> occurances end)
+  end
+
   def go do
     lines = read_file()
       |> Enum.sort()
@@ -82,7 +93,6 @@ defmodule AdventOfCode201804 do
 
     ranges = lines
       |> guard_lines_to_ranges()
-    #IO.inspect ranges, char_lists: :as_lists
 
     most_sleepy_guard = ranges
       |> ranges_to_sleep_time_by_guard()
@@ -90,21 +100,32 @@ defmodule AdventOfCode201804 do
       |> Enum.max_by(fn {_guard_id, sleep_time} -> sleep_time end)
       |> elem(0)
 
-    most_sleepy_guard_most_often_slept_minute = ranges
-      |> Enum.filter(fn x -> x.guard_id == most_sleepy_guard end)
-      |> Enum.map(fn x -> x.asleep_mins_list end)
-      |> List.flatten()
-      |> Enum.group_by(fn(x) -> x end)
-      |> Enum.reduce(%{}, fn({k, v}, acc) -> Map.put(acc, k, Enum.count(v)) end)
-      |> Map.to_list()
-      |> Enum.max_by(fn {_sleep_minute, occurances} -> occurances end)
+    most_sleepy_guard_most_often_slept_minute = 
+      get_most_slept_minute_for_guard(most_sleepy_guard, ranges)
       |> elem(0)
 
-
+    IO.puts ""
     IO.puts "[Part 1, most sleepy guard and most slept minute]:"
     IO.puts "Most sleepy guard: "
     IO.puts most_sleepy_guard
     IO.puts "Minute most often slept for that guard: "
     IO.puts most_sleepy_guard_most_often_slept_minute
+
+    IO.puts ""
+    IO.puts "[Part 2]"
+    IO.puts "Which guard was most frequently asleep on the same minute?"
+    guard_ids = ranges
+      |> Enum.map(fn x -> x.guard_id end)
+      |> Enum.uniq
+
+    most_often_slept_minutes_by_guard = guard_ids 
+      |> Enum.reduce([], fn guard_id, acc ->
+        {sleep_minute, occurances} = get_most_slept_minute_for_guard(guard_id, ranges)
+        r = %{sleep_minute: sleep_minute, occurances: occurances, guard_id: guard_id}
+        [r | acc]
+      end)
+    pt2_answer = most_often_slept_minutes_by_guard
+      |> Enum.max_by(fn %{guard_id: guard_id, occurances: occurances, sleep_minute: sleep_minute} -> occurances end )
+    IO.inspect pt2_answer
   end
 end
