@@ -2,7 +2,9 @@
 require 'pp'
 
 FILENAME = 'input.txt'
+SAFE_THRES = 10000
 #FILENAME = 'input_small.txt'
+#SAFE_THRES = 32
 
 def find_closest(coords, x, y)
   answers = []
@@ -115,3 +117,27 @@ winner = non_inf_areas.max_by {|z| z["size"]}
 pp winner
 puts "Part 1 answer: "
 pp winner["size"]
+
+## Now let's find safe
+# SAFE_THRES
+safe_squares = 0
+0.upto(BOARD_SIZE_Y - 1) do |y|
+  0.upto(BOARD_SIZE_X - 1) do |x|
+    total_distance = 0
+
+    coords.each do |coord|
+      total_distance += distance(x, y, coord[0], coord[1])
+    end
+
+    if total_distance < SAFE_THRES
+      safe_squares += 1
+    end
+    
+  end
+end
+
+puts "Part 2, numbe rof safe squares"
+pp safe_squares
+
+## :(
+## I guessed 25174 and it was incorrect.
