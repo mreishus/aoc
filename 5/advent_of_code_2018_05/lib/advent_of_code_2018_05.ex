@@ -75,4 +75,29 @@ defmodule AdventOfCode201805 do
     react(polymer) |> length
   end
 
+  def all_letters(), do: Enum.to_list(?a .. ?z) |> List.to_string |> String.graphemes
+
+  def part2(filename \\ "input_small.txt") do
+    polymer = file_to_polymer(filename)
+    all_candidate_lengths = all_letters()
+      |> Enum.reduce([], fn letter, acc ->
+        this_len = polymer
+          |> Enum.join()
+          |> String.replace(letter, "")
+          |> String.replace(String.upcase(letter), "")
+          |> String.graphemes()
+          |> react()
+          |> length
+        [this_len | acc]
+      end)
+    all_candidate_lengths |> Enum.min()
+  end
+
+  def go() do
+    filename = "input.txt"
+    IO.puts "[Part 1]"
+    IO.puts part1(filename)
+    IO.puts "[Part 2]"
+    IO.puts part2(filename)
+  end
 end
