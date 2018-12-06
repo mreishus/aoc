@@ -1,1 +1,1 @@
-dabAcCaCBAcCcaDA
+../input_small.txt
