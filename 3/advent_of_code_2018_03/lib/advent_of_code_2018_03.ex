@@ -20,8 +20,8 @@ defmodule AdventOfCode201803 do
   # List of text -> List of claims
   def parse_file(data) do
     data
-      |> Enum.map(fn x -> replace_non_digits_with_space(x) end)
-      |> Enum.map(fn x -> file_line_to_claim(x) end)
+      |> Enum.map(&replace_non_digits_with_space/1)
+      |> Enum.map(&file_line_to_claim/1)
   end
 
   # Text with punctuation removed -> Claim
