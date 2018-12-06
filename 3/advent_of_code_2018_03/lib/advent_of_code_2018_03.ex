@@ -26,13 +26,14 @@ defmodule AdventOfCode201803 do
 
   # Text with punctuation removed -> Claim
   def file_line_to_claim(line) do
-    [id, x, y, width, height] = String.split(line, " ", trim: true)
+    [id, x, y, width, height] = String.split(line, " ", trim: true) 
+                                |> Enum.map(&String.to_integer/1)
     %Claim{
-      id: id |> String.to_integer,
-      x: x |> String.to_integer,
-      y: y |> String.to_integer,
-      width: width |> String.to_integer,
-      height: height |> String.to_integer
+      id: id,
+      x: x,
+      y: y,
+      width: width,
+      height: height
     }
   end
 
