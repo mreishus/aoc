@@ -26,8 +26,9 @@ defmodule AdventOfCode201803 do
 
   # Text with punctuation removed -> Claim
   def file_line_to_claim(line) do
-    [id, x, y, width, height] = String.split(line, " ", trim: true) 
-                                |> Enum.map(&String.to_integer/1)
+    [id, x, y, width, height] =
+      String.split(line, " ", trim: true)
+      |> Enum.map(&String.to_integer/1)
     %Claim{
       id: id,
       x: x,
@@ -40,21 +41,19 @@ defmodule AdventOfCode201803 do
   # text -> text with punctuation turned to space
   def replace_non_digits_with_space(line), do: Regex.replace(~r/\D+/, line, " ")
 
-  # grid size -> empty grid (map with tuple(x,y) as key and empty list [] as value)
-  def init_grid(size) do
-    1..size |> Enum.reduce(%{}, fn x, acc ->
-      1..size |> Enum.reduce(acc, fn y, acc ->
-        Map.put(acc, {x, y}, [])
-      end)
-    end)
-  end
-
   # grid, claim -> grid with claim applied
   def apply_claim(grid, claim) do
     claim.x..(claim.x + claim.width - 1) |> Enum.reduce(grid, fn x, acc ->
       claim.y..(claim.y + claim.height - 1) |> Enum.reduce(acc, fn y, acc ->
-        new_value = acc[{x, y}] ++ [claim.id]
-        Map.put(acc, {x, y}, new_value)
+
+        {_, map} = Map.get_and_update(acc, {x, y}, fn current_value ->
+          case current_value do
+            nil -> {current_value, [claim.id]}
+            _ -> {current_value, [claim.id | current_value]}
+          end
+        end)
+        map
+
       end)
     end)
   end
@@ -63,7 +62,7 @@ defmodule AdventOfCode201803 do
   def overlapping_squares(grid, size) do
     1..size |> Enum.reduce(0, fn x, acc ->
       1..size |> Enum.reduce(acc, fn y, acc ->
-        case (length(grid[{x, y}]) > 1) do
+        case (Map.has_key?(grid, {x, y}) && length(grid[{x, y}]) > 1) do
           true -> acc + 1
           false -> acc
         end
@@ -75,7 +74,7 @@ defmodule AdventOfCode201803 do
     1..size |> Enum.reduce(claims, fn x, acc ->
       1..size |> Enum.reduce(acc, fn y, acc ->
         this_square_claim_ids = grid[{x, y}]
-        case (length(this_square_claim_ids) > 1) do
+        case (Map.has_key?(grid, {x, y}) && length(this_square_claim_ids) > 1) do
           true -> acc
             |> Enum.filter(fn x -> !Enum.member?(this_square_claim_ids, x.id) end)
           false -> acc
@@ -89,7 +88,7 @@ defmodule AdventOfCode201803 do
       |> parse_file()
 
     grid = claims
-      |> Enum.reduce(init_grid(grid_size), fn claim, acc ->
+      |> Enum.reduce(%{}, fn claim, acc ->
         apply_claim(acc, claim)
       end)
 
