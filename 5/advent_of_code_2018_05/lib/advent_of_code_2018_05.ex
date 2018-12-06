@@ -6,6 +6,7 @@ defmodule AdventOfCode201805 do
     file_name = Path.expand("./", __DIR__) |> Path.join(filename)
     {:ok, contents} = File.read(file_name)
     contents
+      |> String.trim()
       |> String.split("\n", trim: true)
   end
 
@@ -69,10 +70,9 @@ defmodule AdventOfCode201805 do
     a != b && String.downcase(a) == String.downcase(b)
   end
 
-  def go(filename \\ "input_small.txt") do
+  def part1(filename \\ "input_small.txt") do
     polymer = file_to_polymer(filename)
-    IO.inspect polymer
-    1
+    react(polymer) |> length
   end
 
 end
