@@ -10,8 +10,8 @@ end
 
 defmodule AdventOfCode201803 do
   # void -> List of text
-  def read_file() do
-    file_name = Path.expand("./", __DIR__) |> Path.join("input.txt")
+  def read_file(filename) do
+    file_name = Path.expand("./", __DIR__) |> Path.join(filename)
     {:ok, contents} = File.read(file_name)
     contents
       |> String.split("\n", trim: true)
@@ -83,17 +83,27 @@ defmodule AdventOfCode201803 do
     end)
   end
 
-  def go do
-    grid_size = 1000
-    claims = read_file()
+  def solve(filename, grid_size) do
+    claims = read_file(filename)
       |> parse_file()
+
     grid = claims
       |> Enum.reduce(init_grid(grid_size), fn claim, acc ->
         apply_claim(acc, claim)
       end)
 
+    # pt 1
     overlap = overlapping_squares(grid, grid_size)
+    # pt 2
     uncontested = uncontested_claims(grid, claims, grid_size)
+    {overlap, uncontested}
+  end
+
+  def go do
+    filename = "input.txt"
+    grid_size = 1000
+
+    {overlap, uncontested} = solve(filename, grid_size)
 
     IO.puts "[Part 1]: overlapping squares:"
     IO.puts overlap
