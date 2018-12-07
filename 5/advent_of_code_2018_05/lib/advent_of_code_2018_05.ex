@@ -39,6 +39,22 @@ defmodule AdventOfCode201805 do
     end)
     |> Enum.reverse
   end
+  # How the reducer works:
+  # [] <- "dabAac"
+  # Most of the time, it moves a letter from the string into the array:
+  #  (to the front, because it's faster, will reverse later)
+  # ["d"] <- "abAac"
+  # ["a", "d"] <- "bAac"
+  # ["b", "a", "d"] <- "Aac"
+  # ["A", "b", "a", "d"] <- "ac"
+  # However, if the front of the result array reacts with
+  # the front of the string, we drop the first element from the
+  # result array and throw away that letter from the string:
+  # ["b", "a", "d"] <- "c"
+  # Back to normal:
+  # ["c", "b", "a", "d"]
+  # Now we're done, no need for multiple passes,
+  # only need to reverse
 
   @doc """
   are_letters_reactive :: Char -> Char -> Boolean
