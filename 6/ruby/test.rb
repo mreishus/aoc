@@ -52,9 +52,9 @@ pp max_x
 pp max_y
 BOARD_SIZE_X = max_x + 1
 BOARD_SIZE_Y = max_y + 1
-board = Array.new(BOARD_SIZE_X) { Array.new(BOARD_SIZE_Y, 0) }
-0.upto(BOARD_SIZE_X - 1) do |x|
-  0.upto(BOARD_SIZE_Y - 1) do |y|
+board = Array.new(BOARD_SIZE_X + 1) { Array.new(BOARD_SIZE_Y + 1, 0) }
+0.upto(BOARD_SIZE_X) do |x|
+  0.upto(BOARD_SIZE_Y) do |y|
     board[x][y] = {:is_coord => nil, :assigned_coord => nil, :is_inf => false}
   end
 end
@@ -67,11 +67,11 @@ coords.each do |coord|
   i += 1
 end
 
-0.upto(BOARD_SIZE_X - 1) do |x|
-  0.upto(BOARD_SIZE_Y - 1) do |y|
+0.upto(BOARD_SIZE_X) do |x|
+  0.upto(BOARD_SIZE_Y) do |y|
     board[x][y][:assigned_coord] = find_closest(coords, x, y)
 
-    if (x == 0 || y == 0 || x == BOARD_SIZE_X - 1 || y == BOARD_SIZE_Y - 1)
+    if (x == 0 || y == 0 || x == BOARD_SIZE_X || y == BOARD_SIZE_Y)
       board[x][y][:is_inf] = true
     end
 
@@ -85,8 +85,8 @@ coords.each do |coord|
   # Is it infinite?
   is_infinite = false
   size = 0
-  0.upto(BOARD_SIZE_X - 1) do |x|
-    0.upto(BOARD_SIZE_Y - 1) do |y|
+  0.upto(BOARD_SIZE_X) do |x|
+    0.upto(BOARD_SIZE_Y) do |y|
       if board[x][y][:assigned_coord] == i
         size += 1
         if board[x][y][:is_inf]
@@ -101,8 +101,8 @@ coords.each do |coord|
   i += 1
 end
 
-0.upto(BOARD_SIZE_Y - 1) do |y|
-  0.upto(BOARD_SIZE_X - 1) do |x|
+0.upto(BOARD_SIZE_Y) do |y|
+  0.upto(BOARD_SIZE_X) do |x|
     print board[x][y][:assigned_coord]
     print board[x][y][:is_inf] ? 'i' : '.'
     print " "
@@ -121,8 +121,8 @@ pp winner["size"]
 ## Now let's find safe
 # SAFE_THRES
 safe_squares = 0
-0.upto(BOARD_SIZE_Y - 1) do |y|
-  0.upto(BOARD_SIZE_X - 1) do |x|
+0.upto(BOARD_SIZE_Y) do |y|
+  0.upto(BOARD_SIZE_X) do |x|
     total_distance = 0
 
     coords.each do |coord|
