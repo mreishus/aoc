@@ -124,6 +124,21 @@ defmodule AdventOfCode201806 do
     end)
   end
 
+  def find_safe_count(coords, safe_threshold) do
+    {size_x, size_y} = coords_to_board_size(coords)
+    0..size_x |> Enum.reduce(0, fn x, acc ->
+      0..size_y |> Enum.reduce(acc, fn y, acc ->
+        total_distance = coords
+          |> Enum.map(fn {xc, yc} -> distance(xc, yc, x, y) end)
+          |> Enum.sum
+        case total_distance < safe_threshold do
+          true -> acc + 1
+          false -> acc
+        end
+      end)
+    end)
+  end
+
   @doc """
   iex> AdventOfCode201806.part1("input_small.txt")
   17
@@ -140,14 +155,19 @@ defmodule AdventOfCode201806 do
       |> Enum.max
   end
 
-  def part2(filename \\ "input_small.txt") do
-    "WIP"
+  @doc """
+  iex> AdventOfCode201806.part2("input_small.txt", 32)
+  16
+  """
+  def part2(filename \\ "input_small.txt", safe_threshold \\ 32) do
+    coords = ParseFile.filename_to_coords(filename)
+    find_safe_count(coords, safe_threshold)
   end
 
   def go do
     filename = "input.txt"
     IO.puts AdventOfCode201806.part1(filename)
-    IO.puts AdventOfCode201806.part2(filename)
+    IO.puts AdventOfCode201806.part2(filename, 10000)
   end
 
 end
