@@ -2,8 +2,8 @@
 
 require 'pp'
 
-FILENAME = 'input.txt'
-#FILENAME = 'input_small.txt'
+#FILENAME = 'input.txt'
+FILENAME = 'input_small.txt'
 
 def is_star(stars, x, y)
   stars.select{ |s| s[:posx] == x && s[:posy] == y }.count > 0
@@ -29,19 +29,14 @@ end
 pp stars.select{ |s| s[:posy] == 0 }
 
 1.upto(100000) do |time|
-
-
   x_center = stars.map{ |s| s[:posx] }.sum.fdiv(stars.size)
   y_center = stars.map{ |s| s[:posy] }.sum.fdiv(stars.size)
 
   x_var = (stars.map{ |s| (s[:posx] - x_center) ** 2 }.sum) / stars.count
   y_var = (stars.map{ |s| (s[:posy] - y_center) ** 2 }.sum) / stars.count
 
-  #show = stars.select{ |s| s[:posx] > -100 && s[:posx] < 200 && s[:posy] > -100 && s[:posy] < 200 }.count > 10
-  #show = true
-  show = (x_var + y_var) < 700
-
-
+  #show = (x_var + y_var) < 700
+  show = (x_var + y_var) < 50
 
   if (show)
     puts "time #{time} center (#{x_center}, #{y_center}) var (#{x_var}, #{y_var})" if show
@@ -54,12 +49,12 @@ pp stars.select{ |s| s[:posy] == 0 }
     y_show_min.upto(y_show_max) do |y|
       x_show_min.upto(x_show_max) do |x|
         if (is_star(stars, x, y))
-          print '#' if show
+          print '#'
         else
-          print '.' if show
+          print '.'
         end
       end
-      print "\n" if show
+      print "\n"
     end
   end
   print "\n" if show
