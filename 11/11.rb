@@ -67,7 +67,7 @@ puts "Part 2"
 max_val = 0
 max_x = -1
 max_y = -1
-serial = 18
+serial = 1308
 #size = 3
 
 (1).upto(300) do |size|
@@ -90,3 +90,5 @@ serial = 18
 end
 end
 
+## Failed Guesses
+# 235,86,13
