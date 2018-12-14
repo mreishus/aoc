@@ -3,9 +3,12 @@
 require 'pp'
 puts 'hi'
 
-FILENAME = 'input.txt'
-#FILENAME = 'input_small.txt'
 GRID_SIZE = 250
+FILENAME = 'input.txt'
+#GRID_SIZE = 13
+#FILENAME = 'input_small.txt'
+#GRID_SIZE = 13
+#FILENAME = 'input_small2.txt'
 
 def make_grid()
   grid = Array.new(GRID_SIZE) { Array.new(GRID_SIZE) }
@@ -25,25 +28,27 @@ end
 
 def find_carts(grid)
   carts = []
+  id = 1
   0.upto(GRID_SIZE-1) do |y|
     0.upto(GRID_SIZE-1) do |x|
       cart = nil
       if grid[y][x] == 'v'
         grid[y][x] = "|"
-        cart = {x: x, y: y, dir: 'v', turn_num: 0}
+        cart = {x: x, y: y, dir: 'v', turn_num: 0, alive: true, id: id}
       elsif grid[y][x] == '^'
         grid[y][x] = "|"
-        cart = {x: x, y: y, dir: '^', turn_num: 0}
+        cart = {x: x, y: y, dir: '^', turn_num: 0, alive: true, id: id}
       elsif grid[y][x] == '>'
         grid[y][x] = "-"
-        cart = {x: x, y: y, dir: '>', turn_num: 0}
+        cart = {x: x, y: y, dir: '>', turn_num: 0, alive: true, id: id}
       elsif grid[y][x] == '<'
         grid[y][x] = "-"
-        cart = {x: x, y: y, dir: '<', turn_num: 0}
+        cart = {x: x, y: y, dir: '<', turn_num: 0, alive: true, id: id}
       end
 
       if cart != nil
         carts.push cart
+        id += 1
       end
     end
   end
@@ -51,20 +56,12 @@ def find_carts(grid)
   [grid, carts]
 end
 
-def scan_for_crashes(carts)
-  z = carts.map{ |c| c[:x].to_s + "," + c[:y].to_s }
-  if z.uniq.length != z.length
-    qwer = z.group_by{ |e| e }.select { |k, v| v.size > 1 }.map(&:first)
-    puts "Crash happened: "
-    pp qwer
-    puts "Make sure to subtract 1 for answer"
-    raise 'crash!!'
-  end
-end
-
 def tick(grid, carts)
   carts = carts.sort_by{|x| x[:y]}
   carts.each_with_index do |cart|
+
+    next if !cart[:alive]
+
     if cart[:dir] == 'v'
       cart[:y] += 1
     elsif cart[:dir] == '^'
@@ -75,7 +72,23 @@ def tick(grid, carts)
       cart[:x] += 1
     end
 
-    scan_for_crashes(carts)
+    crash = carts.find{|c2| c2[:x] == cart[:x] && c2[:y] == cart[:y] && c2[:alive] && c2[:id] != cart[:id]}
+    if crash
+      crash[:alive] = false
+      cart[:alive] = false
+      puts "Crash at #{cart[:x]-1} #{cart[:y]-1}"
+
+      alive_carts = carts.select{|c| c[:alive]}
+      if alive_carts.length == 1
+        last_cart = alive_carts.first
+        puts "One cart left at #{last_cart[:x]-1} #{last_cart[:y]-1}"
+        pp last_cart
+        puts 'You might have to move it once more to give it the answer it wants?'
+        exit
+      end
+
+    end
+
 
     this_square = grid[ cart[:y] ][ cart[:x] ]
     if this_square == "+"
@@ -169,14 +182,15 @@ def main
   grid = make_grid
   grid, carts = find_carts(grid)
 
-  0.upto(1015) do |i|
+  0.upto(100015) do |i|
     carts = tick(grid, carts)
+    #print_map(grid, carts)
     #pp '---'
     #pp minus_one(carts)
-    #print_map(grid, carts)
   end
 end
 
 # Guesses: (You guessed 57,47.)
+# (You guessed 26,84.)
 
 main
