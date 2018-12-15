@@ -10,11 +10,128 @@ require 'pp'
 
 def tests
   raise 'fail' unless true == true
+  test_input_tiny3
+  test_input_tiny2
+  test_input_small_move
 end
 
+def test_input_tiny2
+  filename = "input_tiny2.txt"
+  gamedata = readfile(filename)
+  board_init = display_string(gamedata)
+
+  gamedata = tick(gamedata)
+  board_p1 = display_string(gamedata)
+
+  p1_expect = %(
+#######
+#.EG..#
+#.G.#.#
+#...#G#
+#######
+)
+  p1_expect[0] = ''
+  raise 'fail 1 tiny2' unless p1_expect == board_p1
+end
+
+def test_input_tiny3
+  filename = "input_tiny3.txt"
+  gamedata = readfile(filename)
+  board_init = display_string(gamedata)
+
+  gamedata = tick(gamedata)
+  board_p1 = display_string(gamedata)
+
+  p1_expect = %(
+#######
+#..E..#
+#...G.#
+#.....#
+#######
+)
+  p1_expect[0] = ''
+  raise 'fail 1 tiny3' unless p1_expect == board_p1
+end
+
+def test_input_small_move
+  filename = "input_small.txt"
+  gamedata = readfile(filename)
+  board_init = display_string(gamedata)
+
+  gamedata = tick(gamedata)
+  board_p1 = display_string(gamedata)
+
+  gamedata = tick(gamedata)
+  board_p2 = display_string(gamedata)
+
+  gamedata = tick(gamedata)
+  board_p3 = display_string(gamedata)
+
+  gamedata = tick(gamedata)
+  board_p4 = display_string(gamedata)
+
+  init_expect = %(
+#########
+#G..G..G#
+#.......#
+#.......#
+#G..E..G#
+#.......#
+#.......#
+#G..G..G#
+#########
+)
+  p1_expect = %(
+#########
+#.G...G.#
+#...G...#
+#...E..G#
+#.G.....#
+#.......#
+#G..G..G#
+#.......#
+#########
+)
+  p2_expect = %(
+#########
+#..G.G..#
+#...G...#
+#.G.E.G.#
+#.......#
+#G..G..G#
+#.......#
+#.......#
+#########
+)
+  p3_expect = %(
+#########
+#.......#
+#..GGG..#
+#..GEG..#
+#G..G...#
+#......G#
+#.......#
+#.......#
+#########
+)
+  init_expect[0] = '' # remove extra newlines
+  p1_expect[0] = ''
+  p2_expect[0] = ''
+  p3_expect[0] = ''
+  p4_expect = p3_expect # No one can move
+  raise 'fail 0 small' unless init_expect == board_init
+  raise 'fail 1 small' unless p1_expect == board_p1
+  raise 'fail 2 small' unless p2_expect == board_p2
+  raise 'fail 3 small' unless p3_expect == board_p3
+  raise 'fail 4 small' unless p4_expect == board_p4
+end
+
+# INPUT: filename(text)
+# OUTPUT: gamedata hash(grid(2d array), units(array of hashes), max_x(int), max_y(int))
+# Parses the file into the main data.
 def readfile(filename)
   max_x, max_y = readfile_coords(filename)
-  grid = Array.new(max_x+1) { Array.new(max_y + 1)}
+  grid = Array.new(max_x + 1) { Array.new(max_y + 1) }
   units = []
   unit_id = 0
   y = 0
@@ -25,12 +142,12 @@ def readfile(filename)
         grid[x][y] = '#'
       elsif c == 'G'
         grid[x][y] = '.'
-        unit = {x: x, y: y, type: 'gob', display: 'G', id: unit_id, hp: 200, atk: 3}
+        unit = { x: x, y: y, type: 'gob', display: 'G', id: unit_id, hp: 200, atk: 3 }
         unit_id += 1
         units.push unit
       elsif c == 'E'
         grid[x][y] = '.'
-        unit = {x: x, y: y, type: 'elf', display: 'E', id: unit_id, hp: 200, atk: 3}
+        unit = { x: x, y: y, type: 'elf', display: 'E', id: unit_id, hp: 200, atk: 3 }
         unit_id += 1
         units.push unit
       elsif c == '.'
@@ -40,13 +157,14 @@ def readfile(filename)
     end
     y += 1
   end
-  {grid: grid, units: units, max_x: max_x, max_y: max_y}
+  { grid: grid, units: units, max_x: max_x, max_y: max_y }
 end
 
-# Gets max_x and max_y, 0 indexed, from file
+# INPUT: filename(text)
+# OUTPUT: [max_x, max_y]  both integers
+# Gets max_x and max_y, 0 indexed, from file. Grid size
 def readfile_coords(filename)
   max_x = 0
-  max_y = 0
   y = 0
   File.readlines(filename).each do |line|
     line = line.strip
@@ -57,17 +175,26 @@ def readfile_coords(filename)
   [max_x, max_y]
 end
 
+# INPUT: gamedata
+# OUTPUT: Prints board to screen
 def display(gamedata)
-  grid, units, max_x, max_y = gamedata.values_at(:grid, :units, :max_x, :max_y)
+  print display_string(gamedata)
+end
 
-  0.upto(max_y) do |y|
-    0.upto(max_x) do |x|
-      #puts "x [#{x}]"
-      unit = units.find{ |u| x.to_i == u[:x] && y.to_i == u[:y] }
-      print unit == nil ? grid[x][y] : unit[:display]
+# INPUT: gamedata
+# OUTPUT: Prints board to string
+def display_string(gamedata)
+  grid, units, max_x, max_y = gamedata.values_at(:grid, :units, :max_x, :max_y)
+  output = ''
+
+  0.upto(max_y - 1) do |y|
+    0.upto(max_x - 1) do |x|
+      unit = units.find { |u| x.to_i == u[:x] && y.to_i == u[:y] }
+      output += unit.nil? ? grid[x][y] : unit[:display]
     end
-    print "\n"
+    output += "\n"
   end
+  output
 end
 
 def tick(input_gamedata)
@@ -106,38 +233,36 @@ def tick_unit(input_gamedata, id)
         { x: u[:x], y: u[:y]-1, reachable: nil, range: nil, paths: [] },
       ]
     end
-    .flatten!
-    .uniq
-    .reject { |coord| grid[coord[:x]][coord[:y]] == '#' }
+                    .flatten!
+                    .uniq
+                    .reject { |coord| grid[coord[:x]][coord[:y]] == '#' }
 
   already_in_range = in_range.find { |t| t[:x] == unit[:x] && t[:y] == unit[:y] } != nil
   return gamedata if already_in_range
 
-  problem = {grid: grid, units: units, unit: unit, targets: in_range}
+  problem = { grid: grid, units: units, unit: unit, targets: in_range }
   bfs(problem)
 
   ## Now we have to find the appropriate target
   move_to = problem[:targets]
-    .select { |t| !t[:range].nil? }
-    .sort_by{ |t| t[:range] }
+    .reject { |t| t[:range].nil? }
+    .sort_by { |t| t[:range] }
 
   return gamedata if move_to.empty? # Found no reachable targets
 
   shortest_range = move_to.first[:range]
   move_to = move_to
-    .select{ |t| t[:range] == shortest_range }     # Nearest only
-    .sort_by{ |t| [t[:y], t[:x]] }                 # Reading order
-    .first
-  #pp move_to
+            .select { |t| t[:range] == shortest_range } # Nearest only
+            .min_by { |t| [t[:y], t[:x]] }              # First by reading order
   paths = move_to[:paths]
 
-  if paths.select{ |p| p.first == "up"}.any?
+  if paths.select { |p| p.first == 'up'}.any?
     unit[:y] -= 1
-  elsif paths.select{ |p| p.first == "left"}.any?
+  elsif paths.select { |p| p.first == 'left'}.any?
     unit[:x] -= 1
-  elsif paths.select{ |p| p.first == "right"}.any?
+  elsif paths.select { |p| p.first == 'right'}.any?
     unit[:x] += 1
-  elsif paths.select{ |p| p.first == "down"}.any?
+  elsif paths.select { |p| p.first == 'down'}.any?
     unit[:y] += 1
   end
 
@@ -156,7 +281,7 @@ def bfs(problem)
   while open_set.count > 0
     subtree_root = open_set.pop
 
-    if is_goal(problem, subtree_root)
+    if goal?(problem, subtree_root)
       path = construct_path(subtree_root, meta)
       range = path.length
       node_x, node_y = expand(subtree_root)
@@ -184,17 +309,17 @@ end
 def construct_path(node, meta)
   actions = []
 
-  while !meta[node].nil?
+  until meta[node].nil?
     node, action = meta[node]
     actions.push(action)
   end
   actions.reverse
 end
 
-def is_goal(problem, subtree_root)
+def goal?(problem, subtree_root)
   x, y = expand(subtree_root)
   targets = problem[:targets]
-  targets.find {|t| t[:x] == x && t[:y] == y } != nil
+  targets.find { |t| t[:x] == x && t[:y] == y } != nil
 end
 
 def get_possible_steps(problem, subtree_root)
@@ -234,12 +359,6 @@ def part1(filename)
   display(gamedata)
   gamedata = tick(gamedata)
   display(gamedata)
-  gamedata = tick(gamedata)
-  display(gamedata)
-  gamedata = tick(gamedata)
-  display(gamedata)
-  gamedata = tick(gamedata)
-  display(gamedata)
 end
 
 begin_tests = Time.now
@@ -247,11 +366,7 @@ tests()
 end_tests = Time.now
 puts "All tests passed - #{end_tests.to_ms - begin_tests.to_ms}ms"
 
-["input_tiny1.txt"].each do |x|
-  puts "Part 1, target: #{x}"
-  part1(x)
-end
-["input_small.txt"].each do |x|
+["input.txt"].each do |x|
   puts "Part 1, target: #{x}"
   part1(x)
 end
