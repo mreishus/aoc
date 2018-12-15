@@ -57,6 +57,36 @@ def part2(target)
   result
 end
 
+=begin
+ Refactor attempt - not actually faster
+
+def part2_refactor(target)
+  target_string = target.to_s
+  board, e1_select, e2_select = init
+  board_string = board.map(&:to_s).join("")
+  search_offset = -20
+
+  result = nil
+  while (result == nil) do
+    new_elements_string = board_add! board, e1_select, e2_select
+    e1_select, e2_select = move_selections(board, e1_select, e2_select)
+
+    board_string += new_elements_string
+
+    pos_search_offset = [0, search_offset].max
+    board_string_searchable = board_string[pos_search_offset..-1]
+    search = board_string_searchable.index(target_string)
+    if search != nil
+      result = search + pos_search_offset
+    end
+
+    search_offset += new_elements_string.length
+  end
+  result
+end
+
+=end
+
 def tests
   raise 'fail 1 1' unless part1(9) == "5158916779"
   raise 'fail 1 2' unless part1(5) == "0124515891"
