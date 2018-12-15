@@ -43,6 +43,8 @@ def part2(target)
   board, e1_select, e2_select = init
   board_string = board.map(&:to_s).join("")
 
+  offset = 0
+
   result = nil
   while (result == nil) do
     new_elements_string = board_add! board, e1_select, e2_select
@@ -51,8 +53,15 @@ def part2(target)
     board_string += new_elements_string
     search = board_string.index(target_string)
     if search != nil
-      result = search
+      result = search + offset
     end
+
+    if board_string.length > 35
+      shorten_amount = 10
+      board_string = board_string[shorten_amount..-1]
+      offset += shorten_amount
+    end
+
   end
   result
 end
