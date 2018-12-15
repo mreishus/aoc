@@ -100,30 +100,33 @@ def tick_unit(input_gamedata, id)
   # squares in range
   in_range = enemies.map do |u|
       [
-        { x: u[:x]+1, y: u[:y], reachable: nil, range: nil },
-        { x: u[:x]-1, y: u[:y], reachable: nil, range: nil },
-        { x: u[:x], y: u[:y]+1, reachable: nil, range: nil },
-        { x: u[:x], y: u[:y]-1, reachable: nil, range: nil },
+        { x: u[:x]+1, y: u[:y], reachable: nil, range: nil, paths: [] },
+        { x: u[:x]-1, y: u[:y], reachable: nil, range: nil, paths: [] },
+        { x: u[:x], y: u[:y]+1, reachable: nil, range: nil, paths: [] },
+        { x: u[:x], y: u[:y]-1, reachable: nil, range: nil, paths: [] },
       ]
     end
     .flatten!
     .uniq
     .reject { |coord| grid[coord[:x]][coord[:y]] == '#' }
 
+  puts '-----------------'
+  pp in_range
   problem = {grid: grid, units: units, unit: unit, targets: in_range}
   z = bfs(problem)
-  action = z.first
+  pp problem
 
-  pp z
-  if action == "right"
-    unit[:x] += 1
-  elsif action == "left"
-    unit[:x] -= 1
-  elsif action == "up"
-    unit[:y] -= 1
-  elsif action == "down"
-    unit[:y] += 1
-  end
+  #action = z.first
+  #pp z
+  #if action == "right"
+  #  unit[:x] += 1
+  #elsif action == "left"
+  #  unit[:x] -= 1
+  #elsif action == "up"
+  #  unit[:y] -= 1
+  #elsif action == "down"
+  #  unit[:y] += 1
+  #end
 
   # move
   #unit[:x] += 1
@@ -139,23 +142,41 @@ def bfs(problem)
   closed_set = []
   meta = {}
 
+  i = 0
   while open_set.count > 0
     subtree_root = open_set.pop
-    str_x, str_y = expand(subtree_root)
+    #puts "i[#{i}] subtree_root[#{subtree_root}]"
 
     if is_goal(problem, subtree_root)
-      return construct_path(subtree_root, meta)
+      path = construct_path(subtree_root, meta)
+      range = path.length
+      node_x, node_y = expand(subtree_root)
+      t = targets.find {|t| t[:x] == node_x && t[:y] == node_y}
+      t[:paths].push path unless t[:paths].include? path
+      t[:range] = range if t[:range].nil? || t[:range] > range
+      t[:reachable] = true
+
+      ##pp subtree_root
+      ##pp construct_path(subtree_root, meta)
+      #puts "Found a goal"
+      #{ x: u[:x], y: u[:y]-1, reachable: nil, range: nil, paths: [] },
+      #pp path
+      #puts 'target'
+      #pp t
     end
 
     get_possible_steps(problem, subtree_root).each do |step|
       child, action = step.values_at(:child, :action)
       next if closed_set.include? child
+      #puts "  possible step [#{action}] [#{child}]"
 
       meta[child] = [subtree_root, action]
-      open_set.push(child)
+      open_set.unshift(child)
     end
+    #puts " End of Algo OpenSet [#{open_set.join(" ")}]"
 
     closed_set.push(subtree_root)
+    i += 1
   end
 end
 
@@ -166,7 +187,7 @@ def construct_path(node, meta)
     node, action = meta[node]
     actions.push(action)
   end
-  actions
+  actions.reverse
 end
 
 def is_goal(problem, subtree_root)
@@ -179,14 +200,14 @@ def get_possible_steps(problem, subtree_root)
   grid, units = problem.values_at(:grid, :units)
   x, y = expand(subtree_root)
   steps = []
+  if (is_ok(x, y+1, grid, units))
+    steps.push({child: collapse(x, y+1), action: 'down'})
+  end
   if (is_ok(x+1, y, grid, units))
     steps.push({child: collapse(x+1, y), action: 'right'})
   end
   if (is_ok(x-1, y, grid, units))
     steps.push({child: collapse(x-1, y), action: 'left'})
-  end
-  if (is_ok(x, y+1, grid, units))
-    steps.push({child: collapse(x, y+1), action: 'down'})
   end
   if (is_ok(x, y-1, grid, units))
     steps.push({child: collapse(x, y-1), action: 'up'})
@@ -199,6 +220,7 @@ def is_ok(x, y, grid, units)
     return false
   end
 
+  return true
   unit = units.find { |u| u[:x] == x && u[:y] == y }
   unit.nil?
 end
@@ -219,7 +241,7 @@ tests()
 end_tests = Time.now
 puts "All tests passed - #{end_tests.to_ms - begin_tests.to_ms}ms"
 
-["input_small.txt"].each do |x|
+["input_tiny1.txt"].each do |x|
   puts "Part 1, target: #{x}"
   part1(x)
 end
