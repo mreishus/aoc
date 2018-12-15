@@ -10,8 +10,10 @@ def init
 end
 
 def board_add!(board, e1_select, e2_select)
-  sum = ((board[e1_select] + board[e2_select]).to_s.split "").map(&:to_i)
+  new_elements_string = (board[e1_select] + board[e2_select]).to_s
+  sum = (new_elements_string.split "").map(&:to_i)
   board.concat sum
+  new_elements_string
 end
 
 def move_selections(board, e1_select, e2_select)
@@ -28,20 +30,9 @@ end
 def part1(target)
   board, e1_select, e2_select = init
 
-  #pp '---'
-  #pp board
-  #pp e1_select, e2_select
-
-  #1.upto(20) do |z|
   while (board.length <= target+9) do
     board_add! board, e1_select, e2_select
-
-
     e1_select, e2_select = move_selections(board, e1_select, e2_select)
-
-    #pp '---'
-    #pp board
-    #pp e1_select, e2_select
   end
 
   board[target..(target+9)].map(&:to_s).join("")
@@ -50,13 +41,14 @@ end
 def part2(target)
   target_string = target.to_s
   board, e1_select, e2_select = init
+  board_string = board.map(&:to_s).join("")
 
   result = nil
   while (result == nil) do
-    board_add! board, e1_select, e2_select
+    new_elements_string = board_add! board, e1_select, e2_select
     e1_select, e2_select = move_selections(board, e1_select, e2_select)
 
-    board_string = board.map(&:to_s).join("")
+    board_string += new_elements_string
     search = board_string.index(target_string)
     if search != nil
       result = search
@@ -78,7 +70,16 @@ def tests
   raise 'fail 2 4' unless part2(59414) == 2018
 end
 
+class Time
+  def to_ms
+    (self.to_f * 1000.0).to_i
+  end
+end
+
+begin_tests = Time.now
 tests()
+end_tests = Time.now
+puts "All tests passed - #{end_tests.to_ms - begin_tests.to_ms}ms"
 
 ## Main Prog ##
 
