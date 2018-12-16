@@ -239,6 +239,11 @@ def tick_unit(input_gamedata, id)
   tick_unit_attack(gamedata, id)
 end
 
+def unit_exists(units, x, y)
+  unit = units.find { |u| u[:x] == x && u[:y] == y }
+  !unit.nil?
+end
+
 def tick_unit_move(input_gamedata, id)
   gamedata = input_gamedata.dup
   grid, units = gamedata.values_at(:grid, :units)
@@ -265,8 +270,12 @@ def tick_unit_move(input_gamedata, id)
     .uniq
     .reject { |coord| grid[coord[:x]][coord[:y]] == '#' }
 
+
   already_in_range = in_range.find { |t| t[:x] == unit[:x] && t[:y] == unit[:y] } != nil
   return gamedata if already_in_range
+
+  # Don't htink this helps?
+  in_range = in_range.reject { |coord| unit_exists(units, coord[:x], coord[:y]) }
 
   problem = { grid: grid, units: units, unit: unit, targets: in_range }
   bfs(problem)
@@ -342,6 +351,7 @@ def bfs(problem)
   closed_set = []
   meta = {}
   min_range = nil
+  steps_without_finding = 0
 
   while open_set.count > 0
     subtree_root = open_set.pop
@@ -356,9 +366,13 @@ def bfs(problem)
       t[:range] = range if t[:range].nil? || t[:range] > range
       min_range = range if min_range.nil? || range < min_range
       t[:reachable] = true
-      # puts "Writing range #{t[:range]}"
+      #puts "Writing range #{t[:range]}"
+      steps_without_finding = 0
+      #puts "--- early" if range > min_range # return early, we have already seen all the shortest paths..
       return if range > min_range # return early, we have already seen all the shortest paths..
     end
+
+    steps_without_finding += 1
 
     get_possible_steps(problem, subtree_root).each do |step|
       child, action = step.values_at(:child, :action)
@@ -368,7 +382,14 @@ def bfs(problem)
       open_set.unshift(child)
     end
 
-    closed_set.push(subtree_root)
+    #puts "no find: #{steps_without_finding}" if steps_without_finding % 500 == 0
+    if false && steps_without_finding % 20000 == 0
+      puts 'closed_set'
+      pp closed_set
+      puts 'open_set'
+      pp open_set
+    end
+    closed_set.push(subtree_root) if !closed_set.include? subtree_root
   end
 end
 
