@@ -152,6 +152,46 @@ def how_many_opcodes_match(regs_before, regs_after, a, b, c)
   which_opcodes_match(regs_before, regs_after, a, b, c).count
 end
 
+def parse_mystery_input(filename)
+  mystery_inputs = []
+  File.open(filename, 'r') do |fh|
+    loop do
+      line = fh.gets
+      break if line.nil?
+
+      before_regs = line.strip.match(/Before:\s+\[(\d+), (\d+), (\d+), (\d+)\]/).captures.map(&:to_i)
+
+      line = fh.gets
+      break if line.nil?
+
+      opcode, a, b, c = line.strip.match(/(\d+) (\d+) (\d+) (\d+)/).captures.map(&:to_i)
+
+      line = fh.gets
+      break if line.nil?
+
+      after_regs = line.strip.match(/After:\s+\[(\d+), (\d+), (\d+), (\d+)\]/).captures.map(&:to_i)
+
+      mystery_input = { before_regs: before_regs, after_regs: after_regs, opcode: opcode, a: a, b: b, c: c }
+      mystery_inputs.push mystery_input
+
+      # Blank line
+      line = fh.gets
+      break if line.nil?
+    end
+  end
+  mystery_inputs
+end
+
+def part1(filename)
+  how_many_behave_like_three_or_more = 0
+  mystery_inputs = parse_mystery_input(filename)
+  mystery_inputs.each do |x|
+    matches = how_many_opcodes_match(x[:before_regs], x[:after_regs], x[:a], x[:b], x[:c])
+    how_many_behave_like_three_or_more += 1 if matches >= 3
+  end
+  how_many_behave_like_three_or_more
+end
+
 ############## MAIN #####################
 
 begin_tests = Time.now
@@ -166,10 +206,5 @@ regs = cpu.public_send('addi', regs, 2, 1, 2)
 #regs = cpu.addi(regs, 2, 1, 2)
 pp regs
 
-i = cpu.all_instructions
-pp i
-
-pp '---------'
-#Before: [3, 2, 1, 1]
-#9 2 1 2
-#After:  [3, 2, 2, 1]
+puts 'How many behave like 3 or more opcodes (Part 1) '
+puts part1('input_1.txt')
