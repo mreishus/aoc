@@ -210,6 +210,29 @@ def part1(filename)
   how_many_behave_like_three_or_more
 end
 
+def part2(filename, opcodes)
+  cpu = Compute.new
+  instructions = parse_program_file(filename)
+  regs = [0, 0, 0, 0]
+  instructions.each do |i|
+    opcode = opcodes[i[:opcode]]
+    raise "Invalid opcode" if opcode.nil?
+
+    regs = cpu.public_send(opcode, regs, i[:a], i[:b], i[:c])
+  end
+  regs
+end
+
+def parse_program_file(filename)
+  instructions = []
+  File.readlines(filename).each do |line|
+    opcode, a, b, c = line.strip.match(/(\d+) (\d+) (\d+) (\d+)/).captures.map(&:to_i)
+    instruction = { opcode: opcode, a: a, b: b, c: c }
+    instructions.push instruction
+  end
+  instructions
+end
+
 def determine_opcodes(filename)
   opcode_defs = {}
   mystery_inputs = parse_mystery_input(filename)
@@ -270,5 +293,12 @@ pp regs
 puts 'How many behave like 3 or more opcodes (Part 1) '
 puts part1('input_1.txt')
 puts 'Let\'s figure out the opcodes'
-z = determine_opcodes('input_1.txt')
-pp z
+opcodes = determine_opcodes('input_1.txt')
+pp opcodes
+puts 'Part2, running program...'
+regs = part2('input_2.txt', opcodes)
+puts 'Part2: All registers...'
+pp regs
+
+# That's not the right answer; your answer is too high.
+# Please wait one minute before trying again. (You guessed 505.)
