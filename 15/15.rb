@@ -18,6 +18,11 @@ end
 
 def test_combat0
   raise 'fail combat0' unless part1('input_combat0.txt') == 27730
+  raise 'fail combat1' unless part1('input_combat1.txt') == 36334
+  raise 'fail combat2' unless part1('input_combat2.txt') == 39514
+  raise 'fail combat3' unless part1('input_combat3.txt') == 27755
+  raise 'fail combat4' unless part1('input_combat4.txt') == 28944
+  raise 'fail combat5' unless part1('input_combat5.txt') == 18740
 end
 
 def test_input_tiny2
