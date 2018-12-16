@@ -14,6 +14,8 @@ def tests
   test_input_tiny2
   test_input_small_move
   test_combat0
+  test_part2
+  test_part2_outcome
 end
 
 def test_combat0
@@ -23,6 +25,23 @@ def test_combat0
   raise 'fail combat3' unless part1('input_combat3.txt') == 27755
   raise 'fail combat4' unless part1('input_combat4.txt') == 28944
   raise 'fail combat5' unless part1('input_combat5.txt') == 18740
+end
+
+def test_part2
+  raise 'fail p2 0' unless part2('input_combat0.txt') == 15
+  raise 'fail p2 1' unless part2('input_combat1.txt') == 4
+  raise 'fail p2 1' unless part2('input_combat2.txt') == 4
+  raise 'fail p2 2' unless part2('input_combat3.txt') == 15
+  raise 'fail p2 3' unless part2('input_combat4.txt') == 12
+  raise 'fail p2 3' unless part2('input_combat5.txt') == 34
+end
+
+def test_part2_outcome
+  raise 'fail p2b 0' unless part2_outcome('input_combat0.txt') == 4988
+  raise 'fail p2b 1' unless part2_outcome('input_combat2.txt') == 31284
+  raise 'fail p2b 2' unless part2_outcome('input_combat3.txt') == 3478
+  raise 'fail p2b 3' unless part2_outcome('input_combat4.txt') == 6474
+  raise 'fail p2b 3' unless part2_outcome('input_combat5.txt') == 1140
 end
 
 def test_input_tiny2
@@ -139,7 +158,7 @@ end
 # INPUT: filename(text)
 # OUTPUT: gamedata hash(grid(2d array), units(array of hashes), max_x(int), max_y(int))
 # Parses the file into the main data.
-def readfile(filename)
+def readfile(filename, elf_attack=3)
   max_x, max_y = readfile_coords(filename)
   grid = Array.new(max_x + 1) { Array.new(max_y + 1) }
   units = []
@@ -157,7 +176,7 @@ def readfile(filename)
         units.push unit
       elsif c == 'E'
         grid[x][y] = '.'
-        unit = { x: x, y: y, type: 'elf', display: 'E', id: unit_id, hp: 200, atk: 3, alive: true }
+        unit = { x: x, y: y, type: 'elf', display: 'E', id: unit_id, hp: 200, atk: elf_attack, alive: true }
         unit_id += 1
         units.push unit
       elsif c == '.'
@@ -167,7 +186,7 @@ def readfile(filename)
     end
     y += 1
   end
-  { grid: grid, units: units, max_x: max_x, max_y: max_y, game_over: false }
+  { grid: grid, units: units, max_x: max_x, max_y: max_y, game_over: false, elf_died: false }
 end
 
 # INPUT: filename(text)
@@ -337,6 +356,10 @@ def tick_unit_attack(input_gamedata, id)
   to_attack[:hp] -= unit[:atk]
   to_attack[:alive] = to_attack[:hp] > 0
 
+  if (!to_attack[:alive] && to_attack[:type] == "elf")
+    gamedata[:elf_died] = true
+  end
+
   gamedata
 end
 
@@ -357,7 +380,6 @@ def bfs(problem)
 
   while open_set.count > 0
     subtree_root = open_set.pop
-    #puts "#{open_set.count} #{closed_set.count}"
 
     if goal?(problem, subtree_root)
       path = construct_path(subtree_root, meta)
@@ -368,9 +390,6 @@ def bfs(problem)
       t[:range] = range if t[:range].nil? || t[:range] > range
       min_range = range if min_range.nil? || range < min_range
       t[:reachable] = true
-      #print " (range #{t[:range]}) "
-      #puts "Writing range #{t[:range]}"
-      #puts "--- early" if range > min_range # return early, we have already seen all the shortest paths..
       return if range > min_range # return early, we have already seen all the shortest paths..
     end
 
@@ -431,20 +450,47 @@ def is_ok(x, y, grid, units)
 end
 
 def part1(filename)
-  gamedata = readfile(filename)
-  display(gamedata)
+  gamedata, i = simulate(filename, {elf_attack: 3})
+  hp_sum = gamedata[:units].map{ |u| u[:hp] }.sum
+  hp_sum * i
+end
+
+# Part2 - Return elf attack
+def part2(filename)
+  elf_attack, _gamedata, _i = part2_inner(filename)
+  elf_attack
+end
+
+# Part 2 - Return outcome
+def part2_outcome(filename)
+  _elf_attack, gamedata, i = part2_inner(filename)
+  hp_sum = gamedata[:units].map{ |u| u[:hp] }.sum
+  hp_sum * i
+end
+
+def part2_inner(filename)
+  elf_attack = 4
+  while true do
+    gamedata, i = simulate(filename, {elf_attack: elf_attack, end_early_on_elf_death: true})
+    return [elf_attack, gamedata, i] unless gamedata[:elf_died]
+    elf_attack += 1
+  end
+  [elf_attack, gamedata, i]
+end
+
+def simulate(filename, options)
+  gamedata = readfile(filename, options[:elf_attack])
+  #display(gamedata)
   i = 0
   while true do
     gamedata = tick(gamedata)
-    puts i
-    display(gamedata)
-    if gamedata[:game_over]
+    #display(gamedata)
+    if gamedata[:game_over] || (options[:end_early_on_elf_death] && gamedata[:elf_died])
       break
     end
     i += 1
   end
-  hp_sum = gamedata[:units].map{ |u| u[:hp] }.sum
-  hp_sum * i
+  [gamedata, i]
 end
 
 begin_tests = Time.now
@@ -455,4 +501,8 @@ puts "All tests passed - #{end_tests.to_ms - begin_tests.to_ms}ms"
 ['input.txt'].each do |x|
   puts "Part 1, filename: #{x}"
   puts part1(x)
+  puts "Part 2, filename: #{x}"
+  puts part2(x)
+  puts "Part 2 outcome, filename: #{x}"
+  puts part2_outcome(x)
 end
