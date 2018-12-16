@@ -278,7 +278,10 @@ def tick_unit_move(input_gamedata, id)
   in_range = in_range.reject { |coord| unit_exists(units, coord[:x], coord[:y]) }
 
   problem = { grid: grid, units: units, unit: unit, targets: in_range }
+  #print '?'
+  #print " (#{unit[:x]},#{unit[:y]}) -> #{in_range.count} "
   bfs(problem)
+  #print '.'
 
   ## Now we have to find the appropriate target
   move_to = problem[:targets]
@@ -351,7 +354,6 @@ def bfs(problem)
   closed_set = []
   meta = {}
   min_range = nil
-  steps_without_finding = 0
 
   while open_set.count > 0
     subtree_root = open_set.pop
@@ -366,29 +368,20 @@ def bfs(problem)
       t[:range] = range if t[:range].nil? || t[:range] > range
       min_range = range if min_range.nil? || range < min_range
       t[:reachable] = true
+      #print " (range #{t[:range]}) "
       #puts "Writing range #{t[:range]}"
-      steps_without_finding = 0
       #puts "--- early" if range > min_range # return early, we have already seen all the shortest paths..
       return if range > min_range # return early, we have already seen all the shortest paths..
     end
-
-    steps_without_finding += 1
 
     get_possible_steps(problem, subtree_root).each do |step|
       child, action = step.values_at(:child, :action)
       next if closed_set.include? child
 
       meta[child] = [subtree_root, action]
-      open_set.unshift(child)
+      open_set.unshift(child) if !open_set.include?(child)
     end
 
-    #puts "no find: #{steps_without_finding}" if steps_without_finding % 500 == 0
-    if false && steps_without_finding % 20000 == 0
-      puts 'closed_set'
-      pp closed_set
-      puts 'open_set'
-      pp open_set
-    end
     closed_set.push(subtree_root) if !closed_set.include? subtree_root
   end
 end
