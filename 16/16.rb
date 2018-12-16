@@ -99,7 +99,7 @@ class Compute
 
   def eqir(regs, a, b, c)
     r = regs.dup
-    if r[a] > b
+    if a == r[b]
       r[c] = 1
     else
       r[c] = 0
@@ -137,6 +137,24 @@ require 'pp'
 def tests
   raise 'fail0' unless which_opcodes_match([3, 2, 1, 1], [3, 2, 2, 1], 2, 1, 2) == %w[addi mulr seti]
   raise 'fail1' unless how_many_opcodes_match([3, 2, 1, 1], [3, 2, 2, 1], 2, 1, 2) == 3
+  raise 'fail2' unless part1('input_1.txt') == 570
+  opcode_tests
+end
+
+def opcode_tests
+  # A = 3  Value A = 3  Register A = 0
+  # B = 2  Value B = 2  Register B = 3
+  # C = 3
+  # Something that sets register 3.
+  # Before: [0, 0, 3, 0]
+  # 14 3 2 3
+  # After:  [0, 0, 3, 1]
+
+  cpu = Compute.new
+  regs_before = [0, 0, 3, 0]
+  regs_after = cpu.public_send('eqir', regs_before, 3, 2, 3)
+  regs_expect = [0, 0, 3, 1]
+  raise 'fail3' unless regs_after == regs_expect
 end
 
 def which_opcodes_match(regs_before, regs_after, a, b, c)
@@ -192,6 +210,49 @@ def part1(filename)
   how_many_behave_like_three_or_more
 end
 
+def determine_opcodes(filename)
+  opcode_defs = {}
+  mystery_inputs = parse_mystery_input(filename)
+  mystery_inputs.each do |x|
+    matches = which_opcodes_match(x[:before_regs], x[:after_regs], x[:a], x[:b], x[:c])
+    if opcode_defs.key?(x[:opcode])
+      opcode_defs[x[:opcode]] &= matches # Array Intersection
+    else
+      opcode_defs[x[:opcode]] = matches
+    end
+  end
+
+  0.upto(20) do
+    opcode_defs = deduce(opcode_defs)
+  end
+  if opcode_defs.values.select { |x| x.count > 1 }.any?
+    raise 'Failed to figure out opcodes..'
+  end
+
+  opcode_defs.keys.each do |x|
+    opcode_defs[x] = opcode_defs[x].first
+  end
+  opcode_defs
+end
+
+# Deduce: Loop for opcodes with only one possible meaning and
+# remove that meaning from others
+# Example Input: { 1 => ["add", "multiply"], 2 => ["multiply"] }
+# 1 must be add, because 2 is already multiply...
+# Example Output: { 1 => ["add"], 2 => ["multiply"] }
+def deduce(opcode_defs)
+  opcodes_with_one_definition(opcode_defs).each do |opcode|
+    opcode_defs.keys.reject { |x| x == opcode }.each do |x|
+      opcode_defs[x].reject! { |y| y == opcode_defs[opcode].first }
+    end
+  end
+  opcode_defs
+end
+
+def opcodes_with_one_definition(opcode_defs)
+  opcode_defs.keys.select { |x| opcode_defs[x].length == 1 }
+end
+
 ############## MAIN #####################
 
 begin_tests = Time.now
@@ -208,3 +269,6 @@ pp regs
 
 puts 'How many behave like 3 or more opcodes (Part 1) '
 puts part1('input_1.txt')
+puts 'Let\'s figure out the opcodes'
+z = determine_opcodes('input_1.txt')
+pp z
