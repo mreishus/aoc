@@ -13,6 +13,11 @@ def tests
   test_input_tiny3
   test_input_tiny2
   test_input_small_move
+  test_combat0
+end
+
+def test_combat0
+  raise 'fail combat0' unless part1('input_combat0.txt') == 27730
 end
 
 def test_input_tiny2
@@ -142,12 +147,12 @@ def readfile(filename)
         grid[x][y] = '#'
       elsif c == 'G'
         grid[x][y] = '.'
-        unit = { x: x, y: y, type: 'gob', display: 'G', id: unit_id, hp: 200, atk: 3 }
+        unit = { x: x, y: y, type: 'gob', display: 'G', id: unit_id, hp: 200, atk: 3, alive: true }
         unit_id += 1
         units.push unit
       elsif c == 'E'
         grid[x][y] = '.'
-        unit = { x: x, y: y, type: 'elf', display: 'E', id: unit_id, hp: 200, atk: 3 }
+        unit = { x: x, y: y, type: 'elf', display: 'E', id: unit_id, hp: 200, atk: 3, alive: true }
         unit_id += 1
         units.push unit
       elsif c == '.'
@@ -157,7 +162,7 @@ def readfile(filename)
     end
     y += 1
   end
-  { grid: grid, units: units, max_x: max_x, max_y: max_y }
+  { grid: grid, units: units, max_x: max_x, max_y: max_y, game_over: false }
 end
 
 # INPUT: filename(text)
@@ -203,7 +208,15 @@ def tick(input_gamedata)
   turn_order = units.sort_by { |h| [h[:y].to_i, h[:x].to_i] }.map { |u| u[:id] }
   turn_order.each do |id|
     gamedata = tick_unit(gamedata, id)
+    gamedata = remove_dead(gamedata)
+    break if gamedata[:game_over]
   end
+  gamedata
+end
+
+def remove_dead(input_gamedata)
+  gamedata = input_gamedata.dup
+  gamedata[:units] = gamedata[:units].select { |u| u[:alive] }
   gamedata
 end
 
@@ -216,13 +229,23 @@ def expand(xystring)
 end
 
 def tick_unit(input_gamedata, id)
+  gamedata = tick_unit_move(input_gamedata, id)
+  return gamedata if gamedata[:game_over]
+  tick_unit_attack(gamedata, id)
+end
+
+def tick_unit_move(input_gamedata, id)
   gamedata = input_gamedata.dup
   grid, units = gamedata.values_at(:grid, :units)
   unit = units.find { |u| u[:id] == id }
+  return input_gamedata if unit.nil? || !unit[:alive]
 
   # how many enemies?
   enemies = units.reject { |u| u[:type] == unit[:type] }
-  return gamedata if enemies.count.zero?
+  if enemies.count.zero?
+    gamedata[:game_over] = true
+    return gamedata
+  end
 
   # squares in range
   in_range = enemies.map do |u|
@@ -233,9 +256,9 @@ def tick_unit(input_gamedata, id)
         { x: u[:x], y: u[:y]-1, reachable: nil, range: nil, paths: [] },
       ]
     end
-                    .flatten!
-                    .uniq
-                    .reject { |coord| grid[coord[:x]][coord[:y]] == '#' }
+    .flatten!
+    .uniq
+    .reject { |coord| grid[coord[:x]][coord[:y]] == '#' }
 
   already_in_range = in_range.find { |t| t[:x] == unit[:x] && t[:y] == unit[:y] } != nil
   return gamedata if already_in_range
@@ -250,6 +273,13 @@ def tick_unit(input_gamedata, id)
 
   return gamedata if move_to.empty? # Found no reachable targets
 
+  tick_unit_move_doit(unit, move_to)
+  gamedata
+end
+
+## Actually makes "unit" move according to "move_to"
+## Side effect warning: Modifies Unit
+def tick_unit_move_doit(unit, move_to)
   shortest_range = move_to.first[:range]
   move_to = move_to
             .select { |t| t[:range] == shortest_range } # Nearest only
@@ -265,11 +295,39 @@ def tick_unit(input_gamedata, id)
   elsif paths.select { |p| p.first == 'down'}.any?
     unit[:y] += 1
   end
+end
 
-  # return
+def tick_unit_attack(input_gamedata, id)
+  gamedata = input_gamedata.dup
+  grid, units = gamedata.values_at(:grid, :units)
+  unit = units.find { |u| u[:id] == id }
+  return input_gamedata if unit.nil? || !unit[:alive]
+
+  x = unit[:x]
+  y = unit[:y]
+
+  enemies = units.reject { |u| u[:type] == unit[:type] }
+  adj_units = enemies.select do |u|
+    (u[:x] == x + 1 && u[:y] == y) \
+    || (u[:x] == x - 1 && u[:y] == y) \
+    || (u[:x] == x && u[:y] == y + 1) \
+    || (u[:x] == x && u[:y] == y - 1)
+  end
+  
+  return gamedata if adj_units.empty?
+  to_attack = adj_units.min_by { |t| [t[:hp], t[:y], t[:x]] }
+
+  to_attack[:hp] -= unit[:atk]
+  to_attack[:alive] = to_attack[:hp] > 0
+
   gamedata
 end
 
+# Breadth first search
+# INPUT: problem wiht keys of :unit, :targets, :grid
+# - We are looking to move unit towards one of the targets, constrained by grid
+# OUTPUT:  modifies its arguments by putting information on problem[:targets]
+# - Sets :range, :paths and :reachable on targets
 def bfs(problem)
   unit, targets = problem.values_at(:unit, :targets)
 
@@ -353,20 +411,28 @@ end
 def part1(filename)
   gamedata = readfile(filename)
   display(gamedata)
-  gamedata = tick(gamedata)
-  display(gamedata)
-  gamedata = tick(gamedata)
-  display(gamedata)
-  gamedata = tick(gamedata)
-  display(gamedata)
+  i = 0
+  while true do
+    gamedata = tick(gamedata)
+    #puts i
+    #display(gamedata)
+    if gamedata[:game_over]
+      break
+    end
+    i += 1
+  end
+  hp_sum = gamedata[:units].map{ |u| u[:hp] }.sum
+  hp_sum * i
 end
 
 begin_tests = Time.now
-tests()
+tests
 end_tests = Time.now
 puts "All tests passed - #{end_tests.to_ms - begin_tests.to_ms}ms"
 
-["input.txt"].each do |x|
-  puts "Part 1, target: #{x}"
-  part1(x)
+#['input.txt'].each do |x|
+#['input_small.txt'].each do |x|
+['input_combat0.txt'].each do |x|
+  puts "Part 1, filename: #{x}"
+  #puts part1(x)
 end
