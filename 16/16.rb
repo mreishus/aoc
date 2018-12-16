@@ -69,61 +69,37 @@ class Compute
 
   def gtir(regs, a, b, c)
     r = regs.dup
-    if a > r[b]
-      r[c] = 1
-    else
-      r[c] = 0
-    end
+    r[c] = a > r[b] ? 1 : 0
     r
   end
 
   def gtri(regs, a, b, c)
     r = regs.dup
-    if r[a] > b
-      r[c] = 1
-    else
-      r[c] = 0
-    end
+    r[c] = r[a] > b ? 1 : 0
     r
   end
 
   def gtrr(regs, a, b, c)
     r = regs.dup
-    if r[a] > r[b]
-      r[c] = 1
-    else
-      r[c] = 0
-    end
+    r[c] = r[a] > r[b] ? 1 : 0
     r
   end
 
   def eqir(regs, a, b, c)
     r = regs.dup
-    if a == r[b]
-      r[c] = 1
-    else
-      r[c] = 0
-    end
+    r[c] = a == r[b] ? 1 : 0
     r
   end
 
   def eqri(regs, a, b, c)
     r = regs.dup
-    if r[a] == b
-      r[c] = 1
-    else
-      r[c] = 0
-    end
+    r[c] = r[a] == b ? 1 : 0
     r
   end
 
   def eqrr(regs, a, b, c)
     r = regs.dup
-    if r[a] == r[b]
-      r[c] = 1
-    else
-      r[c] = 0
-    end
+    r[c] = r[a] == r[b] ? 1 : 0
     r
   end
 
@@ -135,10 +111,17 @@ end
 require 'pp'
 
 def tests
+  opcode_tests
+  p2_tests
   raise 'fail0' unless which_opcodes_match([3, 2, 1, 1], [3, 2, 2, 1], 2, 1, 2) == %w[addi mulr seti]
   raise 'fail1' unless how_many_opcodes_match([3, 2, 1, 1], [3, 2, 2, 1], 2, 1, 2) == 3
   raise 'fail2' unless part1('input_1.txt') == 570
-  opcode_tests
+end
+
+def p2_tests
+  opcodes = determine_opcodes('input_1.txt')
+  regs = part2('input_2.txt', opcodes)
+  raise 'fail p2' unless regs[0] == 503
 end
 
 def opcode_tests
@@ -283,22 +266,12 @@ tests
 end_tests = Time.now
 puts "All tests passed - #{end_tests.to_ms - begin_tests.to_ms}ms"
 
-cpu = Compute.new
-regs = [3, 2, 1, 1]
-pp regs
-regs = cpu.public_send('addi', regs, 2, 1, 2)
-#regs = cpu.addi(regs, 2, 1, 2)
-pp regs
-
 puts 'How many behave like 3 or more opcodes (Part 1) '
 puts part1('input_1.txt')
+
 puts 'Let\'s figure out the opcodes'
 opcodes = determine_opcodes('input_1.txt')
-pp opcodes
 puts 'Part2, running program...'
 regs = part2('input_2.txt', opcodes)
 puts 'Part2: All registers...'
 pp regs
-
-# That's not the right answer; your answer is too high.
-# Please wait one minute before trying again. (You guessed 505.)
