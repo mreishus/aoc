@@ -335,6 +335,8 @@ end
 # - Sets :range, :paths and :reachable on targets
 def bfs(problem)
   unit, targets = problem.values_at(:unit, :targets)
+  #pp unit
+  #pp targets
 
   open_set = [collapse(unit[:x], unit[:y])]
   closed_set = []
@@ -343,6 +345,7 @@ def bfs(problem)
 
   while open_set.count > 0
     subtree_root = open_set.pop
+    #puts "#{open_set.count} #{closed_set.count}"
 
     if goal?(problem, subtree_root)
       path = construct_path(subtree_root, meta)
@@ -419,8 +422,8 @@ def part1(filename)
   i = 0
   while true do
     gamedata = tick(gamedata)
-    #puts i
-    #display(gamedata)
+    puts i
+    display(gamedata)
     if gamedata[:game_over]
       break
     end
@@ -435,9 +438,7 @@ tests
 end_tests = Time.now
 puts "All tests passed - #{end_tests.to_ms - begin_tests.to_ms}ms"
 
-#['input.txt'].each do |x|
-#['input_small.txt'].each do |x|
-['input_combat0.txt'].each do |x|
+['input.txt'].each do |x|
   puts "Part 1, filename: #{x}"
-  #puts part1(x)
+  puts part1(x)
 end
