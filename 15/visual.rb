@@ -510,14 +510,16 @@ end
 
 def simulate(filename, options)
   puts "\e[H\e[2J"
-  sleep 11 
 
   gamedata = readfile(filename, options[:elf_attack])
-  #display(gamedata)
+  display(gamedata)
+  sleep 12
   i = 0
   while true do
     gamedata = tick(gamedata)
+    puts "\e[H\e[2J"
     display(gamedata)
+    puts i
     sleep 0.3
     if gamedata[:game_over] || (options[:end_early_on_elf_death] && gamedata[:elf_died])
       sleep 10
@@ -533,7 +535,7 @@ begin_tests = Time.now
 end_tests = Time.now
 puts "All tests passed - #{end_tests.to_ms - begin_tests.to_ms}ms"
 
-['input.txt'].each do |x|
+['input_weird.txt'].each do |x|
   puts "Part 1, filename: #{x}"
   puts part1(x)
   #puts "Part 2, filename: #{x}"
