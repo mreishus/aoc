@@ -60,7 +60,7 @@ def test_input_small
 ....||..|.
 )
   p1_expect[0] = ''
-	p2_expect = %(
+  p2_expect = %(
 .......#..
 ......|#..
 .|.|||....
@@ -73,7 +73,7 @@ def test_input_small
 .|||||||||
 )
   p2_expect[0] = ''
-	p3_expect = %(
+  p3_expect = %(
 .......#..
 ....|||#..
 .|.||||...
@@ -86,7 +86,7 @@ def test_input_small
 ||||||||||
 )
   p3_expect[0] = ''
-	p4_expect = %(
+  p4_expect = %(
 .....|.#..
 ...||||#..
 .|.#||||..
@@ -99,7 +99,6 @@ def test_input_small
 ||||||||||
 )
   p4_expect[0] = ''
-	
   raise 'fail 1 small' unless p1_expect == board_p1
   raise 'fail 2 small' unless p2_expect == board_p2
   raise 'fail 3 small' unless p3_expect == board_p3
@@ -162,14 +161,35 @@ def part1(filename)
 end
 
 def part2(filename)
+  # Look forcycles
   gamedata = readfile(filename)
   scores = []
   1.upto(1500) do |i|
     gamedata = tick(gamedata)
     scores.push(get_score(gamedata))
   end
-  pp scores
-  pp detect_cycle(scores)
+  cycle = detect_cycle(scores)
+  pp cycle
+
+  # Start overand use cycles
+  gamedata = readfile(filename)
+  i = 0
+  goal = 1000000000
+  #goal = 10
+  loop do
+    while i >= cycle[:cycle_begin] && (i + cycle[:cycle_size]) < goal
+      #puts "Skip"
+      i += cycle[:cycle_size]
+    end
+
+    gamedata = tick(gamedata)
+    i += 1
+    puts i
+    break if i == goal
+  end
+  score = get_score(gamedata)
+  puts score
+  score
 end
 
 def detect_cycle(scores)
@@ -207,7 +227,7 @@ def detect_cycle(scores)
   cycle_begin = slow_i
   # puts "[1] slow_i #{slow_i} fast_i #{fast_i} slow #{slow} fast #{fast}"
 
-  # Now, find the smallest cycle size.. 
+  # Now, find the smallest cycle size..
   fast_i = slow_i + 1
   loop do
     slow = scores[slow_i]
