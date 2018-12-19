@@ -164,9 +164,7 @@ def tick(gamedata_in)
           gamedata_out[:grid][x][y] = '#'
         end
       elsif square == '#'
-        if one_or_more_neighbors(gamedata_in, x, y, '#') && one_or_more_neighbors(gamedata_in, x, y, '|')
-          # nothing
-        else
+        if !one_or_more_neighbors(gamedata_in, x, y, '#') || !one_or_more_neighbors(gamedata_in, x, y, '|')
           gamedata_out[:grid][x][y] = '.'
         end
       end
@@ -179,30 +177,28 @@ end
 def safe_check(gamedata, x, y)
   grid, max_x, max_y = gamedata.values_at(:grid, :max_x, :max_y)
   return nil if x >= max_x || y >= max_y || x < 0 || y < 0
+
   grid[x][y]
 end
 
 def three_or_more_neighbors(gamedata, x, y, target)
-  neighbor_count = 0
-  -1.upto(1).each do |dy|
-    -1.upto(1).each do |dx|
-      next if dx.zero? && dy.zero?
-
-      neighbor_count += 1 if safe_check(gamedata, x+dx, y+dy) == target
-      return true if neighbor_count >= 3
-    end
-  end
-  false
+  n_or_more_neighbors(gamedata, x, y, 3, target)
 end
 
 def one_or_more_neighbors(gamedata, x, y, target)
+  n_or_more_neighbors(gamedata, x, y, 1, target)
+end
+
+# Looking inside gamedata, at point x, y,
+# To see if n or more neighbors match target
+def n_or_more_neighbors(gamedata, x, y, n, target)
   neighbor_count = 0
   -1.upto(1).each do |dy|
     -1.upto(1).each do |dx|
       next if dx.zero? && dy.zero?
 
       neighbor_count += 1 if safe_check(gamedata, x+dx, y+dy) == target
-      return true if neighbor_count >= 1
+      return true if neighbor_count >= n
     end
   end
   false
