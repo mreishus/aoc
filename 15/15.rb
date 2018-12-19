@@ -45,7 +45,7 @@ def test_part2_outcome
 end
 
 def test_input_tiny2
-  filename = "input_tiny2.txt"
+  filename = 'input_tiny2.txt'
   gamedata = readfile(filename)
   board_init = display_string(gamedata)
 
