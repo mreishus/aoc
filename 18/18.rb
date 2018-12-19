@@ -11,6 +11,26 @@ end
 
 def tests
   test_input_small
+  test_part1
+  test_cycles
+end
+
+def test_cycles
+  test_array = [90, 30, 62, 23, 41, 37, 1, 1, 8, 9, 7, 8, 9, 7, 8, 9, 7, 8, 9, 7, 8, 9, 7, 8, 9, 7, 8, 9]
+  answer1 = detect_cycle(test_array)
+  test_array = [100, 200, 300, 301, 1512, 1234, 1234, 125, 16243,6432,52345, 2345, 2345, 4523422 ,334523, 2345234, 1, 2, 3, 4, 5, 1, 2, 3, 4, 5, 1, 2, 3, 4, 5, 1, 2, 3, 4, 5, 1, 2, 3, 4, 5, 1, 2, 3, 4, 5, 1, 2, 3, 4, 5, 1, 2, 3, 4, 5, 1, 2, 3, 4, 5]
+  answer2 = detect_cycle(test_array)
+
+  answer1_expect = {:cycle_size=>3, :cycle_begin=>8, :is_cycle=>true}
+  answer2_expect = {:cycle_size=>5, :cycle_begin=>16, :is_cycle=>true}
+  raise 'fail cycle1' unless answer1 == answer1_expect
+  raise 'fail cycle2' unless answer2 == answer2_expect
+end
+
+def test_part1
+  filename = 'input_small.txt'
+  product = part1(filename)
+  raise 'fail p1' unless product == 1147
 end
 
 def test_input_small
@@ -119,6 +139,95 @@ def readfile_coords(filename)
   [max_x, max_y]
 end
 
+def count(gamedata, valids)
+  grid, max_x, max_y = gamedata.values_at(:grid, :max_x, :max_y)
+  total = 0
+
+  0.upto(max_y - 1) do |y|
+    0.upto(max_x - 1) do |x|
+      square = grid[x][y]
+      total += 1 if valids.include? square
+    end
+  end
+
+  total
+end
+
+def part1(filename)
+  gamedata = readfile(filename)
+  1.upto(10) do |i|
+    gamedata = tick(gamedata)
+  end
+  get_score(gamedata)
+end
+
+def part2(filename)
+  gamedata = readfile(filename)
+  scores = []
+  1.upto(1500) do |i|
+    gamedata = tick(gamedata)
+    scores.push(get_score(gamedata))
+  end
+  pp scores
+  pp detect_cycle(scores)
+end
+
+def detect_cycle(scores)
+  slow_i, fast_i, slow, fast = [1, 2, nil, nil]
+
+  # Is there a cycle?
+  loop do
+    slow = scores[slow_i]
+    fast = scores[fast_i]
+    break if slow == fast || fast.nil?
+
+    slow_i += 1
+    fast_i += 2
+  end
+
+  return {cycle_size: nil, cycle_begin: nil, is_cycle: false} if slow != fast # Not a cycle
+
+  # From here on: There is a cycle
+  cycle_size_multiple = fast_i - slow_i # This is a multiple of the cycle size, but not the smallest size
+  # puts "[2] slow_i #{slow_i} fast_i #{fast_i} slow #{slow} fast #{fast}"
+
+  # Reset slow to the beginning and move at the same speed, where they "meet" (in a graph)
+  # Is the beginning of the cycle
+  slow_i = 0
+  loop do
+    slow = scores[slow_i]
+    fast = scores[fast_i]
+    break if slow == fast
+
+    slow_i += 1
+    fast_i += 1
+  end
+
+  # Now we know the cycle starts at slow_i
+  cycle_begin = slow_i
+  # puts "[1] slow_i #{slow_i} fast_i #{fast_i} slow #{slow} fast #{fast}"
+
+  # Now, find the smallest cycle size.. 
+  fast_i = slow_i + 1
+  loop do
+    slow = scores[slow_i]
+    fast = scores[fast_i]
+    break if slow == fast
+    fast_i += 1
+  end
+
+  cycle_size = fast_i - slow_i
+
+  #answer = {cycle_size: cycle_size, cycle_begin: cycle_begin, cycle_size_multiple: cycle_size_multiple, is_cycle: true}
+  answer = {cycle_size: cycle_size, cycle_begin: cycle_begin, is_cycle: true}
+end
+
+def get_score(gamedata)
+  trees = count(gamedata, ['|'])
+  lumberyards = count(gamedata, ['#'])
+  trees * lumberyards
+end
+
 # INPUT: gamedata
 # OUTPUT: Prints board to screen
 def display(gamedata)
@@ -213,9 +322,22 @@ tests
 end_tests = Time.now
 puts "All tests passed - #{end_tests.to_ms - begin_tests.to_ms}ms"
 
+filename = 'input.txt'
+product = part1(filename)
+puts "Part 1: #{product}"
+ans = part2(filename)
+puts "Part 2: #{ans}"
+=begin
 filename = 'input_small.txt'
 gamedata = readfile(filename)
 display(gamedata)
-
-gamedata = tick(gamedata)
+1.upto(10) do |i|
+  gamedata = tick(gamedata)
+end
 display(gamedata)
+
+trees = count(gamedata, ['|'])
+lumberyards = count(gamedata, ['#'])
+product = trees * lumberyards
+puts product
+=end
