@@ -126,19 +126,19 @@ end
 def tick(data)
   exe = data[:program][data[:regs][data[:ip_index]]]
 
-  print "ip=#{data[:regs][data[:ip_index]]} #{data[:regs]} "
-  $cpu.public_send(exe[:op], data[:regs], exe[:a], exe[:b], exe[:c])
-  print "-> #{exe[:op]} #{exe[:a]} #{exe[:b]} #{exe[:c]} -> #{data[:regs]} -> "
+  #print "ip=#{data[:regs][data[:ip_index]]} #{data[:regs]} "
+  $cpu.send(exe[:op], data[:regs], exe[:a], exe[:b], exe[:c])
+
+  #print "-> #{exe[:op]} #{exe[:a]} #{exe[:b]} #{exe[:c]} -> #{data[:regs]} -> "
   data[:regs][data[:ip_index]] += 1
-  puts "#{data[:regs]}"
+
+  #puts "#{data[:regs]}"
 
   data
 end
 
 def invalid_ip(data)
-  program, ip_index, regs = data.values_at(:program, :ip_index, :regs)
-  to_execute = program[regs[ip_index]]
-  to_execute.nil?
+  data[:program][  data[:regs][  data[:ip_index] ]].nil?
 end
 
 def part1(filename)
@@ -165,7 +165,8 @@ puts "All tests passed - #{end_tests.to_ms - begin_tests.to_ms}ms"
 filename = 'input.txt'
 data = parse_file(filename)
 loop do
-  data = tick(data)
+  tick(data)
+  #puts data
   break if invalid_ip(data)
   #STDIN.getch
 end
