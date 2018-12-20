@@ -1,6 +1,7 @@
 #!/usr/bin/env ruby
 
 require 'pp'
+require 'io/console'
 
 class Time
   def to_ms
@@ -9,100 +10,68 @@ class Time
 end
 
 class Compute
-  def addr(regs, a, b, c)
-    r = regs.dup
+  def addr(r, a, b, c)
     r[c] = r[a] + r[b]
-    r
   end
 
-  def addi(regs, a, b, c)
-    r = regs.dup
+  def addi(r, a, b, c)
     r[c] = r[a] + b
-    r
   end
 
-  def mulr(regs, a, b, c)
-    r = regs.dup
+  def mulr(r, a, b, c)
     r[c] = r[a] * r[b]
-    r
   end
 
-  def muli(regs, a, b, c)
-    r = regs.dup
+  def muli(r, a, b, c)
     r[c] = r[a] * b
-    r
   end
 
-  def banr(regs, a, b, c)
-    r = regs.dup
+  def banr(r, a, b, c)
     r[c] = r[a] & r[b]
-    r
   end
 
-  def bani(regs, a, b, c)
-    r = regs.dup
+  def bani(r, a, b, c)
     r[c] = r[a] & b
-    r
   end
 
-  def borr(regs, a, b, c)
-    r = regs.dup
+  def borr(r, a, b, c)
     r[c] = r[a] | r[b]
-    r
   end
 
-  def bori(regs, a, b, c)
-    r = regs.dup
+  def bori(r, a, b, c)
     r[c] = r[a] | b
-    r
   end
 
-  def setr(regs, a, _b, c)
-    r = regs.dup
+  def setr(r, a, _b, c)
     r[c] = r[a]
-    r
   end
 
-  def seti(regs, a, _b, c)
-    r = regs.dup
+  def seti(r, a, _b, c)
     r[c] = a
-    r
   end
 
-  def gtir(regs, a, b, c)
-    r = regs.dup
+  def gtir(r, a, b, c)
     r[c] = a > r[b] ? 1 : 0
-    r
   end
 
-  def gtri(regs, a, b, c)
-    r = regs.dup
+  def gtri(r, a, b, c)
     r[c] = r[a] > b ? 1 : 0
-    r
   end
 
-  def gtrr(regs, a, b, c)
-    r = regs.dup
+  def gtrr(r, a, b, c)
     r[c] = r[a] > r[b] ? 1 : 0
-    r
   end
 
-  def eqir(regs, a, b, c)
-    r = regs.dup
+  def eqir(r, a, b, c)
     r[c] = a == r[b] ? 1 : 0
-    r
   end
 
-  def eqri(regs, a, b, c)
-    r = regs.dup
+  def eqri(r, a, b, c)
     r[c] = r[a] == b ? 1 : 0
-    r
   end
 
-  def eqrr(regs, a, b, c)
-    r = regs.dup
+  def eqrr(r, a, b, c)
     r[c] = r[a] == r[b] ? 1 : 0
-    r
   end
 
   def all_instructions
@@ -110,9 +79,11 @@ class Compute
   end
 end
 
+$cpu = Compute.new
+
 def tests
-  p1_tests
-  opcode_tests
+  #p1_tests
+  #opcode_tests
 end
 
 def p1_tests
@@ -141,7 +112,6 @@ def parse_file(filename)
   program = []
   ip_index = -1
   File.readlines(filename).each do |line|
-    puts line
     if line =~ /^#ip/
       ip_index, _ = line.strip.match(/#ip (\d+)/).captures.map(&:to_i)
       next
@@ -154,16 +124,15 @@ def parse_file(filename)
 end
 
 def tick(data)
-  program, ip_index, regs = data.values_at(:program, :ip_index, :regs)
+  exe = data[:program][data[:regs][data[:ip_index]]]
 
-  to_execute = program[regs[ip_index]]
-  op, a, b, c = to_execute.values_at(:op, :a, :b, :c)
+  print "ip=#{data[:regs][data[:ip_index]]} #{data[:regs]} "
+  $cpu.public_send(exe[:op], data[:regs], exe[:a], exe[:b], exe[:c])
+  print "-> #{exe[:op]} #{exe[:a]} #{exe[:b]} #{exe[:c]} -> #{data[:regs]} -> "
+  data[:regs][data[:ip_index]] += 1
+  puts "#{data[:regs]}"
 
-  cpu = Compute.new
-  new_regs = cpu.public_send(op, regs, a, b, c)
-  new_regs[ip_index] += 1
-
-  { program: program, ip_index: ip_index, regs: new_regs }
+  data
 end
 
 def invalid_ip(data)
@@ -193,21 +162,17 @@ tests
 end_tests = Time.now
 puts "All tests passed - #{end_tests.to_ms - begin_tests.to_ms}ms"
 
-filename = 'input_small.txt'
-filename = 'input.txt'
-answer = part1(filename)
-pp answer
-
-=begin
 filename = 'input.txt'
 data = parse_file(filename)
-
 loop do
   data = tick(data)
-  #pp data[:regs]
   break if invalid_ip(data)
+  #STDIN.getch
 end
-pp data[:regs]
-puts "Left in reg 0: " 
+puts data
 puts data[:regs][0]
-=end
+
+# That's not the right answer; your answer is too low. If you're stuck, there
+# are some general tips on the about page, or you can ask for hints on the
+# subreddit. Please wait one minute before trying again. (You guessed 10551312.)
+
