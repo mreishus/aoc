@@ -160,7 +160,8 @@ end
 
 def astar(initial, goal, depth)
   closed_set = {}
-  open_set = [initial]
+  open_set = {}
+  open_set[initial] = 1
   came_from = {}
 
   # Cost of initial -> This node
@@ -171,22 +172,11 @@ def astar(initial, goal, depth)
   est_full_travel_score = Hash.new(999999999999)
   est_full_travel_score[initial] = heuristic(initial, goal)
 
-  i = 0
-  debug = false
-  until open_set.empty?
-    #i += 1
-    current = open_set.min_by { |t| est_full_travel_score[t] }
-    if i == 1000 && debug
-      pp current
-      pp open_set.length
-      pp closed_set.keys.length
-      i = 0
-    end
-    if current == goal
-      return reconstruct_path(came_from, current)
-    end
+  until open_set.keys.empty?
+    current = open_set.keys.min_by { |t| est_full_travel_score[t] }
+    return reconstruct_path(came_from, current) if current == goal
 
-    open_set.reject! { |y| y == current }
+    open_set.delete(current)
     closed_set[current] = 1
 
     moves = valid_moves(current, goal, depth)
@@ -195,8 +185,8 @@ def astar(initial, goal, depth)
       next if closed_set.key? move
 
       tenative_travel_score = travel_score[current] + cost
-      if !open_set.include? move
-        open_set.push move
+      if !open_set.key? move
+        open_set[move] = 1
       elsif tenative_travel_score >= travel_score[move]
         next
       end
