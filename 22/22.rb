@@ -45,13 +45,26 @@ class Grid
   end
 
   def self.geoind(coord, targetcoord, depth)
-    x, y = [coord.real, coord.imag]
-    tx, ty = [targetcoord.real, targetcoord.imag]
-    return 0 if (x == 0 && y == 0) || (x == tx && y == ty)
-    return x * 16807 if y.zero?
-    return y * 48271 if x.zero?
+    @grid_calculations ||= Hash.new do |h, key|
+      coord  = key[0]
+      targetcoord = key[1]
+      depth = key[2]
 
-    Grid.erosionlevel(Complex(x - 1, y), targetcoord, depth) * Grid.erosionlevel(Complex(x, y - 1), targetcoord, depth)
+      x, y = [coord.real, coord.imag]
+      tx, ty = [targetcoord.real, targetcoord.imag]
+      answer = nil
+      if (x == 0 && y == 0) || (x == tx && y == ty)
+        answer = 0
+      elsif y.zero?
+        answer = x * 16807
+      elsif x.zero?
+        answer = y * 48271
+      else
+        answer = Grid.erosionlevel(Complex(x - 1, y), targetcoord, depth) * Grid.erosionlevel(Complex(x, y - 1), targetcoord, depth)
+      end
+      h[key] = answer
+    end
+    @grid_calculations[[coord, targetcoord, depth]]
   end
 
   def self.erosionlevel(coord, targetcoord, depth)
