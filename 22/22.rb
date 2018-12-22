@@ -1,6 +1,9 @@
 #!/usr/bin/env ruby
 
 require 'pp'
+require 'priority_queue'
+# sudo gem install PriorityQueue
+# https://github.com/supertinou/priority-queue
 
 class Time
   def to_ms
@@ -160,8 +163,6 @@ end
 
 def astar(initial, goal, depth)
   closed_set = {}
-  open_set = {}
-  open_set[initial] = 1
   came_from = {}
 
   # Cost of initial -> This node
@@ -172,11 +173,13 @@ def astar(initial, goal, depth)
   est_full_travel_score = Hash.new(999999999999)
   est_full_travel_score[initial] = heuristic(initial, goal)
 
-  until open_set.keys.empty?
-    current = open_set.keys.min_by { |t| est_full_travel_score[t] }
+  open_set = PriorityQueue.new
+  open_set.push initial, est_full_travel_score[initial]
+
+  loop do
+    current = open_set.delete_min_return_key
     return reconstruct_path(came_from, current) if current == goal
 
-    open_set.delete(current)
     closed_set[current] = 1
 
     moves = valid_moves(current, goal, depth)
@@ -185,8 +188,8 @@ def astar(initial, goal, depth)
       next if closed_set.key? move
 
       tenative_travel_score = travel_score[current] + cost
-      if !open_set.key? move
-        open_set[move] = 1
+      if !open_set.has_key? move
+        open_set.push move, 99999999
       elsif tenative_travel_score >= travel_score[move]
         next
       end
@@ -194,6 +197,7 @@ def astar(initial, goal, depth)
       came_from[move] = current
       travel_score[move] = tenative_travel_score
       est_full_travel_score[move] = travel_score[move] + heuristic(move, goal)
+      open_set.change_priority move, est_full_travel_score[move]
     end
   end
 end
