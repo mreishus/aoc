@@ -144,7 +144,7 @@ def heuristic(coord_tool_pair, target_tool_pair)
   dx, dy = [target.real, target.imag]
 
   mdist = (sx - dx).abs + (sy - dy).abs
-  return mdist + 7 if begin_tool != end_tool
+  return mdist + 7 if mdist <= 15 && begin_tool != end_tool
 
   mdist
 end
