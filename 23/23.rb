@@ -21,17 +21,30 @@ class NanoBot
   def has_target_in_range(bot2)
     self.dist(bot2) <= @r
   end
+
+  def has_xyz_in_range(xt, yt, zt)
+    ((@x - xt).abs + (@y - yt).abs + (@z - zt).abs) <= @r
+  end
 end
 
 class Region
-  attr_accessor :x0, :x1, :y0, :y1, :z0, :z1
+  attr_reader :x0, :x1, :y0, :y1, :z0, :z1, :size
+  attr_accessor :bots_min_bound, :bots_max_bound
   def initialize(x0, y0, z0, x1, y1, z1)
     @x0, @y0, @z0 = x0, y0, z0
     @x1, @y1, @z1 = x1, y1, z1
+    @size = (x1-x0) * (y1-y0) * (z1-z0)
+    @bots_min_bound = nil
+    @bots_max_bound = nil
+    raise 'invalid region' if y0 > y1 || x0 > x1 || z0 > z1
   end
 
   def all_points
     [@x0, @y0, @z0, @x1, @y1, @z1]
+  end
+
+  def get_estimates!(bots)
+    @bots_max_bound, @bots_min_bound = estimate_region(bots, self)
   end
 end
 
@@ -103,10 +116,11 @@ def estimate_region(bots, r2)
       lower_bound += 1
     elsif corners_in_range > 0
       upper_bound += 1
-    elsif bot.x > x0 && bot.x < x1 && bot.y > y0 && bot.y < y1 && bot.z > z0 && bot.z < z1
+    elsif bot.x >= x0 && bot.x <= x1 && bot.y >= y0 && bot.y <= y1 && bot.z >= z0 && bot.z <= z1
       # ^ Checks to see if bot is sitting inside the range
       upper_bound += 1
     elsif is_on_face(bot, Region.new(x0, y0, z0, x1, y1, z1))
+      #puts 'END SUCCESS scanning faces'
       # Check along all 6 faces to see if points are in range..(slow?)
       upper_bound += 1
     end
@@ -115,22 +129,21 @@ def estimate_region(bots, r2)
 end
 
 def is_on_face(bot, r)
+  #puts 'BEGIN scanning faces'
+  #pp bot
+  #pp r
   x0, y0, z0, x1, y1, z1 = r.all_points
   x0.upto(x1) do |x|
     # All Xs and Ys with Z at min
     # All Xs and Ys with Z at max
     y0.upto(y1) do |y|
-      p1 = NanoBot.new(x, y, z0, 0)
-      p2 = NanoBot.new(x, y, z1, 0)
-      return true if bot.has_target_in_range(p1) || bot.has_target_in_range(p2)
+      return true if bot.has_xyz_in_range(x, y, z0) || bot.has_xyz_in_range(x, y, z1)
     end
 
     # All Zs and Xs with Y at min
     # All Zs and Xs with Y at max
     z0.upto(z1) do |z|
-      p1 = NanoBot.new(x, y0, z, 0)
-      p2 = NanoBot.new(x, y1, z, 0)
-      return true if bot.has_target_in_range(p1) || bot.has_target_in_range(p2)
+      return true if bot.has_xyz_in_range(x, y0, z) || bot.has_xyz_in_range(x, y1, z)
     end
   end
 
@@ -138,13 +151,76 @@ def is_on_face(bot, r)
   # All Zs and Ys with X at max
   z0.upto(z1) do |z|
     y0.upto(y1) do |y|
-      p1 = NanoBot.new(x0, y, z, 0)
-      p2 = NanoBot.new(x1, y, z, 0)
-      return true if bot.has_target_in_range(p1) || bot.has_target_in_range(p2)
+      return true if bot.has_xyz_in_range(x0, y, z) || bot.has_xyz_in_range(x1, y, z)
     end
   end
 
+  #puts 'END FAIL scanning faces'
   false
+end
+
+def part2(filename)
+  bots = parse_file(filename)
+  r = get_max_region(bots)
+  #r.get_estimates!(bots)
+
+  regions = [r]
+  final_candidates = []
+  tell_regions_to_calculate_estimates(regions, bots)
+
+  loop do
+    candidate = regions.max_by { |this_r| this_r.bots_max_bound }
+    if candidate.size < 50
+      final_candidates.push candidate
+      break
+    end
+    regions.reject! { |y| y == candidate }
+    new_regions = split(candidate)
+    tell_regions_to_calculate_estimates(new_regions, bots)
+    regions += new_regions
+  end
+
+  pp final_candidates
+
+  raise 'hi'
+end
+
+def tell_regions_to_calculate_estimates(regions, bots)
+  regions.select { |this_r| this_r.bots_max_bound.nil? }.each { |this_r| this_r.get_estimates!(bots) }
+end
+
+def split(r)
+  rs = []
+  x0, y0, z0, x1, y1, z1 = r.all_points
+  x_mid = (x0 + x1) / 2
+  y_mid = (y0 + y1) / 2
+  z_mid = (z0 + z1) / 2
+  #pp "-----"
+  #pp r
+  ##puts "xmid #{x_mid} ymid #{y_mid} zmid #{z_mid} "
+
+  rs.push(Region.new(x0, y0, z0, x_mid, y_mid, z_mid)) # Original cut down
+  rs.push(Region.new(x_mid, y0, z0, x1, y_mid, z_mid)) # Only X moved
+  rs.push(Region.new(x0, y_mid, z0, x_mid, y1, z_mid)) # Only Y moved
+  rs.push(Region.new(x_mid, y_mid, z0, x1, y1, z_mid)) # X+Y moved
+  rs.push(Region.new(x0, y0, z_mid, x_mid, y_mid, z1)) # Only Z moved
+  rs.push(Region.new(x_mid, y0, z_mid, x1, y_mid, z1)) # Z+X moved
+  rs.push(Region.new(x0, y_mid, z_mid, x_mid, y1, z1)) # Z+Y moved
+  rs.push(Region.new(x_mid, y_mid, z_mid, x1, y1, z1)) # Everything moved
+  rs
+end
+
+def get_max_region(bots)
+  x0, y0, z0, x1, y1, z1 = [nil, nil, nil, nil, nil, nil]
+  bots.each do |bot|
+    x0 = bot.x if x0.nil? || bot.x < x0
+    x1 = bot.x if x1.nil? || bot.x > x1
+    y0 = bot.y if y0.nil? || bot.y < y0
+    y1 = bot.y if y1.nil? || bot.y > y1
+    z0 = bot.z if z0.nil? || bot.z < z0
+    z1 = bot.z if z1.nil? || bot.z > z1
+  end
+  Region.new(x0, y0, z0, x1, y1, z1)
 end
 
 begin_tests = Time.now
@@ -156,6 +232,10 @@ puts 'Part1: '
 pp part1('input.txt')
 
 puts 'Part2 playground: '
+pp part2('input_small2.txt')
+#pp part2('input.txt')
+
+=begin
 
 bots = parse_file('input_small2.txt')
 num = points_in_range(bots, 12, 12, 12)
@@ -173,3 +253,5 @@ pp upper_bound, lower_bound
 #def estimate_region(bots, x0, x1, y0, y1, z0, z1)
 upper_bound, lower_bound = estimate_region(bots, Region.new(-500, -500, -500, 500, 500, 500))
 pp upper_bound, lower_bound
+
+=end
