@@ -31,7 +31,7 @@ class Region
   end
 
   def all_points
-    [@x0, @x1, @y0, @y1, @z0, @z1]
+    [@x0, @y0, @z0, @x1, @y1, @z1]
   end
 end
 
@@ -79,7 +79,8 @@ def points_in_range(bots, x, y, z)
 end
 
 # x0 = min_x, x1 = max_x, etc
-def estimate_region(bots, x0, y0, z0, x1, y1, z1)
+def estimate_region(bots, r2)
+  x0, y0, z0, x1, y1, z1 = r2.all_points
   corners = [
     NanoBot.new(x0, y0, z0, 0),
     NanoBot.new(x0, y0, z1, 0),
@@ -160,15 +161,15 @@ bots = parse_file('input_small2.txt')
 num = points_in_range(bots, 12, 12, 12)
 pp num
 pp '---'
-upper_bound, lower_bound = estimate_region(bots, 10, 10, 10, 13, 13, 13)
+upper_bound, lower_bound = estimate_region(bots, Region.new(10, 10, 10, 13, 13, 13))
 pp upper_bound, lower_bound
-upper_bound, lower_bound = estimate_region(bots, 11, 11, 11, 13, 13, 13)
+upper_bound, lower_bound = estimate_region(bots, Region.new(11, 11, 11, 13, 13, 13))
 pp upper_bound, lower_bound
 
-upper_bound, lower_bound = estimate_region(bots, 12, 12, 12, 12, 12, 12)
+upper_bound, lower_bound = estimate_region(bots, Region.new(12, 12, 12, 12, 12, 12))
 pp '?'
 pp upper_bound, lower_bound
 
 #def estimate_region(bots, x0, x1, y0, y1, z0, z1)
-upper_bound, lower_bound = estimate_region(bots, -500, -500, -500, 500, 500, 500)
+upper_bound, lower_bound = estimate_region(bots, Region.new(-500, -500, -500, 500, 500, 500))
 pp upper_bound, lower_bound
