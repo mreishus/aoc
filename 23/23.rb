@@ -1,6 +1,9 @@
 #!/usr/bin/env ruby
 
 require 'pp'
+require 'priority_queue'
+# sudo gem install PriorityQueue
+# https://github.com/supertinou/priority-queue
 
 class Time
   def to_ms
@@ -33,7 +36,7 @@ class Region
   def initialize(x0, y0, z0, x1, y1, z1)
     @x0, @y0, @z0 = x0, y0, z0
     @x1, @y1, @z1 = x1, y1, z1
-    @size = (x1-x0) * (y1-y0) * (z1-z0)
+    @size = (x1-x0+1) * (y1-y0+1) * (z1-z0+1)
     @bots_min_bound = nil
     @bots_max_bound = nil
     raise 'invalid region' if y0 > y1 || x0 > x1 || z0 > z1
@@ -129,6 +132,7 @@ def estimate_region(bots, r2)
 end
 
 def is_on_face(bot, r)
+  return false if r.size > 100
   #puts 'BEGIN scanning faces'
   #pp bot
   #pp r
@@ -162,27 +166,101 @@ end
 def part2(filename)
   bots = parse_file(filename)
   r = get_max_region(bots)
-  #r.get_estimates!(bots)
+  r.get_estimates!(bots)
 
-  regions = [r]
+  max_count = 0
+  max_coord = [nil, nil, nil]
   final_candidates = []
-  tell_regions_to_calculate_estimates(regions, bots)
+  stop_searching_threshold = nil
 
+  regions = PriorityQueue.new
+  regions.push r, 0 - r.bots_max_bound
+
+  i = 0
   loop do
-    candidate = regions.max_by { |this_r| this_r.bots_max_bound }
-    if candidate.size < 50
-      final_candidates.push candidate
-      break
+    candidate = regions.delete_min_return_key
+    #candidate = regions.max_by { |this_r| this_r.bots_max_bound }
+
+    break if candidate.nil?
+    if candidate.size < 10
+      break if candidate.bots_max_bound < max_count
+      i += 1
+
+      max_count_here, max_coord_here = calculate_max_point(candidate, bots)
+      if max_count_here > max_count
+        max_count = max_count_here
+        max_coord = max_coord_here
+      end
+
+      if i % 1000 == 0
+        xt, yt, zt = max_coord
+        pp '---final count---'
+        pp max_count
+        pp '---final coords---'
+        pp max_coord
+        pp '--dist---'
+        pp xt + yt + zt
+        pp '--candidate--'
+        pp candidate
+        i = 0
+      end
+      #pp '---final count---'
+      #pp max_count
+      #pp '---final coords---'
+      #pp max_coord
+      #pp '--dist---'
+
+      #break if 
+      #pp candidate
+      #pp max
+      #raise 'bye'
+      #stop_searching_threshold = candidate.bots_min_bound if stop_searching_threshold.nil?
+      #break if candidate.bots_max_bound <= stop_searching_threshold
+      #final_candidates.push candidate
+      #puts 'candidate'
+      #pp candidate
+      #pp final_candidates.count
+
+      next
     end
-    regions.reject! { |y| y == candidate }
+
     new_regions = split(candidate)
     tell_regions_to_calculate_estimates(new_regions, bots)
-    regions += new_regions
+    new_regions.each do |r2|
+      regions.push r2, 0 - r2.bots_max_bound
+    end
   end
 
-  pp final_candidates
+  pp '---final count---'
+	pp max_count
+	pp '---final coords---'
+  pp max_coord
+  xt, yt, zt = max_coord
+  pp '--dist---'
+  pp xt + yt + zt
+end
 
-  raise 'hi'
+# In a region, calculate the number of bots in range for each point
+# in that region.  Find the point with the highest, then report
+# that point and where it is.  To only be used with small regions.
+def calculate_max_point(r, bots)
+  x0, y0, z0, x1, y1, z1 = r.all_points
+
+  max_seen = 0
+  max_coord = [nil, nil, nil]
+
+  x0.upto(x1) do |x|
+    y0.upto(y1) do |y|
+      z0.upto(z1) do |z|
+        num = points_in_range(bots, x, y, z)
+        if num > max_seen
+          max_seen = num
+          max_coord = [x, y, z]
+        end
+      end
+    end
+  end
+  [max_seen, max_coord]
 end
 
 def tell_regions_to_calculate_estimates(regions, bots)
@@ -232,8 +310,8 @@ puts 'Part1: '
 pp part1('input.txt')
 
 puts 'Part2 playground: '
-pp part2('input_small2.txt')
-#pp part2('input.txt')
+#pp part2('input_small2.txt')
+pp part2('input.txt')
 
 =begin
 
