@@ -90,8 +90,9 @@ def part1(filename)
 end
 
 def points_in_range(bots, x, y, z)
-  target_bot = NanoBot.new(x, y, z, 0)
-  bots.select { |bot| bot.has_target_in_range(target_bot) }.count
+  #target_bot = NanoBot.new(x, y, z, 0)
+  #bots.select { |bot| bot.has_target_in_range(target_bot) }.count
+  bots.select { |bot| bot.has_xyz_in_range(x, y, z) }.count
 end
 
 # x0 = min_x, x1 = max_x, etc
@@ -132,7 +133,7 @@ def estimate_region(bots, r2)
 end
 
 def is_on_face(bot, r)
-  return false if r.size > 100
+  return false if r.size > 400
   #puts 'BEGIN scanning faces'
   #pp bot
   #pp r
@@ -165,7 +166,8 @@ end
 
 def part2(filename)
   bots = parse_file(filename)
-  r = get_max_region(bots)
+  tr = get_max_region(bots)
+  r = Region.new(tr.x0, tr.y0, tr.z0, tr.x1 + 100, tr.y1 + 200 , tr.z1 + 300)
   r.get_estimates!(bots)
 
   max_count = 0
@@ -182,8 +184,9 @@ def part2(filename)
     #candidate = regions.max_by { |this_r| this_r.bots_max_bound }
 
     break if candidate.nil?
-    if candidate.size < 10
+    if candidate.size < 20
       break if candidate.bots_max_bound < max_count
+      #puts "examine #{candidate.size}"
       i += 1
 
       max_count_here, max_coord_here = calculate_max_point(candidate, bots)
@@ -202,6 +205,8 @@ def part2(filename)
         pp xt + yt + zt
         pp '--candidate--'
         pp candidate
+        #pp '--points calculated--'
+        #pp $POINTS_CALCULATED_DIRECTLY
         i = 0
       end
       #pp '---final count---'
@@ -224,6 +229,8 @@ def part2(filename)
       next
     end
 
+    #puts "split #{candidate.size}"
+
     new_regions = split(candidate)
     tell_regions_to_calculate_estimates(new_regions, bots)
     new_regions.each do |r2|
@@ -243,6 +250,7 @@ end
 # In a region, calculate the number of bots in range for each point
 # in that region.  Find the point with the highest, then report
 # that point and where it is.  To only be used with small regions.
+#$POINTS_CALCULATED_DIRECTLY = 0
 def calculate_max_point(r, bots)
   x0, y0, z0, x1, y1, z1 = r.all_points
 
@@ -253,6 +261,7 @@ def calculate_max_point(r, bots)
     y0.upto(y1) do |y|
       z0.upto(z1) do |z|
         num = points_in_range(bots, x, y, z)
+        #$POINTS_CALCULATED_DIRECTLY += 1
         if num > max_seen
           max_seen = num
           max_coord = [x, y, z]
@@ -309,9 +318,17 @@ puts "All tests passed - #{end_tests.to_ms - begin_tests.to_ms}ms"
 puts 'Part1: '
 pp part1('input.txt')
 
-puts 'Part2 playground: '
+puts 'Part2: '
+#pp part2('input.txt')
+
+## FAIL CASE
+bots = parse_file('input4.txt')
+z = points_in_range(bots, 10615635, 41145430, 30249331)
+pp z
+pp part2('input4.txt') # Should be 983.. my program only sees 936
+
 #pp part2('input_small2.txt')
-pp part2('input.txt')
+#pp part2('input_edge.txt')
 
 =begin
 
