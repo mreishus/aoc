@@ -35,7 +35,7 @@ def parse_file(filename)
       next
     end
 
-    main_re = /(\d+) units each with (\d+) hit points .* with an attack that does (\d+) (\w+) damage at initiative (\d+)/
+    main_re = /(\d+) units each with (\d+) hit points.*with an attack that does (\d+) (\w+) damage at initiative (\d+)/
     next unless line =~ main_re
     num, hp, atk_p, atk_t, init = line.strip.match(main_re).captures
 
@@ -89,6 +89,7 @@ def tick_target_selection(fighters_in)
 
   troops = fighters_out.sort_by { |x| [x.effective_power, x.init] }.reverse
   troops.each do |t|
+    #puts "-----------Selecting target #{t.effective_power} #{t.init}"
     t.target = select_target(t, fighters_out)
   end
 
@@ -97,8 +98,8 @@ end
 
 def select_target(attacking, fighters)
   units_being_targeted = fighters.map{ |x| x.target }
-  enemies = fighters.select{ |x| x.army != attacking.army && !units_being_targeted.include?(x.id) }
-  target = enemies.max_by{ |e| [damage_done(attacking, e), e.effective_power, e.init] }
+  enemies = fighters.select { |x| x.army != attacking.army && !units_being_targeted.include?(x.id) }
+  target = enemies.max_by { |e| [damage_done(attacking, e), e.effective_power, e.init] }
   return nil if damage_done(attacking, target).zero?
 
   target.id
@@ -107,7 +108,7 @@ end
 def damage_done(attacking, target)
   # If attacking has 0 or negative units, then 0 dmg
   # If defender Immune, then 0
-  return 0 if attacking.num <= 0
+  #return 0 if attacking.num <= 0
   return 0 if target.nil?
   return 0 if target.immunes.include?(attacking.atk_t)
 
@@ -170,9 +171,11 @@ def one_side_dead(fighters)
   false
 end
 
-#fighters = parse_file('input.txt')
-fighters = parse_file('input_small.txt')
+fighters = parse_file('input.txt')
+#fighters = parse_file('input_small.txt')
 display(fighters)
+#pp fighters
+#raise 'test'
 loop do
   fighters = tick(fighters)
   display(fighters)
@@ -182,4 +185,5 @@ puts "Over.."
 puts fighters.select{ |x| x.num > 0}.map{ |x| x.num }.sum
 
 # Guessed 19322: Too high.
+# Guessed 19163: Too low.
 # Guessed 19064: Too low.
