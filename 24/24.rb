@@ -140,10 +140,10 @@ def tick_attack(fighters_in)
     damage = damage_done(attacking, target)
     units_killed = damage / target.hp
 
-    puts "Id #{attacking.id} Attacks #{target.id}, damage[#{damage}] Kills[#{units_killed}]"
-    puts "     Victim num before: #{target.num}"
+    #puts "Id #{attacking.id} Attacks #{target.id}, damage[#{damage}] Kills[#{units_killed}]"
+    #puts "     Victim num before: #{target.num}"
     target.num -= units_killed
-    puts "     Victim num after: #{target.num}"
+    #puts "     Victim num after: #{target.num}"
   end
 
   fighters_out.reject! { |y| y.num <= 0 } # Remove Dead
@@ -152,17 +152,17 @@ def tick_attack(fighters_in)
 end
 
 def display(fighters)
-  puts 'Immune System:'
+  #puts 'Immune System:'
   troops = fighters.select { |x| x.army == 0 }.sort_by { |x| x.id }
   troops.each do |t|
-    puts "Group #{t.id} Contains #{t.num} Units"
+    #puts "Group #{t.id} Contains #{t.num} Units"
   end
-  puts 'Infection:'
+  #puts 'Infection:'
   troops = fighters.select { |x| x.army == 1 }.sort_by { |x| x.id }
   troops.each do |t|
-    puts "Group #{t.id} Contains #{t.num} Units"
+    #puts "Group #{t.id} Contains #{t.num} Units"
   end
-  puts
+  #puts
 end
 
 def one_side_dead(fighters)
@@ -171,19 +171,58 @@ def one_side_dead(fighters)
   false
 end
 
-fighters = parse_file('input.txt')
-#fighters = parse_file('input_small.txt')
-display(fighters)
-#pp fighters
-#raise 'test'
-loop do
-  fighters = tick(fighters)
+def part1
+  fighters = parse_file('input.txt')
+  #fighters = parse_file('input_small.txt')
   display(fighters)
-  break if one_side_dead(fighters)
+  #pp fighters
+  #raise 'test'
+  loop do
+    fighters = tick(fighters)
+    display(fighters)
+    break if one_side_dead(fighters)
+  end
+  puts "Over.."
+  puts fighters.select{ |x| x.num > 0}.map{ |x| x.num }.sum
 end
-puts "Over.."
-puts fighters.select{ |x| x.num > 0}.map{ |x| x.num }.sum
 
-# Guessed 19322: Too high.
-# Guessed 19163: Too low.
-# Guessed 19064: Too low.
+def apply_boost(fighters, boost)
+  fighters.select { |x| x.army == 0 }.each do |f|
+    f.atk_p += boost
+  end
+  fighters
+end
+
+def simulate_fight(filename, boost)
+  fighters = parse_file(filename)
+  fighters = apply_boost(fighters, boost)
+
+  last_sums = [1, 2, 3, 4, 5, 6, 7, 8]
+  loop do
+    fighters = tick(fighters)
+    display(fighters)
+    break if one_side_dead(fighters)
+
+    sum = fighters.map{ |x| x.num }.sum
+    last_sums.shift
+    last_sums.push sum
+    break if last_sums[last_sums.length - 1] == last_sums[last_sums.length - 2] && last_sums[last_sums.length - 1] == last_sums[last_sums.length - 3] && last_sums[last_sums.length - 1] == last_sums[last_sums.length - 4]
+  end
+
+  fighters_left = fighters.select{ |x| x.num > 0}.map{ |x| x.num }.sum
+
+  return ["infection", fighters_left] if fighters.select { |x| x.army == 0 } .count == 0
+  return ["immune", fighters_left] if fighters.select { |x| x.army == 1 } .count == 0
+  ["stalemate", fighters_left]
+end
+
+raise 'f1' unless simulate_fight('input_small.txt', 0) == ['infection', 5216]
+raise 'f2' unless simulate_fight('input_small.txt', 1570) == ['immune', 51]
+1.upto(10000) do |b|
+  puts b
+  winner, sum = simulate_fight('input.txt', b)
+  if winner == 'immune'
+    puts "Immune wins!  Sum is #{sum} Boost is #{b}"
+    break
+  end
+end
