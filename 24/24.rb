@@ -218,6 +218,7 @@ end
 
 raise 'f1' unless simulate_fight('input_small.txt', 0) == ['infection', 5216]
 raise 'f2' unless simulate_fight('input_small.txt', 1570) == ['immune', 51]
+
 1.upto(10000) do |b|
   puts b
   winner, sum = simulate_fight('input.txt', b)
