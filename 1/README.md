@@ -2,6 +2,8 @@
 
 Day 1 was relatively straightforward.   I have never programmed with Elixir before, and I had been interested in the language after watching its mini-documentary on youtube ( https://www.youtube.com/watch?v=lxYFOM3UJzo ), so I gave it a shot and wrote my first elixir programs ever.
 
+**Languages Solved In:** Elixir
+
 ## Part 1
 
 **Problem:** Sum all numbers in a file.
