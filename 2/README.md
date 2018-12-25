@@ -1,5 +1,7 @@
 # Advent Of Code 2018, Day 2
 
+https://adventofcode.com/2018/day/2
+
 I happened to be awake when the problem was released, so I wanted to try for a quick solution to get a high rank.  I developed a fast solution in Javascript, then redid the problem in Elixir as more practice in the language.
 
 I solved the first part in 10 minutes, earning me rank #839, and the second part in 16 minutes, earning me rank #512.  
@@ -42,3 +44,5 @@ I realized I probably don't have what it takes to be a competitive programmer, e
   defp is_one_char_off(_, []), do: false
 ```
 
+**Drawbacks**:  Both approaches require each pair of strings to be checked, so it's not the most efficient runtime.
+Perhaps a hashing based solution would be better?  Given the size of the input, it didn't matter much.

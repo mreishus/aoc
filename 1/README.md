@@ -1,6 +1,8 @@
 # Advent Of Code 2018, Day 1
 
-Day 1 was relatively straightforward.   I have never programmed with Elixir before, and I had been interested in the language after watching its mini-documentary on youtube ( https://www.youtube.com/watch?v=lxYFOM3UJzo ), so I gave it a shot and wrote my first elixir programs ever.
+https://adventofcode.com/2018/day/1
+
+Day 1 was relatively straightforward.   I had never programmed with Elixir before, and I had been interested in the language after watching its mini-documentary on youtube ( https://www.youtube.com/watch?v=lxYFOM3UJzo ), so I gave it a shot and wrote my first elixir programs ever.
 
 **Languages Solved In:** Elixir
 
