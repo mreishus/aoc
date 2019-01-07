@@ -9,11 +9,4 @@ See https://adventofcode.com/2018/
 * Day 4: 2 stars: Elixir
 * Day 5: 2 stars: Elixir, Ruby
 * Day 6: 2 stars: Elixir, Ruby
-* Day 7: 2 stars: Ruby
-* Day 8: 2 stars: Ruby
-* Day 9: 2 stars: Ruby
-* Day 10: 2 stars: Ruby
-* Day 11: 2 stars: Ruby
-* Day 12: 2 stars: Ruby
-* Day 13: 2 stars: Ruby
-* Day 14: 2 stars: Ruby
+* Day 7-25: 2 stars: Ruby
