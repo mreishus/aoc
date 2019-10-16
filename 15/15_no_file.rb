@@ -235,7 +235,8 @@ end
 def readfile_coords(filename)
   max_x = 0
   y = 0
-  File.readlines(filename).each do |line|
+  #File.readlines(filename).each do |line|
+  lines().each do |line|
     line = line.strip
     max_x = [max_x, line.length].max
     y += 1
