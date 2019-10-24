@@ -31,4 +31,4 @@ Days 1-7 have writeups in their own directories in the README.md file.
 - Day 6: 2 stars: Elixir, Ruby
 - Day 7-25: 2 stars: Ruby
 
-![Finished Advent 2018](/aoc_2018_finished.png?raw=true&i=0 "Finished Advent 2018")
+![Finished Advent 2018](./aoc_2018_finished.png?raw=true&i=0 "Finished Advent 2018")
