@@ -75,7 +75,24 @@ class Compute
   end
 
   def all_instructions
-    %w[addr addi mulr muli banr bani borr bori setr seti gtir gtri gtrr eqir eqri eqrr]
+    %w[
+      addr
+      addi
+      mulr
+      muli
+      banr
+      bani
+      borr
+      bori
+      setr
+      seti
+      gtir
+      gtri
+      gtrr
+      eqir
+      eqri
+      eqrr
+    ]
   end
 end
 
@@ -130,16 +147,13 @@ def tick(data)
   if data[:regs][data[:ip_index]] == 3
     ##pp data[:regs]
     r = data[:regs]
-    if r[1] % r[2] == 0
-      r[0] += r[2]
-    end
+    r[0] += r[2] if r[1] % r[2] == 0
     r[5] = r[1] + 1
     r[3] = 1
     data[:regs][data[:ip_index]] = 12
     ##pp data[:regs]
     return data
   end
-
 
   $cpu.send(exe[:op], data[:regs], exe[:a], exe[:b], exe[:c])
 
@@ -152,7 +166,7 @@ def tick(data)
 end
 
 def invalid_ip(data)
-  data[:program][  data[:regs][  data[:ip_index] ]].nil?
+  data[:program][data[:regs][data[:ip_index]]].nil?
 end
 
 def part1(filename)
@@ -164,7 +178,7 @@ def part1(filename)
     break if invalid_ip(data)
   end
   #pp data[:regs]
-  #puts "Left in reg 0: " 
+  #puts "Left in reg 0: "
   #puts data[:regs][0]
   data[:regs][0]
 end
@@ -198,4 +212,3 @@ puts data[:regs][0]
 # That's not the right answer; your answer is too low. If you're stuck, there
 # are some general tips on the about page, or you can ask for hints on the
 # subreddit. Please wait one minute before trying again. (You guessed 10551312.)
-

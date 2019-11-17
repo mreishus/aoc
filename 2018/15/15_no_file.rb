@@ -19,12 +19,12 @@ def tests
 end
 
 def test_combat0
-  raise 'fail combat0' unless part1('input_combat0.txt') == 27730
-  raise 'fail combat1' unless part1('input_combat1.txt') == 36334
-  raise 'fail combat2' unless part1('input_combat2.txt') == 39514
-  raise 'fail combat3' unless part1('input_combat3.txt') == 27755
-  raise 'fail combat4' unless part1('input_combat4.txt') == 28944
-  raise 'fail combat5' unless part1('input_combat5.txt') == 18740
+  raise 'fail combat0' unless part1('input_combat0.txt') == 27_730
+  raise 'fail combat1' unless part1('input_combat1.txt') == 36_334
+  raise 'fail combat2' unless part1('input_combat2.txt') == 39_514
+  raise 'fail combat3' unless part1('input_combat3.txt') == 27_755
+  raise 'fail combat4' unless part1('input_combat4.txt') == 28_944
+  raise 'fail combat5' unless part1('input_combat5.txt') == 18_740
 end
 
 def test_part2
@@ -37,11 +37,11 @@ def test_part2
 end
 
 def test_part2_outcome
-  raise 'fail p2b 0' unless part2_outcome('input_combat0.txt') == 4988
-  raise 'fail p2b 1' unless part2_outcome('input_combat2.txt') == 31284
-  raise 'fail p2b 2' unless part2_outcome('input_combat3.txt') == 3478
-  raise 'fail p2b 3' unless part2_outcome('input_combat4.txt') == 6474
-  raise 'fail p2b 3' unless part2_outcome('input_combat5.txt') == 1140
+  raise 'fail p2b 0' unless part2_outcome('input_combat0.txt') == 4_988
+  raise 'fail p2b 1' unless part2_outcome('input_combat2.txt') == 31_284
+  raise 'fail p2b 2' unless part2_outcome('input_combat3.txt') == 3_478
+  raise 'fail p2b 3' unless part2_outcome('input_combat4.txt') == 6_474
+  raise 'fail p2b 3' unless part2_outcome('input_combat5.txt') == 1_140
 end
 
 def test_input_tiny2
@@ -52,38 +52,38 @@ def test_input_tiny2
   gamedata = tick(gamedata)
   board_p1 = display_string(gamedata)
 
-  p1_expect = %(
+  p1_expect = '
 #######
 #.EG..#
 #.G.#.#
 #...#G#
 #######
-)
+'
   p1_expect[0] = ''
   raise 'fail 1 tiny2' unless p1_expect == board_p1
 end
 
 def test_input_tiny3
-  filename = "input_tiny3.txt"
+  filename = 'input_tiny3.txt'
   gamedata = readfile(filename)
   board_init = display_string(gamedata)
 
   gamedata = tick(gamedata)
   board_p1 = display_string(gamedata)
 
-  p1_expect = %(
+  p1_expect = '
 #######
 #..E..#
 #...G.#
 #.....#
 #######
-)
+'
   p1_expect[0] = ''
   raise 'fail 1 tiny3' unless p1_expect == board_p1
 end
 
 def test_input_small_move
-  filename = "input_small.txt"
+  filename = 'input_small.txt'
   gamedata = readfile(filename)
   board_init = display_string(gamedata)
 
@@ -99,7 +99,8 @@ def test_input_small_move
   gamedata = tick(gamedata)
   board_p4 = display_string(gamedata)
 
-  init_expect = %(
+  init_expect =
+    '
 #########
 #G..G..G#
 #.......#
@@ -109,8 +110,9 @@ def test_input_small_move
 #.......#
 #G..G..G#
 #########
-)
-  p1_expect = %(
+'
+  p1_expect =
+    '
 #########
 #.G...G.#
 #...G...#
@@ -120,8 +122,9 @@ def test_input_small_move
 #G..G..G#
 #.......#
 #########
-)
-  p2_expect = %(
+'
+  p2_expect =
+    '
 #########
 #..G.G..#
 #...G...#
@@ -131,8 +134,9 @@ def test_input_small_move
 #.......#
 #.......#
 #########
-)
-  p3_expect = %(
+'
+  p3_expect =
+    '
 #########
 #.......#
 #..GGG..#
@@ -142,7 +146,7 @@ def test_input_small_move
 #.......#
 #.......#
 #########
-)
+'
   init_expect[0] = '' # remove extra newlines
   p1_expect[0] = ''
   p2_expect[0] = ''
@@ -155,68 +159,84 @@ def test_input_small_move
   raise 'fail 4 small' unless p4_expect == board_p4
 end
 
-
 def lines()
-
-  [
-"################################",
-"###########...G...#.##..########",
-"###########...#..G#..G...#######",
-"#########.G.#....##.#GG..#######",
-"#########.#.........G....#######",
-"#########.#..............#######",
-"#########.#...............######",
-"#########.GG#.G...........######",
-"########.##...............##..##",
-"#####.G..##G.......E....G......#",
-"#####.#..##......E............##",
-"#####.#..##..........EG....#.###",
-"########......#####...E.##.#.#.#",
-"########.#...#######......E....#",
-"########..G.#########..E...###.#",
-"####.###..#.#########.....E.####",
-"####....G.#.#########.....E.####",
-"#.........#G#########......#####",
-"####....###G#########......##..#",
-"###.....###..#######....##..#..#",
-"####....#.....#####.....###....#",
-"######..#.G...........##########",
-"######...............###########",
-"####.....G.......#.#############",
-"####..#...##.##..#.#############",
-"####......#####E...#############",
-"#.....###...####E..#############",
-"##.....####....#...#############",
-"####.########..#...#############",
-"####...######.###..#############",
-"####..##########################",
-"################################",
+  %w[
+    ################################
+    ###########...G...#.##..########
+    ###########...#..G#..G...#######
+    #########.G.#....##.#GG..#######
+    #########.#.........G....#######
+    #########.#..............#######
+    #########.#...............######
+    #########.GG#.G...........######
+    ########.##...............##..##
+    #####.G..##G.......E....G......#
+    #####.#..##......E............##
+    #####.#..##..........EG....#.###
+    ########......#####...E.##.#.#.#
+    ########.#...#######......E....#
+    ########..G.#########..E...###.#
+    ####.###..#.#########.....E.####
+    ####....G.#.#########.....E.####
+    #.........#G#########......#####
+    ####....###G#########......##..#
+    ###.....###..#######....##..#..#
+    ####....#.....#####.....###....#
+    ######..#.G...........##########
+    ######...............###########
+    ####.....G.......#.#############
+    ####..#...##.##..#.#############
+    ####......#####E...#############
+    #.....###...####E..#############
+    ##.....####....#...#############
+    ####.########..#...#############
+    ####...######.###..#############
+    ####..##########################
+    ################################
   ]
 end
 
 # INPUT: filename(text)
 # OUTPUT: gamedata hash(grid(2d array), units(array of hashes), max_x(int), max_y(int))
 # Parses the file into the main data.
-def readfile(filename, elf_attack=3)
+def readfile(filename, elf_attack = 3)
   max_x, max_y = readfile_coords(filename)
   grid = Array.new(max_x + 1) { Array.new(max_y + 1) }
   units = []
   unit_id = 0
   y = 0
   #File.readlines(filename).each do |line|
-  lines().each do |line|
+  lines.each do |line|
     x = 0
     line.chars.each do |c|
       if c == '#'
         grid[x][y] = '#'
       elsif c == 'G'
         grid[x][y] = '.'
-        unit = { x: x, y: y, type: 'gob', display: 'G', id: unit_id, hp: 200, atk: 3, alive: true }
+        unit = {
+          x: x,
+          y: y,
+          type: 'gob',
+          display: 'G',
+          id: unit_id,
+          hp: 200,
+          atk: 3,
+          alive: true
+        }
         unit_id += 1
         units.push unit
       elsif c == 'E'
         grid[x][y] = '.'
-        unit = { x: x, y: y, type: 'elf', display: 'E', id: unit_id, hp: 200, atk: elf_attack, alive: true }
+        unit = {
+          x: x,
+          y: y,
+          type: 'elf',
+          display: 'E',
+          id: unit_id,
+          hp: 200,
+          atk: elf_attack,
+          alive: true
+        }
         unit_id += 1
         units.push unit
       elsif c == '.'
@@ -226,7 +246,14 @@ def readfile(filename, elf_attack=3)
     end
     y += 1
   end
-  { grid: grid, units: units, max_x: max_x, max_y: max_y, game_over: false, elf_died: false }
+  {
+    grid: grid,
+    units: units,
+    max_x: max_x,
+    max_y: max_y,
+    game_over: false,
+    elf_died: false
+  }
 end
 
 # INPUT: filename(text)
@@ -236,7 +263,7 @@ def readfile_coords(filename)
   max_x = 0
   y = 0
   #File.readlines(filename).each do |line|
-  lines().each do |line|
+  lines.each do |line|
     line = line.strip
     max_x = [max_x, line.length].max
     y += 1
@@ -318,24 +345,25 @@ def tick_unit_move(input_gamedata, id)
   end
 
   # squares in range
-  in_range = enemies.map do |u|
+  in_range =
+    enemies.map do |u|
       [
-        { x: u[:x]+1, y: u[:y], reachable: nil, range: nil, paths: [] },
-        { x: u[:x]-1, y: u[:y], reachable: nil, range: nil, paths: [] },
-        { x: u[:x], y: u[:y]+1, reachable: nil, range: nil, paths: [] },
-        { x: u[:x], y: u[:y]-1, reachable: nil, range: nil, paths: [] },
+        { x: u[:x] + 1, y: u[:y], reachable: nil, range: nil, paths: [] },
+        { x: u[:x] - 1, y: u[:y], reachable: nil, range: nil, paths: [] },
+        { x: u[:x], y: u[:y] + 1, reachable: nil, range: nil, paths: [] },
+        { x: u[:x], y: u[:y] - 1, reachable: nil, range: nil, paths: [] }
       ]
-    end
-    .flatten!
-    .uniq
-    .reject { |coord| grid[coord[:x]][coord[:y]] == '#' }
+    end.flatten!
+      .uniq
+      .reject { |coord| grid[coord[:x]][coord[:y]] == '#' }
 
-
-  already_in_range = in_range.find { |t| t[:x] == unit[:x] && t[:y] == unit[:y] } != nil
+  already_in_range =
+    in_range.find { |t| t[:x] == unit[:x] && t[:y] == unit[:y] } != nil
   return gamedata if already_in_range
 
   # Don't htink this helps?
-  in_range = in_range.reject { |coord| unit_exists(units, coord[:x], coord[:y]) }
+  in_range =
+    in_range.reject { |coord| unit_exists(units, coord[:x], coord[:y]) }
 
   problem = { grid: grid, units: units, unit: unit, targets: in_range }
   #print '?'
@@ -344,9 +372,8 @@ def tick_unit_move(input_gamedata, id)
   #print '.'
 
   ## Now we have to find the appropriate target
-  move_to = problem[:targets]
-    .reject { |t| t[:range].nil? }
-    .sort_by { |t| t[:range] }
+  move_to =
+    problem[:targets].reject { |t| t[:range].nil? }.sort_by { |t| t[:range] }
 
   return gamedata if move_to.empty? # Found no reachable targets
 
@@ -358,18 +385,19 @@ end
 ## Side effect warning: Modifies Unit
 def tick_unit_move_doit(unit, move_to)
   shortest_range = move_to.first[:range]
-  move_to = move_to
-            .select { |t| t[:range] == shortest_range } # Nearest only
-            .min_by { |t| [t[:y], t[:x]] }              # First by reading order
+  move_to =
+    move_to.select { |t| t[:range] == shortest_range }.min_by do |t|  # Nearest only
+      [t[:y], t[:x]]
+    end # First by reading order
   paths = move_to[:paths]
 
-  if paths.select { |p| p.first == 'up'}.any?
+  if paths.select { |p| p.first == 'up' }.any?
     unit[:y] -= 1
-  elsif paths.select { |p| p.first == 'left'}.any?
+  elsif paths.select { |p| p.first == 'left' }.any?
     unit[:x] -= 1
-  elsif paths.select { |p| p.first == 'right'}.any?
+  elsif paths.select { |p| p.first == 'right' }.any?
     unit[:x] += 1
-  elsif paths.select { |p| p.first == 'down'}.any?
+  elsif paths.select { |p| p.first == 'down' }.any?
     unit[:y] += 1
   end
 end
@@ -384,20 +412,20 @@ def tick_unit_attack(input_gamedata, id)
   y = unit[:y]
 
   enemies = units.reject { |u| u[:type] == unit[:type] }
-  adj_units = enemies.select do |u|
-    (u[:x] == x + 1 && u[:y] == y) \
-    || (u[:x] == x - 1 && u[:y] == y) \
-    || (u[:x] == x && u[:y] == y + 1) \
-    || (u[:x] == x && u[:y] == y - 1)
-  end
-  
+  adj_units =
+    enemies.select do |u|
+      (u[:x] == x + 1 && u[:y] == y) || (u[:x] == x - 1 && u[:y] == y) ||
+        (u[:x] == x && u[:y] == y + 1) ||
+        (u[:x] == x && u[:y] == y - 1)
+    end
+
   return gamedata if adj_units.empty?
   to_attack = adj_units.min_by { |t| [t[:hp], t[:y], t[:x]] }
 
   to_attack[:hp] -= unit[:atk]
   to_attack[:alive] = to_attack[:hp] > 0
 
-  if (!to_attack[:alive] && to_attack[:type] == "elf")
+  if (!to_attack[:alive] && to_attack[:type] == 'elf')
     gamedata[:elf_died] = true
   end
 
@@ -466,33 +494,31 @@ def get_possible_steps(problem, subtree_root)
   grid, units = problem.values_at(:grid, :units)
   x, y = expand(subtree_root)
   steps = []
-  if is_ok(x, y+1, grid, units)
-    steps.push({child: collapse(x, y+1), action: 'down'})
+  if is_ok(x, y + 1, grid, units)
+    steps.push({ child: collapse(x, y + 1), action: 'down' })
   end
-  if is_ok(x+1, y, grid, units)
-    steps.push({child: collapse(x+1, y), action: 'right'})
+  if is_ok(x + 1, y, grid, units)
+    steps.push({ child: collapse(x + 1, y), action: 'right' })
   end
-  if is_ok(x-1, y, grid, units)
-    steps.push({child: collapse(x-1, y), action: 'left'})
+  if is_ok(x - 1, y, grid, units)
+    steps.push({ child: collapse(x - 1, y), action: 'left' })
   end
-  if is_ok(x, y-1, grid, units)
-    steps.push({child: collapse(x, y-1), action: 'up'})
+  if is_ok(x, y - 1, grid, units)
+    steps.push({ child: collapse(x, y - 1), action: 'up' })
   end
   steps
 end
 
 def is_ok(x, y, grid, units)
-  if grid[x] == nil || grid[x][y] == nil || grid[x][y] == '#'
-    return false
-  end
+  return false if grid[x] == nil || grid[x][y] == nil || grid[x][y] == '#'
 
   unit = units.find { |u| u[:x] == x && u[:y] == y }
   unit.nil?
 end
 
 def part1(filename)
-  gamedata, i = simulate(filename, {elf_attack: 3})
-  hp_sum = gamedata[:units].map{ |u| u[:hp] }.sum
+  gamedata, i = simulate(filename, { elf_attack: 3 })
+  hp_sum = gamedata[:units].map { |u| u[:hp] }.sum
   hp_sum * i
 end
 
@@ -505,15 +531,19 @@ end
 # Part 2 - Return outcome
 def part2_outcome(filename)
   _elf_attack, gamedata, i = part2_inner(filename)
-  hp_sum = gamedata[:units].map{ |u| u[:hp] }.sum
+  hp_sum = gamedata[:units].map { |u| u[:hp] }.sum
   hp_sum * i
 end
 
 def part2_inner(filename)
   elf_attack = 4
-  while true do
-    gamedata, i = simulate(filename, {elf_attack: elf_attack, end_early_on_elf_death: true})
-    return [elf_attack, gamedata, i] unless gamedata[:elf_died]
+  while true
+    gamedata, i =
+      simulate(
+        filename,
+        { elf_attack: elf_attack, end_early_on_elf_death: true }
+      )
+    return elf_attack, gamedata, i unless gamedata[:elf_died]
     elf_attack += 1
   end
   [elf_attack, gamedata, i]
@@ -523,10 +553,11 @@ def simulate(filename, options)
   gamedata = readfile(filename, options[:elf_attack])
   #display(gamedata)
   i = 0
-  while true do
+  while true
     gamedata = tick(gamedata)
     #display(gamedata)
-    if gamedata[:game_over] || (options[:end_early_on_elf_death] && gamedata[:elf_died])
+    if gamedata[:game_over] ||
+         (options[:end_early_on_elf_death] && gamedata[:elf_died])
       break
     end
     i += 1
@@ -539,7 +570,7 @@ begin_tests = Time.now
 end_tests = Time.now
 puts "All tests passed - #{end_tests.to_ms - begin_tests.to_ms}ms"
 
-['input.txt'].each do |x|
+%w[input.txt].each do |x|
   puts "Part 1, filename: #{x}"
   puts part1(x)
   puts "Part 2, filename: #{x}"

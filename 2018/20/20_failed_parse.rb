@@ -7,13 +7,12 @@ class Time
   end
 end
 
-def tests
-end
+def tests; end
 
 def parse(filename)
   chars = File.read(filename).strip
   raise 'Invalid file beginning' unless chars[0] == '^'
-  raise 'Invalid file ending' unless chars[chars.length-1] == '$'
+  raise 'Invalid file ending' unless chars[chars.length - 1] == '$'
 
   chars[0] = ''
   chars.chomp('$')
@@ -32,9 +31,7 @@ def parse2(filename)
   i = 0
   chars.each_char do |x|
     if %w[N E W S].include? x
-      if this_array[i].nil?
-        this_array[i] = []
-      end
+      this_array[i] = [] if this_array[i].nil?
       this_array[i].push x
     elsif x == '('
       i_stack.push i

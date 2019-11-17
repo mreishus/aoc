@@ -15,7 +15,7 @@ end
 #end
 
 max_players = 411
-STOP_PLAYING_MARBLE = 72059 * 100
+STOP_PLAYING_MARBLE = 72_059 * 100
 #STOP_PLAYING_MARBLE = 11
 
 players = []
@@ -53,7 +53,6 @@ marble_to_insert = 3
 current_player = 3
 i = 3
 while 1
-
   if marble_to_insert % 23 == 0
     #puts "Player notices the selected marble index is #{selected_marble_index} which is marble #{marbles[selected_marble_index]}"
     player_score[current_player] += marble_to_insert
@@ -61,7 +60,6 @@ while 1
     seven_minus = selected_marble.prev.prev.prev.prev.prev.prev.prev
     six_minus = seven_minus.next
     eight_minus = seven_minus.prev
-
 
     #puts "Player #{current_player} deletes marble #{marbles[index_to_delete]}"
     player_score[current_player] += seven_minus.value
@@ -74,7 +72,6 @@ while 1
     #marbles.slice!(index_to_delete)
     #selected_marble_index = index_to_delete
   else
-
     new_marb = Node.new
     new_marb.value = marble_to_insert
 
@@ -87,7 +84,6 @@ while 1
     new_marb.next = two_plus
 
     selected_marble = new_marb
-
   end
 
   #pp '--'
@@ -95,26 +91,22 @@ while 1
   #pp marbles
   #pp "selected: #{marbles[selected_marble_index]}"
 
-
   ## End of loop, increment and set up for next loop
 
   # This looks dumb but it works
-  current_player = (current_player % (max_players)) + 1 
+  current_player = (current_player % (max_players)) + 1
 
   #
   marble_to_insert += 1
 
-  if (i % 10000 == 0)
-    puts "Mrable #{i} #{i.to_f / STOP_PLAYING_MARBLE}"
-  end
+  puts "Mrable #{i} #{i.to_f / STOP_PLAYING_MARBLE}" if (i % 10_000 == 0)
 
   i += 1
   if (i > STOP_PLAYING_MARBLE)
     pp '--'
     pp player_score
-    pp "Max:"
+    pp 'Max:'
     pp player_score.values.max
     exit
   end
 end
-

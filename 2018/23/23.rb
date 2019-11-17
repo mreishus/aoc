@@ -36,7 +36,7 @@ class Region
   def initialize(x0, y0, z0, x1, y1, z1)
     @x0, @y0, @z0 = x0, y0, z0
     @x1, @y1, @z1 = x1, y1, z1
-    @size = (x1-x0+1) * (y1-y0+1) * (z1-z0+1)
+    @size = (x1 - x0 + 1) * (y1 - y0 + 1) * (z1 - z0 + 1)
     @bots_min_bound = nil
     @bots_max_bound = nil
     raise 'invalid region' if y0 > y1 || x0 > x1 || z0 > z1
@@ -54,7 +54,10 @@ end
 def parse_file(filename)
   bots = []
   File.readlines(filename).each do |line|
-    x, y, z, r = line.strip.match(/pos=<(-?\d+),(-?\d+),(-?\d+)>, r=(\d+)/).captures.map(&:to_i)
+    x, y, z, r =
+      line.strip.match(/pos=<(-?\d+),(-?\d+),(-?\d+)>, r=(\d+)/).captures.map(
+        &:to_i
+      )
     bots.push(NanoBot.new(x, y, z, r))
   end
   bots
@@ -113,14 +116,16 @@ def estimate_region(bots, r2)
 
   bots.each do |bot|
     # Is the bot actually sitting inside the box?
-
-    corners_in_range = corners.select { |corner| bot.has_target_in_range(corner) }.count
+    corners_in_range =
+      corners.select { |corner| bot.has_target_in_range(corner) }.count
     if corners_in_range == 8
       upper_bound += 1
       lower_bound += 1
     elsif corners_in_range > 0
       upper_bound += 1
-    elsif bot.x >= x0 && bot.x <= x1 && bot.y >= y0 && bot.y <= y1 && bot.z >= z0 && bot.z <= z1
+    elsif bot.x >= x0 && bot.x <= x1 && bot.y >= y0 && bot.y <= y1 &&
+          bot.z >= z0 &&
+          bot.z <= z1
       # ^ Checks to see if bot is sitting inside the range
       upper_bound += 1
     elsif is_on_face(bot, Region.new(x0, y0, z0, x1, y1, z1))
@@ -142,13 +147,17 @@ def is_on_face(bot, r)
     # All Xs and Ys with Z at min
     # All Xs and Ys with Z at max
     y0.upto(y1) do |y|
-      return true if bot.has_xyz_in_range(x, y, z0) || bot.has_xyz_in_range(x, y, z1)
+      if bot.has_xyz_in_range(x, y, z0) || bot.has_xyz_in_range(x, y, z1)
+        return true
+      end
     end
 
     # All Zs and Xs with Y at min
     # All Zs and Xs with Y at max
     z0.upto(z1) do |z|
-      return true if bot.has_xyz_in_range(x, y0, z) || bot.has_xyz_in_range(x, y1, z)
+      if bot.has_xyz_in_range(x, y0, z) || bot.has_xyz_in_range(x, y1, z)
+        return true
+      end
     end
   end
 
@@ -156,7 +165,9 @@ def is_on_face(bot, r)
   # All Zs and Ys with X at max
   z0.upto(z1) do |z|
     y0.upto(y1) do |y|
-      return true if bot.has_xyz_in_range(x0, y, z) || bot.has_xyz_in_range(x1, y, z)
+      if bot.has_xyz_in_range(x0, y, z) || bot.has_xyz_in_range(x1, y, z)
+        return true
+      end
     end
   end
 
@@ -167,7 +178,7 @@ end
 def part2(filename)
   bots = parse_file(filename)
   tr = get_max_region(bots)
-  r = Region.new(tr.x0, tr.y0, tr.z0, tr.x1 + 100, tr.y1 + 200 , tr.z1 + 300)
+  r = Region.new(tr.x0, tr.y0, tr.z0, tr.x1 + 100, tr.y1 + 200, tr.z1 + 300)
   r.get_estimates!(bots)
 
   max_count = 0
@@ -184,6 +195,7 @@ def part2(filename)
     #candidate = regions.max_by { |this_r| this_r.bots_max_bound }
 
     break if candidate.nil?
+
     if candidate.size < 20
       break if candidate.bots_max_bound < max_count
       #puts "examine #{candidate.size}"
@@ -195,7 +207,7 @@ def part2(filename)
         max_coord = max_coord_here
       end
 
-      if i % 1000 == 0
+      if i % 1_000 == 0
         xt, yt, zt = max_coord
         pp '---final count---'
         pp max_count
@@ -215,7 +227,7 @@ def part2(filename)
       #pp max_coord
       #pp '--dist---'
 
-      #break if 
+      #break if
       #pp candidate
       #pp max
       #raise 'bye'
@@ -233,14 +245,12 @@ def part2(filename)
 
     new_regions = split(candidate)
     tell_regions_to_calculate_estimates(new_regions, bots)
-    new_regions.each do |r2|
-      regions.push r2, 0 - r2.bots_max_bound
-    end
+    new_regions.each { |r2| regions.push r2, 0 - r2.bots_max_bound }
   end
 
   pp '---final count---'
-	pp max_count
-	pp '---final coords---'
+  pp max_count
+  pp '---final coords---'
   pp max_coord
   xt, yt, zt = max_coord
   pp '--dist---'
@@ -273,7 +283,9 @@ def calculate_max_point(r, bots)
 end
 
 def tell_regions_to_calculate_estimates(regions, bots)
-  regions.select { |this_r| this_r.bots_max_bound.nil? }.each { |this_r| this_r.get_estimates!(bots) }
+  regions.select { |this_r| this_r.bots_max_bound.nil? }.each do |this_r|
+    this_r.get_estimates!(bots)
+  end
 end
 
 def split(r)
@@ -323,7 +335,7 @@ puts 'Part2: '
 
 ## FAIL CASE
 bots = parse_file('input4.txt')
-z = points_in_range(bots, 10615635, 41145430, 30249331)
+z = points_in_range(bots, 10_615_635, 41_145_430, 30_249_331)
 pp z
 pp part2('input4.txt') # Should be 983.. my program only sees 936
 

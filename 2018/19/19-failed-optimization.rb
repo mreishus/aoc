@@ -91,7 +91,24 @@ class Compute
   end
 
   def all_instructions
-    %w[addr addi mulr muli banr bani borr bori setr seti gtir gtri gtrr eqir eqri eqrr]
+    %w[
+      addr
+      addi
+      mulr
+      muli
+      banr
+      bani
+      borr
+      bori
+      setr
+      seti
+      gtir
+      gtri
+      gtrr
+      eqir
+      eqri
+      eqrr
+    ]
   end
 end
 
@@ -143,36 +160,54 @@ def tick(data)
   to_execute = program[regs[ip_index]]
   op, a, b, c = to_execute.values_at(:op, :a, :b, :c)
 
-  optimize_8000000 = regs[ip_index] == 10 \
-    && ( \
-      (regs[5]*regs[2]+(8000010/regs[2])) < regs[1] \
-      || (regs[5] * regs[2] > regs[1] && regs[5] < regs[1]) \
-    ) && regs[3] == 0
-  optimize_800000 = regs[ip_index] == 10 && (regs[5]*regs[2]+(800010/regs[2])) < regs[1] && regs[3] == 0
-  optimize_70000 = regs[ip_index] == 10 && (regs[5]*regs[2]+(70010/regs[2])) < regs[1] && regs[3] == 0
-  optimize_6000 = regs[ip_index] == 10 && (regs[5]*regs[2]+(6010/regs[2])) < regs[1] && regs[3] == 0
-  optimize_600 = regs[ip_index] == 10 && (regs[5]*regs[2]+(610/regs[2])) < regs[1] && regs[3] == 0
-  optimize_125 = regs[ip_index] == 10  \
-    && ( \
-      (regs[5]*regs[2]+(135/regs[2])) < regs[1]  \
-      || (regs[5] * regs[2] > regs[1] && regs[5] < regs[1]) \
-    ) && regs[3] == 0
-  optimize_25 = regs[ip_index] == 10 && (regs[5]*regs[2]+(35/regs[2])) < regs[1] && regs[3] == 0
-  optimize = regs[ip_index] == 10 && (regs[5]*regs[2]+(5/regs[2])) < regs[1] && regs[3] == 0
+  optimize_8000000 =
+    regs[ip_index] == 10 &&
+      (
+        (regs[5] * regs[2] + (8_000_010 / regs[2])) < regs[1] ||
+          (regs[5] * regs[2] > regs[1] && regs[5] < regs[1])
+      ) &&
+      regs[3] == 0
+  optimize_800000 =
+    regs[ip_index] == 10 &&
+      (regs[5] * regs[2] + (800_010 / regs[2])) < regs[1] &&
+      regs[3] == 0
+  optimize_70000 =
+    regs[ip_index] == 10 &&
+      (regs[5] * regs[2] + (70_010 / regs[2])) < regs[1] &&
+      regs[3] == 0
+  optimize_6000 =
+    regs[ip_index] == 10 && (regs[5] * regs[2] + (6_010 / regs[2])) < regs[1] &&
+      regs[3] == 0
+  optimize_600 =
+    regs[ip_index] == 10 && (regs[5] * regs[2] + (610 / regs[2])) < regs[1] &&
+      regs[3] == 0
+  optimize_125 =
+    regs[ip_index] == 10 &&
+      (
+        (regs[5] * regs[2] + (135 / regs[2])) < regs[1] ||
+          (regs[5] * regs[2] > regs[1] && regs[5] < regs[1])
+      ) &&
+      regs[3] == 0
+  optimize_25 =
+    regs[ip_index] == 10 && (regs[5] * regs[2] + (35 / regs[2])) < regs[1] &&
+      regs[3] == 0
+  optimize =
+    regs[ip_index] == 10 && (regs[5] * regs[2] + (5 / regs[2])) < regs[1] &&
+      regs[3] == 0
 
   another_optimize = regs[ip_index] == 10 && regs[3] == 1 && regs[2] < regs[1]
 
   if optimize_8000000
-    data[:regs][5] += 8000000
+    data[:regs][5] += 8_000_000
     return data
   elsif optimize_800000
-    data[:regs][5] += 800000
+    data[:regs][5] += 800_000
     return data
   elsif optimize_70000
-    data[:regs][5] += 70000
+    data[:regs][5] += 70_000
     return data
   elsif optimize_6000
-    data[:regs][5] += 6000
+    data[:regs][5] += 6_000
     return data
   elsif optimize_600
     data[:regs][5] += 600
@@ -194,7 +229,6 @@ def tick(data)
     #puts "#{new_regs}"
   end
 
-
   { program: program, ip_index: ip_index, regs: new_regs }
 end
 
@@ -213,7 +247,7 @@ def part1(filename)
     break if invalid_ip(data)
   end
   #pp data[:regs]
-  #puts "Left in reg 0: " 
+  #puts "Left in reg 0: "
   #puts data[:regs][0]
   data[:regs][0]
 end
@@ -238,4 +272,3 @@ puts data[:regs][0]
 # That's not the right answer; your answer is too low. If you're stuck, there
 # are some general tips on the about page, or you can ask for hints on the
 # subreddit. Please wait one minute before trying again. (You guessed 10551312.)
-

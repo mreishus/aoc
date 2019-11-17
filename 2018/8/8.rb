@@ -7,8 +7,8 @@ FILENAME = 'input.txt'
 
 nums = []
 File.readlines(FILENAME).each do |line|
-  nums = line.split(" ")
-  nums = nums.map{ |x| x.to_i }
+  nums = line.split(' ')
+  nums = nums.map(&:to_i)
   break
 end
 
@@ -22,21 +22,17 @@ def build_child(nums)
   children = []
   metadata = []
 
-  1.upto(num_children) do |child_i|
-    children.push( build_child( nums ) )
-  end
+  1.upto(num_children) { |child_i| children.push(build_child(nums)) }
   node[:children] = children
 
-  1.upto(num_metadata) do |metadata_i|
-    metadata.push( nums.shift )
-  end
+  1.upto(num_metadata) { |metadata_i| metadata.push(nums.shift) }
   node[:metadata] = metadata
 
   node
 end
 
 def add_all_metadata(tree)
-  child_sum = tree[:children].map{ |x| add_all_metadata(x) }.sum
+  child_sum = tree[:children].map { |x| add_all_metadata(x) }.sum
   tree[:metadata].sum + child_sum
 end
 
@@ -51,9 +47,7 @@ def node_value(tree)
   rv = 0
 
   tree[:metadata].each do |i|
-    if tree[:children][i - 1] != nil
-      rv += node_value(tree[:children][i - 1])
-    end
+    rv += node_value(tree[:children][i - 1]) if tree[:children][i - 1] != nil
   end
 
   #puts "return return value #{rv}"
@@ -62,11 +56,8 @@ end
 
 tree = build_child(nums)
 #pp tree
-pp'--'
+pp '--'
 total = add_all_metadata(tree)
 pp total
 pp 'part2---'
 pp node_value(tree)
-
-
-

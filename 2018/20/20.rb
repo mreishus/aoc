@@ -7,13 +7,12 @@ class Time
   end
 end
 
-def tests
-end
+def tests; end
 
 def parse(filename)
   chars = File.read(filename).strip
   raise 'Invalid file beginning' unless chars[0] == '^'
-  raise 'Invalid file ending' unless chars[chars.length-1] == '$'
+  raise 'Invalid file ending' unless chars[chars.length - 1] == '$'
 
   chars[0] = ''
   chars.chomp('$')
@@ -37,9 +36,7 @@ def parse2(filename)
       distance += 1
       new_position = change_position(current_position, x)
 
-      compare_these = [
-        distance_for_position[current_position] + 1
-      ]
+      compare_these = [distance_for_position[current_position] + 1]
       if distance_for_position.key?(new_position)
         compare_these.push(distance_for_position[new_position])
       end
@@ -67,7 +64,7 @@ end
 
 def part2(filename)
   distances = parse2(filename)
-  distances.values.select { |x| x >= 1000 }.count
+  distances.values.select { |x| x >= 1_000 }.count
 end
 
 begin_tests = Time.now
@@ -78,4 +75,3 @@ puts "All tests passed - #{end_tests.to_ms - begin_tests.to_ms}ms"
 filename = 'input.txt'
 puts part1(filename)
 puts part2(filename)
-

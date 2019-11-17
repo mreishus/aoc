@@ -4,7 +4,16 @@ require 'pp'
 require 'duplicate'
 
 class Fighter
-  attr_accessor :id, :num, :hp, :atk_p, :atk_t, :init, :army, :immunes, :weaks, :target
+  attr_accessor :id,
+                :num,
+                :hp,
+                :atk_p,
+                :atk_t,
+                :init,
+                :army,
+                :immunes,
+                :weaks,
+                :target
   def initialize(id, num, hp, atk_p, atk_t, init, army)
     @id = id
     @num = num
@@ -45,12 +54,12 @@ def parse_file(filename)
     weak_re = /weak to (.*?)[;\)]/
     if line =~ immune_re
       immune_str, = line.match(immune_re).captures
-      immunes = immune_str.split(", ")
+      immunes = immune_str.split(', ')
       #puts "Immunes: #{immunes}"
     end
     if line =~ weak_re
       weak_str, = line.match(weak_re).captures
-      weaks = weak_str.split(", ")
+      weaks = weak_str.split(', ')
       #puts "Weaks: #{weaks}"
     end
 
@@ -75,9 +84,7 @@ def tick_target_selection(fighters_in)
   fighters_out = Duplicate.duplicate(fighters_in)
 
   # Clear all targets
-  fighters_out.each do |f|
-    f.target = nil
-  end
+  fighters_out.each { |f| f.target = nil }
 
   # Armys take turn selecting targets - Dont think it works this way
   #[0, 1].each do |army|
@@ -90,16 +97,23 @@ def tick_target_selection(fighters_in)
   troops = fighters_out.sort_by { |x| [x.effective_power, x.init] }.reverse
   troops.each do |t|
     #puts "-----------Selecting target #{t.effective_power} #{t.init}"
-    t.target = select_target(t, fighters_out)
+    t.target =
+      select_target(t, fighters_out)
   end
 
   fighters_out
 end
 
 def select_target(attacking, fighters)
-  units_being_targeted = fighters.map{ |x| x.target }
-  enemies = fighters.select { |x| x.army != attacking.army && !units_being_targeted.include?(x.id) }
-  target = enemies.max_by { |e| [damage_done(attacking, e), e.effective_power, e.init] }
+  units_being_targeted = fighters.map(&:target)
+  enemies =
+    fighters.select do |x|
+      x.army != attacking.army && !units_being_targeted.include?(x.id)
+    end
+  target =
+    enemies.max_by do |e|
+      [damage_done(attacking, e), e.effective_power, e.init]
+    end
   return nil if damage_done(attacking, target).zero?
 
   target.id
@@ -122,7 +136,7 @@ def damage_done(attacking, target)
   else
     #puts " 1x[#{dmg}]"
   end
-  return dmg*2 if target.weaks.include?(attacking.atk_t)
+  return dmg * 2 if target.weaks.include?(attacking.atk_t)
 
   dmg
 end
@@ -130,7 +144,7 @@ end
 def tick_attack(fighters_in)
   fighters_out = Duplicate.duplicate(fighters_in)
 
-  troop_ids = fighters_out.sort_by { |x| x.init }.reverse.map { |x| x.id }
+  troop_ids = fighters_out.sort_by(&:init).reverse.map(&:id)
   troop_ids.each do |attacking_id|
     attacking = fighters_out.find { |e| e.id == attacking_id }
     next if attacking.num <= 0 || attacking.target.nil? # dead
@@ -153,21 +167,19 @@ end
 
 def display(fighters)
   #puts 'Immune System:'
-  troops = fighters.select { |x| x.army == 0 }.sort_by { |x| x.id }
+  troops = fighters.select { |x| x.army == 0 }.sort_by(&:id)
   troops.each do |t|
-    #puts "Group #{t.id} Contains #{t.num} Units"
   end
   #puts 'Infection:'
-  troops = fighters.select { |x| x.army == 1 }.sort_by { |x| x.id }
+  troops = fighters.select { |x| x.army == 1 }.sort_by(&:id)
   troops.each do |t|
-    #puts "Group #{t.id} Contains #{t.num} Units"
   end
   #puts
 end
 
 def one_side_dead(fighters)
-  return true if fighters.select { |x| x.army == 0 } .count == 0
-  return true if fighters.select { |x| x.army == 1 } .count == 0
+  return true if fighters.select { |x| x.army == 0 }.count == 0
+  return true if fighters.select { |x| x.army == 1 }.count == 0
   false
 end
 
@@ -182,14 +194,12 @@ def part1
     display(fighters)
     break if one_side_dead(fighters)
   end
-  puts "Over.."
-  puts fighters.select{ |x| x.num > 0}.map{ |x| x.num }.sum
+  puts 'Over..'
+  puts fighters.select { |x| x.num > 0 }.map(&:num).sum
 end
 
 def apply_boost(fighters, boost)
-  fighters.select { |x| x.army == 0 }.each do |f|
-    f.atk_p += boost
-  end
+  fighters.select { |x| x.army == 0 }.each { |f| f.atk_p += boost }
   fighters
 end
 
@@ -203,23 +213,31 @@ def simulate_fight(filename, boost)
     display(fighters)
     break if one_side_dead(fighters)
 
-    sum = fighters.map{ |x| x.num }.sum
+    sum = fighters.map(&:num).sum
     last_sums.shift
     last_sums.push sum
-    break if last_sums[last_sums.length - 1] == last_sums[last_sums.length - 2] && last_sums[last_sums.length - 1] == last_sums[last_sums.length - 3] && last_sums[last_sums.length - 1] == last_sums[last_sums.length - 4]
+    if last_sums[last_sums.length - 1] == last_sums[last_sums.length - 2] &&
+         last_sums[last_sums.length - 1] == last_sums[last_sums.length - 3] &&
+         last_sums[last_sums.length - 1] == last_sums[last_sums.length - 4]
+      break
+    end
   end
 
-  fighters_left = fighters.select{ |x| x.num > 0}.map{ |x| x.num }.sum
+  fighters_left = fighters.select { |x| x.num > 0 }.map(&:num).sum
 
-  return ["infection", fighters_left] if fighters.select { |x| x.army == 0 } .count == 0
-  return ["immune", fighters_left] if fighters.select { |x| x.army == 1 } .count == 0
-  ["stalemate", fighters_left]
+  if fighters.select { |x| x.army == 0 }.count == 0
+    return 'infection', fighters_left
+  end
+  if fighters.select { |x| x.army == 1 }.count == 0
+    return 'immune', fighters_left
+  end
+  ['stalemate', fighters_left]
 end
 
-raise 'f1' unless simulate_fight('input_small.txt', 0) == ['infection', 5216]
-raise 'f2' unless simulate_fight('input_small.txt', 1570) == ['immune', 51]
+raise 'f1' unless simulate_fight('input_small.txt', 0) == ['infection', 5_216]
+raise 'f2' unless simulate_fight('input_small.txt', 1_570) == ['immune', 51]
 
-1.upto(10000) do |b|
+1.upto(10_000) do |b|
   puts b
   winner, sum = simulate_fight('input.txt', b)
   if winner == 'immune'

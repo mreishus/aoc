@@ -29,21 +29,21 @@ end
 def find_carts(grid)
   carts = []
   id = 1
-  0.upto(GRID_SIZE-1) do |y|
-    0.upto(GRID_SIZE-1) do |x|
+  0.upto(GRID_SIZE - 1) do |y|
+    0.upto(GRID_SIZE - 1) do |x|
       cart = nil
       if grid[y][x] == 'v'
-        grid[y][x] = "|"
-        cart = {x: x, y: y, dir: 'v', turn_num: 0, alive: true, id: id}
+        grid[y][x] = '|'
+        cart = { x: x, y: y, dir: 'v', turn_num: 0, alive: true, id: id }
       elsif grid[y][x] == '^'
-        grid[y][x] = "|"
-        cart = {x: x, y: y, dir: '^', turn_num: 0, alive: true, id: id}
+        grid[y][x] = '|'
+        cart = { x: x, y: y, dir: '^', turn_num: 0, alive: true, id: id }
       elsif grid[y][x] == '>'
-        grid[y][x] = "-"
-        cart = {x: x, y: y, dir: '>', turn_num: 0, alive: true, id: id}
+        grid[y][x] = '-'
+        cart = { x: x, y: y, dir: '>', turn_num: 0, alive: true, id: id }
       elsif grid[y][x] == '<'
-        grid[y][x] = "-"
-        cart = {x: x, y: y, dir: '<', turn_num: 0, alive: true, id: id}
+        grid[y][x] = '-'
+        cart = { x: x, y: y, dir: '<', turn_num: 0, alive: true, id: id }
       end
 
       if cart != nil
@@ -57,9 +57,8 @@ def find_carts(grid)
 end
 
 def tick(grid, carts)
-  carts = carts.sort_by{|x| x[:y]}
+  carts = carts.sort_by { |x| x[:y] }
   carts.each_with_index do |cart|
-
     next if !cart[:alive]
 
     if cart[:dir] == 'v'
@@ -72,27 +71,28 @@ def tick(grid, carts)
       cart[:x] += 1
     end
 
-    crash = carts.find{|c2| c2[:x] == cart[:x] && c2[:y] == cart[:y] && c2[:alive] && c2[:id] != cart[:id]}
+    crash =
+      carts.find do |c2|
+        c2[:x] == cart[:x] && c2[:y] == cart[:y] && c2[:alive] &&
+          c2[:id] != cart[:id]
+      end
     if crash
       crash[:alive] = false
       cart[:alive] = false
-      puts "Crash at #{cart[:x]-1} #{cart[:y]-1}"
+      puts "Crash at #{cart[:x] - 1} #{cart[:y] - 1}"
 
-      alive_carts = carts.select{|c| c[:alive]}
+      alive_carts = carts.select { |c| c[:alive] }
       if alive_carts.length == 1
         last_cart = alive_carts.first
-        puts "One cart left at #{last_cart[:x]-1} #{last_cart[:y]-1}"
+        puts "One cart left at #{last_cart[:x] - 1} #{last_cart[:y] - 1}"
         pp last_cart
         puts 'You might have to move it once more to give it the answer it wants?'
         exit
       end
-
     end
 
-
-    this_square = grid[ cart[:y] ][ cart[:x] ]
-    if this_square == "+"
-
+    this_square = grid[cart[:y]][cart[:x]]
+    if this_square == '+'
       if cart[:turn_num] == 0
         turn = 'left'
       elsif cart[:turn_num] == 1
@@ -104,12 +104,8 @@ def tick(grid, carts)
       cart[:dir] = do_turn(turn, cart[:dir])
 
       cart[:turn_num] += 1
-      if cart[:turn_num] == 3
-        cart[:turn_num] = 0
-      end
-
+      cart[:turn_num] = 0 if cart[:turn_num] == 3
     elsif this_square == '/'
-
       if cart[:dir] == '>'
         cart[:dir] = '^'
       elsif cart[:dir] == 'v'
@@ -120,7 +116,6 @@ def tick(grid, carts)
         cart[:dir] = 'v'
       end
     elsif this_square == '\\'
-
       if cart[:dir] == '>'
         cart[:dir] = 'v'
       elsif cart[:dir] == 'v'
@@ -135,33 +130,23 @@ def tick(grid, carts)
   carts
 end
 
-def do_turn(turn, direction) 
+def do_turn(turn, direction)
   if turn == 'straight'
     return direction
   elsif turn == 'left'
-    map = {
-      "^" => "<",
-      "<" => "v",
-      "v" => ">",
-      ">" => "^",
-    };
-    return map[direction];
+    map = { '^' => '<', '<' => 'v', 'v' => '>', '>' => '^' }
+    return map[direction]
   elsif turn == 'right'
-    map = {
-      "^" => ">",
-      "<" => "^",
-      "v" => "<",
-      ">" => "v",
-    };
-    return map[direction];
+    map = { '^' => '>', '<' => '^', 'v' => '<', '>' => 'v' }
+    return map[direction]
   end
   direction
 end
 
 def print_map(grid, carts)
   0.upto(8) do |y|
-    0.upto(GRID_SIZE-1) do |x|
-      candidates = carts.select{ |c| c[:x] == x && c[:y] == y }
+    0.upto(GRID_SIZE - 1) do |x|
+      candidates = carts.select { |c| c[:x] == x && c[:y] == y }
       if candidates.any?
         print candidates.first[:dir]
       else
@@ -174,15 +159,14 @@ def print_map(grid, carts)
 end
 
 def minus_one(carts)
-  carts.map{ |c| (c[:x]-1).to_s + "," + (c[:y]-1).to_s }
+  carts.map { |c| (c[:x] - 1).to_s + ',' + (c[:y] - 1).to_s }
 end
-
 
 def main
   grid = make_grid
   grid, carts = find_carts(grid)
 
-  0.upto(100015) do |i|
+  0.upto(100_015) do |i|
     carts = tick(grid, carts)
     #print_map(grid, carts)
     #pp '---'

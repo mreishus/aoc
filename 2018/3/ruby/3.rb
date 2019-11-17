@@ -4,7 +4,7 @@ require 'pp'
 #BOARD_SIZE = 11
 #FILENAME = 'input_small.txt'
 
-BOARD_SIZE = 1000
+BOARD_SIZE = 1_000
 FILENAME = 'input.txt'
 
 #BOARD_SIZE = 100000
@@ -28,12 +28,17 @@ File.readlines(FILENAME).each do |line|
   x.upto(x + width - 1) do |xx|
     y.upto(y + length - 1) do |yy|
       #puts "    #{xx},#{yy} add one"
-      board[xx][yy] += 1
+      board[
+        xx
+      ][
+        yy
+      ] +=
+        1
     end
   end
 end
 
-count = 0;
+count = 0
 0.upto(BOARD_SIZE - 1) do |x|
   0.upto(BOARD_SIZE - 1) do |y|
     if (board[x][y] > 1)

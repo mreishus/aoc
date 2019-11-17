@@ -75,7 +75,24 @@ class Compute
   end
 
   def all_instructions
-    %w[addr addi mulr muli banr bani borr bori setr seti gtir gtri gtrr eqir eqri eqrr]
+    %w[
+      addr
+      addi
+      mulr
+      muli
+      banr
+      bani
+      borr
+      bori
+      setr
+      seti
+      gtir
+      gtri
+      gtrr
+      eqir
+      eqri
+      eqrr
+    ]
   end
 end
 
@@ -126,7 +143,6 @@ end
 $last_magic_number = nil
 $seen = {}
 
-
 def tick(data)
   exe = data[:program][data[:regs][data[:ip_index]]]
 
@@ -149,36 +165,34 @@ def tick(data)
 
 =end
 
-
   $cpu.send(exe[:op], data[:regs], exe[:a], exe[:b], exe[:c])
 
   #print "-> #{exe[:op]} #{exe[:a]} #{exe[:b]} #{exe[:c]} -> #{data[:regs]} -> "
   data[:regs][data[:ip_index]] += 1
 
   #puts "#{data[:regs]}"
-	if data[:regs][data[:ip_index]] == 28
-		#puts "#{data[:regs]}" 
+  if data[:regs][data[:ip_index]] == 28
+    #puts "#{data[:regs]}"
     magic_number = data[:regs][4]
     #puts magic_number
 
     pp $seen.keys.length
 
-
     seen_before = $seen[magic_number] != nil
-    if (magic_number == 9566170 || seen_before) && $last_magic_number != nil
-      puts "LOOP DETECTED - last number"
+    if (magic_number == 9_566_170 || seen_before) && $last_magic_number != nil
+      puts 'LOOP DETECTED - last number'
       puts $last_magic_number
       raise
     end
     $last_magic_number = magic_number
     $seen[magic_number] = 1
-	end
+  end
 
   data
 end
 
 def invalid_ip(data)
-  data[:program][  data[:regs][  data[:ip_index] ]].nil?
+  data[:program][data[:regs][data[:ip_index]]].nil?
 end
 
 def part1(filename)
@@ -190,7 +204,7 @@ def part1(filename)
     break if invalid_ip(data)
   end
   #pp data[:regs]
-  #puts "Left in reg 0: " 
+  #puts "Left in reg 0: "
   #puts data[:regs][0]
   data[:regs][0]
 end
@@ -223,4 +237,3 @@ end
 puts data
 puts data[:regs]
 puts data[:regs][0]
-

@@ -104,7 +104,24 @@ class Compute
   end
 
   def all_instructions
-    %w[addr addi mulr muli banr bani borr bori setr seti gtir gtri gtrr eqir eqri eqrr]
+    %w[
+      addr
+      addi
+      mulr
+      muli
+      banr
+      bani
+      borr
+      bori
+      setr
+      seti
+      gtir
+      gtri
+      gtrr
+      eqir
+      eqri
+      eqrr
+    ]
   end
 end
 
@@ -113,8 +130,13 @@ require 'pp'
 def tests
   opcode_tests
   p2_tests
-  raise 'fail0' unless which_opcodes_match([3, 2, 1, 1], [3, 2, 2, 1], 2, 1, 2) == %w[addi mulr seti]
-  raise 'fail1' unless how_many_opcodes_match([3, 2, 1, 1], [3, 2, 2, 1], 2, 1, 2) == 3
+  unless which_opcodes_match([3, 2, 1, 1], [3, 2, 2, 1], 2, 1, 2) ==
+           %w[addi mulr seti]
+    raise 'fail0'
+  end
+  unless how_many_opcodes_match([3, 2, 1, 1], [3, 2, 2, 1], 2, 1, 2) == 3
+    raise 'fail1'
+  end
   raise 'fail2' unless part1('input_1.txt') == 570
 end
 
@@ -144,7 +166,9 @@ def which_opcodes_match(regs_before, regs_after, a, b, c)
   matches = []
   cpu = Compute.new
   cpu.all_instructions.each do |method_name|
-    matches.push method_name if cpu.public_send(method_name, regs_before, a, b, c) == regs_after
+    if cpu.public_send(method_name, regs_before, a, b, c) == regs_after
+      matches.push method_name
+    end
   end
   matches.sort
 end
@@ -160,19 +184,31 @@ def parse_mystery_input(filename)
       line = fh.gets
       break if line.nil?
 
-      before_regs = line.strip.match(/Before:\s+\[(\d+), (\d+), (\d+), (\d+)\]/).captures.map(&:to_i)
+      before_regs =
+        line.strip.match(/Before:\s+\[(\d+), (\d+), (\d+), (\d+)\]/).captures
+          .map(&:to_i)
 
       line = fh.gets
       break if line.nil?
 
-      opcode, a, b, c = line.strip.match(/(\d+) (\d+) (\d+) (\d+)/).captures.map(&:to_i)
+      opcode, a, b, c =
+        line.strip.match(/(\d+) (\d+) (\d+) (\d+)/).captures.map(&:to_i)
 
       line = fh.gets
       break if line.nil?
 
-      after_regs = line.strip.match(/After:\s+\[(\d+), (\d+), (\d+), (\d+)\]/).captures.map(&:to_i)
+      after_regs =
+        line.strip.match(/After:\s+\[(\d+), (\d+), (\d+), (\d+)\]/).captures
+          .map(&:to_i)
 
-      mystery_input = { before_regs: before_regs, after_regs: after_regs, opcode: opcode, a: a, b: b, c: c }
+      mystery_input = {
+        before_regs: before_regs,
+        after_regs: after_regs,
+        opcode: opcode,
+        a: a,
+        b: b,
+        c: c
+      }
       mystery_inputs.push mystery_input
 
       # Blank line
@@ -187,7 +223,14 @@ def part1(filename)
   how_many_behave_like_three_or_more = 0
   mystery_inputs = parse_mystery_input(filename)
   mystery_inputs.each do |x|
-    matches = how_many_opcodes_match(x[:before_regs], x[:after_regs], x[:a], x[:b], x[:c])
+    matches =
+      how_many_opcodes_match(
+        x[:before_regs],
+        x[:after_regs],
+        x[:a],
+        x[:b],
+        x[:c]
+      )
     how_many_behave_like_three_or_more += 1 if matches >= 3
   end
   how_many_behave_like_three_or_more
@@ -199,7 +242,7 @@ def part2(filename, opcodes)
   regs = [0, 0, 0, 0]
   instructions.each do |i|
     opcode = opcodes[i[:opcode]]
-    raise "Invalid opcode" if opcode.nil?
+    raise 'Invalid opcode' if opcode.nil?
 
     regs = cpu.public_send(opcode, regs, i[:a], i[:b], i[:c])
   end
@@ -209,7 +252,8 @@ end
 def parse_program_file(filename)
   instructions = []
   File.readlines(filename).each do |line|
-    opcode, a, b, c = line.strip.match(/(\d+) (\d+) (\d+) (\d+)/).captures.map(&:to_i)
+    opcode, a, b, c =
+      line.strip.match(/(\d+) (\d+) (\d+) (\d+)/).captures.map(&:to_i)
     instruction = { opcode: opcode, a: a, b: b, c: c }
     instructions.push instruction
   end
@@ -220,7 +264,8 @@ def determine_opcodes(filename)
   opcode_defs = {}
   mystery_inputs = parse_mystery_input(filename)
   mystery_inputs.each do |x|
-    matches = which_opcodes_match(x[:before_regs], x[:after_regs], x[:a], x[:b], x[:c])
+    matches =
+      which_opcodes_match(x[:before_regs], x[:after_regs], x[:a], x[:b], x[:c])
     if opcode_defs.key?(x[:opcode])
       opcode_defs[x[:opcode]] &= matches # Array Intersection
     else
@@ -228,16 +273,12 @@ def determine_opcodes(filename)
     end
   end
 
-  0.upto(20) do
-    opcode_defs = deduce(opcode_defs)
-  end
+  0.upto(20) { opcode_defs = deduce(opcode_defs) }
   if opcode_defs.values.select { |x| x.count > 1 }.any?
     raise 'Failed to figure out opcodes..'
   end
 
-  opcode_defs.keys.each do |x|
-    opcode_defs[x] = opcode_defs[x].first
-  end
+  opcode_defs.keys.each { |x| opcode_defs[x] = opcode_defs[x].first }
   opcode_defs
 end
 
@@ -269,7 +310,7 @@ puts "All tests passed - #{end_tests.to_ms - begin_tests.to_ms}ms"
 puts 'How many behave like 3 or more opcodes (Part 1) '
 puts part1('input_1.txt')
 
-puts 'Let\'s figure out the opcodes'
+puts "Let's figure out the opcodes"
 opcodes = determine_opcodes('input_1.txt')
 puts 'Part2, running program...'
 regs = part2('input_2.txt', opcodes)

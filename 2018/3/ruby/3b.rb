@@ -4,7 +4,7 @@ require 'pp'
 #BOARD_SIZE = 11
 #FILENAME = 'input_small.txt'
 
-BOARD_SIZE = 1000
+BOARD_SIZE = 1_000
 FILENAME = 'input.txt'
 
 #BOARD_SIZE = 100000
@@ -28,9 +28,7 @@ File.readlines(FILENAME).each do |line|
   #puts x + width
   x.upto(x + width - 1) do |xx|
     y.upto(y + length - 1) do |yy|
-      if (board[xx][yy].nil?) # Workaround to not init 3d array correctly
-        board[xx][yy] = []
-      end
+      board[xx][yy] = [] if (board[xx][yy].nil?) # Workaround to not init 3d array correctly
       #puts "    #{xx},#{yy} add one"
       board[xx][yy].push(id)
     end
@@ -54,6 +52,6 @@ non_overlapping_ids = all_ids
   end
 end
 
-puts "Non overlapping ids:" 
+puts 'Non overlapping ids:'
 pp non_overlapping_ids
 #puts count

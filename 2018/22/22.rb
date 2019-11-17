@@ -13,27 +13,37 @@ end
 
 def tests
   depth = 510
-  raise 'ind01' unless Grid.geoind( Complex(0, 0), Complex(10, 10), depth ) == 0
-  raise 'ind01' unless Grid.geoind( Complex(10, 10), Complex(10, 10), depth ) == 0
+  raise 'ind01' unless Grid.geoind(Complex(0, 0), Complex(10, 10), depth) == 0
+  raise 'ind01' unless Grid.geoind(Complex(10, 10), Complex(10, 10), depth) == 0
 
-  raise 'f1' unless Grid.geoind( Complex(1, 0), Complex(10, 10), depth ) == 16807
-  raise 'f2' unless Grid.erosionlevel( Complex(1, 0), Complex(10, 10), depth ) == 17317
-  raise 'f3' unless Grid.type( Complex(1, 0), Complex(10, 10), depth ) == 1
+  raise 'f1' unless Grid.geoind(Complex(1, 0), Complex(10, 10), depth) == 16_807
+  unless Grid.erosionlevel(Complex(1, 0), Complex(10, 10), depth) == 17_317
+    raise 'f2'
+  end
+  raise 'f3' unless Grid.type(Complex(1, 0), Complex(10, 10), depth) == 1
 
-  raise 'f4' unless Grid.geoind( Complex(0, 1), Complex(10, 10), depth ) == 48271
-  raise 'f5' unless Grid.erosionlevel( Complex(0, 1), Complex(10, 10), depth ) == 8415
-  raise 'f6' unless Grid.type( Complex(0, 1), Complex(10, 10), depth ) == 0
+  raise 'f4' unless Grid.geoind(Complex(0, 1), Complex(10, 10), depth) == 48_271
+  unless Grid.erosionlevel(Complex(0, 1), Complex(10, 10), depth) == 8_415
+    raise 'f5'
+  end
+  raise 'f6' unless Grid.type(Complex(0, 1), Complex(10, 10), depth) == 0
 
-  raise 'f7' unless Grid.geoind( Complex(1, 1), Complex(10, 10), depth ) == 145722555
-  raise 'f8' unless Grid.erosionlevel( Complex(1, 1), Complex(10, 10), depth ) == 1805
-  raise 'f9' unless Grid.type( Complex(1, 1), Complex(10, 10), depth ) == 2
+  unless Grid.geoind(Complex(1, 1), Complex(10, 10), depth) == 145_722_555
+    raise 'f7'
+  end
+  unless Grid.erosionlevel(Complex(1, 1), Complex(10, 10), depth) == 1_805
+    raise 'f8'
+  end
+  raise 'f9' unless Grid.type(Complex(1, 1), Complex(10, 10), depth) == 2
 
-  raise 'f10' unless Grid.geoind( Complex(10, 10), Complex(10, 10), depth ) == 0
-  raise 'f11' unless Grid.erosionlevel( Complex(10, 10), Complex(10, 10), depth ) == 510
-  raise 'f12' unless Grid.type( Complex(10, 10), Complex(10, 10), depth ) == 0
+  raise 'f10' unless Grid.geoind(Complex(10, 10), Complex(10, 10), depth) == 0
+  unless Grid.erosionlevel(Complex(10, 10), Complex(10, 10), depth) == 510
+    raise 'f11'
+  end
+  raise 'f12' unless Grid.type(Complex(10, 10), Complex(10, 10), depth) == 0
 
   raise 'f13' unless Grid.total_risk(Complex(10, 10), depth) == 114
-  raise 'f14' unless Grid.total_risk(Complex(11, 718), 11739) == 8735
+  raise 'f14' unless Grid.total_risk(Complex(11, 718), 11_739) == 8_735
   test_part2
 end
 
@@ -52,49 +62,51 @@ class Grid
     tx, ty = [targetcoord.real, targetcoord.imag]
     risk = 0
     0.upto(tx) do |x|
-      0.upto(ty) do |y|
-        risk += Grid.type(Complex(x, y), targetcoord, depth)
-      end
+      0.upto(ty) { |y| risk += Grid.type(Complex(x, y), targetcoord, depth) }
     end
     risk
   end
 
   def self.geoind(coord, targetcoord, depth)
-    @grid_calculations ||= Hash.new do |h, key|
-      coord = key[0]
-      targetcoord = key[1]
-      depth = key[2]
+    @grid_calculations ||=
+      Hash.new do |h, key|
+        coord = key[0]
+        targetcoord = key[1]
+        depth = key[2]
 
-      x, y = [coord.real, coord.imag]
-      tx, ty = [targetcoord.real, targetcoord.imag]
-      answer = nil
-      if (x.zero? && y.zero?) || (x == tx && y == ty)
-        answer = 0
-      elsif y.zero?
-        answer = x * 16807
-      elsif x.zero?
-        answer = y * 48271
-      else
-        answer = Grid.erosionlevel(Complex(x - 1, y), targetcoord, depth) * Grid.erosionlevel(Complex(x, y - 1), targetcoord, depth)
+        x, y = [coord.real, coord.imag]
+        tx, ty = [targetcoord.real, targetcoord.imag]
+        answer = nil
+        if (x.zero? && y.zero?) || (x == tx && y == ty)
+          answer = 0
+        elsif y.zero?
+          answer = x * 16_807
+        elsif x.zero?
+          answer = y * 48_271
+        else
+          answer =
+            Grid.erosionlevel(Complex(x - 1, y), targetcoord, depth) *
+              Grid.erosionlevel(Complex(x, y - 1), targetcoord, depth)
+        end
+        h[key] = answer
       end
-      h[key] = answer
-    end
     @grid_calculations[[coord, targetcoord, depth]]
   end
 
   def self.erosionlevel(coord, targetcoord, depth)
-    (Grid.geoind(coord, targetcoord, depth) + depth) % 20183
+    (Grid.geoind(coord, targetcoord, depth) + depth) % 20_183
   end
 
   def self.type(coord, targetcoord, depth)
-    @type_calculations ||= Hash.new do |h, key|
-      coord = key[0]
-      targetcoord = key[1]
-      depth = key[2]
+    @type_calculations ||=
+      Hash.new do |h, key|
+        coord = key[0]
+        targetcoord = key[1]
+        depth = key[2]
 
-      answer = Grid.erosionlevel(coord, targetcoord, depth) % 3
-      h[key] = answer
-    end
+        answer = Grid.erosionlevel(coord, targetcoord, depth) % 3
+        h[key] = answer
+      end
     @type_calculations[[coord, targetcoord, depth]]
   end
 end
@@ -107,9 +119,9 @@ end
 
 def tool_valid(coord, target, depth, tool)
   type = Grid.type(coord, target, depth)
-  return [1, 2].include? tool if type.zero?
-  return [0, 1].include? tool if type == 1
-  return [0, 2].include? tool if type == 2
+  return 1, 2 if type.zero?
+  return 0, 1 if type == 1
+  return 0, 2 if type == 2
 
   false
 end
@@ -127,21 +139,21 @@ def valid_moves(coord_tool_pair, target_tool_pair, depth)
     dx, dy = [destination.real, destination.imag]
     next if dx < 0 || dy < 0 || !tool_valid(destination, target, depth, tool)
 
-    moves.push({coord_tool_pair: [destination, tool], cost: 1})
+    moves.push({ coord_tool_pair: [destination, tool], cost: 1 })
   end
 
   # Option 2: Changing the current tool
   [0, 1, 2].each do |newtool|
     next if newtool == tool || !tool_valid(coord, target, depth, newtool)
 
-    moves.push({coord_tool_pair: [coord, newtool], cost: 7})
+    moves.push({ coord_tool_pair: [coord, newtool], cost: 7 })
   end
   moves
 end
 
 def heuristic(coord_tool_pair, target_tool_pair)
   coord, begin_tool = coord_tool_pair
-  target, end_tool  = target_tool_pair
+  target, end_tool = target_tool_pair
 
   sx, sy = [coord.real, coord.imag]
   dx, dy = [target.real, target.imag]
@@ -166,11 +178,11 @@ def astar(initial, goal, depth)
   came_from = {}
 
   # Cost of initial -> This node
-  travel_score = Hash.new(999999999999)
+  travel_score = Hash.new(999_999_999_999)
   travel_score[initial] = 0
 
   # Cost of Initial -> This node -> destination, using a heuristic for what we haven't figured out yet
-  est_full_travel_score = Hash.new(999999999999)
+  est_full_travel_score = Hash.new(999_999_999_999)
   est_full_travel_score[initial] = heuristic(initial, goal)
 
   open_set = PriorityQueue.new
@@ -189,7 +201,7 @@ def astar(initial, goal, depth)
 
       tenative_travel_score = travel_score[current] + cost
       if !open_set.has_key? move
-        open_set.push move, 99999999
+        open_set.push move, 99_999_999
       elsif tenative_travel_score >= travel_score[move]
         next
       end
@@ -232,7 +244,6 @@ def part2(initial_pair, target_pair, depth)
 
   calculate_time(path)
 end
-
 
 ############## MAIN #####################
 

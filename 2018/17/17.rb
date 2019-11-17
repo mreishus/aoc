@@ -35,11 +35,7 @@ end
 
 def init_grid(grid_max_x, grid_max_y)
   grid = Array.new(grid_max_x + 1) { Array.new(grid_max_y + 1) }
-  0.upto(grid_max_y) do |y|
-    0.upto(grid_max_x) do |x|
-      grid[x][y] = '.'
-    end
-  end
+  0.upto(grid_max_y) { |y| 0.upto(grid_max_x) { |x| grid[x][y] = '.' } }
   grid
 end
 
@@ -53,30 +49,28 @@ end
 
 def parse_file(filename)
   # Could scan input file for max
-  grid = init_grid(1850, 1850)
+  grid = init_grid(1_850, 1_850)
 
   maxmins = {}
 
   File.readlines(filename).each do |line|
     if line =~ /^x/
-      x, y1, _, y2 = line.strip.match(/x=(\d+), y=(\d+)(..(\d+))?/).captures.map(&:to_i)
+      x, y1, _, y2 =
+        line.strip.match(/x=(\d+), y=(\d+)(..(\d+))?/).captures.map(&:to_i)
       if y2.zero?
         grid[x][y1] = '#'
       else
-        (y1..y2).each do |y|
-          grid[x][y] = '#'
-        end
+        (y1..y2).each { |y| grid[x][y] = '#' }
         maxmins = update_maxmins(maxmins, x, y2)
       end
       maxmins = update_maxmins(maxmins, x, y1)
     elsif line =~ /^y/
-      y, x1, _, x2 = line.strip.match(/y=(\d+), x=(\d+)(..(\d+))?/).captures.map(&:to_i)
+      y, x1, _, x2 =
+        line.strip.match(/y=(\d+), x=(\d+)(..(\d+))?/).captures.map(&:to_i)
       if x2.zero?
         grid[x1][y] = '#'
       else
-        (x1..x2).each do |x|
-          grid[x][y] = '#'
-        end
+        (x1..x2).each { |x| grid[x][y] = '#' }
         maxmins = update_maxmins(maxmins, x2, y)
       end
       maxmins = update_maxmins(maxmins, x1, y)
@@ -103,12 +97,11 @@ def display(simdata)
 end
 
 def display_no_buffer(simdata)
-  max_x, max_y, min_x, min_y = simdata[:maxmins].values_at(:max_x, :max_y, :min_x, :min_y)
+  max_x, max_y, min_x, min_y =
+    simdata[:maxmins].values_at(:max_x, :max_y, :min_x, :min_y)
 
   min_y.upto(max_y) do |y|
-    (min_x - 1).upto(max_x + 1) do |x|
-      print simdata[:grid][x][y]
-    end
+    (min_x - 1).upto(max_x + 1) { |x| print simdata[:grid][x][y] }
     print "\n"
   end
 end
@@ -116,13 +109,12 @@ end
 # INPUT: simdata
 # OUTPUT: Prints board to string
 def display_string(simdata)
-  max_x, max_y, min_x, min_y = simdata[:maxmins].values_at(:max_x, :max_y, :min_x, :min_y)
+  max_x, max_y, min_x, min_y =
+    simdata[:maxmins].values_at(:max_x, :max_y, :min_x, :min_y)
   output = ''
 
   min_y.upto(max_y + 25) do |y|
-    (min_x - 1).upto(max_x + 1 + 25) do |x|
-      output += simdata[:grid][x][y]
-    end
+    (min_x - 1).upto(max_x + 1 + 25) { |x| output += simdata[:grid][x][y] }
     output += "\n"
   end
   output
@@ -139,7 +131,7 @@ end
 def waterflow(simdata, spout_x, spout_y)
   grid, maxmins = simdata.values_at(:grid, :maxmins)
 
-  grid[spout_x][spout_y+1] = '|'
+  grid[spout_x][spout_y + 1] = '|'
   process_me = [collapse(spout_x, spout_y + 1)]
 
   until process_me.empty?
@@ -216,7 +208,7 @@ end
 
 def add_to_queue!(process_me, x, y)
   process_me.push(collapse(x, y))
-  process_me.push(collapse(x, y-1))
+  process_me.push(collapse(x, y - 1))
   # Everything works without these...
   # process_me.push(collapse(x+1, y))
   # process_me.push(collapse(x-1, y))
@@ -224,16 +216,17 @@ def add_to_queue!(process_me, x, y)
 end
 
 def count_part_1(simdata)
-  count(simdata, ['~', '|'])
+  count(simdata, %w[~ |])
 end
 
 def count_part_2(simdata)
-  count(simdata, ['~'])
+  count(simdata, %w[~])
 end
 
 def count(simdata, valids)
   grid, maxmins = simdata.values_at(:grid, :maxmins)
-  max_x, max_y, min_x, min_y = simdata[:maxmins].values_at(:max_x, :max_y, :min_x, :min_y)
+  max_x, max_y, min_x, min_y =
+    simdata[:maxmins].values_at(:max_x, :max_y, :min_x, :min_y)
 
   total_water = 0
 
@@ -246,7 +239,6 @@ def count(simdata, valids)
 
   total_water
 end
-
 
 ############## MAIN #####################
 

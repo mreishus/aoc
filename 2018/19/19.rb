@@ -75,7 +75,24 @@ class Compute
   end
 
   def all_instructions
-    %w[addr addi mulr muli banr bani borr bori setr seti gtir gtri gtrr eqir eqri eqrr]
+    %w[
+      addr
+      addi
+      mulr
+      muli
+      banr
+      bani
+      borr
+      bori
+      setr
+      seti
+      gtir
+      gtri
+      gtrr
+      eqir
+      eqri
+      eqrr
+    ]
   end
 end
 
@@ -138,7 +155,7 @@ def tick(data)
 end
 
 def invalid_ip(data)
-  data[:program][  data[:regs][  data[:ip_index] ]].nil?
+  data[:program][data[:regs][data[:ip_index]]].nil?
 end
 
 def part1(filename)
@@ -150,7 +167,7 @@ def part1(filename)
     break if invalid_ip(data)
   end
   #pp data[:regs]
-  #puts "Left in reg 0: " 
+  #puts "Left in reg 0: "
   #puts data[:regs][0]
   data[:regs][0]
 end
@@ -176,4 +193,3 @@ puts data[:regs][0]
 # That's not the right answer; your answer is too low. If you're stuck, there
 # are some general tips on the about page, or you can ask for hints on the
 # subreddit. Please wait one minute before trying again. (You guessed 10551312.)
-

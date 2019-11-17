@@ -15,7 +15,8 @@ class Star
   end
 
   def dist(star2)
-    (@w - star2.w).abs + (@x - star2.x).abs + (@y - star2.y).abs + (@z - star2.z).abs
+    (@w - star2.w).abs + (@x - star2.x).abs + (@y - star2.y).abs +
+      (@z - star2.z).abs
   end
 end
 
@@ -29,22 +30,23 @@ class Constellation
   end
 
   def has_any_w(w)
-    @stars.any?{ |s| s.w == w }
+    @stars.any? { |s| s.w == w }
   end
   def has_any_x(x)
-    @stars.any?{ |s| s.x == x }
+    @stars.any? { |s| s.x == x }
   end
   def has_any_y(y)
-    @stars.any?{ |s| s.y == y }
+    @stars.any? { |s| s.y == y }
   end
   def has_any_z(z)
-    @stars.any?{ |s| s.z == z }
+    @stars.any? { |s| s.z == z }
   end
   def is_possible_match(star)
-    has_any_w(star.w) || has_any_x(star.x) || has_any_y(star.y) || has_any_z(star.z)
+    has_any_w(star.w) || has_any_x(star.x) || has_any_y(star.y) ||
+      has_any_z(star.z)
   end
   def is_actual_match(star)
-    @stars.any?{ |s| s.dist(star) <= 3 }
+    @stars.any? { |s| s.dist(star) <= 3 }
   end
 end
 
@@ -64,17 +66,19 @@ def find_constellation(star, constellations)
   #puts "Looking for star #{star.id}"
   matches = []
   constellations.each do |const|
-    #next unless const.is_possible_match(star) && const.is_actual_match(star)
-    matches.push(const) if const.is_actual_match(star)
+    if const.is_actual_match(star)
+      #next unless const.is_possible_match(star) && const.is_actual_match(star)
+      matches.push(const)
+    end
   end
 
   if matches.nil? || matches.empty?
     #puts "Unable to find match for #{star.id}"
-    return [nil, 'none']
+    return nil, 'none'
   elsif matches.count == 1
-    return [matches, 'single']
-  else 
-    return [matches, 'multiple']
+    return matches, 'single'
+  else
+    return matches, 'multiple'
   end
 end
 
@@ -82,7 +86,7 @@ def part1(filename)
   stars = parse_file(filename)
   constellations = []
 
-  stars.sort_by {|s| s.avg}.each do |star|
+  stars.sort_by(&:avg).each do |star|
     matches, match_type = find_constellation(star, constellations)
     if match_type == 'none'
       new_const = Constellation.new([star])
@@ -97,12 +101,9 @@ def part1(filename)
       ids_to_delete = []
       matches.each do |merge_const|
         ids_to_delete.push(merge_const.id)
-        merge_const.stars.each do |star|
-          parent.stars.push(star)
-        end
+        merge_const.stars.each { |star| parent.stars.push(star) }
       end
       constellations.reject! { |y| ids_to_delete.include? y.id }
-
     end
   end
   #pp constellations

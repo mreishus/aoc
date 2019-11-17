@@ -16,13 +16,104 @@ def tests
 end
 
 def test_cycles
-  test_array = [90, 30, 62, 23, 41, 37, 1, 1, 8, 9, 7, 8, 9, 7, 8, 9, 7, 8, 9, 7, 8, 9, 7, 8, 9, 7, 8, 9]
+  test_array = [
+    90,
+    30,
+    62,
+    23,
+    41,
+    37,
+    1,
+    1,
+    8,
+    9,
+    7,
+    8,
+    9,
+    7,
+    8,
+    9,
+    7,
+    8,
+    9,
+    7,
+    8,
+    9,
+    7,
+    8,
+    9,
+    7,
+    8,
+    9
+  ]
   answer1 = detect_cycle(test_array)
-  test_array = [100, 200, 300, 301, 1512, 1234, 1234, 125, 16243,6432,52345, 2345, 2345, 4523422 ,334523, 2345234, 1, 2, 3, 4, 5, 1, 2, 3, 4, 5, 1, 2, 3, 4, 5, 1, 2, 3, 4, 5, 1, 2, 3, 4, 5, 1, 2, 3, 4, 5, 1, 2, 3, 4, 5, 1, 2, 3, 4, 5, 1, 2, 3, 4, 5]
+  test_array = [
+    100,
+    200,
+    300,
+    301,
+    1_512,
+    1_234,
+    1_234,
+    125,
+    16_243,
+    6_432,
+    52_345,
+    2_345,
+    2_345,
+    4_523_422,
+    334_523,
+    2_345_234,
+    1,
+    2,
+    3,
+    4,
+    5,
+    1,
+    2,
+    3,
+    4,
+    5,
+    1,
+    2,
+    3,
+    4,
+    5,
+    1,
+    2,
+    3,
+    4,
+    5,
+    1,
+    2,
+    3,
+    4,
+    5,
+    1,
+    2,
+    3,
+    4,
+    5,
+    1,
+    2,
+    3,
+    4,
+    5,
+    1,
+    2,
+    3,
+    4,
+    5,
+    1,
+    2,
+    3,
+    4,
+    5
+  ]
   answer2 = detect_cycle(test_array)
 
-  answer1_expect = {:cycle_size=>3, :cycle_begin=>8, :is_cycle=>true}
-  answer2_expect = {:cycle_size=>5, :cycle_begin=>16, :is_cycle=>true}
+  answer1_expect = { cycle_size: 3, cycle_begin: 8, is_cycle: true }
+  answer2_expect = { cycle_size: 5, cycle_begin: 16, is_cycle: true }
   raise 'fail cycle1' unless answer1 == answer1_expect
   raise 'fail cycle2' unless answer2 == answer2_expect
 end
@@ -30,7 +121,7 @@ end
 def test_part1
   filename = 'input_small.txt'
   product = part1(filename)
-  raise 'fail p1' unless product == 1147
+  raise 'fail p1' unless product == 1_147
 end
 
 def test_input_small
@@ -47,7 +138,8 @@ def test_input_small
   gamedata = tick(gamedata)
   board_p4 = display_string(gamedata)
 
-  p1_expect = %(
+  p1_expect =
+    '
 .......##.
 ......|###
 .|..|...#.
@@ -58,9 +150,10 @@ def test_input_small
 |||||.||.|
 ||||||||||
 ....||..|.
-)
+'
   p1_expect[0] = ''
-  p2_expect = %(
+  p2_expect =
+    '
 .......#..
 ......|#..
 .|.|||....
@@ -71,9 +164,10 @@ def test_input_small
 ||||||||||
 ||||||||||
 .|||||||||
-)
+'
   p2_expect[0] = ''
-  p3_expect = %(
+  p3_expect =
+    '
 .......#..
 ....|||#..
 .|.||||...
@@ -84,9 +178,10 @@ def test_input_small
 ||||||||||
 ||||||||||
 ||||||||||
-)
+'
   p3_expect[0] = ''
-  p4_expect = %(
+  p4_expect =
+    '
 .....|.#..
 ...||||#..
 .|.#||||..
@@ -97,7 +192,7 @@ def test_input_small
 ||||||||||
 ||||||||||
 ||||||||||
-)
+'
   p4_expect[0] = ''
   raise 'fail 1 small' unless p1_expect == board_p1
   raise 'fail 2 small' unless p2_expect == board_p2
@@ -154,9 +249,7 @@ end
 
 def part1(filename)
   gamedata = readfile(filename)
-  1.upto(10) do |i|
-    gamedata = tick(gamedata)
-  end
+  1.upto(10) { |i| gamedata = tick(gamedata) }
   get_score(gamedata)
 end
 
@@ -164,7 +257,7 @@ def part2(filename)
   # Look forcycles
   gamedata = readfile(filename)
   scores = []
-  1.upto(1500) do |i|
+  1.upto(1_500) do |i|
     gamedata = tick(gamedata)
     scores.push(get_score(gamedata))
   end
@@ -174,7 +267,7 @@ def part2(filename)
   # Start overand use cycles
   gamedata = readfile(filename)
   i = 0
-  goal = 1000000000
+  goal = 1_000_000_000
   #goal = 10
   loop do
     while i >= cycle[:cycle_begin] && (i + cycle[:cycle_size]) < goal
@@ -205,7 +298,7 @@ def detect_cycle(scores)
     fast_i += 2
   end
 
-  return {cycle_size: nil, cycle_begin: nil, is_cycle: false} if slow != fast # Not a cycle
+  return { cycle_size: nil, cycle_begin: nil, is_cycle: false } if slow != fast # Not a cycle
 
   # From here on: There is a cycle
   cycle_size_multiple = fast_i - slow_i # This is a multiple of the cycle size, but not the smallest size
@@ -239,12 +332,12 @@ def detect_cycle(scores)
   cycle_size = fast_i - slow_i
 
   #answer = {cycle_size: cycle_size, cycle_begin: cycle_begin, cycle_size_multiple: cycle_size_multiple, is_cycle: true}
-  answer = {cycle_size: cycle_size, cycle_begin: cycle_begin, is_cycle: true}
+  answer = { cycle_size: cycle_size, cycle_begin: cycle_begin, is_cycle: true }
 end
 
 def get_score(gamedata)
-  trees = count(gamedata, ['|'])
-  lumberyards = count(gamedata, ['#'])
+  trees = count(gamedata, %w[|])
+  lumberyards = count(gamedata, %w[#])
   trees * lumberyards
 end
 
@@ -262,9 +355,7 @@ def display_string(gamedata)
   output = ''
 
   0.upto(max_y - 1) do |y|
-    0.upto(max_x - 1) do |x|
-      output += grid[x][y]
-    end
+    0.upto(max_x - 1) { |x| output += grid[x][y] }
     output += "\n"
   end
   output
@@ -275,7 +366,6 @@ An open acre . will become filled with trees | if three or more adjacent acres c
 An acre filled with trees | will become a lumberyard # if three or more adjacent acres were lumberyards. Otherwise, nothing happens.
 An acre containing a lumberyard # will remain a lumberyard if it was adjacent to at least one other lumberyard and at least one acre containing trees. Otherwise, it becomes open.
 =end
-
 
 def tick(gamedata_in)
   gamedata_out = Duplicate.duplicate(gamedata_in)
@@ -293,7 +383,8 @@ def tick(gamedata_in)
           gamedata_out[:grid][x][y] = '#'
         end
       elsif square == '#'
-        if !one_or_more_neighbors(gamedata_in, x, y, '#') || !one_or_more_neighbors(gamedata_in, x, y, '|')
+        if !one_or_more_neighbors(gamedata_in, x, y, '#') ||
+             !one_or_more_neighbors(gamedata_in, x, y, '|')
           gamedata_out[:grid][x][y] = '.'
         end
       end
@@ -326,14 +417,12 @@ def n_or_more_neighbors(gamedata, x, y, n, target)
     -1.upto(1).each do |dx|
       next if dx.zero? && dy.zero?
 
-      neighbor_count += 1 if safe_check(gamedata, x+dx, y+dy) == target
+      neighbor_count += 1 if safe_check(gamedata, x + dx, y + dy) == target
       return true if neighbor_count >= n
     end
   end
   false
 end
-
-
 
 ############## MAIN #####################
 

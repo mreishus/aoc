@@ -75,7 +75,24 @@ class Compute
   end
 
   def all_instructions
-    %w[addr addi mulr muli banr bani borr bori setr seti gtir gtri gtrr eqir eqri eqrr]
+    %w[
+      addr
+      addi
+      mulr
+      muli
+      banr
+      bani
+      borr
+      bori
+      setr
+      seti
+      gtir
+      gtri
+      gtrr
+      eqir
+      eqri
+      eqrr
+    ]
   end
 end
 
@@ -145,7 +162,6 @@ def tick(data)
 
 =end
 
-
   $cpu.send(exe[:op], data[:regs], exe[:a], exe[:b], exe[:c])
 
   print "-> #{exe[:op]} #{exe[:a]} #{exe[:b]} #{exe[:c]} -> #{data[:regs]} -> "
@@ -157,7 +173,7 @@ def tick(data)
 end
 
 def invalid_ip(data)
-  data[:program][  data[:regs][  data[:ip_index] ]].nil?
+  data[:program][data[:regs][data[:ip_index]]].nil?
 end
 
 def part1(filename)
@@ -169,7 +185,7 @@ def part1(filename)
     break if invalid_ip(data)
   end
   #pp data[:regs]
-  #puts "Left in reg 0: " 
+  #puts "Left in reg 0: "
   #puts data[:regs][0]
   data[:regs][0]
 end
@@ -184,7 +200,7 @@ puts "All tests passed - #{end_tests.to_ms - begin_tests.to_ms}ms"
 filename = 'input.txt'
 data = parse_file(filename)
 i = 0
-data[:regs][0] = 9566170
+data[:regs][0] = 9_566_170
 loop do
   tick(data)
 
@@ -201,4 +217,3 @@ end
 puts data
 puts data[:regs]
 puts data[:regs][0]
-
