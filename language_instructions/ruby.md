@@ -58,4 +58,6 @@ test:
         ./bin/rspec
 repl:
         irb
+format:
+        bundle exec rbprettier --write '**/*.rb'
 ```
