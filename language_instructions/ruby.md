@@ -1,7 +1,8 @@
 # Ruby
 
-### Basic Setup
-```
+## Basic Setup
+
+```fish
 set PROJNAME ruby_day01
 mkdir $PROJNAME
 cd $PROJNAME
@@ -18,7 +19,8 @@ nvim Makefile
 chmod +x main.rb
 ```
 
-### `./lib/day01.rb`
+## `./lib/day01.rb`
+
 ```ruby
 class Day01
   def self.testme()
@@ -27,7 +29,8 @@ class Day01
 end
 ```
 
-### `./spec/day01_spec.rb`
+## `./spec/day01_spec.rb`
+
 ```ruby
 require 'day01'
 
@@ -41,8 +44,9 @@ RSpec.describe Day01, 'testme' do
 end
 ```
 
-### `./main.rb`
-```
+## `./main.rb`
+
+```ruby
 #!/usr/bin/env ruby
 require 'require_all'
 require_all './lib'
@@ -50,8 +54,9 @@ require_all './lib'
 puts Day01.testme
 ```
 
-### `./Makefile` (requires tabs!)
-```
+## `./Makefile` (requires tabs!)
+
+```makefile
 run:
         ./main.rb
 test:

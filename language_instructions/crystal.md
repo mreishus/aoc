@@ -1,7 +1,8 @@
 # Crystal
 
-### Basic Setup
-```
+## Basic Setup
+
+```fish
 set PROJNAME crystal_day01
 crystal init app $PROJNAME
 rm -rf $PROJNAME/.git
@@ -9,7 +10,8 @@ cd $PROJNAME
 nvim src/$PROJNAME.cr src/main.cr spec/{$PROJNAME}_spec.cr -p
 ```
 
-### `src/crystal_day01.cr`
+## `src/crystal_day01.cr`
+
 ```crystal
 # TODO: Write documentation for `CrystalDay01`
 module CrystalDay01
@@ -22,14 +24,16 @@ module CrystalDay01
 end
 ```
 
-### `src/main.cr`
+## `src/main.cr`
+
 ```crystal
 require "./crystal_day01"
 puts "hello"
 puts CrystalDay01.add_one(100)
 ```
 
-### `spec/crystal_day01_spec.cr`
+## `spec/crystal_day01_spec.cr`
+
 ```crystal
 require "./spec_helper"
 
@@ -42,8 +46,9 @@ describe CrystalDay01 do
 end
 ```
 
-### `./Makefile` (requires tabs!)
-```
+## `./Makefile` (requires tabs!)
+
+```makefile
 run:
         crystal run src/main.cr
 test:
@@ -53,4 +58,3 @@ format:
 repl:
         crystal play --binding 0.0.0.0
 ```
-

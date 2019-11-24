@@ -1,13 +1,17 @@
-### Basic Setup
-```
+# Elixir
+
+## Basic Setup
+
+```fish
 set PROJNAME elixir_day01
 mix new $PROJNAME
 cd $PROJNAME
 nvim lib/{$PROJNAME}.ex test/{$PROJNAME}_test.exs Makefile -p
 ```
 
-### `lib/elixir_day01.ex`
-```
+## `lib/elixir_day01.ex`
+
+```elixir
 defmodule ElixirDay01 do
   @moduledoc """
   Documentation for ElixirDay01.
@@ -32,8 +36,9 @@ defmodule ElixirDay01 do
 end
 ```
 
-### `test/elixir_day01_test.exs`
-```
+## `test/elixir_day01_test.exs`
+
+```elixir
 defmodule ElixirDay01Test do
   use ExUnit.Case
   doctest ElixirDay01
@@ -44,9 +49,9 @@ defmodule ElixirDay01Test do
 end
 ```
 
+## `./Makefile` (requires tabs!)
 
-### `./Makefile` (requires tabs!)
-```
+```makefile
 run:
         mix run -e "ElixirDay01.main()"
 test:
