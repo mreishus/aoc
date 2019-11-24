@@ -1,0 +1,13 @@
+name: crystal_day01
+version: 0.1.0
+
+authors:
+  - Matthew Reishus <mreishus@users.noreply.github.com>
+
+targets:
+  crystal_day01:
+    main: src/crystal_day01.cr
+
+crystal: 0.31.1
+
+license: MIT
