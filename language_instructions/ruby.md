@@ -8,6 +8,7 @@ cd $PROJNAME
 bundler init
 bundler add rspec prettier require_all
 bundle install --binstubs
+echo "bin" >> .gitignore
 bin/rspec --init
 mkdir lib
 nvim lib/day01.rb
