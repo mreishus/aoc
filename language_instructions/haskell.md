@@ -1,5 +1,11 @@
 # Haskell
 
+## Prereqs
+
+```fish
+stack install brittany
+```
+
 ## Basic Setup
 
 ```fish
@@ -71,4 +77,6 @@ test:
         stack test
 repl:
         stack ghci
+format:
+        brittany --write-mode=inplace **/*.hs        
 ```
