@@ -4,6 +4,7 @@
 
 ```fish
 set PROJNAME ruby_day01
+set FILENAME day01
 mkdir $PROJNAME
 cd $PROJNAME
 bundler init
@@ -12,11 +13,9 @@ bundle install --binstubs
 echo "bin" >> .gitignore
 bin/rspec --init
 mkdir lib
-nvim lib/day01.rb
-nvim main.rb
-nvim spec/day01_spec.rb
-nvim Makefile
+touch main.rb
 chmod +x main.rb
+nvim lib/{$FILENAME}.rb main.rb spec/{$FILENAME}_spec.rb Makefile -p
 ```
 
 ## `./lib/day01.rb`

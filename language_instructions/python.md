@@ -15,9 +15,10 @@ conda install -c conda-forge neovim
 ```fish
 conda activate myenv
 set PROJNAME python_day01
+set FILENAME day01
 mkdir $PROJNAME
 cd $PROJNAME
-nvim day01.py3 test_day01.py3 Makefile -p
+nvim {$FILENAME}.py test_{$FILENAME}.py Makefile -p
 ```
 
 ## `day01.py`
