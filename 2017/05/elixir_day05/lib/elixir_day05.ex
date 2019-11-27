@@ -1,6 +1,4 @@
 defmodule ElixirDay05 do
-  use Tensor
-
   @moduledoc """
   Documentation for ElixirDay05.
   """
@@ -49,12 +47,12 @@ defmodule ElixirDay05 do
   end
 
   def do_part1(jumps, location, steps) do
-    value = Vector.get(jumps, location, nil)
+    value = Array.get(jumps, location)
 
     if value == nil do
       steps
     else
-      jumps = set(jumps, location, value + 1)
+      jumps = Array.set(jumps, location, value + 1)
       do_part1(jumps, location + value, steps + 1)
     end
   end
@@ -64,7 +62,7 @@ defmodule ElixirDay05 do
   end
 
   def do_part2(jumps, location, steps) do
-    value = Vector.get(jumps, location, nil)
+    value = Array.get(jumps, location)
 
     if value == nil do
       steps
@@ -76,14 +74,13 @@ defmodule ElixirDay05 do
           value + 1
         end
 
-      jumps = set(jumps, location, new_val)
+      jumps = Array.set(jumps, location, new_val)
       do_part2(jumps, location + value, steps + 1)
     end
   end
 
   def set(vector, index, new_value) do
-    {:ok, v} = Vector.get_and_update(vector, index, fn _ -> {:ok, new_value} end)
-    v
+    Array.set(vector, index, new_value)
   end
 
   def parse(filename) do
@@ -91,6 +88,6 @@ defmodule ElixirDay05 do
     |> Stream.map(&String.trim/1)
     |> Stream.map(&String.to_integer/1)
     |> Enum.map(fn x -> x end)
-    |> Vector.new()
+    |> Array.from_list()
   end
 end

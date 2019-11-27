@@ -1,4 +1,5 @@
 %{
+  "array": {:git, "https://github.com/jfacorro/elixir-array.git", "f248f9d257da2c703c469da05ca88206a7e6c15d", []},
   "coerce": {:hex, :coerce, "1.0.1", "211c27386315dc2894ac11bc1f413a0e38505d808153367bd5c6e75a4003d096", [:mix], [], "hexpm"},
   "extractable": {:hex, :extractable, "0.2.0", "8527dd76d37978afeb591a98f433e294ffd634e91a6be5cab410f94d5329adbc", [:mix], [], "hexpm"},
   "insertable": {:hex, :insertable, "0.2.0", "f9ef5e484d1cc0756f1d248a54466aa6388142a81df18f588158e3eda2501395", [:mix], [], "hexpm"},
