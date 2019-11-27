@@ -18,7 +18,7 @@ set PROJNAME python_day01
 set FILENAME day01
 mkdir $PROJNAME
 cd $PROJNAME
-nvim {$FILENAME}.py3 test_{$FILENAME}.py3 Makefile -p
+nvim {$FILENAME}.py test_{$FILENAME}.py Makefile -p
 ```
 
 ## `day01.py`
