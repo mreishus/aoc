@@ -3,10 +3,10 @@ package main
 
 import "testing"
 
-func TestGetBottomNode(t *testing.T) {
+func TestGetLeftNode(t *testing.T) {
 	t.Run("works", func(t *testing.T) {
 		nodes := Parse("../input_small.txt")
-		node := GetBottomNode(nodes)
+		node := GetLeftNode(nodes)
 		got := node.Name
 		want := "tknk"
 		if got != want {
