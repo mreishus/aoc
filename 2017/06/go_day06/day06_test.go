@@ -19,8 +19,18 @@ func TestRedistrib(t *testing.T) {
 func TestPart1(t *testing.T) {
 	t.Run("works", func(t *testing.T) {
 		banks := []int{0, 2, 7, 0}
-		got := Part1(banks)
+		got, _ := Part1(banks)
 		want := 5
+		if got != want {
+			t.Errorf("got %q want %q", got, want)
+		}
+	})
+}
+func TestPart2(t *testing.T) {
+	t.Run("works", func(t *testing.T) {
+		banks := []int{0, 2, 7, 0}
+		got := Part2(banks)
+		want := 4
 		if got != want {
 			t.Errorf("got %q want %q", got, want)
 		}

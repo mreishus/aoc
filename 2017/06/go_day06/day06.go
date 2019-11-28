@@ -44,7 +44,7 @@ func max(list []int) (int, int) {
 }
 
 // Part1 solves part 1
-func Part1(banks []int) int {
+func Part1(banks []int) (int, []int) {
 	seen := make(map[[32]byte]int)
 	seen[sliceHash(banks)] = 1
 	steps := 0
@@ -63,13 +63,13 @@ func Part1(banks []int) int {
 		// Record seen
 		seen[hash] = 1
 	}
-	return steps
+	return steps, banks
+}
 
-	// fmt.Printf("%v", banks)
-	// banks = Redistribute(banks)
-	// fmt.Printf("%v", banks)
-	// banks = Redistribute(banks)
-	// fmt.Printf("%v", banks)
+func Part2(banks []int) int {
+	steps, banks := Part1(banks)
+	steps, banks = Part1(banks)
+	return steps
 }
 
 func sliceHash(list []int) [32]byte {
@@ -105,5 +105,11 @@ func main() {
 	// banks := []int{0, 2, 7, 0}
 	// fmt.Println(Part1(banks))
 	banks := Parse("../input.txt")
-	fmt.Println(Part1(banks))
+	steps, banks := Part1(banks)
+	fmt.Println("Part 1")
+	fmt.Println(steps)
+
+	banks = Parse("../input.txt")
+	fmt.Println("Part 2")
+	fmt.Println(Part2(banks))
 }
