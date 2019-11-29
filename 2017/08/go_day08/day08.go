@@ -71,14 +71,15 @@ func Parse(filename string) []Instruction {
 	return instructions
 }
 
-// Part1 x
-func Part1(filename string) {
-	fmt.Printf("Part1 file[%v]\n", filename)
+// Part1And2 x
+func Part1And2(filename string) {
+	fmt.Printf("Part1And2 file[%v]\n", filename)
 	instructions := Parse(filename)
 	registers := make(map[string]int, 0)
-	registers = RunInstructions(instructions, registers)
+	registers, allTimeMax := RunInstructions(instructions, registers)
 	max := maxRegValue(registers)
-	fmt.Printf("Max value: [%v]\n", max)
+	fmt.Printf("Max value (p1): [%v]\n", max)
+	fmt.Printf("All time max value (p2): [%v]\n", allTimeMax)
 }
 
 func maxRegValue(registers map[string]int) int {
@@ -92,7 +93,9 @@ func maxRegValue(registers map[string]int) int {
 }
 
 // RunInstructions x
-func RunInstructions(program []Instruction, registers map[string]int) map[string]int {
+func RunInstructions(program []Instruction, registers map[string]int) (map[string]int, int) {
+	allTimeMax := -99999
+
 	for _, instr := range program {
 		v1 := registers[instr.ConditionRegister]
 		v2 := instr.ConditionValue
@@ -123,11 +126,16 @@ func RunInstructions(program []Instruction, registers map[string]int) map[string
 		} else {
 			// fmt.Printf("-- False\n")
 		}
+
+		max := maxRegValue(registers)
+		if max > allTimeMax {
+			allTimeMax = max
+		}
 	}
-	return registers
+	return registers, allTimeMax
 }
 
 func main() {
-	Part1("../input_small.txt")
-	Part1("../input.txt")
+	Part1And2("../input_small.txt")
+	Part1And2("../input.txt")
 }
