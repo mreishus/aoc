@@ -55,3 +55,28 @@ func TestGroupScore(t *testing.T) {
 		})
 	}
 }
+
+func TestGarbageCount(t *testing.T) {
+	tests := []struct {
+		name   string
+		gcount int
+	}{
+		{"<>", 0},
+		{"<random characters>", 17},
+		{"<<<<>", 3},
+		{"<{!>}>", 2},
+		{"<!!>", 0},
+		{"<!!!>>", 0},
+		{"<{o\"i!a,<{i<a>", 10},
+	}
+
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			got := GarbageCount(test.name)
+			want := test.gcount
+			if got != want {
+				t.Errorf("[garbagecount] got %v want %v input %v", got, want, test.name)
+			}
+		})
+	}
+}
