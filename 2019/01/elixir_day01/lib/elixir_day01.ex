@@ -14,15 +14,23 @@ defmodule ElixirDay01 do
     |> Stream.map(&String.to_integer/1)
   end
 
-  def main do
-    parse("../input.txt")
+  def solve(filename) do
+    parse(filename)
     |> Stream.map(&fuel/1)
     |> Enum.sum()
     |> IO.inspect(label: "Part 1")
 
-    parse("../input.txt")
+    parse(filename)
     |> Stream.map(&fuel_total/1)
     |> Enum.sum()
     |> IO.inspect(label: "Part 2")
+  end
+
+  def main do
+    solve("../input.txt")
+  end
+
+  def main_big do
+    solve("../input_large.txt")
   end
 end

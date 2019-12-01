@@ -11,6 +11,14 @@ and to try out a new language.
 - [Ruby](./ruby_day01/01.rb)
 - [Elixir](./elixir_day01/lib/elixir_day01.ex) - Uses tail call optimization
 
+## Solutions (Fan-made Large Input)
+
+`input_large.txt` is a fan made input containing 1,000,000 lines of numbers 46
+digits long.
+
+- [Elixir](./elixir_day01/lib/elixir_day01.ex) - Solves correctly in 19
+  seconds.
+
 ## Problem Description
 
 [2019 Day 01 on AdventOfCode.com](https://adventofcode.com/2019/day/1)
