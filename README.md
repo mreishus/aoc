@@ -1,5 +1,20 @@
 # Advent Of Code
 
+## 2017
+
+WIP
+
+## 2018
+
+All days completed. Links WIP.
+
+## 2019
+
+- **Day 1**: [Writeup + Visualization](./2019/01/README.md)
+  | [Ruby](./2019/01/ruby_day01/01.rb)
+  | [Elixir](./2019/01/elixir_day01/lib/elixir_day01.ex)
+  | [Go](./2019/01/go_day01/day01.go)
+
 ## Misc
 
 - [aocdl, a util for downloading input.txt](https://github.com/GreenLightning/advent-of-code-downloader)
