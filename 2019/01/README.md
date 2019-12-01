@@ -17,7 +17,8 @@ and to try out a new language.
 digits long.
 
 - [Elixir](./elixir_day01/lib/elixir_day01.ex) - Solves correctly in 19
-  seconds.
+  seconds, single threaded. After implementing Flow, solves in 4.7 seconds on
+  my quad core laptop. `make big` to run.
 
 ## Problem Description
 

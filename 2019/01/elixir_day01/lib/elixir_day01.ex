@@ -29,8 +29,4 @@ defmodule ElixirDay01 do
   def main do
     solve("../input.txt")
   end
-
-  def main_big do
-    solve("../input_large.txt")
-  end
 end
