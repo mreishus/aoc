@@ -10,15 +10,40 @@ and to try out a new language.
 
 - [Ruby](./ruby_day01/01.rb)
 - [Elixir](./elixir_day01/lib/elixir_day01.ex) - Uses tail call optimization
+- [Go](./go_day01/day01.go)
 
 ## Solutions (Fan-made Large Input)
 
 `input_large.txt` is a fan made input containing 1,000,000 lines of numbers 46
 digits long.
 
-- [Elixir](./elixir_day01/lib/elixir_day01.ex) - Solves correctly in 19
-  seconds, single threaded. After implementing Flow, solves in 4.7 seconds on
-  my quad core laptop. `make big` to run.
+- [Elixir](./elixir_day01/lib/elixir_day01_big.ex) - After implementing Flow,
+  solves in 4.7 seconds on my quad core laptop. `make big` to run. Was 19
+  seconds without concurrency.
+- [Go](./go_day01/day01_large.go) - Runs in 7 seconds using BigNum and
+  channels. Adding channels to Part 1 actually slowed it down, but I might
+  not be implementing them here in the best way.
+
+Overall, Elixir made solving the large input very easy. It supports BigNums
+out of the box - all ints have large support by default - I was using them all
+along, which I didn't expect. The `Flow` library provided one way to
+parallelize the work easily, but I also tried a manual implementation which
+was just as fast.
+
+- [Elixir Manual](./elixir_day01/lib/elixir_day01_big.ex) - Manual
+  chunking/parallelize: 5 seconds.
+- [Elixir Flow](./elixir_day01/lib/elixir_day01_big_flow.ex) - Using Flow
+  library: 5 seconds.
+- [Elixir Naive](./elixir_day01/lib/elixir_day01_big_naive.ex) - Spawning one
+  million processes at once. Slow: 35 seconds. It's actually faster to run in
+  one process, but hey, I wanted to spawn a million.
+
+On the other hand, my Go program needed to be converted to use big.Int, which
+was not fun. All of the basic operations need their own function calls, and
+they expect you to pass pointers to BigInts around, not the actual values.
+When it came to adding concurrency, I first tried passing pointers across the
+channels but the program paniced and crashed. So I changed to values.. it
+ended up working, but it was a bit of a `*` and `&` soup, which I didn't like.
 
 ## Problem Description
 
