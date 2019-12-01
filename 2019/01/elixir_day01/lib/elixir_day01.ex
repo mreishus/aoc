@@ -1,9 +1,11 @@
 defmodule ElixirDay01 do
   def fuel(num), do: (floor(num / 3) - 2) |> max(0)
 
-  def fuel_r(num, acc) do
+  def fuel_total(num), do: fuel_total(num, 0)
+
+  def fuel_total(num, acc) do
     fuel = fuel(num)
-    if fuel > 0, do: fuel_r(fuel, acc + fuel), else: acc
+    if fuel > 0, do: fuel_total(fuel, acc + fuel), else: acc
   end
 
   def parse(filename) do
@@ -14,12 +16,12 @@ defmodule ElixirDay01 do
 
   def main do
     parse("../input.txt")
-    |> Enum.map(&fuel/1)
+    |> Stream.map(&fuel/1)
     |> Enum.sum()
     |> IO.inspect(label: "Part 1")
 
     parse("../input.txt")
-    |> Enum.map(fn x -> fuel_r(x, 0) end)
+    |> Stream.map(&fuel_total/1)
     |> Enum.sum()
     |> IO.inspect(label: "Part 2")
   end
