@@ -45,6 +45,17 @@ When it came to adding concurrency, I first tried passing pointers across the
 channels but the program paniced and crashed. So I changed to values.. it
 ended up working, but it was a bit of a `*` and `&` soup, which I didn't like.
 
+## Visualization
+
+I made some visualizations of the problem using react-three-fiber. They're
+quite crude, with relative box area representing the amount of fuel used for
+each number, but it's my first time using react-three-fiber to draw in 3d, so
+I'm satisfied.
+
+![Day 1 Part 1 Visualization](./2019_day01_part1.gif?raw=true "Day 1 Part 1 Visualization")
+
+![Day 1 Part 2 Visualization](./2019_day01_part1.gif?raw=true "Day 1 Part 2 Visualization")
+
 ## Problem Description
 
 [2019 Day 01 on AdventOfCode.com](https://adventofcode.com/2019/day/1)
