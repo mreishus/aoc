@@ -54,7 +54,7 @@ I'm satisfied.
 
 ![Day 1 Part 1 Visualization](./2019_day01_part1.gif?raw=true "Day 1 Part 1 Visualization")
 
-![Day 1 Part 2 Visualization](./2019_day01_part1.gif?raw=true "Day 1 Part 2 Visualization")
+![Day 1 Part 2 Visualization](./2019_day01_part2.gif?raw=true "Day 1 Part 2 Visualization")
 
 ## Problem Description
 
