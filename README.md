@@ -24,7 +24,7 @@ All days completed. Links WIP.
   [Lib](./2019/01/haskell-day01/src/Lib.hs)
   [(test)](./2019/01/haskell-day01/test/Spec.hs)
   | [React](./2019/01/react_day01/src/) (Visualization only)
-- **Day 2**: [Writeup](./2019/02/README.md)
+- **Day 2**: [Writeup + Visualization](./2019/02/README.md)
   | [Ruby](./2019/02/ruby_day02/02.rb)
   | [Python](./2019/02/python_day02/02.py) (Features Gradient Descent)
   | [Go](./2019/02/go_day02/day02.go)
@@ -33,3 +33,8 @@ All days completed. Links WIP.
 ## Misc
 
 - [aocdl, a util for downloading input.txt](https://github.com/GreenLightning/advent-of-code-downloader)
+
+```
+Created:       Mon 02 Dec 2019 05:12:40 PM CST
+Last Modified: Mon 02 Dec 2019 05:12:58 PM CST
+```

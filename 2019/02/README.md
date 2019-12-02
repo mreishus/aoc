@@ -2,6 +2,17 @@
 
 ## Approach and Reflections
 
+Day2 introduced us to _Intcode_! We had to implement a simple assembly
+language that includes only 2 opcodes (for now): Add and Multiply. The
+program and data areas are mixed, so technically, the program we are emulating
+is self-modifying.
+
+Part1 made sure we were able to run a simple program. Part2 asked us to
+provide two numbers in the program to make it produce a given output. Since
+the search space was so small, brute force worked fine. As a fun exercise,
+I implemented a rough gradient descent-like algorithm to find the answer in
+only a few steps, instead of trying all the search space.
+
 ## Solutions
 
 - [Ruby](./ruby_day02/02.rb)
@@ -169,3 +180,8 @@ words, don't reuse memory from a previous attempt.
 Find the input noun and verb that cause the program to produce the
 output 19690720. What is 100 \* noun + verb? (For example, if noun=12 and
 verb=2, the answer would be 1202.)
+
+```
+Created:       Mon 02 Dec 2019 05:12:11 PM CST
+Last Modified: Mon 02 Dec 2019 05:12:30 PM CST
+```

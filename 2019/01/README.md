@@ -3,8 +3,8 @@
 ## Approach and Reflections
 
 This was a fairly simple problem based around parsing a file full of numbers
-and applying some basic math. This is a good way to ease into Advent of Code
-and to try out a new language.
+and applying some basic math, involving iteration and/or recursion for Part
+II. This is a good way to ease into Advent of Code and to try out a new language.
 
 ## Solutions
 
@@ -126,3 +126,8 @@ process, continuing until a fuel requirement is zero or negative. For example:
 spacecraft when also taking into account the mass of the added fuel?
 (Calculate the fuel requirements for each module separately, then add them all
 up at the end.)
+
+```
+Created:       Mon 02 Dec 2019 05:12:11 PM CST
+Last Modified: Mon 02 Dec 2019 05:12:32 PM CST
+```
