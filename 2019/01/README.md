@@ -13,7 +13,9 @@ and to try out a new language.
 - [Go](./go_day01/day01.go)
 - [Python](./python_day01/day01.py)
 - [Raku](./raku_day01/01.p6)
-- [Crystal](./crystal_day01/src/crystal_day01.cr)
+- Crystal [Main](./crystal_day01/src/main.cr) [Lib](./crystal_day01/src/crystal_day01.cr)
+- Haskell [Main](./haskell-day01/app/Main.hs)
+  [Lib](./haskell-day01/src/Lib.hs)
 
 ## Solutions (Fan-made Large Input)
 
