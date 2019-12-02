@@ -119,8 +119,8 @@ process, continuing until a fuel requirement is zero or negative. For example:
   fuel, which requires `21` fuel, which requires `5` fuel, which requires no
   further fuel. So, the total fuel required for a module of mass `1969` is
   `654 + 216 + 70 + 21 + 5 = 966`.
-- The fuel required by a module of mass `100756` and its fuel is: `33583
-  - 11192 + 3728 + 1240 + 411 + 135 + 43 + 12 + 2 = 50346`.
+- The fuel required by a module of mass `100756` and its fuel is:
+  `33583 - 11192 + 3728 + 1240 + 411 + 135 + 43 + 12 + 2 = 50346`.
 
 **What is the sum of the fuel requirements** for all of the modules on your
 spacecraft when also taking into account the mass of the added fuel?

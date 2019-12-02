@@ -23,6 +23,9 @@ All days completed. Links WIP.
   | Haskell [Main](./2019/01/haskell-day01/app/Main.hs)
   [Lib](./2019/01/haskell-day01/src/Lib.hs)
   [(test)](./2019/01/haskell-day01/test/Spec.hs)
+- **Day 2**: [Writeup](./2019/02/README.md)
+  | [Ruby](./2019/02/ruby_day02/02.rb)
+  | [Python](./2019/02/python_day02/02.py) (Features Gradient Descent)
 
 ## Misc
 
