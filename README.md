@@ -14,6 +14,7 @@ All days completed. Links WIP.
   | [Ruby](./2019/01/ruby_day01/01.rb)
   | [Elixir](./2019/01/elixir_day01/lib/elixir_day01.ex)
   | [Go](./2019/01/go_day01/day01.go)
+  | [Python](./2019/01/python_day01/day01.py)
 
 ## Misc
 

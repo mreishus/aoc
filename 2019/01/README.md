@@ -11,6 +11,7 @@ and to try out a new language.
 - [Ruby](./ruby_day01/01.rb)
 - [Elixir](./elixir_day01/lib/elixir_day01.ex) - Uses tail call optimization
 - [Go](./go_day01/day01.go)
+- [Python](./python_day01/day01.py)
 
 ## Solutions (Fan-made Large Input)
 
