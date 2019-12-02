@@ -16,6 +16,7 @@ All days completed. Links WIP.
   | [Go](./2019/01/go_day01/day01.go)
   | [Python](./2019/01/python_day01/day01.py)
   | [Raku](./2019/01/raku_day01/01.p6)
+  | [Crystal](./2019/01/crystal_day01/src/crystal_day01.cr)
 
 ## Misc
 

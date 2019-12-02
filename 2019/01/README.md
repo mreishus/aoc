@@ -13,6 +13,7 @@ and to try out a new language.
 - [Go](./go_day01/day01.go)
 - [Python](./python_day01/day01.py)
 - [Raku](./raku_day01/01.p6)
+- [Crystal](./crystal_day01/src/crystal_day01.cr)
 
 ## Solutions (Fan-made Large Input)
 
