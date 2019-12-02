@@ -12,6 +12,7 @@ and to try out a new language.
 - [Elixir](./elixir_day01/lib/elixir_day01.ex) - Uses tail call optimization
 - [Go](./go_day01/day01.go)
 - [Python](./python_day01/day01.py)
+- [Raku](./raku_day01/01.p6)
 
 ## Solutions (Fan-made Large Input)
 
