@@ -84,7 +84,7 @@ def testme(x):
     return 1 if x > 0 else -1
 
 
-def part2_decent(program_in):
+def part2_descent(program_in):
     """ Solve Part2 using gradient descent. """
     p = program_in.copy()
     noun = 50
@@ -138,5 +138,5 @@ print("part 1:")
 print(part1(program))
 print("part 2 (brute):")
 print(part2_brute(program))
-print("part 2 (gradient decent):")
-print(part2_decent(program))
+print("part 2 (gradient descent):")
+print(part2_descent(program))
