@@ -4,15 +4,26 @@
 
 ## Solutions
 
-- [Ruby](./ruby_day02/02.rb) - Done quickly, rough.
+- [Ruby](./ruby_day02/02.rb)
 - [Python](./python_day02/02.py) - Implements a rough gradient descent to
   avoid brute force.
+- [Go](./go_day02/day02.go)
+- [React](./react_day02/src/) - Visualization of Part A.
 
 ## Solutions (Fan-made Large Input)
 
 - [Python](./python_day02/02.py) - Comment out the brute force, and it solves
   the `D2P2-RealisticBigBoy` and `D2P2-VeryBigBoy` files using gradient
   descent in a reasonable amount of time.
+
+## Visualization
+
+![Day 2 Part 1 Visualization](./2019_day02_part1.gif?raw=true "Day 2 Part
+1 Visualization")
+
+Simple visualization of the memory state done in react. To run the app, cd
+into the `./react_day02/` directory, `npm install` then `npm start`. Click
+the _step_ button to advance state.
 
 ## Problem Description
 
