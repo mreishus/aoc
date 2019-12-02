@@ -8,14 +8,17 @@ and to try out a new language.
 
 ## Solutions
 
-- [Ruby](./ruby_day01/01.rb)
-- [Elixir](./elixir_day01/lib/elixir_day01.ex) - Uses tail call optimization
-- [Go](./go_day01/day01.go)
+- [Ruby](./ruby_day01/01.rb) _(tests embedded)_
+- [Elixir](./elixir_day01/lib/elixir_day01.ex)
+  [(test)](./elixir_day01/test/elixir_day01_test.exs) - Uses tail call optimization
+- [Go](./go_day01/day01.go) [(test)](./go_day01/day01_test.go)
 - [Python](./python_day01/day01.py)
 - [Raku](./raku_day01/01.p6)
-- Crystal [Main](./crystal_day01/src/main.cr) [Lib](./crystal_day01/src/crystal_day01.cr)
+- Crystal [Main](./crystal_day01/src/main.cr)
+  [Lib](./crystal_day01/src/crystal_day01.cr)
+  [(test)](./crystal_day01/spec/crystal_day01_spec.cr)
 - Haskell [Main](./haskell-day01/app/Main.hs)
-  [Lib](./haskell-day01/src/Lib.hs)
+  [Lib](./haskell-day01/src/Lib.hs) [(test)](./haskell-day01/test/Spec.hs)
 
 ## Solutions (Fan-made Large Input)
 
