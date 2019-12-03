@@ -7,7 +7,7 @@ programInput[2] = 2;
 
 const ADD = 1;
 const MULT = 2;
-const STOP = 99;
+// const STOP = 99;
 
 export const PartA = () => {
   const [program, setProgram] = useState(programInput);
@@ -19,7 +19,7 @@ export const PartA = () => {
 
   const step = useCallback(() => {
     const instruction = program[i];
-    if (instruction == ADD) {
+    if (instruction === ADD) {
       const pos_in1 = program[i + 1];
       const pos_in2 = program[i + 2];
       const pos_out = program[i + 3];
@@ -33,7 +33,7 @@ export const PartA = () => {
       setIn1(pos_in1);
       setIn2(pos_in2);
       setOut1(pos_out);
-    } else if (instruction == MULT) {
+    } else if (instruction === MULT) {
       const pos_in1 = program[i + 1];
       const pos_in2 = program[i + 2];
       const pos_out = program[i + 3];
