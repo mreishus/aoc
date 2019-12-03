@@ -41,7 +41,27 @@
 
 ## 2017
 
-WIP
+- Day 1:
+  [Python](./2017/01/python_day01/day01.py)
+  [(test)](./2017/01/python_day01/test_day01.py)
+  | [Go](./2017/01/go_day01/day01.go)
+  [(test)](./2017/01/go_day01/day01_test.go)
+  | Ruby
+  [(main)](./2017/01/ruby_day01/main.rb)
+  [(lib)](./2017/01/ruby_day01/lib/day01.rb)
+  [(test)](./2017/01/ruby_day01/spec/day01_spec.rb)
+  | [Crystal](./2017/01/crystal_day01/src/crystal_day01.cr)
+  [(test)](./2017/01/crystal_day01/spec/crystal_day01_spec.cr)
+  | [Elixir](./2017/01/elixir_day01/lib/elixir_day01.ex)
+  [(test)](./2017/01/elixir_day01/test/elixir_day01_test.exs)
+  | Haskell [(main)](./2017/01/haskell-day01/app/Main.hs)
+  [(lib)](./2017/01/haskell-day01/src/Lib.hs)
+  [(test)](./2017/01/haskell-day01/test/Spec.hs)
+- Day 2:
+  [Go](./2017/02/go_day02/day02.go) [(test)](./2017/02/go_day02/day02_test.go)
+- Day 3:
+  [Python](./2017/03/python_day03/day03.py)
+  [(test)](./2017/03/python_day03/test_day03.py)
 
 ## Misc
 
@@ -49,5 +69,5 @@ WIP
 
 ```
 Created:       Mon 02 Dec 2019 05:12:40 PM CST
-Last Modified: Tue 03 Dec 2019 11:32:01 AM CST
+Last Modified: Tue 03 Dec 2019 12:03:28 PM CST
 ```
