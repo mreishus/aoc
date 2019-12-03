@@ -1,13 +1,5 @@
 # Advent Of Code
 
-## 2017
-
-WIP
-
-## 2018
-
-All days completed. Links WIP.
-
 ## 2019
 
 - **Day 1**: [Writeup + Visualization](./2019/01/README.md)
@@ -30,6 +22,24 @@ All days completed. Links WIP.
   | [Go](./2019/02/go_day02/day02.go)
   | [React](./2019/02/react_day02/src/) (Part A Visualization Only)
   | [Elixir](./2019/02/elixir_day02/lib/elixir_day02.ex)
+- **Day 3**: [Writeup](./2019/03/README.md)
+  | [Ruby](./2019/03/ruby_day03/03.rb)
+
+## 2018
+
+- Day 1: [Writeup](./2018/1/README.md)
+  | Elixir [(Part 1)](./2018/1/advent_of_code_2018_01a/lib/advent_of_code_2018_01a.ex)
+  [(Part 2)](./2018/1/advent_of_code_2018_01b/lib/advent_of_code_2018_01b.ex)
+- Day 2: [Writeup](./2018/2/README.md)
+  | [JavaScript](./2018/2/fast_js/2.js) (Done quickly)
+  | [Elixir](./2018/2/advent_of_code_2018_02/lib/advent_of_code_2018_02.ex)
+- Day 3: [Writeup](./2018/3/README.md)
+  | [Ruby](./2018/3/ruby/)
+  | [Elixir](./2018/3/advent_of_code_2018_03/lib/advent_of_code_2018_03.ex)
+
+## 2017
+
+WIP
 
 ## Misc
 
@@ -37,5 +47,5 @@ All days completed. Links WIP.
 
 ```
 Created:       Mon 02 Dec 2019 05:12:40 PM CST
-Last Modified: Mon 02 Dec 2019 07:47:33 PM CST
+Last Modified: Tue 03 Dec 2019 08:32:14 AM CST
 ```

@@ -1,6 +1,4 @@
 #!/usr/bin/env ruby
-require 'pp'
-
 $DIRECTIONS = {
   'R' => Complex(1, 0),
   'L' => Complex(-1, 0),
@@ -8,23 +6,26 @@ $DIRECTIONS = {
   'D' => Complex(0, -1)
 }
 
+# Input (String): "L1003,U125,L229,U421"
+# Output (Wire): [["L", 1003], ["U", 125], ["L", 229], ["U", 421]]
 def parse_wire(line)
-  dirs = line.split(',')
-  a = []
-  dirs.each do |dir|
-    compass, l = dir.match(/^(\w)(\d+)$/).captures
-    a.push([compass, l.to_i])
+  line.split(',').map do |pair|
+    compass, l = pair.match(/^(\w)(\d+)$/).captures
+    [compass, l.to_i]
   end
-  a
 end
 
+# Input (filename: String) -> Output (List of Wires)
 def parse(filename)
-  wires = []
-  File.readlines(filename).each do |line|
-    wire = parse_wire(line)
-    wires.push(wire)
-  end
-  wires
+  File.readlines(filename).map { |line| parse_wire(line) }
+end
+
+def manhattan(coord)
+  coord.real.abs + coord.imaginary.abs
+end
+
+def total_steps(grid_value)
+  grid_value.map { |info| info[:total_steps] }.sum
 end
 
 def part12(data)
@@ -37,41 +38,26 @@ def part12(data)
       1.upto(step[1]) do |i|
         location += delta
         total_steps += 1
+        info = { wire_index: wire_index, total_steps: total_steps }
         # puts "i #{i} location #{location} wire #{wire_index}"
 
         if grid[location] == nil
-          grid[location] = [
-            { wire_index: wire_index, total_steps: total_steps }
-          ]
+          grid[location] = [info]
         elsif !grid[location].any? { |thing| thing[:wire_index] == wire_index }
-          grid[location].push(
-            { wire_index: wire_index, total_steps: total_steps }
-          )
+          grid[location].push(info)
         end
       end
     end
   end
 
-  answer1 = 999_999_999
-  answer2 = 999_999_999
-  grid.each do |key, value|
-    next if (value.length < 2)
-    distance = key.real.abs + key.imaginary.abs
-    # pp key
-    # pp value
-    # puts "#{key} #{value} #{distance}"
-    answer1 = distance if distance < answer1
-    step_distance = value.map { |thing| thing[:total_steps] }.sum
-    answer2 = step_distance if step_distance < answer2
-    # pp '----'
-  end
+  intersections = grid.keys.filter { |k| grid[k].length >= 2 }
+  answer1 = intersections.map { |k| manhattan(k) }.min
+  answer2 = intersections.map { |k| total_steps(grid[k]) }.min
 
-  pp '--answer--'
   [answer1, answer2]
 end
 
 data = parse('../input.txt')
-# pp data
 answers = part12(data)
 puts 'Part 1:'
 puts answers[0]
