@@ -16,6 +16,7 @@ minimum.
 ## Solutions
 
 - [Ruby](./ruby_day03/03.rb)
+- [Python](./python_day03/03.py)
 
 ## Problem Description
 
@@ -135,5 +136,5 @@ intersection?
 
 ```
 Created:       Tue 03 Dec 2019 08:29:02 AM CST
-Last Modified: Tue 03 Dec 2019 08:51:32 AM CST
+Last Modified: Tue 03 Dec 2019 10:31:12 AM CST
 ```

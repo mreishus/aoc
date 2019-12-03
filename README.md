@@ -24,6 +24,7 @@
   | [Elixir](./2019/02/elixir_day02/lib/elixir_day02.ex)
 - **Day 3**: [Writeup](./2019/03/README.md)
   | [Ruby](./2019/03/ruby_day03/03.rb)
+  | [Python](./2019/03/python_day03/03.py)
 
 ## 2018
 
@@ -47,5 +48,5 @@ WIP
 
 ```
 Created:       Mon 02 Dec 2019 05:12:40 PM CST
-Last Modified: Tue 03 Dec 2019 08:32:14 AM CST
+Last Modified: Tue 03 Dec 2019 10:31:31 AM CST
 ```
