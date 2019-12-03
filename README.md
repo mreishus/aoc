@@ -26,6 +26,7 @@
   | [Ruby](./2019/03/ruby_day03/03.rb)
   | [Python](./2019/03/python_day03/03.py)
   | [Elixir](./2019/03/elixir_day03/lib/elixir_day03.ex)
+  | [Go](./2019/03/go_day03/day03.go)
 
 ## 2018
 
@@ -69,5 +70,5 @@
 
 ```
 Created:       Mon 02 Dec 2019 05:12:40 PM CST
-Last Modified: Tue 03 Dec 2019 12:03:28 PM CST
+Last Modified: Tue 03 Dec 2019 05:42:49 PM CST
 ```

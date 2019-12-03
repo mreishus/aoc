@@ -18,6 +18,7 @@ minimum.
 - [Ruby](./ruby_day03/03.rb)
 - [Python](./python_day03/03.py)
 - [Elixir](./elixir_day03/lib/elixir_day03.ex)
+- [Go](./go_day03/day03.go)
 
 ## Problem Description
 
@@ -137,5 +138,5 @@ intersection?
 
 ```
 Created:       Tue 03 Dec 2019 08:29:02 AM CST
-Last Modified: Tue 03 Dec 2019 11:31:25 AM CST
+Last Modified: Tue 03 Dec 2019 05:42:34 PM CST
 ```
