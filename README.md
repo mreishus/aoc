@@ -29,6 +29,7 @@ All days completed. Links WIP.
   | [Python](./2019/02/python_day02/02.py) (Features Gradient Descent)
   | [Go](./2019/02/go_day02/day02.go)
   | [React](./2019/02/react_day02/src/) (Part A Visualization Only)
+  | [Elixir](./2019/02/elixir_day02/lib/elixir_day02.ex)
 
 ## Misc
 
@@ -36,5 +37,5 @@ All days completed. Links WIP.
 
 ```
 Created:       Mon 02 Dec 2019 05:12:40 PM CST
-Last Modified: Mon 02 Dec 2019 05:12:58 PM CST
+Last Modified: Mon 02 Dec 2019 07:47:33 PM CST
 ```

@@ -20,6 +20,7 @@ only a few steps, instead of trying all the search space.
   avoid brute force.
 - [Go](./go_day02/day02.go)
 - [React](./react_day02/src/) - Visualization of Part A.
+- [Elixir](./elixir_day02/lib/elixir_day02.ex)
 
 ## Solutions (Fan-made Large Input)
 
@@ -183,5 +184,5 @@ verb=2, the answer would be 1202.)
 
 ```
 Created:       Mon 02 Dec 2019 05:12:11 PM CST
-Last Modified: Mon 02 Dec 2019 05:12:30 PM CST
+Last Modified: Mon 02 Dec 2019 07:47:06 PM CST
 ```
