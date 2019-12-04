@@ -30,6 +30,8 @@
 - **Day 4**: [Writeup](./2019/04/README.md)
   | [Python](./2019/04/python_day04/day04.py)
   [(test)](./2019/04/python_day04/day04_test.py)
+  | [Elixir](./2019/04/elixir_day04/lib/elixir_day04.ex)
+  [(test)](./2019/04/elixir_day04/test/elixir_day04_test.exs)
 
 ## 2018
 
@@ -82,5 +84,5 @@
 
 ```
 Created:       Mon 02 Dec 2019 05:12:40 PM CST
-Last Modified: Wed 04 Dec 2019 11:45:16 AM CST
+Last Modified: Wed 04 Dec 2019 12:37:01 PM CST
 ```
