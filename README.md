@@ -64,11 +64,16 @@
   [Python](./2017/03/python_day03/day03.py)
   [(test)](./2017/03/python_day03/test_day03.py)
 
+## 2016
+
+- Day 1:
+  [Python](./2016/01/day01_python/01.py)
+
 ## Misc
 
 - [aocdl, a util for downloading input.txt](https://github.com/GreenLightning/advent-of-code-downloader)
 
 ```
 Created:       Mon 02 Dec 2019 05:12:40 PM CST
-Last Modified: Tue 03 Dec 2019 05:42:49 PM CST
+Last Modified: Tue 03 Dec 2019 08:59:37 PM CST
 ```
