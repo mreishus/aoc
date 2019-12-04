@@ -21,7 +21,7 @@ defmodule ElixirDay03 do
   """
   def parse_line(string) do
     # When building a wire, we use a tuple of {visited, location, steps}.
-    # Visited is the map described above.
+    # Visited is a map: {x, y} -> steps needed to get there
     # Location is {x, y}, our current location.
     # Steps is an int, current number of steps taken.
     {visited, _location, _steps} =
@@ -57,15 +57,20 @@ defmodule ElixirDay03 do
   def move({x, y}, "D"), do: {x, y - 1}
   def move({_x, _y}, _), do: raise("move: unknown direction")
 
+  def intersections(wires) do
+    wires
+    |> Enum.map(&Map.keys/1)
+    |> Enum.map(&MapSet.new/1)
+    |> Enum.reduce(&MapSet.intersection/2)
+  end
+
   @doc """
   Find all intersecting wires, convert the intersecting points to manhattan distance,
   find the smallest manhattan distance.
   """
   def part1(wires) do
     wires
-    |> Enum.map(&Map.keys/1)
-    |> Enum.map(&MapSet.new/1)
-    |> Enum.reduce(&MapSet.intersection/2)
+    |> intersections()
     |> Enum.map(fn {x, y} -> abs(x) + abs(y) end)
     |> Enum.min()
   end
@@ -76,9 +81,7 @@ defmodule ElixirDay03 do
   """
   def part2(wires) do
     wires
-    |> Enum.map(&Map.keys/1)
-    |> Enum.map(&MapSet.new/1)
-    |> Enum.reduce(&MapSet.intersection/2)
+    |> intersections()
     |> Enum.map(fn {x, y} -> find_sum_steps(wires, {x, y}) end)
     |> Enum.min()
   end
