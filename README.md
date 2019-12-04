@@ -27,6 +27,9 @@
   | [Python](./2019/03/python_day03/03.py)
   | [Elixir](./2019/03/elixir_day03/lib/elixir_day03.ex)
   | [Go](./2019/03/go_day03/day03.go)
+- **Day 4**: [Writeup](./2019/04/README.md)
+  | [Python](./2019/04/python_day04/day04.py)
+  [(test)](./2019/04/python_day04/day04_test.py)
 
 ## 2018
 
@@ -75,5 +78,5 @@
 
 ```
 Created:       Mon 02 Dec 2019 05:12:40 PM CST
-Last Modified: Tue 03 Dec 2019 08:59:37 PM CST
+Last Modified: Wed 04 Dec 2019 11:38:43 AM CST
 ```
