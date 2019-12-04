@@ -17,6 +17,7 @@ class Day04TestCase(TestCase):
         self.assertEqual(is_password2(112233), True)
         self.assertEqual(is_password2(123444), False)
         self.assertEqual(is_password2(111122), True)
+        self.assertEqual(is_password2(111123), False)
 
     def test_solve(self):
         want = 771
