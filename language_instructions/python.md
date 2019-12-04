@@ -1,17 +1,19 @@
 # Python
 
 ## Prereqs
+
 ```fish
 # Install anaconda (Download and run .sh file from their website
 ### after anaconda is installed
-conda create --name myenv --clone base 
+conda create --name myenv --clone base
 conda activate myenv
 conda install black
-conda install -c conda-forge neovim 
+conda install -c conda-forge neovim
 ## Networkx / sympy / numpy will already be installed
 ```
 
 ## Basic Setup
+
 ```fish
 conda activate myenv
 set PROJNAME python_day01
@@ -20,6 +22,11 @@ mkdir $PROJNAME
 cd $PROJNAME
 nvim {$FILENAME}.py test_{$FILENAME}.py Makefile -p
 ```
+
+## Note
+
+See [2019/04](../2019/04/python_day04/) for an example of testing
+without classes.
 
 ## `day01.py`
 
