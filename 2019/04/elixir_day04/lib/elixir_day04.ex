@@ -1,8 +1,4 @@
 defmodule ElixirDay04 do
-  @moduledoc """
-  Documentation for ElixirDay04.
-  """
-
   def solve(lower, upper) do
     lower..upper
     |> Stream.filter(&password?/1)
@@ -15,17 +11,11 @@ defmodule ElixirDay04 do
     |> Enum.count()
   end
 
-  def password?(cand) when cand >= 100_000 and cand <= 999_999 do
-    mono_inc?(cand) and part1?(cand)
-  end
+  def password?(num), do: six_digit?(num) and mono_inc?(num) and part1?(num)
+  def password2?(num), do: six_digit?(num) and mono_inc?(num) and part2?(num)
 
-  def password?(_), do: false
-
-  def password2?(cand) when cand >= 100_000 and cand <= 999_999 do
-    mono_inc?(cand) and part2?(cand)
-  end
-
-  def password2?(_), do: false
+  def six_digit?(num) when is_integer(num) and num >= 100_000 and num <= 999_999, do: true
+  def six_digit?(_), do: false
 
   # Monotonically increasing?
   def mono_inc?(num) do
