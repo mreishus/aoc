@@ -42,6 +42,8 @@
 - Day 3: [Writeup](./2018/3/README.md)
   | [Ruby](./2018/3/ruby/)
   | [Elixir](./2018/3/advent_of_code_2018_03/lib/advent_of_code_2018_03.ex)
+- Day 4: [Writeup](./2018/4/README.md)
+  | [Elixir](./2018/4/advent_of_code_2018_04/lib/advent_of_code_2018_04.ex)
 
 ## 2017
 
@@ -66,6 +68,8 @@
 - Day 3:
   [Python](./2017/03/python_day03/day03.py)
   [(test)](./2017/03/python_day03/test_day03.py)
+- Day 4:
+  [Elixir](./2017/04/elixir_day04/lib/elixir_day04.ex)
 
 ## 2016
 
@@ -78,5 +82,5 @@
 
 ```
 Created:       Mon 02 Dec 2019 05:12:40 PM CST
-Last Modified: Wed 04 Dec 2019 11:38:43 AM CST
+Last Modified: Wed 04 Dec 2019 11:45:16 AM CST
 ```
