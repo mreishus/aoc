@@ -21,257 +21,139 @@ class MODE:
     IMMEDIATE = 1
 
 
-# b = 1234
-# b // 100 = 12
-#     - (b // 100) // 10 = 1
-#       (b // 100) % 10  = 2
-# b % 100 = 34  (could be 5, no leading 0)
+def digit_from_right(x, n):
+    return x // (10 ** n) % 10
 
 
-def decode(opcode_over_1000):
-    x = opcode_over_1000
-    firstsecond = (x // 100) // 10
-    first = firstsecond // 10
-    second = firstsecond % 10
-    three = (x // 100) % 10
-    fourfive = x % 100
-    return (first, second, three, fourfive)
+class Computer(object):
+    def __init__(self, memory, inputs):
+        self.memory = memory.copy()
+        self.inputs = inputs.copy()
+        self.outputs = []
+        self.pc = 0
 
+    def direct(self, n):
+        return self.memory[self.pc + n]
 
-def compute(program, inputs):
-    i = 0
-    outputs = []
-    output_value = -99
-    while True:
-        raw_instruction = program[i]
-        (mode3, mode2, mode1, instruction) = decode(raw_instruction)
-        if DEBUG:
-            print("")
-            if i % 4 == 0:
-                print(program)
-            if i + 2 < len(program):
-                print(
-                    f"i[{i}] inst[{instruction}] next1[{ program[i+1] }] next1[{ program[i+2] }]  mode1[{mode1}] mode2[{mode2}]  "
-                )
-            else:
-                print(f"i[{i}] inst[{instruction}] mode1[{mode1}] mode2[{mode2}] ")
-
-        if instruction == OP.ADD:
-            pos_in1 = program[i + 1]
-            pos_in2 = program[i + 2]
-            pos_out = program[i + 3]
-
-            add1 = 0
-            if mode1 == MODE.POSITION:
-                add1 = program[pos_in1]
-            elif mode1 == MODE.IMMEDIATE:
-                add1 = pos_in1
-            else:
-                raise Exception("add: Unknown mode1")
-
-            add2 = 0
-            if mode2 == MODE.POSITION:
-                add2 = program[pos_in2]
-            elif mode2 == MODE.IMMEDIATE:
-                add2 = pos_in2
-            else:
-                raise Exception("add: Unknown mode2")
-
-            if DEBUG:
-                print(
-                    f"    -> ADD program[{pos_out}] = {add1} + {add2} = {add1 + add2}"
-                )
-            program[pos_out] = add1 + add2
-            i += 4
-        elif instruction == OP.MULT:
-            pos_in1 = program[i + 1]
-            pos_in2 = program[i + 2]
-            pos_out = program[i + 3]
-
-            mult1 = 0
-            if mode1 == MODE.POSITION:
-                mult1 = program[pos_in1]
-            elif mode1 == MODE.IMMEDIATE:
-                mult1 = pos_in1
-            else:
-                raise Exception("mult: Unknown mode1")
-
-            mult2 = 0
-            if mode2 == MODE.POSITION:
-                mult2 = program[pos_in2]
-            elif mode2 == MODE.IMMEDIATE:
-                mult2 = pos_in2
-            else:
-                raise Exception("mult: Unknown mode2")
-
-            if DEBUG:
-                print(
-                    f"    -> MULT program[{pos_out}] = {mult1} * {mult2} = {mult1 * mult2}"
-                )
-            program[pos_out] = mult1 * mult2
-            i += 4
-        elif instruction == OP.SAVE:
-            some_input = inputs.pop(0)
-            pos_out = program[i + 1]
-            program[pos_out] = some_input
-            if DEBUG:
-                print(f"    -> SAVE program[{pos_out}] = INPUT = {some_input}")
-            i += 2
-        elif instruction == OP.WRITE:
-
-            pos_in = program[i + 1]
-            some_output = None
-            if mode1 == MODE.POSITION:
-                some_output = program[pos_in]
-            elif mode1 == MODE.IMMEDIATE:
-                some_output = pos_in
-            else:
-                raise Exception("write: unknown mode1")
-
-            outputs.append(some_output)
-            i += 2
-        elif instruction == OP.JUMP_IF_TRUE:
-            pos_in1 = program[i + 1]
-            pos_in2 = program[i + 2]
-
-            p1 = 0
-            if mode1 == MODE.POSITION:
-                p1 = program[pos_in1]
-            elif mode1 == MODE.IMMEDIATE:
-                p1 = pos_in1
-            else:
-                raise Exception("jump if truee: unknown p1")
-
-            p2 = 0
-            if mode2 == MODE.POSITION:
-                p2 = program[pos_in2]
-            elif mode2 == MODE.IMMEDIATE:
-                p2 = pos_in2
-            else:
-                raise Exception("jump if truee: unknown p2")
-
-            if p1 != 0:
-                if DEBUG:
-                    print(f"    -> JUMP_IF_TRUE [{p1}] != 0, setting i = [{p2}]")
-                i = p2
-            else:
-                if DEBUG:
-                    print(f"    -> JUMP_IF_TRUE [{p1}] == 0, doing normal i+= 3")
-                i += 3
-
-        elif instruction == OP.JUMP_IF_FALSE:
-            pos_in1 = program[i + 1]
-            pos_in2 = program[i + 2]
-
-            p1 = 0
-            if mode1 == MODE.POSITION:
-                p1 = program[pos_in1]
-            elif mode1 == MODE.IMMEDIATE:
-                p1 = pos_in1
-            else:
-                raise Exception("jump if false: unknown p1")
-
-            p2 = 0
-            if mode2 == MODE.POSITION:
-                p2 = program[pos_in2]
-            elif mode2 == MODE.IMMEDIATE:
-                p2 = pos_in2
-            else:
-                raise Exception("jump if false: unknown p2")
-
-            if p1 == 0:
-                if DEBUG:
-                    print(f"    -> JUMP_IF_FALSE [{p1}] == 0, setting i = [{p2}]")
-                i = p2
-            else:
-                if DEBUG:
-                    print(f"    -> JUMP_IF_FALSE [{p1}] != 0, doing normal i+= 3")
-                i += 3
-        elif instruction == OP.LESS_THAN:
-            pos_in1 = program[i + 1]
-            pos_in2 = program[i + 2]
-            pos_out = program[i + 3]
-
-            p1 = 0
-            if mode1 == MODE.POSITION:
-                p1 = program[pos_in1]
-            elif mode1 == MODE.IMMEDIATE:
-                p1 = pos_in1
-            else:
-                raise Exception("less than: unknown p1")
-
-            p2 = 0
-            if mode2 == MODE.POSITION:
-                p2 = program[pos_in2]
-            elif mode2 == MODE.IMMEDIATE:
-                p2 = pos_in2
-            else:
-                raise Exception("less than: unknown p2")
-
-            if p1 < p2:
-                if DEBUG:
-                    print(
-                        f"    -> LESS_THAN [{p1}] < [{p2}], setting program[{pos_out}] = 1"
-                    )
-                program[pos_out] = 1
-            else:
-                if DEBUG:
-                    print(
-                        f"    -> LESS_THAN [{p1}] not < [{p2}], setting program[{pos_out}] = 0"
-                    )
-                program[pos_out] = 0
-
-            i += 4
-        elif instruction == OP.EQUALS:
-            pos_in1 = program[i + 1]
-            pos_in2 = program[i + 2]
-            pos_out = program[i + 3]
-
-            p1 = 0
-            if mode1 == MODE.POSITION:
-                p1 = program[pos_in1]
-            elif mode1 == MODE.IMMEDIATE:
-                p1 = pos_in1
-            else:
-                raise Exception("less than: unknown p1")
-
-            p2 = 0
-            if mode2 == MODE.POSITION:
-                p2 = program[pos_in2]
-            elif mode2 == MODE.IMMEDIATE:
-                p2 = pos_in2
-            else:
-                raise Exception("less than: unknown p2")
-
-            if p1 == p2:
-                if DEBUG:
-                    print(
-                        f"    -> EQUAL [{p1}] == [{p2}], setting program[{pos_out}] = 1"
-                    )
-                program[pos_out] = 1
-            else:
-                if DEBUG:
-                    print(
-                        f"    -> EQUAL [{p1}] != [{p2}], setting program[{pos_out}] = 0"
-                    )
-                program[pos_out] = 0
-
-            i += 4
-        elif instruction == OP.STOP:
-            break
+    def lookup(self, n):
+        instruction = self.memory[self.pc]
+        # If instruction is 105, and n=1, mode is the "1", or the 2nd digit
+        # from right 0 indexed (3rd when counting naturally)
+        mode = digit_from_right(instruction, n + 1)
+        if mode == MODE.POSITION:
+            return self.memory[self.direct(n)]
+        elif mode == MODE.IMMEDIATE:
+            return self.direct(n)
         else:
-            raise ValueError(f"compute: Found unknown instruction {instruction}")
-    return outputs
+            raise Exception("Unknown mode")
+
+    def info(self, string):
+        if DEBUG:
+            print(string)
+
+    def execute(self):
+        while True:
+            instruction = self.memory[self.pc] % 100
+            if instruction == OP.ADD:
+                self.memory[self.direct(3)] = self.lookup(1) + self.lookup(2)
+                self.info(
+                    f"    -> ADD program[{self.direct(3)}] = {self.lookup(1)} + {self.lookup(2)} = {self.lookup(1) + self.lookup(2)}"
+                )
+                self.pc += 4
+            elif instruction == OP.MULT:
+                self.memory[self.direct(3)] = self.lookup(1) * self.lookup(2)
+                self.info(
+                    f"    -> ADD program[{self.direct(3)}] = {self.lookup(1)} * {self.lookup(2)} = {self.lookup(1) * self.lookup(2)}"
+                )
+                self.pc += 4
+            elif instruction == OP.SAVE:
+                # Opcode 3 takes a single integer as input and saves it to the
+                # position given by its only parameter. For example, the
+                # instruction 3,50 would take an input value and store it at
+                # address 50.
+                this_input = self.inputs.pop(0)
+                self.memory[self.direct(1)] = this_input
+                self.info(
+                    f"    -> SAVE program[{self.direct(1)}] = INPUT = {this_input}"
+                )
+                self.pc += 2
+            elif instruction == OP.WRITE:
+                # Opcode 4 outputs the value of its only parameter. For
+                # example, the instruction 4,50 would output the value at
+                # address 50.
+                self.outputs.append(self.lookup(1))
+                self.info(f"    -> WRITE {self.lookup(1)} = OUTPUT")
+                self.pc += 2
+            elif instruction == OP.JUMP_IF_TRUE:
+                # Opcode 5 is jump-if-true: if the first parameter is non-zero,
+                # it sets the instruction pointer to the value from the second
+                # parameter. Otherwise, it does nothing.
+                if self.lookup(1) != 0:
+                    self.info(
+                        f"    -> JUMP_IF_TRUE [{self.lookup(1)}] != 0, setting i = [{self.lookup(2)}]"
+                    )
+                    self.pc = self.lookup(2)
+                else:
+                    self.info(
+                        f"    -> JUMP_IF_TRUE [{self.lookup(1)}] == 0, doing normal i+= 3"
+                    )
+                    self.pc += 3
+            elif instruction == OP.JUMP_IF_FALSE:
+                # Opcode 6 is jump-if-false: if the first parameter is zero, it
+                # sets the instruction pointer to the value from the second
+                # parameter. Otherwise, it does nothing.
+                if self.lookup(1) == 0:
+                    self.info(
+                        f"    -> JUMP_IF_FALSE [{self.lookup(1)}] == 0, setting i = [{self.lookup(2)}]"
+                    )
+                    self.pc = self.lookup(2)
+                else:
+                    self.info(
+                        f"    -> JUMP_IF_FALSE [{self.lookup(1)}] != 0, doing normal i+= 3"
+                    )
+                    self.pc += 3
+            elif instruction == OP.LESS_THAN:
+                # Opcode 7 is less than: if the first parameter is less than
+                # the second parameter, it stores 1 in the position given by
+                # the third parameter. Otherwise, it stores 0.
+                if self.lookup(1) < self.lookup(2):
+                    self.info(
+                        f"    -> LESS_THAN [{self.lookup(1)}] < [{self.lookup(2)}], setting program[{self.direct(3)}] = 1"
+                    )
+                    self.memory[self.direct(3)] = 1
+                else:
+                    self.info(
+                        f"    -> LESS_THAN [{self.lookup(1)}] not < [{self.lookup(2)}], setting program[{self.direct(3)}] = 0"
+                    )
+                    self.memory[self.direct(3)] = 0
+                self.pc += 4
+            elif instruction == OP.EQUALS:
+                # Opcode 8 is equals: if the first parameter is equal to the
+                # second parameter, it stores 1 in the position given by the
+                # third parameter. Otherwise, it stores 0.
+                if self.lookup(1) == self.lookup(2):
+                    self.info(
+                        f"    -> EQUALS [{self.lookup(1)}] == [{self.lookup(2)}], setting program[{self.direct(3)}] = 1"
+                    )
+                    self.memory[self.direct(3)] = 1
+                else:
+                    self.info(
+                        f"    -> EQUALS [{self.lookup(1)}] != [{self.lookup(2)}], setting program[{self.direct(3)}] = 0"
+                    )
+                    self.memory[self.direct(3)] = 0
+                self.pc += 4
+            elif instruction == OP.STOP:
+                break
 
 
 def parse(filename):
     return [int(num) for num in open(filename).readline().strip().split(",")]
 
 
-def solve1(program_in, input_value):
-    p = program_in.copy()
-    p = compute(p, input_value)
-    return p
+def solve1(program_in, inputs):
+    c = Computer(program_in, inputs)
+    c.execute()
+    return c.outputs
 
 
 if __name__ == "__main__":

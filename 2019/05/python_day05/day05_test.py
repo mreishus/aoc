@@ -1,23 +1,22 @@
 #!/usr/bin/env python
 from unittest import TestCase, main
-from day05 import decode, solve1, parse
+from day05 import solve1, parse, digit_from_right
 
 
 class Day05TestCase(TestCase):
-    def test_fourdigit(self):
-        want = (0, 1, 2, 34)
-        got = decode(1234)
-        self.assertEqual(want, got)
-
-    def test_fivedigit(self):
-        want = (1, 2, 3, 45)
-        got = decode(12345)
-        self.assertEqual(want, got)
-
-    def test_onedigit(self):
-        want = (0, 0, 0, 1)
-        got = decode(1)
-        self.assertEqual(want, got)
+    def test_digit_from_right(self):
+        self.assertEqual(digit_from_right(12345, 0), 5)
+        self.assertEqual(digit_from_right(12345, 1), 4)
+        self.assertEqual(digit_from_right(12345, 2), 3)
+        self.assertEqual(digit_from_right(12345, 3), 2)
+        self.assertEqual(digit_from_right(12345, 4), 1)
+        self.assertEqual(digit_from_right(12345, 5), 0)
+        self.assertEqual(digit_from_right(498, 0), 8)
+        self.assertEqual(digit_from_right(498, 1), 9)
+        self.assertEqual(digit_from_right(498, 2), 4)
+        self.assertEqual(digit_from_right(498, 3), 0)
+        self.assertEqual(digit_from_right(498, 4), 0)
+        self.assertEqual(digit_from_right(498, 5), 0)
 
     def test_part1(self):
         file_data = parse("../input.txt")
