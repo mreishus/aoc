@@ -11,6 +11,10 @@ defmodule ElixirDay05.Computer do
   @op_mult 2
   @op_save 3
   @op_write 4
+  @op_jump_if_true 5
+  @op_jump_if_false 6
+  @op_less_than 7
+  @op_equals 8
   @op_halt 99
 
   @mode_position 0
@@ -71,46 +75,82 @@ defmodule ElixirDay05.Computer do
 
   def outputs(%Computer{outputs: outputs}), do: outputs
 
-  def execute_step(%Computer{pc: pc, memory: memory} = computer) do
+  def execute_step(%Computer{pc: pc, memory: memory} = c) do
     instruction = Array.get(memory, pc) |> rem(100)
-    do_execute_step(computer, instruction)
+    do_execute_step(c, instruction)
   end
 
   # ADD: 3 = 1 + 2
-  def do_execute_step(%Computer{pc: pc, memory: memory} = computer, @op_add) do
-    result = lookup(computer, 1) + lookup(computer, 2)
-    new_memory = Array.set(memory, direct(computer, 3), result)
+  def do_execute_step(%Computer{pc: pc, memory: memory} = c, @op_add) do
+    result = lookup(c, 1) + lookup(c, 2)
+    new_memory = Array.set(memory, direct(c, 3), result)
     new_pc = pc + 4
-    %Computer{computer | memory: new_memory, pc: new_pc}
+    %Computer{c | memory: new_memory, pc: new_pc}
   end
 
   # MULT: 3 = 1 * 2
-  def do_execute_step(%Computer{pc: pc, memory: memory} = computer, @op_mult) do
-    result = lookup(computer, 1) * lookup(computer, 2)
-    new_memory = Array.set(memory, direct(computer, 3), result)
+  def do_execute_step(%Computer{pc: pc, memory: memory} = c, @op_mult) do
+    result = lookup(c, 1) * lookup(c, 2)
+    new_memory = Array.set(memory, direct(c, 3), result)
     new_pc = pc + 4
-    %Computer{computer | memory: new_memory, pc: new_pc}
+    %Computer{c | memory: new_memory, pc: new_pc}
   end
 
   # SAVE: 1 = Input
-  def do_execute_step(%Computer{pc: pc, memory: memory, inputs: inputs} = computer, @op_save) do
+  def do_execute_step(%Computer{pc: pc, memory: memory, inputs: inputs} = c, @op_save) do
     [this_input | new_inputs] = inputs
-    new_memory = Array.set(memory, direct(computer, 1), this_input)
+    new_memory = Array.set(memory, direct(c, 1), this_input)
     new_pc = pc + 2
-    %Computer{computer | memory: new_memory, pc: new_pc, inputs: new_inputs}
+    %Computer{c | memory: new_memory, pc: new_pc, inputs: new_inputs}
   end
 
   # WRITE: Output = 1
-  def do_execute_step(%Computer{pc: pc, outputs: outputs} = computer, @op_write) do
-    this_output = lookup(computer, 1)
+  def do_execute_step(%Computer{pc: pc, outputs: outputs} = c, @op_write) do
+    this_output = lookup(c, 1)
     new_outputs = outputs ++ [this_output]
     new_pc = pc + 2
-    %Computer{computer | pc: new_pc, outputs: new_outputs}
+    %Computer{c | pc: new_pc, outputs: new_outputs}
   end
 
   # HALT: Stop
-  def do_execute_step(computer, @op_halt) do
-    %Computer{computer | halted: true}
+  def do_execute_step(c, @op_halt) do
+    %Computer{c | halted: true}
+  end
+
+  def do_execute_step(%Computer{pc: pc, memory: memory} = c, @op_jump_if_true) do
+    new_pc =
+      if lookup(c, 1) != 0 do
+        lookup(c, 2)
+      else
+        pc + 3
+      end
+
+    %Computer{c | pc: new_pc}
+  end
+
+  def do_execute_step(%Computer{pc: pc, memory: memory} = c, @op_jump_if_false) do
+    new_pc =
+      if lookup(c, 1) == 0 do
+        lookup(c, 2)
+      else
+        pc + 3
+      end
+
+    %Computer{c | pc: new_pc}
+  end
+
+  def do_execute_step(%Computer{pc: pc, memory: memory} = c, @op_less_than) do
+    result = if lookup(c, 1) < lookup(c, 2), do: 1, else: 0
+    new_memory = Array.set(memory, direct(c, 3), result)
+    new_pc = pc + 4
+    %Computer{c | memory: new_memory, pc: new_pc}
+  end
+
+  def do_execute_step(%Computer{pc: pc, memory: memory} = c, @op_equals) do
+    result = if lookup(c, 1) == lookup(c, 2), do: 1, else: 0
+    new_memory = Array.set(memory, direct(c, 3), result)
+    new_pc = pc + 4
+    %Computer{c | memory: new_memory, pc: new_pc}
   end
 
   def do_execute_step(_, opcode) do

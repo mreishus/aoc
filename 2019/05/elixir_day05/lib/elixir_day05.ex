@@ -17,5 +17,9 @@ defmodule ElixirDay05 do
     parse("../input.txt")
     |> Computer.solve([1])
     |> IO.inspect(label: "part1")
+
+    parse("../input.txt")
+    |> Computer.solve([5])
+    |> IO.inspect(label: "part2")
   end
 end
