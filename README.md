@@ -32,6 +32,8 @@
   [(test)](./2019/04/python_day04/day04_test.py)
   | [Elixir](./2019/04/elixir_day04/lib/elixir_day04.ex)
   [(test)](./2019/04/elixir_day04/test/elixir_day04_test.exs)
+  | [Go](./2019/04/go_day04/day04.go)
+  [(test)](./2019/04/go_day04/day04_test.go)
 
 ## 2018
 
@@ -84,5 +86,5 @@
 
 ```
 Created:       Mon 02 Dec 2019 05:12:40 PM CST
-Last Modified: Wed 04 Dec 2019 12:37:01 PM CST
+Last Modified: Wed 04 Dec 2019 06:51:05 PM CST
 ```

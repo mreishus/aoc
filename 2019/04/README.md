@@ -22,6 +22,8 @@ detecting a group of 2 easier.
 - [Python](./python_day04/day04.py) [(test)](./python_day04/day04_test.py)
 - [Elixir](./elixir_day04/lib/elixir_day04.ex)
   [(test)](./elixir_day04/test/elixir_day04_test.exs)
+- [Go](./go_day04/day04.go)
+  [(test)](./go_day04/day04_test.go)
 
 ## Problem Description
 
