@@ -38,9 +38,9 @@ def decode(opcode_over_1000):
     return (first, second, three, fourfive)
 
 
-def compute(program, input_value):
+def compute(program, inputs):
     i = 0
-    mode = MODE.POSITION
+    outputs = []
     output_value = -99
     while True:
         raw_instruction = program[i]
@@ -48,8 +48,8 @@ def compute(program, input_value):
         if DEBUG:
             print("")
             if i % 4 == 0:
-                print(data)
-            if i + 2 < len(data):
+                print(program)
+            if i + 2 < len(program):
                 print(
                     f"i[{i}] inst[{instruction}] next1[{ program[i+1] }] next1[{ program[i+2] }]  mode1[{mode1}] mode2[{mode2}]  "
                 )
@@ -111,7 +111,7 @@ def compute(program, input_value):
             program[pos_out] = mult1 * mult2
             i += 4
         elif instruction == OP.SAVE:
-            some_input = input_value  # 4  # 99  # XXX TODO
+            some_input = inputs.pop(0)
             pos_out = program[i + 1]
             program[pos_out] = some_input
             if DEBUG:
@@ -120,17 +120,15 @@ def compute(program, input_value):
         elif instruction == OP.WRITE:
 
             pos_in = program[i + 1]
-            zzz = 0
+            some_output = None
             if mode1 == MODE.POSITION:
-                zzz = program[pos_in]
+                some_output = program[pos_in]
             elif mode1 == MODE.IMMEDIATE:
-                zzz = pos_in
+                some_output = pos_in
             else:
                 raise Exception("write: unknown mode1")
 
-            some_output = zzz
-            print(f"output: [{some_output}]")
-            output_value = some_output
+            outputs.append(some_output)
             i += 2
         elif instruction == OP.JUMP_IF_TRUE:
             pos_in1 = program[i + 1]
@@ -263,7 +261,7 @@ def compute(program, input_value):
             break
         else:
             raise ValueError(f"compute: Found unknown instruction {instruction}")
-    return output_value
+    return outputs
 
 
 def parse(filename):
@@ -279,6 +277,6 @@ def solve1(program_in, input_value):
 if __name__ == "__main__":
     file_data = parse("../input.txt")
     print("Part1: ")
-    print(solve1(file_data, 1))
+    print(solve1(file_data, [1]))
     print("Part2: ")
-    print(solve1(file_data, 5))
+    print(solve1(file_data, [5]))
