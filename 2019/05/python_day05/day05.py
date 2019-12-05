@@ -2,12 +2,19 @@
 from collections import Counter
 import re
 
+# DEBUG = True
+DEBUG = False
+
 
 class OP:
     ADD = 1
     MULT = 2
     SAVE = 3
     WRITE = 4
+    JUMP_IF_TRUE = 5
+    JUMP_IF_FALSE = 6
+    LESS_THAN = 7
+    EQUALS = 8
     STOP = 99
 
 
@@ -33,12 +40,23 @@ def decode(opcode_over_1000):
     return (first, second, three, fourfive)
 
 
-def compute(program):
+def compute(program, input_value):
     i = 0
     mode = MODE.POSITION
+    output_value = -99
     while True:
         raw_instruction = program[i]
         (mode3, mode2, mode1, instruction) = decode(raw_instruction)
+        if DEBUG:
+            print("")
+            if i % 4 == 0:
+                print(data)
+            if i + 2 < len(data):
+                print(
+                    f"i[{i}] inst[{instruction}] next1[{ program[i+1] }] next1[{ program[i+2] }]  mode1[{mode1}] mode2[{mode2}]  "
+                )
+            else:
+                print(f"i[{i}] inst[{instruction}] mode1[{mode1}] mode2[{mode2}] ")
 
         if instruction == OP.ADD:
             pos_in1 = program[i + 1]
@@ -61,8 +79,13 @@ def compute(program):
             else:
                 raise Exception("add: Unknown mode2")
 
+            if DEBUG:
+                print(
+                    f"    -> ADD program[{pos_out}] = {add1} + {add2} = {add1 + add2}"
+                )
             program[pos_out] = add1 + add2
-            i += 4
+            if i != pos_out:
+                i += 4
         elif instruction == OP.MULT:
             pos_in1 = program[i + 1]
             pos_in2 = program[i + 2]
@@ -84,13 +107,21 @@ def compute(program):
             else:
                 raise Exception("mult: Unknown mode2")
 
+            if DEBUG:
+                print(
+                    f"    -> MULT program[{pos_out}] = {mult1} * {mult2} = {mult1 * mult2}"
+                )
             program[pos_out] = mult1 * mult2
-            i += 4
+            if i != pos_out:
+                i += 4
         elif instruction == OP.SAVE:
-            some_input = 1  # 99  # XXX TODO
+            some_input = input_value  # 4  # 99  # XXX TODO
             pos_out = program[i + 1]
             program[pos_out] = some_input
-            i += 2
+            if DEBUG:
+                print(f"    -> SAVE program[{pos_out}] = INPUT = {some_input}")
+            if i != pos_out:
+                i += 2
         elif instruction == OP.WRITE:
 
             pos_in = program[i + 1]
@@ -103,13 +134,145 @@ def compute(program):
                 raise Exception("write: unknown mode1")
 
             some_output = zzz
-            print(f"output: [{some_output}]\n")
+            print(f"output: [{some_output}]")
+            output_value = some_output
             i += 2
+        elif instruction == OP.JUMP_IF_TRUE:
+            pos_in1 = program[i + 1]
+            pos_in2 = program[i + 2]
+
+            p1 = 0
+            if mode1 == MODE.POSITION:
+                p1 = program[pos_in1]
+            elif mode1 == MODE.IMMEDIATE:
+                p1 = pos_in1
+            else:
+                raise Exception("jump if truee: unknown p1")
+
+            p2 = 0
+            if mode2 == MODE.POSITION:
+                p2 = program[pos_in2]
+            elif mode2 == MODE.IMMEDIATE:
+                p2 = pos_in2
+            else:
+                raise Exception("jump if truee: unknown p2")
+
+            if p1 != 0:
+                if DEBUG:
+                    print(f"    -> JUMP_IF_TRUE [{p1}] != 0, setting i = [{p2}]")
+                i = p2
+            else:
+                if DEBUG:
+                    print(f"    -> JUMP_IF_TRUE [{p1}] == 0, doing normal i+= 3")
+                i += 3
+
+        elif instruction == OP.JUMP_IF_FALSE:
+            pos_in1 = program[i + 1]
+            pos_in2 = program[i + 2]
+
+            p1 = 0
+            if mode1 == MODE.POSITION:
+                p1 = program[pos_in1]
+            elif mode1 == MODE.IMMEDIATE:
+                p1 = pos_in1
+            else:
+                raise Exception("jump if false: unknown p1")
+
+            p2 = 0
+            if mode2 == MODE.POSITION:
+                p2 = program[pos_in2]
+            elif mode2 == MODE.IMMEDIATE:
+                p2 = pos_in2
+            else:
+                raise Exception("jump if false: unknown p2")
+
+            if p1 == 0:
+                if DEBUG:
+                    print(f"    -> JUMP_IF_FALSE [{p1}] == 0, setting i = [{p2}]")
+                i = p2
+            else:
+                if DEBUG:
+                    print(f"    -> JUMP_IF_FALSE [{p1}] != 0, doing normal i+= 3")
+                i += 3
+        elif instruction == OP.LESS_THAN:
+            pos_in1 = program[i + 1]
+            pos_in2 = program[i + 2]
+            pos_out = program[i + 3]
+
+            p1 = 0
+            if mode1 == MODE.POSITION:
+                p1 = program[pos_in1]
+            elif mode1 == MODE.IMMEDIATE:
+                p1 = pos_in1
+            else:
+                raise Exception("less than: unknown p1")
+
+            p2 = 0
+            if mode2 == MODE.POSITION:
+                p2 = program[pos_in2]
+            elif mode2 == MODE.IMMEDIATE:
+                p2 = pos_in2
+            else:
+                raise Exception("less than: unknown p2")
+
+            # p3, writing, never check mode
+
+            if p1 < p2:
+                if DEBUG:
+                    print(
+                        f"    -> LESS_THAN [{p1}] < [{p2}], setting program[{pos_out}] = 1"
+                    )
+                program[pos_out] = 1
+            else:
+                if DEBUG:
+                    print(
+                        f"    -> LESS_THAN [{p1}] not < [{p2}], setting program[{pos_out}] = -"
+                    )
+                program[pos_out] = 0
+
+            if i != pos_out:
+                i += 4
+        elif instruction == OP.EQUALS:
+            pos_in1 = program[i + 1]
+            pos_in2 = program[i + 2]
+            pos_out = program[i + 3]
+
+            p1 = 0
+            if mode1 == MODE.POSITION:
+                p1 = program[pos_in1]
+            elif mode1 == MODE.IMMEDIATE:
+                p1 = pos_in1
+            else:
+                raise Exception("less than: unknown p1")
+
+            p2 = 0
+            if mode2 == MODE.POSITION:
+                p2 = program[pos_in2]
+            elif mode2 == MODE.IMMEDIATE:
+                p2 = pos_in2
+            else:
+                raise Exception("less than: unknown p2")
+
+            if p1 == p2:
+                if DEBUG:
+                    print(
+                        f"    -> EQUAL [{p1}] == [{p2}], setting program[{pos_out}] = 1"
+                    )
+                program[pos_out] = 1
+            else:
+                if DEBUG:
+                    print(
+                        f"    -> EQUAL [{p1}] != [{p2}], setting program[{pos_out}] = 0"
+                    )
+                program[pos_out] = 0
+
+            if i != pos_out:
+                i += 4
         elif instruction == OP.STOP:
             break
         else:
             raise ValueError(f"compute: Found unknown instruction {instruction}")
-    return program
+    return output_value
 
 
 def add_one(x):
@@ -127,15 +290,10 @@ def parse(filename):
 # line = "person:guy age:33"
 # (a, b) = re.match("person:(\w+) age:(\d+)", line).groups()
 
-# string -> wire
-# wire example: [ ("U", 5), ("D", 40), ... ]
-def parse_line(line):
-    return [parse_step(step) for step in line.strip().split(",")]
 
-
-def solve1(program_in):
+def solve1(program_in, input_value):
     p = program_in.copy()
-    p = compute(p)
+    p = compute(p, input_value)
     return p
 
 
@@ -144,9 +302,8 @@ def solve2(data):
 
 
 if __name__ == "__main__":
-    data = parse("../input.txt")
-    # data = parse("../input_small.txt")
+    file_data = parse("../input.txt")
     print("Part1: ")
-    print(solve1(data))
-    # print("Part2: ")
-    # print(solve2(data))
+    print(solve1(file_data, 1))
+    print("Part2: ")
+    print(solve1(file_data, 5))
