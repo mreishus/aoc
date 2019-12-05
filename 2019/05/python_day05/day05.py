@@ -1,6 +1,4 @@
 #!/usr/bin/env python
-from collections import Counter
-import re
 
 # DEBUG = True
 DEBUG = False
@@ -84,8 +82,7 @@ def compute(program, input_value):
                     f"    -> ADD program[{pos_out}] = {add1} + {add2} = {add1 + add2}"
                 )
             program[pos_out] = add1 + add2
-            if i != pos_out:
-                i += 4
+            i += 4
         elif instruction == OP.MULT:
             pos_in1 = program[i + 1]
             pos_in2 = program[i + 2]
@@ -112,16 +109,14 @@ def compute(program, input_value):
                     f"    -> MULT program[{pos_out}] = {mult1} * {mult2} = {mult1 * mult2}"
                 )
             program[pos_out] = mult1 * mult2
-            if i != pos_out:
-                i += 4
+            i += 4
         elif instruction == OP.SAVE:
             some_input = input_value  # 4  # 99  # XXX TODO
             pos_out = program[i + 1]
             program[pos_out] = some_input
             if DEBUG:
                 print(f"    -> SAVE program[{pos_out}] = INPUT = {some_input}")
-            if i != pos_out:
-                i += 2
+            i += 2
         elif instruction == OP.WRITE:
 
             pos_in = program[i + 1]
@@ -215,8 +210,6 @@ def compute(program, input_value):
             else:
                 raise Exception("less than: unknown p2")
 
-            # p3, writing, never check mode
-
             if p1 < p2:
                 if DEBUG:
                     print(
@@ -226,12 +219,11 @@ def compute(program, input_value):
             else:
                 if DEBUG:
                     print(
-                        f"    -> LESS_THAN [{p1}] not < [{p2}], setting program[{pos_out}] = -"
+                        f"    -> LESS_THAN [{p1}] not < [{p2}], setting program[{pos_out}] = 0"
                     )
                 program[pos_out] = 0
 
-            if i != pos_out:
-                i += 4
+            i += 4
         elif instruction == OP.EQUALS:
             pos_in1 = program[i + 1]
             pos_in2 = program[i + 2]
@@ -266,8 +258,7 @@ def compute(program, input_value):
                     )
                 program[pos_out] = 0
 
-            if i != pos_out:
-                i += 4
+            i += 4
         elif instruction == OP.STOP:
             break
         else:
@@ -275,30 +266,14 @@ def compute(program, input_value):
     return output_value
 
 
-def add_one(x):
-    return x + 1
-
-
-# filename -> [ wires ]
-# wire example: [ ("U", 5), ("D", 40), ... ]
-# def parse(filename):
-#     return [parse_line(line) for line in open(filename).readlines()]
 def parse(filename):
     return [int(num) for num in open(filename).readline().strip().split(",")]
-
-
-# line = "person:guy age:33"
-# (a, b) = re.match("person:(\w+) age:(\d+)", line).groups()
 
 
 def solve1(program_in, input_value):
     p = program_in.copy()
     p = compute(p, input_value)
     return p
-
-
-def solve2(data):
-    return data
 
 
 if __name__ == "__main__":

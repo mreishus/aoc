@@ -36,6 +36,8 @@ without classes.
 Advent of Code 2017 Day 01.
 """
 
+# line = "person:guy age:88"
+# (a, b) = re.match("person:(\w+) age:(\d+)", line).groups()
 
 class Day01:
     """Main module for solving Day01."""

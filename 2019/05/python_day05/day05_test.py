@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 from unittest import TestCase, main
-from day05 import add_one, decode, solve1, parse
+from day05 import decode, solve1, parse
 
 
 class Day05TestCase(TestCase):
@@ -13,10 +13,6 @@ class Day05TestCase(TestCase):
         want = (1, 2, 3, 45)
         got = decode(12345)
         self.assertEqual(want, got)
-        # (a, b, c, de) = decode(1234)
-        # self.assertEqual(a, 1)
-        # z = decode(99999)
-        # print(z)
 
     def test_onedigit(self):
         want = (0, 0, 0, 1)
@@ -27,6 +23,12 @@ class Day05TestCase(TestCase):
         file_data = parse("../input.txt")
         got = solve1(file_data, 1)
         want = 5821753
+        self.assertEqual(want, got)
+
+    def test_part2(self):
+        file_data = parse("../input.txt")
+        got = solve1(file_data, 5)
+        want = 11956381
         self.assertEqual(want, got)
 
     def test_8_1(self):
