@@ -33,19 +33,21 @@ class Computer(object):
         self.pc = 0
 
     def direct(self, n):
+        """ Get the direct value of the memory address of the Nth arg, or PC + N"""
         return self.memory[self.pc + n]
 
     def lookup(self, n):
+        """ Get the dereferenced value of the Nth arg, after checking the Nth mode
+        of the current instruction. """
         instruction = self.memory[self.pc]
         # If instruction is 105, and n=1, mode is the "1", or the 2nd digit
         # from right 0 indexed (3rd when counting naturally)
         mode = digit_from_right(instruction, n + 1)
         if mode == MODE.POSITION:
             return self.memory[self.direct(n)]
-        elif mode == MODE.IMMEDIATE:
+        if mode == MODE.IMMEDIATE:
             return self.direct(n)
-        else:
-            raise Exception("Unknown mode")
+        raise Exception("Unknown mode")
 
     def info(self, string):
         if DEBUG:

@@ -34,6 +34,9 @@
   [(test)](./2019/04/elixir_day04/test/elixir_day04_test.exs)
   | [Go](./2019/04/go_day04/day04.go)
   [(test)](./2019/04/go_day04/day04_test.go)
+- Day 5: [Writeup](./2019/05/README.md)
+  | [Python](./2019/05/python_day05/day05.py)
+  [(test)](./2019/05/python_day05/day05_test.py)
 
 ## 2018
 
@@ -48,6 +51,10 @@
   | [Elixir](./2018/3/advent_of_code_2018_03/lib/advent_of_code_2018_03.ex)
 - Day 4: [Writeup](./2018/4/README.md)
   | [Elixir](./2018/4/advent_of_code_2018_04/lib/advent_of_code_2018_04.ex)
+- Day 5: [Writeup](./2018/5/README.md)
+  | [Elixir](./2018/5/advent_of_code_2018_05/lib/advent_of_code_2018_05.ex)
+  [(test)](./2018/5/advent_of_code_2018_05/test/advent_of_code_2018_05_test.exs)
+  | [Ruby](./2018/5/ruby/test.rb) (Done quickly)
 
 ## 2017
 
@@ -74,6 +81,12 @@
   [(test)](./2017/03/python_day03/test_day03.py)
 - Day 4:
   [Elixir](./2017/04/elixir_day04/lib/elixir_day04.ex)
+- Day 5:
+  [Elixir](./2017/05/elixir_day05/lib/elixir_day05.ex)
+  | [Go](./2017/05/go_day05/day05.go)
+  [(test)](./2017/05/go_day05/day05_test.go)
+  | [Python](./2017/05/python_day05/day05.py)
+  | [Ruby](./2017/05/ruby_day05/day05.rb)
 
 ## 2016
 
@@ -86,5 +99,5 @@
 
 ```
 Created:       Mon 02 Dec 2019 05:12:40 PM CST
-Last Modified: Wed 04 Dec 2019 06:51:05 PM CST
+Last Modified: Thu 05 Dec 2019 12:54:45 PM CST
 ```
