@@ -3,19 +3,6 @@ defmodule ElixirDay02 do
   Documentation for ElixirDay02.
   """
 
-  @doc """
-  Hello world.
-
-  ## Examples
-
-      iex> ElixirDay02.hello()
-      :world
-
-  """
-  def hello do
-    :world
-  end
-
   def parse(filename) do
     File.stream!(filename)
     |> Stream.map(&String.trim/1)
