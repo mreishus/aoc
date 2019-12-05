@@ -69,10 +69,6 @@ class Computer(object):
                 )
                 self.pc += 4
             elif instruction == OP.SAVE:
-                # Opcode 3 takes a single integer as input and saves it to the
-                # position given by its only parameter. For example, the
-                # instruction 3,50 would take an input value and store it at
-                # address 50.
                 this_input = self.inputs.pop(0)
                 self.memory[self.direct(1)] = this_input
                 self.info(
@@ -80,16 +76,10 @@ class Computer(object):
                 )
                 self.pc += 2
             elif instruction == OP.WRITE:
-                # Opcode 4 outputs the value of its only parameter. For
-                # example, the instruction 4,50 would output the value at
-                # address 50.
                 self.outputs.append(self.lookup(1))
                 self.info(f"    -> WRITE {self.lookup(1)} = OUTPUT")
                 self.pc += 2
             elif instruction == OP.JUMP_IF_TRUE:
-                # Opcode 5 is jump-if-true: if the first parameter is non-zero,
-                # it sets the instruction pointer to the value from the second
-                # parameter. Otherwise, it does nothing.
                 if self.lookup(1) != 0:
                     self.info(
                         f"    -> JUMP_IF_TRUE [{self.lookup(1)}] != 0, setting i = [{self.lookup(2)}]"
@@ -101,9 +91,6 @@ class Computer(object):
                     )
                     self.pc += 3
             elif instruction == OP.JUMP_IF_FALSE:
-                # Opcode 6 is jump-if-false: if the first parameter is zero, it
-                # sets the instruction pointer to the value from the second
-                # parameter. Otherwise, it does nothing.
                 if self.lookup(1) == 0:
                     self.info(
                         f"    -> JUMP_IF_FALSE [{self.lookup(1)}] == 0, setting i = [{self.lookup(2)}]"
@@ -115,9 +102,6 @@ class Computer(object):
                     )
                     self.pc += 3
             elif instruction == OP.LESS_THAN:
-                # Opcode 7 is less than: if the first parameter is less than
-                # the second parameter, it stores 1 in the position given by
-                # the third parameter. Otherwise, it stores 0.
                 if self.lookup(1) < self.lookup(2):
                     self.info(
                         f"    -> LESS_THAN [{self.lookup(1)}] < [{self.lookup(2)}], setting program[{self.direct(3)}] = 1"
@@ -130,9 +114,6 @@ class Computer(object):
                     self.memory[self.direct(3)] = 0
                 self.pc += 4
             elif instruction == OP.EQUALS:
-                # Opcode 8 is equals: if the first parameter is equal to the
-                # second parameter, it stores 1 in the position given by the
-                # third parameter. Otherwise, it stores 0.
                 if self.lookup(1) == self.lookup(2):
                     self.info(
                         f"    -> EQUALS [{self.lookup(1)}] == [{self.lookup(2)}], setting program[{self.direct(3)}] = 1"
