@@ -5,6 +5,8 @@
 ## Solutions
 
 - [Python](./python_day05/day05.py) [(test)](./python_day05/day05_test.py)
+- [Elixir](./elixir_day05/lib/computer.ex)
+  [(test)](./elixir_day05/test/elixir_day05_test.exs)
 
 ## Problem Description
 

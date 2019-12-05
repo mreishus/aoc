@@ -37,6 +37,8 @@
 - Day 5: [Writeup](./2019/05/README.md)
   | [Python](./2019/05/python_day05/day05.py)
   [(test)](./2019/05/python_day05/day05_test.py)
+  | [Elixir](./2019/05/elixir_day05/lib/elixir_day05.ex)
+  [(test)](./2019/05/elixir_day05/test/elixir_day05_test.exs)
 
 ## 2018
 
@@ -99,5 +101,5 @@
 
 ```
 Created:       Mon 02 Dec 2019 05:12:40 PM CST
-Last Modified: Thu 05 Dec 2019 12:54:45 PM CST
+Last Modified: Thu 05 Dec 2019 05:02:21 PM CST
 ```
