@@ -5,7 +5,7 @@ import PartB from "./prob/PartB";
 
 function App() {
   const [showB, setShowB] = useState(false);
-  const [isHidden, setIsHidden] = useState(false);
+  const [isHidden] = useState(false);
   return (
     <>
       <div className="container text-center mx-auto">

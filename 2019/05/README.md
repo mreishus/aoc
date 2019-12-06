@@ -8,6 +8,7 @@
 - [Elixir](./elixir_day05/lib/computer.ex)
   [(test)](./elixir_day05/test/elixir_day05_test.exs)
 - [React](./react_day05/src/prob/)
+- [Go](./go_day05/day05.go) [(test)](./go_day05/day05_test.go)
 
 ## Visualization
 
