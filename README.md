@@ -34,7 +34,7 @@
   [(test)](./2019/04/elixir_day04/test/elixir_day04_test.exs)
   | [Go](./2019/04/go_day04/day04.go)
   [(test)](./2019/04/go_day04/day04_test.go)
-- Day 5: [Writeup](./2019/05/README.md)
+- **Day 5**: [Writeup + Visualization + Benchmark](./2019/05/README.md)
   | [Python](./2019/05/python_day05/day05.py)
   [(test)](./2019/05/python_day05/day05_test.py)
   | [Elixir](./2019/05/elixir_day05/lib/elixir_day05.ex)
@@ -45,25 +45,25 @@
 
 ## 2018
 
-- Day 1: [Writeup](./2018/1/README.md)
+- **Day 1**: [Writeup](./2018/1/README.md)
   | Elixir [(Part 1)](./2018/1/advent_of_code_2018_01a/lib/advent_of_code_2018_01a.ex)
   [(Part 2)](./2018/1/advent_of_code_2018_01b/lib/advent_of_code_2018_01b.ex)
-- Day 2: [Writeup](./2018/2/README.md)
+- **Day 2**: [Writeup](./2018/2/README.md)
   | [JavaScript](./2018/2/fast_js/2.js) (Done quickly)
   | [Elixir](./2018/2/advent_of_code_2018_02/lib/advent_of_code_2018_02.ex)
-- Day 3: [Writeup](./2018/3/README.md)
+- **Day 3**: [Writeup](./2018/3/README.md)
   | [Ruby](./2018/3/ruby/)
   | [Elixir](./2018/3/advent_of_code_2018_03/lib/advent_of_code_2018_03.ex)
-- Day 4: [Writeup](./2018/4/README.md)
+- **Day 4**: [Writeup](./2018/4/README.md)
   | [Elixir](./2018/4/advent_of_code_2018_04/lib/advent_of_code_2018_04.ex)
-- Day 5: [Writeup](./2018/5/README.md)
+- **Day 5**: [Writeup](./2018/5/README.md)
   | [Elixir](./2018/5/advent_of_code_2018_05/lib/advent_of_code_2018_05.ex)
   [(test)](./2018/5/advent_of_code_2018_05/test/advent_of_code_2018_05_test.exs)
   | [Ruby](./2018/5/ruby/test.rb) (Done quickly)
 
 ## 2017
 
-- Day 1:
+- **Day 1**:
   [Python](./2017/01/python_day01/day01.py)
   [(test)](./2017/01/python_day01/test_day01.py)
   | [Go](./2017/01/go_day01/day01.go)
@@ -79,14 +79,14 @@
   | Haskell [(main)](./2017/01/haskell-day01/app/Main.hs)
   [(lib)](./2017/01/haskell-day01/src/Lib.hs)
   [(test)](./2017/01/haskell-day01/test/Spec.hs)
-- Day 2:
+- **Day 2**:
   [Go](./2017/02/go_day02/day02.go) [(test)](./2017/02/go_day02/day02_test.go)
-- Day 3:
+- **Day 3**:
   [Python](./2017/03/python_day03/day03.py)
   [(test)](./2017/03/python_day03/test_day03.py)
-- Day 4:
+- **Day 4**:
   [Elixir](./2017/04/elixir_day04/lib/elixir_day04.ex)
-- Day 5:
+- **Day 5**:
   [Elixir](./2017/05/elixir_day05/lib/elixir_day05.ex)
   | [Go](./2017/05/go_day05/day05.go)
   [(test)](./2017/05/go_day05/day05_test.go)
@@ -95,7 +95,7 @@
 
 ## 2016
 
-- Day 1:
+- **Day 1**:
   [Python](./2016/01/day01_python/01.py)
 
 ## Misc
@@ -104,5 +104,5 @@
 
 ```
 Created:       Mon 02 Dec 2019 05:12:40 PM CST
-Last Modified: Thu 05 Dec 2019 10:02:50 PM CST
+Last Modified: Thu 05 Dec 2019 10:36:30 PM CST
 ```
