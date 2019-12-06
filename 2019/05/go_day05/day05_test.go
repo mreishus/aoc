@@ -188,3 +188,16 @@ func TestLonger(t *testing.T) {
 		})
 	}
 }
+
+func BenchmarkSolvePart1(b *testing.B) {
+	program := Parse("../input.txt")
+	for i := 0; i < b.N; i++ {
+		Solve(program, []int{1})
+	}
+}
+func BenchmarkSolvePart2(b *testing.B) {
+	program := Parse("../input.txt")
+	for i := 0; i < b.N; i++ {
+		Solve(program, []int{5})
+	}
+}
