@@ -22,4 +22,13 @@ defmodule ElixirDay05 do
     |> Computer.solve([5])
     |> IO.inspect(label: "part2")
   end
+
+  def benchmark do
+    program = parse("../input.txt")
+
+    Benchee.run(%{
+      "part1" => fn -> Computer.solve(program, [1]) end,
+      "part2" => fn -> Computer.solve(program, [5]) end
+    })
+  end
 end

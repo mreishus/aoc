@@ -2,6 +2,13 @@
 
 ## Approach and Reflections
 
+They're ramping up the complexity early this year! We had to build an
+assembly interpreter that understands a version of IntCode with 8 operations,
+and two reference modes for each parameter (immediate, or indirect).
+
+The computer/interpreter also has input and output stacks. I wonder if we
+will be networking them in a future challenge..
+
 ## Solutions
 
 - [Python](./python_day05/day05.py) [(test)](./python_day05/day05_test.py)
@@ -25,6 +32,17 @@ Part 2
 Simple visualization of the memory state done in react. To run the app, cd
 into the `./react_day05/` directory, `npm install` then `npm start`. Click
 the _step_ button to advance state, or _auto run_ to run automatically.
+
+## Benchmark Performance: Golang vs Python vs Elixir
+
+```
+Python Part 1 = 0.239ms = 239000ns
+Python Part 2 = 0.367ms = 367000ns
+Go Part1 = 0.0078ms = 7817 ns = 30x faster than python, 9x faster than elixir
+Go Part2 = 0.0114ms = 11468 ns = ~32x faster than python, 9.7x faster than elixir
+Elixir Part1 = 69.95 μs = 70000 ns = 3.4x faster than python
+Elixir Part2 = 112.01 μs = 112000 ns = 3x faster than python
+```
 
 ## Problem Description
 

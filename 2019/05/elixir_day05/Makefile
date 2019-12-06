@@ -7,3 +7,5 @@ repl:
 	iex
 format:
 	mix format
+bench:
+	mix run -e "ElixirDay05.benchmark()"
