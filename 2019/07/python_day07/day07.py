@@ -148,7 +148,8 @@ class Computer(object):
 
 
 def parse(filename):
-    return [int(num) for num in open(filename).readline().strip().split(",")]
+    with open(filename) as f:
+        return [int(num) for num in f.readline().strip().split(",")]
 
 
 def solve1(program_in, inputs):
@@ -158,19 +159,25 @@ def solve1(program_in, inputs):
 
 
 def part1(program_in):
+    return amplify_once_find_highest_seq(program_in)
+
+
+def amplify_once_find_highest_seq(program_in):
+    """Try every combination of phase settings on the amplifiers. What is the
+    highest signal that can be sent to the thrusters? (Max Val)"""
     max_val = 0
     max_sequence = []
 
     for seq in permutations([0, 1, 2, 3, 4]):
         phase_sequence = list(seq)
-        val = part1_onetry(program_in, phase_sequence)
+        val = amplify_once(program_in, phase_sequence)
         if val > max_val:
             max_val = val
             max_sequence = phase_sequence
     return [max_val, max_sequence]
 
 
-def part1_onetry(program_in, phase_sequence):
+def amplify_once(program_in, phase_sequence):
     input_signal = 0
     for setting in phase_sequence:
         outputs = solve1(program_in, [setting, input_signal])
@@ -178,7 +185,7 @@ def part1_onetry(program_in, phase_sequence):
     return input_signal
 
 
-def part2_onetry(program_in, phase_sequence):
+def amplify_loop(program_in, phase_sequence):
     cpus = []
     # print(program_in)
     # print(phase_sequence)
@@ -209,7 +216,7 @@ def part2(program_in):
     max_sequence = []
     for seq in permutations([5, 6, 7, 8, 9]):
         phase_sequence = list(seq)
-        val = part2_onetry(program_in, phase_sequence)
+        val = amplify_loop(program_in, phase_sequence)
         if val > max_val:
             max_val = val
             max_sequence = phase_sequence
@@ -217,16 +224,8 @@ def part2(program_in):
 
 
 if __name__ == "__main__":
-    file_data = parse("../input.txt")
-    print("Part1: ")
     # test_prog = [3, 15, 3, 16, 1002, 16, 10, 16, 1, 16, 15, 15, 4, 15, 99, 0, 0]
     # # You guessed 20314
-    [max_val, max_seq] = part1(file_data)
-    print("Max val:")
-    print(max_val)
-    print("Max seq:")
-    print(max_seq)
-    print("--")
     test_prog = [
         3,
         26,
@@ -258,7 +257,7 @@ if __name__ == "__main__":
         0,
         5,
     ]
-    # z = part2_onetry(test_prog, [9, 8, 7, 6, 5])
+    # z = amplify_loop(test_prog, [9, 8, 7, 6, 5])
     # print(z)
 
     test_prog2 = [
@@ -320,18 +319,19 @@ if __name__ == "__main__":
         0,
         10,
     ]
-    # z = part2_onetry(test_prog2, [9, 7, 8, 5, 6])
+    # z = amplify_loop(test_prog2, [9, 7, 8, 5, 6])
     # print(z)
 
     # zz = part2(test_prog)
     # print(zz)
     # zz = part2(test_prog2)
     # print(zz)
+
+    file_data = parse("../input.txt")
+    print("Part 1:")
+    [max_val, max_seq] = part1(file_data)
+    print(f"Max val: {max_val} Max Seq: {max_seq}")
+
     print("Part 2")
-    zz = part2(file_data)
-    print(zz)
-    # [max_val, max_seq] = part2(test_prog)
-    # print("Max val:")
-    # print(max_val)
-    # print("Max seq:")
-    # print(max_seq)
+    [max_val, max_seq] = part2(file_data)
+    print(f"Max val: {max_val} Max Seq: {max_seq}")
