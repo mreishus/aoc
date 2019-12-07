@@ -1,5 +1,8 @@
 #!/usr/bin/env python
 
+from itertools import permutations
+import time
+
 # DEBUG = True
 DEBUG = False
 
@@ -31,6 +34,7 @@ class Computer(object):
         self.inputs = inputs.copy()
         self.outputs = []
         self.pc = 0
+        self.state = "new"
 
     def direct(self, n):
         """ Get the direct value of the memory address of the Nth arg, or PC + N"""
@@ -53,7 +57,16 @@ class Computer(object):
         if DEBUG:
             print(string)
 
+    def add_input(self, x):
+        self.inputs.append(x)
+
+    def pop_output(self):
+        return self.outputs.pop(0)
+
     def execute(self):
+        if self.state == "halted":
+            print("Refusing to execute; is halted")
+        self.state = "running"
         while True:
             instruction = self.memory[self.pc] % 100
             if instruction == OP.ADD:
@@ -69,6 +82,10 @@ class Computer(object):
                 )
                 self.pc += 4
             elif instruction == OP.SAVE:
+                if len(self.inputs) == 0:
+                    # print("Not enough input!")
+                    self.state = "waiting_input"
+                    break
                 this_input = self.inputs.pop(0)
                 self.memory[self.direct(1)] = this_input
                 self.info(
@@ -126,6 +143,7 @@ class Computer(object):
                     self.memory[self.direct(3)] = 0
                 self.pc += 4
             elif instruction == OP.STOP:
+                self.state = "halted"
                 break
 
 
@@ -171,17 +189,160 @@ def part1_onetry(program_in, phase_sequence):
     return input_signal
 
 
+def part2_onetry(program_in, phase_sequence):
+    cpus = []
+    # print(program_in)
+    # print(phase_sequence)
+    for i in range(5):
+        cpus.append(Computer(program_in, [phase_sequence[i]]))
+
+    i = 0
+    next_input = 0
+    while True:
+        # print(i)
+        cpus[i].add_input(next_input)
+        cpus[i].execute()
+        if cpus[i].state == "halted" and i == 4:
+            # print("halted")
+            # print(cpus[i].outputs[0])
+            return cpus[i].outputs[0]
+        next_input = cpus[i].pop_output()
+        # print(f"Got output {next_input} from computer {i}")
+        i = (i + 1) % 5
+    # print("STate")
+    # print(cpus[0].state)
+    # print("Outpuits")
+    # print(cpus[0].outputs)
+
+
+def part2(program_in):
+    max_val = 0
+    max_sequence = []
+    for seq in permutations([5, 6, 7, 8, 9]):
+        phase_sequence = list(seq)
+        val = part2_onetry(program_in, phase_sequence)
+        if val > max_val:
+            max_val = val
+            max_sequence = phase_sequence
+    return [max_val, max_sequence]
+
+
 if __name__ == "__main__":
     file_data = parse("../input.txt")
     print("Part1: ")
-    test_prog = [3, 15, 3, 16, 1002, 16, 10, 16, 1, 16, 15, 15, 4, 15, 99, 0, 0]
-    # You guessed 20314
+    # test_prog = [3, 15, 3, 16, 1002, 16, 10, 16, 1, 16, 15, 15, 4, 15, 99, 0, 0]
+    # # You guessed 20314
     [max_val, max_seq] = part1(file_data)
     print("Max val:")
     print(max_val)
     print("Max seq:")
     print(max_seq)
-    # print(part1(test_prog, [4, 3, 2, 1, 0]))
-    # print(solve1(file_data, [3, 0]))
-    # print("Part2: ")
-    # print(solve1(file_data, [5]))
+    print("--")
+    test_prog = [
+        3,
+        26,
+        1001,
+        26,
+        -4,
+        26,
+        3,
+        27,
+        1002,
+        27,
+        2,
+        27,
+        1,
+        27,
+        26,
+        27,
+        4,
+        27,
+        1001,
+        28,
+        -1,
+        28,
+        1005,
+        28,
+        6,
+        99,
+        0,
+        0,
+        5,
+    ]
+    # z = part2_onetry(test_prog, [9, 8, 7, 6, 5])
+    # print(z)
+
+    test_prog2 = [
+        3,
+        52,
+        1001,
+        52,
+        -5,
+        52,
+        3,
+        53,
+        1,
+        52,
+        56,
+        54,
+        1007,
+        54,
+        5,
+        55,
+        1005,
+        55,
+        26,
+        1001,
+        54,
+        -5,
+        54,
+        1105,
+        1,
+        12,
+        1,
+        53,
+        54,
+        53,
+        1008,
+        54,
+        0,
+        55,
+        1001,
+        55,
+        1,
+        55,
+        2,
+        53,
+        55,
+        53,
+        4,
+        53,
+        1001,
+        56,
+        -1,
+        56,
+        1005,
+        56,
+        6,
+        99,
+        0,
+        0,
+        0,
+        0,
+        10,
+    ]
+    # z = part2_onetry(test_prog2, [9, 7, 8, 5, 6])
+    # print(z)
+
+    # zz = part2(test_prog)
+    # print(zz)
+    # zz = part2(test_prog2)
+    # print(zz)
+    print("Part 2")
+    zz = part2(file_data)
+    print(zz)
+    # [max_val, max_seq] = part2(test_prog)
+    # print("Max val:")
+    # print(max_val)
+    # print("Max seq:")
+    # print(max_seq)
