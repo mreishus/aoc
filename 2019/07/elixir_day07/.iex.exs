@@ -1,0 +1,2 @@
+alias ElixirDay07.Computer
+alias ElixirDay07.ComputerServer

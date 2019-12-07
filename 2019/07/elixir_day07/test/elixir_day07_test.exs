@@ -2,7 +2,49 @@ defmodule ElixirDay07Test do
   use ExUnit.Case
   doctest ElixirDay07
 
-  alias ElixirDay07.Computer
+  alias ElixirDay07.{Computer, ComputerServer}
+
+  ## GenServer tests
+
+  test "day 5 part1 GenServer (Full Input)" do
+    program = ElixirDay07.parse("../../05/input.txt")
+    {:ok, pid} = ComputerServer.start(program, [1])
+    got = ComputerServer.outputs(pid)
+    want = [0, 0, 0, 0, 0, 0, 0, 0, 0, 5_821_753]
+    assert got == want
+  end
+
+  test "day 5 part1 GenServer (Pass Input after starting)" do
+    program = ElixirDay07.parse("../../05/input.txt")
+    {:ok, pid} = ComputerServer.start(program, [])
+    assert ComputerServer.outputs(pid) == []
+    ComputerServer.add_input(pid, 1)
+    got = ComputerServer.outputs(pid)
+    want = [0, 0, 0, 0, 0, 0, 0, 0, 0, 5_821_753]
+    assert got == want
+  end
+
+  test "day5 part2 GenServer (Pop Output)" do
+    program = ElixirDay07.parse("../../05/input.txt")
+    {:ok, pid} = ComputerServer.start(program, [5])
+    old_output_len = length(ComputerServer.outputs(pid))
+    output = ComputerServer.pop_output(pid)
+    new_output_len = length(ComputerServer.outputs(pid))
+    assert new_output_len + 1 == old_output_len
+    assert output == 11_956_381
+  end
+
+  ## Non GenServer Tests
+
+  test "pausing on missing input, adding input, and resuming" do
+    program = [3, 9, 8, 9, 10, 9, 4, 9, 99, -1, 8]
+    c = Computer.new(program, []) |> Computer.execute()
+    assert c.waiting_for_input == true
+    c = c |> Computer.add_input(8) |> Computer.execute()
+    assert c.waiting_for_input == false
+    assert c.halted == true
+    assert c.outputs == [1]
+  end
 
   test "day 5 part1" do
     got =
