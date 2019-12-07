@@ -5,11 +5,64 @@ from day07 import (
     parse,
     part1,
     part2,
+    solve1,
     amplify_once,
     amplify_once_find_max_seq,
     amplify_loop,
     amplify_loop_max_seq,
 )
+
+
+class Programs5:
+    prog_larger = [
+        3,
+        21,
+        1008,
+        21,
+        8,
+        20,
+        1005,
+        20,
+        22,
+        107,
+        8,
+        21,
+        20,
+        1006,
+        20,
+        31,
+        1106,
+        0,
+        36,
+        98,
+        0,
+        0,
+        1002,
+        21,
+        125,
+        20,
+        4,
+        20,
+        1105,
+        1,
+        46,
+        104,
+        999,
+        1105,
+        1,
+        46,
+        1101,
+        1000,
+        1,
+        20,
+        4,
+        20,
+        1105,
+        1,
+        46,
+        98,
+        99,
+    ]
 
 
 class Programs7:
@@ -227,6 +280,58 @@ class Day07TestCase(TestCase):
             [got_val, got_seq] = amplify_loop_max_seq(prog)
             self.assertEqual(want_val, got_val)
             self.assertEqual(want_seq, got_seq)
+
+    def test_8_1(self):
+        program = [3, 9, 8, 9, 10, 9, 4, 9, 99, -1, 8]
+        self.assertEqual(solve1(program, [7]), [0])
+        self.assertEqual(solve1(program, [8]), [1])
+        self.assertEqual(solve1(program, [9]), [0])
+
+    def test_8_2(self):
+        program = [3, 9, 7, 9, 10, 9, 4, 9, 99, -1, 8]
+        self.assertEqual(solve1(program, [7]), [1])
+        self.assertEqual(solve1(program, [8]), [0])
+        self.assertEqual(solve1(program, [9]), [0])
+
+    def test_8_3(self):
+        program = [3, 3, 1108, -1, 8, 3, 4, 3, 99]
+        self.assertEqual(solve1(program, [7]), [0])
+        self.assertEqual(solve1(program, [8]), [1])
+        self.assertEqual(solve1(program, [9]), [0])
+
+    def test_8_4(self):
+        program = [3, 3, 1107, -1, 8, 3, 4, 3, 99]
+        self.assertEqual(solve1(program, [7]), [1])
+        self.assertEqual(solve1(program, [8]), [0])
+        self.assertEqual(solve1(program, [9]), [0])
+
+    def test_jump_1(self):
+        program = [3, 12, 6, 12, 15, 1, 13, 14, 13, 4, 13, 99, -1, 0, 1, 9]
+        self.assertEqual(solve1(program, [0]), [0])
+        self.assertEqual(solve1(program, [10]), [1])
+
+    def test_jump_2(self):
+        program = [3, 3, 1105, -1, 9, 1101, 0, 0, 12, 4, 12, 99, 1]
+        self.assertEqual(solve1(program, [0]), [0])
+        self.assertEqual(solve1(program, [10]), [1])
+
+    def test_larger(self):
+        program = Programs5.prog_larger
+        self.assertEqual(solve1(program, [2]), [999])
+        self.assertEqual(solve1(program, [8]), [1000])
+        self.assertEqual(solve1(program, [12]), [1001])
+
+    def test_day5_part1(self):
+        file_data = parse("../../05/input.txt")
+        got = solve1(file_data, [1])
+        want = [0, 0, 0, 0, 0, 0, 0, 0, 0, 5821753]
+        self.assertEqual(want, got)
+
+    def test_day5_part2(self):
+        file_data = parse("../../05/input.txt")
+        got = solve1(file_data, [5])
+        want = [11956381]
+        self.assertEqual(want, got)
 
 
 if __name__ == "__main__":

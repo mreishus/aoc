@@ -152,6 +152,8 @@ def parse(filename):
 
 
 def solve1(program_in, inputs):
+    """ Given a program and inputs, make a new VM, run the program, and return
+    its outputs when it stops. """
     c = Computer(program_in, inputs)
     c.execute()
     return c.outputs
