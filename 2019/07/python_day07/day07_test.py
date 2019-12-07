@@ -1,7 +1,15 @@
 #!/usr/bin/env python
 from unittest import TestCase, main
 
-from day07 import parse, part1, part2, amplify_once, amplify_once_find_highest_seq
+from day07 import (
+    parse,
+    part1,
+    part2,
+    amplify_once,
+    amplify_once_find_max_seq,
+    amplify_loop,
+    amplify_loop_max_seq,
+)
 
 
 class Programs7:
@@ -69,6 +77,96 @@ class Programs7:
         0,
         0,
     ]
+    prog_b_1 = [
+        3,
+        26,
+        1001,
+        26,
+        -4,
+        26,
+        3,
+        27,
+        1002,
+        27,
+        2,
+        27,
+        1,
+        27,
+        26,
+        27,
+        4,
+        27,
+        1001,
+        28,
+        -1,
+        28,
+        1005,
+        28,
+        6,
+        99,
+        0,
+        0,
+        5,
+    ]
+    prog_b_2 = [
+        3,
+        52,
+        1001,
+        52,
+        -5,
+        52,
+        3,
+        53,
+        1,
+        52,
+        56,
+        54,
+        1007,
+        54,
+        5,
+        55,
+        1005,
+        55,
+        26,
+        1001,
+        54,
+        -5,
+        54,
+        1105,
+        1,
+        12,
+        1,
+        53,
+        54,
+        53,
+        1008,
+        54,
+        0,
+        55,
+        1001,
+        55,
+        1,
+        55,
+        2,
+        53,
+        55,
+        53,
+        4,
+        53,
+        1001,
+        56,
+        -1,
+        56,
+        1005,
+        56,
+        6,
+        99,
+        0,
+        0,
+        0,
+        0,
+        10,
+    ]
 
 
 class Day07TestCase(TestCase):
@@ -94,7 +192,7 @@ class Day07TestCase(TestCase):
             got_val = amplify_once(prog, phase_setting)
             self.assertEqual(want_val, got_val)
 
-    def test_amplify_once_find_highest_seq(self):
+    def test_amplify_once_find_max_seq(self):
         test_cases = []
         test_cases.append([Programs7.prog_a_1, [4, 3, 2, 1, 0], 43210])
         test_cases.append([Programs7.prog_a_2, [0, 1, 2, 3, 4], 54321])
@@ -103,7 +201,30 @@ class Day07TestCase(TestCase):
             prog = test_case[0]
             want_seq = test_case[1]
             want_val = test_case[2]
-            [got_val, got_seq] = amplify_once_find_highest_seq(prog)
+            [got_val, got_seq] = amplify_once_find_max_seq(prog)
+            self.assertEqual(want_val, got_val)
+            self.assertEqual(want_seq, got_seq)
+
+    def test_amplify_loop(self):
+        test_cases = []
+        test_cases.append([Programs7.prog_b_1, [9, 8, 7, 6, 5], 139629729])
+        test_cases.append([Programs7.prog_b_2, [9, 7, 8, 5, 6], 18216])
+        for test_case in test_cases:
+            prog = test_case[0]
+            phase_setting = test_case[1]
+            want_val = test_case[2]
+            got_val = amplify_loop(prog, phase_setting)
+            self.assertEqual(want_val, got_val)
+
+    def test_amplify_loop_max_seq(self):
+        test_cases = []
+        test_cases.append([Programs7.prog_b_1, [9, 8, 7, 6, 5], 139629729])
+        test_cases.append([Programs7.prog_b_2, [9, 7, 8, 5, 6], 18216])
+        for test_case in test_cases:
+            prog = test_case[0]
+            want_seq = test_case[1]
+            want_val = test_case[2]
+            [got_val, got_seq] = amplify_loop_max_seq(prog)
             self.assertEqual(want_val, got_val)
             self.assertEqual(want_seq, got_seq)
 
