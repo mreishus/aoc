@@ -160,24 +160,13 @@ def solve1(program_in, inputs):
 def part1(program_in):
     max_val = 0
     max_sequence = []
-    for a in range(5):
-        for b in range(5):
-            if b == a:
-                continue
-            for c in range(5):
-                if c == b or c == a:
-                    continue
-                for d in range(5):
-                    if d == c or d == b or d == a:
-                        continue
-                    for e in range(5):
-                        if e == d or e == c or e == b or e == a:
-                            continue
-                        phase_sequence = [a, b, c, d, e]
-                        val = part1_onetry(program_in, phase_sequence)
-                        if val > max_val:
-                            max_val = val
-                            max_sequence = phase_sequence
+
+    for seq in permutations([0, 1, 2, 3, 4]):
+        phase_sequence = list(seq)
+        val = part1_onetry(program_in, phase_sequence)
+        if val > max_val:
+            max_val = val
+            max_sequence = phase_sequence
     return [max_val, max_sequence]
 
 

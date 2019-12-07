@@ -20,6 +20,8 @@ def part1(parent_of):
     return sum(total_orbits(key, parent_of) for key in parent_of)
 
 
+# Does extra work - possible speedup with
+# memoization / lru cache.
 def total_orbits(item, parent_of):
     count = 0
     while item in parent_of:

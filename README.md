@@ -42,6 +42,8 @@
   | [React](./2019/05/react_day05/src/prob)
   | [Go](./2019/05/go_day05/day05.go)
   [(test)](./2019/05/go_day05/day05_test.go)
+- Day 6: [Writeup](./2019/06/README.md)
+  | [Python](./2019/06/python_day06/day06.py)
 
 ## 2018
 
@@ -104,5 +106,5 @@
 
 ```
 Created:       Mon 02 Dec 2019 05:12:40 PM CST
-Last Modified: Thu 05 Dec 2019 10:36:30 PM CST
+Last Modified: Fri 06 Dec 2019 03:32:11 PM CST
 ```
