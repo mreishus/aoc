@@ -1,4 +1,4 @@
-defmodule ElixirDay05.Computer do
+defmodule ElixirDay07.Computer do
   defstruct [
     :memory,
     :pc,
@@ -20,7 +20,7 @@ defmodule ElixirDay05.Computer do
   @mode_position 0
   @mode_immediate 1
 
-  alias ElixirDay05.Computer
+  alias ElixirDay07.Computer
 
   def solve(memory, inputs) when is_list(memory) and is_list(inputs) do
     Computer.new(memory, inputs)
