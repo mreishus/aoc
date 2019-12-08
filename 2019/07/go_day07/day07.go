@@ -2,6 +2,7 @@
 package main
 
 import (
+	"errors"
 	"fmt"
 	"io/ioutil"
 	"log"
@@ -79,8 +80,19 @@ func (c Computer) Lookup(n int) int {
 	return 0
 }
 
+// AddInput adds an input to a computer
 func (c *Computer) AddInput(newInput int) {
 	c.Inputs = append(c.Inputs, newInput)
+}
+
+// PopOutput returns the oldest output, and removes it from the computer's output
+func (c *Computer) PopOutput() (int, error) {
+	if len(c.Outputs) == 0 {
+		return 0, errors.New("Computer has no output, can't pop")
+	}
+	first, rest := c.Outputs[0], c.Outputs[1:]
+	c.Outputs = rest
+	return first, nil
 }
 
 // Execute runs instructions until the computer stops (99) or pauses (Waiting for input)
@@ -147,6 +159,49 @@ func (c *Computer) Step() {
 	}
 }
 
+// Returns (Seq, Val)
+func AmplifyOnceMaxSeq(program []int) ([]int, int) {
+	// value = amplify_once(program, phase_sequence)
+	// {phase_sequence, value}
+	// end)
+	// |> Enum.max_by(fn {_phase_sequence, value} ->
+	// value
+	// end)
+
+	maxValue := 0
+	maxSeq := []int{}
+
+	for _, seq := range permutations([]int{0, 1, 2, 3, 4}) {
+		value := AmplifyOnce(program, seq)
+		if value > maxValue {
+			maxValue = value
+			maxSeq = seq
+		}
+	}
+	return maxSeq, maxValue
+}
+
+func AmplifyOnce(program []int, phaseSeq []int) int {
+	computers := make([]Computer, 0)
+	for _, num := range phaseSeq {
+		c := NewComputer(program, []int{num})
+		c.Execute()
+		computers = append(computers, c)
+	}
+
+	lastOutput := 0
+	var err error
+	for _, c := range computers {
+		c.AddInput(lastOutput)
+		c.Execute()
+		lastOutput, err = c.PopOutput()
+		if err != nil {
+			log.Fatal("AmplifyOnce: Couldn't read output")
+		}
+	}
+	return lastOutput
+}
+
 func Parse(filename string) []int {
 	program := make([]int, 0)
 
@@ -166,12 +221,42 @@ func Parse(filename string) []int {
 	return program
 }
 
+// https://stackoverflow.com/questions/30226438/generate-all-permutations-in-go
+func permutations(arr []int) [][]int {
+	var helper func([]int, int)
+	res := [][]int{}
+
+	helper = func(arr []int, n int) {
+		if n == 1 {
+			tmp := make([]int, len(arr))
+			copy(tmp, arr)
+			res = append(res, tmp)
+		} else {
+			for i := 0; i < n; i++ {
+				helper(arr, n-1)
+				if n%2 == 1 {
+					tmp := arr[i]
+					arr[i] = arr[n-1]
+					arr[n-1] = tmp
+				} else {
+					tmp := arr[0]
+					arr[0] = arr[n-1]
+					arr[n-1] = tmp
+				}
+			}
+		}
+	}
+	helper(arr, len(arr))
+	return res
+}
+
 func main() {
 	fmt.Println("Hello, world")
-	// program := Parse("../../05/input.txt")
-	// output1 := Solve(program, []int{1})
-	// fmt.Println("Part 1:")
-	// fmt.Println(output1)
+	program := Parse("../input.txt")
+	p1MaxSeq, p1MaxValue := AmplifyOnceMaxSeq(program)
+	fmt.Println("Part 1:")
+	fmt.Println(p1MaxSeq)
+	fmt.Println(p1MaxValue)
 	// output2 := Solve(program, []int{5})
 	// fmt.Println("Part 2:")
 	// fmt.Println(output2)

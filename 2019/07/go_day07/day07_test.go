@@ -35,6 +35,71 @@ func TestPauseOnMissingInput(t *testing.T) {
 	}
 }
 
+func TestPopOutput(t *testing.T) {
+	program := []int{3, 9, 8, 9, 10, 9, 4, 9, 99, -1, 8}
+	inputs := []int{8}
+	c := NewComputer(program, inputs)
+	c.Execute()
+
+	oldLen := len(c.Outputs)
+	popped, err := c.PopOutput()
+	newLen := len(c.Outputs)
+
+	if err != nil {
+		t.Errorf("TestPopOutput: didn't expect an error")
+	}
+	if newLen+1 != oldLen {
+		t.Errorf("Popping didn't remove an output")
+	}
+	if popped != 1 {
+		t.Errorf("Incorrect value popped off")
+	}
+}
+
+func TestAmplifyOnce(t *testing.T) {
+	progA1 := []int{3, 15, 3, 16, 1002, 16, 10, 16, 1, 16, 15, 15, 4, 15, 99, 0, 0}
+	progA2 := []int{3, 23, 3, 24, 1002, 24, 10, 24, 1002, 23, -1, 23, 101, 5, 23, 23, 1, 24, 23, 23, 4, 23, 99, 0, 0}
+	progA3 := []int{3, 31, 3, 32, 1002, 32, 10, 32, 1001, 31, -2, 31, 1007, 31, 0, 33, 1002, 33, 7, 33, 1, 33, 31, 31, 1, 32, 31, 31, 4, 31, 99, 0, 0, 0}
+
+	tests := []struct {
+		name     string
+		prog     []int
+		phaseSeq []int
+		wantVal  int
+	}{
+		{
+			"A1", progA1, []int{4, 3, 2, 1, 0}, 43210,
+		},
+		{
+			"A2", progA2, []int{0, 1, 2, 3, 4}, 54321,
+		},
+		{
+			"A3", progA3, []int{1, 0, 4, 3, 2}, 65210,
+		},
+	}
+
+	for _, test := range tests {
+		// First: Check the correct answer with AmplifyOnce
+		t.Run(test.name+" T1", func(t *testing.T) {
+			got := AmplifyOnce(test.prog, test.phaseSeq)
+			want := test.wantVal
+			if got != want {
+				t.Errorf("got %v want %v", got, want)
+			}
+		})
+		// Second: See if we can generate the correct answer with AmplifyOnceMaxSeq
+		t.Run(test.name+" T1", func(t *testing.T) {
+			gotSeq, gotVal := AmplifyOnceMaxSeq(test.prog)
+			if !reflect.DeepEqual(gotSeq, test.phaseSeq) {
+				t.Errorf("got %v want %v", gotSeq, test.phaseSeq)
+			}
+			if gotVal != test.wantVal {
+				t.Errorf("got %v want %v", gotVal, test.wantVal)
+			}
+		})
+	}
+}
+
 func TestDigitFromRight(t *testing.T) {
 	tests := []struct {
 		num      int
