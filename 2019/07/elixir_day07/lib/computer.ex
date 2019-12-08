@@ -1,10 +1,11 @@
-defmodule ElixirDay05.Computer do
+defmodule ElixirDay07.Computer do
   defstruct [
     :memory,
     :pc,
     :inputs,
     :outputs,
-    :halted
+    :halted,
+    :waiting_for_input
   ]
 
   @op_add 1
@@ -20,7 +21,7 @@ defmodule ElixirDay05.Computer do
   @mode_position 0
   @mode_immediate 1
 
-  alias ElixirDay05.Computer
+  alias ElixirDay07.Computer
 
   def solve(memory, inputs) when is_list(memory) and is_list(inputs) do
     Computer.new(memory, inputs)
@@ -34,8 +35,14 @@ defmodule ElixirDay05.Computer do
       inputs: inputs,
       outputs: [],
       pc: 0,
-      halted: false
+      halted: false,
+      waiting_for_input: false
     }
+  end
+
+  def add_input(%Computer{inputs: inputs} = c, input) do
+    new_inputs = inputs ++ [input]
+    %Computer{c | inputs: new_inputs}
   end
 
   # Get the direct value of the memory address of the Nth arg, or PC + N
@@ -66,14 +73,32 @@ defmodule ElixirDay05.Computer do
   def execute(computer) do
     computer = execute_step(computer)
 
-    if computer.halted do
+    if computer.halted or (computer.waiting_for_input and length(computer.inputs) == 0) do
       computer
     else
       execute(computer)
     end
   end
 
+  def halted?(%Computer{} = c) do
+    c.halted
+  end
+
   def outputs(%Computer{outputs: outputs}), do: outputs
+
+  @doc """
+  pop_output/1: Return the oldest output, and a computer with that output removed from it
+  pop_output(computer) = {oldest_output, new_computer}
+  or
+  pop_output(computer) = {nil, computer} # If no outputs
+  """
+  def pop_output(%Computer{outputs: []} = c), do: {nil, c}
+
+  def pop_output(%Computer{outputs: outputs} = c) do
+    [this_output | rest_outputs] = outputs
+    new_c = %Computer{c | outputs: rest_outputs}
+    {this_output, new_c}
+  end
 
   def execute_step(%Computer{pc: pc, memory: memory} = c) do
     instruction = Array.get(memory, pc) |> rem(100)
@@ -96,12 +121,17 @@ defmodule ElixirDay05.Computer do
     %Computer{c | memory: new_memory, pc: new_pc}
   end
 
-  # SAVE: 1 = Input
+  # SAVE: 1 = Input (No Inputs)
+  def do_execute_step(%Computer{inputs: []} = c, @op_save) do
+    %Computer{c | waiting_for_input: true}
+  end
+
+  # SAVE: 1 = Input (Inputs Exist)
   def do_execute_step(%Computer{pc: pc, memory: memory, inputs: inputs} = c, @op_save) do
     [this_input | new_inputs] = inputs
     new_memory = Array.set(memory, direct(c, 1), this_input)
     new_pc = pc + 2
-    %Computer{c | memory: new_memory, pc: new_pc, inputs: new_inputs}
+    %Computer{c | memory: new_memory, pc: new_pc, inputs: new_inputs, waiting_for_input: false}
   end
 
   # WRITE: Output = 1
