@@ -6,6 +6,35 @@ import (
 	"testing"
 )
 
+func TestPauseOnMissingInput(t *testing.T) {
+	// Run this program with no inputs
+	program := []int{3, 9, 8, 9, 10, 9, 4, 9, 99, -1, 8}
+	inputs := []int{}
+	c := NewComputer(program, inputs)
+	c.Execute()
+	// C should be waiting for input
+	if !c.WaitingForInput {
+		t.Errorf("computer not waiting for input")
+	}
+	// Add input 8 and execute
+	c.AddInput(8)
+	c.Execute()
+	// Should no longer be waiting for input
+	if c.WaitingForInput {
+		t.Errorf("computer waiting for input inappropriately")
+	}
+	// Should be halted
+	if !c.Halted {
+		t.Errorf("computer not halted")
+	}
+	// Outputs should have 1 in them
+	got := c.Outputs
+	want := []int{1}
+	if !reflect.DeepEqual(got, want) {
+		t.Errorf("got %v want %v", got, want)
+	}
+}
+
 func TestDigitFromRight(t *testing.T) {
 	tests := []struct {
 		num      int

@@ -25,11 +25,12 @@ var (
 )
 
 type Computer struct {
-	Memory  []int
-	Inputs  []int
-	Outputs []int
-	PC      int
-	Halted  bool
+	Memory          []int
+	Inputs          []int
+	Outputs         []int
+	PC              int
+	Halted          bool
+	WaitingForInput bool
 }
 
 func DigitFromRight(x, n int) int {
@@ -78,9 +79,15 @@ func (c Computer) Lookup(n int) int {
 	return 0
 }
 
-// Execute runs instructions until the computer stops (99)
+func (c *Computer) AddInput(newInput int) {
+	c.Inputs = append(c.Inputs, newInput)
+}
+
+// Execute runs instructions until the computer stops (99) or pauses (Waiting for input)
 func (c *Computer) Execute() {
-	for c.Halted == false {
+	// Stopped: c.Halted == true || (c.WaitingForInput && len(c.Inputs) == 0)
+	// Running is inverse
+	for c.Halted == false && (!c.WaitingForInput || len(c.Inputs) > 0) {
 		c.Step()
 	}
 }
@@ -95,10 +102,17 @@ func (c *Computer) Step() {
 		c.Memory[c.Direct(3)] = c.Lookup(1) * c.Lookup(2)
 		c.PC += 4
 	} else if instruction == OP_SAVE {
-		input := c.Inputs[0]
-		c.Inputs = c.Inputs[1:]
-		c.Memory[c.Direct(1)] = input
-		c.PC += 2
+		if len(c.Inputs) == 0 {
+			// No input available, pause execution
+			c.WaitingForInput = true
+		} else {
+			// Process Input
+			c.WaitingForInput = false
+			input := c.Inputs[0]
+			c.Inputs = c.Inputs[1:]
+			c.Memory[c.Direct(1)] = input
+			c.PC += 2
+		}
 	} else if instruction == OP_WRITE {
 		c.Outputs = append(c.Outputs, c.Lookup(1))
 		c.PC += 2
