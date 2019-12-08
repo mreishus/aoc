@@ -31,16 +31,15 @@ def load(filename, width, height):
     return planes
 
 
-def plane_count(plane, target):
+def flat_count(plane, target):
     """ Given a plane (2d array) and a target number, how many times
     does that number appear in that plane? """
-    flatplane = list(flatten(plane))
-    return len([x for x in flatplane if x == target])
+    return list(flatten(plane)).count(target)
 
 
 def part1(planes):
-    plane_min_zeros = min(planes, key=lambda plane: plane_count(plane, 0))
-    return plane_count(plane_min_zeros, 1) * plane_count(plane_min_zeros, 2)
+    plane_min_zeros = min(planes, key=lambda plane: flat_count(plane, 0))
+    return flat_count(plane_min_zeros, 1) * flat_count(plane_min_zeros, 2)
 
 
 def part2(planes):
