@@ -80,6 +80,10 @@ defmodule ElixirDay07.Computer do
     end
   end
 
+  def halted?(%Computer{} = c) do
+    c.halted
+  end
+
   def outputs(%Computer{outputs: outputs}), do: outputs
 
   @doc """

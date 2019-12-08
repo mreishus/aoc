@@ -95,6 +95,120 @@ defmodule ElixirDay07Test do
     end)
   end
 
+  test "amplify_loop" do
+    prog_b_1 = [
+      3,
+      26,
+      1001,
+      26,
+      -4,
+      26,
+      3,
+      27,
+      1002,
+      27,
+      2,
+      27,
+      1,
+      27,
+      26,
+      27,
+      4,
+      27,
+      1001,
+      28,
+      -1,
+      28,
+      1005,
+      28,
+      6,
+      99,
+      0,
+      0,
+      5
+    ]
+
+    prog_b_2 = [
+      3,
+      52,
+      1001,
+      52,
+      -5,
+      52,
+      3,
+      53,
+      1,
+      52,
+      56,
+      54,
+      1007,
+      54,
+      5,
+      55,
+      1005,
+      55,
+      26,
+      1001,
+      54,
+      -5,
+      54,
+      1105,
+      1,
+      12,
+      1,
+      53,
+      54,
+      53,
+      1008,
+      54,
+      0,
+      55,
+      1001,
+      55,
+      1,
+      55,
+      2,
+      53,
+      55,
+      53,
+      4,
+      53,
+      1001,
+      56,
+      -1,
+      56,
+      1005,
+      56,
+      6,
+      99,
+      0,
+      0,
+      0,
+      0,
+      10
+    ]
+
+    test_cases = [
+      {prog_b_1, [9, 8, 7, 6, 5], 139_629_729},
+      {prog_b_2, [9, 7, 8, 5, 6], 18216}
+    ]
+
+    # Test amplify_loop
+    test_cases
+    |> Enum.each(fn {prog, phase_seq, want_val} ->
+      got_val = ElixirDay07.amplify_loop(prog, phase_seq)
+      assert got_val == want_val
+    end)
+
+    # Test amplify_loop_max_seq
+    test_cases
+    |> Enum.each(fn {prog, want_seq, want_val} ->
+      {got_seq, got_val} = ElixirDay07.amplify_loop_max_seq(prog)
+      assert got_seq == want_seq
+      assert got_val == want_val
+    end)
+  end
+
   ## GenServer tests
 
   test "day 5 part1 GenServer (Full Input)" do

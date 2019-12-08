@@ -37,6 +37,10 @@ defmodule ElixirDay07.ComputerServer do
     GenServer.call(pid, {:add_input, input})
   end
 
+  def halted?(pid) do
+    GenServer.call(pid, :halted?)
+  end
+
   #########
 
   def init({program, input}) when is_list(program) and is_list(input) do
@@ -54,6 +58,10 @@ defmodule ElixirDay07.ComputerServer do
   def handle_call(:pop_output, _from, state) do
     {output, new_state} = Computer.pop_output(state)
     {:reply, output, new_state}
+  end
+
+  def handle_call(:halted?, _from, state) do
+    {:reply, Computer.halted?(state), state}
   end
 
   def handle_call({:add_input, input}, _from, state) do
