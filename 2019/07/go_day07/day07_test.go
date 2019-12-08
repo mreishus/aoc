@@ -35,6 +35,31 @@ func TestPauseOnMissingInput(t *testing.T) {
 	}
 }
 
+func TestDay7Part1(t *testing.T) {
+	program := Parse("../input.txt")
+	p1MaxSeq, p1MaxVal := AmplifyOnceMaxSeq(program)
+	wantMaxSeq := []int{2, 0, 3, 1, 4}
+	wantMaxVal := 13848
+	if !reflect.DeepEqual(p1MaxSeq, wantMaxSeq) {
+		t.Errorf("got %v want %v", p1MaxSeq, wantMaxSeq)
+	}
+	if p1MaxVal != wantMaxVal {
+		t.Errorf("got %v want %v", p1MaxVal, wantMaxVal)
+	}
+}
+func TestDay7Part2(t *testing.T) {
+	program := Parse("../input.txt")
+	p2MaxSeq, p2MaxVal := AmplifyLoopMaxSeq(program)
+	wantMaxSeq := []int{6, 8, 7, 5, 9}
+	wantMaxVal := 12932154
+	if !reflect.DeepEqual(p2MaxSeq, wantMaxSeq) {
+		t.Errorf("got %v want %v", p2MaxSeq, wantMaxSeq)
+	}
+	if p2MaxVal != wantMaxVal {
+		t.Errorf("got %v want %v", p2MaxVal, wantMaxVal)
+	}
+}
+
 func TestPopOutput(t *testing.T) {
 	program := []int{3, 9, 8, 9, 10, 9, 4, 9, 99, -1, 8}
 	inputs := []int{8}
@@ -90,6 +115,46 @@ func TestAmplifyOnce(t *testing.T) {
 		// Second: See if we can generate the correct answer with AmplifyOnceMaxSeq
 		t.Run(test.name+" T1", func(t *testing.T) {
 			gotSeq, gotVal := AmplifyOnceMaxSeq(test.prog)
+			if !reflect.DeepEqual(gotSeq, test.phaseSeq) {
+				t.Errorf("got %v want %v", gotSeq, test.phaseSeq)
+			}
+			if gotVal != test.wantVal {
+				t.Errorf("got %v want %v", gotVal, test.wantVal)
+			}
+		})
+	}
+}
+
+func TestAmplifyLoop(t *testing.T) {
+	progB1 := []int{3, 26, 1001, 26, -4, 26, 3, 27, 1002, 27, 2, 27, 1, 27, 26, 27, 4, 27, 1001, 28, -1, 28, 1005, 28, 6, 99, 0, 0, 5}
+	progB2 := []int{3, 52, 1001, 52, -5, 52, 3, 53, 1, 52, 56, 54, 1007, 54, 5, 55, 1005, 55, 26, 1001, 54, -5, 54, 1105, 1, 12, 1, 53, 54, 53, 1008, 54, 0, 55, 1001, 55, 1, 55, 2, 53, 55, 53, 4, 53, 1001, 56, -1, 56, 1005, 56, 6, 99, 0, 0, 0, 0, 10}
+
+	tests := []struct {
+		name     string
+		prog     []int
+		phaseSeq []int
+		wantVal  int
+	}{
+		{
+			"B1", progB1, []int{9, 8, 7, 6, 5}, 139629729,
+		},
+		{
+			"B2", progB2, []int{9, 7, 8, 5, 6}, 18216,
+		},
+	}
+
+	for _, test := range tests {
+		// First: Check the correct answer with AmplifyOnce
+		t.Run(test.name+" T1", func(t *testing.T) {
+			got := AmplifyLoop(test.prog, test.phaseSeq)
+			want := test.wantVal
+			if got != want {
+				t.Errorf("got %v want %v", got, want)
+			}
+		})
+		// Second: See if we can generate the correct answer with AmplifyOnceMaxSeq
+		t.Run(test.name+" T1", func(t *testing.T) {
+			gotSeq, gotVal := AmplifyLoopMaxSeq(test.prog)
 			if !reflect.DeepEqual(gotSeq, test.phaseSeq) {
 				t.Errorf("got %v want %v", gotSeq, test.phaseSeq)
 			}

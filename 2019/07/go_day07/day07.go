@@ -159,15 +159,12 @@ func (c *Computer) Step() {
 	}
 }
 
-// Returns (Seq, Val)
+// AmplifyOnceMaxSeq takes a program given, and runs
+// AmplifyOnce with many different 'phase sequence' values,
+// (all permutations of (01234)).  It finds the sequence
+// that returns the highest value, then returns both the
+// sequence and the value.
 func AmplifyOnceMaxSeq(program []int) ([]int, int) {
-	// value = amplify_once(program, phase_sequence)
-	// {phase_sequence, value}
-	// end)
-	// |> Enum.max_by(fn {_phase_sequence, value} ->
-	// value
-	// end)
-
 	maxValue := 0
 	maxSeq := []int{}
 
@@ -181,12 +178,16 @@ func AmplifyOnceMaxSeq(program []int) ([]int, int) {
 	return maxSeq, maxValue
 }
 
+// AmplifyOnce sets up a chain of 5 computers, loads them with a program,
+// initializes them with the "Phase Sequence" values, sends a 0 to the first
+// computer, sends the first computer's output to the second computer, etc,
+// then returns the last computer's output.
 func AmplifyOnce(program []int, phaseSeq []int) int {
-	computers := make([]Computer, 0)
+	computers := make([]*Computer, 0)
 	for _, num := range phaseSeq {
 		c := NewComputer(program, []int{num})
 		c.Execute()
-		computers = append(computers, c)
+		computers = append(computers, &c)
 	}
 
 	lastOutput := 0
@@ -197,6 +198,59 @@ func AmplifyOnce(program []int, phaseSeq []int) int {
 		lastOutput, err = c.PopOutput()
 		if err != nil {
 			log.Fatal("AmplifyOnce: Couldn't read output")
+		}
+	}
+	return lastOutput
+}
+
+// AmplifyLoopMaxSeq takes a program given, and runs
+// AmplifyLoop with many different 'phase sequence' values,
+// (all permutations of (56789)).  It finds the sequence
+// that returns the highest value, then returns both the
+// sequence and the value.
+func AmplifyLoopMaxSeq(program []int) ([]int, int) {
+	maxValue := 0
+	maxSeq := []int{}
+
+	for _, seq := range permutations([]int{5, 6, 7, 8, 9}) {
+		value := AmplifyLoop(program, seq)
+		if value > maxValue {
+			maxValue = value
+			maxSeq = seq
+		}
+	}
+	return maxSeq, maxValue
+}
+
+// AmplifyLoop sets up a chain of 5 computers, loads them with a program,
+// initializes them with the "Phase Sequence" values, sends a 0 to the first
+// computer, sends the first computer's output to the second computer, etc.
+// The last computer's output is fed to the first computer's input in a feedback
+// loop.  The signal keeps looping until at least one of the computers has halted,
+// then it finishes the current cycle and returns the last computer's output.
+func AmplifyLoop(program []int, phaseSeq []int) int {
+	computers := make([]*Computer, 0)
+	for _, num := range phaseSeq {
+		c := NewComputer(program, []int{num})
+		c.Execute()
+		computers = append(computers, &c)
+	}
+
+	lastOutput := 0
+	var err error
+	stillRunning := true
+
+	for stillRunning && lastOutput >= 0 {
+		for _, c := range computers {
+			c.AddInput(lastOutput)
+			c.Execute()
+			lastOutput, err = c.PopOutput()
+			if err != nil {
+				log.Fatal("AmplifyLoop: Couldn't read output")
+			}
+			if c.Halted {
+				stillRunning = false
+			}
 		}
 	}
 	return lastOutput
@@ -251,13 +305,13 @@ func permutations(arr []int) [][]int {
 }
 
 func main() {
-	fmt.Println("Hello, world")
 	program := Parse("../input.txt")
 	p1MaxSeq, p1MaxValue := AmplifyOnceMaxSeq(program)
 	fmt.Println("Part 1:")
 	fmt.Println(p1MaxSeq)
 	fmt.Println(p1MaxValue)
-	// output2 := Solve(program, []int{5})
-	// fmt.Println("Part 2:")
-	// fmt.Println(output2)
+	p2MaxSeq, p2MaxValue := AmplifyLoopMaxSeq(program)
+	fmt.Println("Part 2:")
+	fmt.Println(p2MaxSeq)
+	fmt.Println(p2MaxValue)
 }
