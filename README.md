@@ -42,8 +42,17 @@
   | [React](./2019/05/react_day05/src/prob)
   | [Go](./2019/05/go_day05/day05.go)
   [(test)](./2019/05/go_day05/day05_test.go)
-- Day 6: [Writeup](./2019/06/README.md)
+- **Day 6**: [Writeup](./2019/06/README.md)
   | [Python](./2019/06/python_day06/day06.py)
+- **Day 7**: [Writeup](./2019/07/README.md)
+  | [Python](./2019/07/python_day07/day07.py)
+  [(test)](./2019/07/python_day07/day07_test.py)
+  | [Elixir](./2019/07/elixir_day07/lib/)
+  [(test)](./2019/07/elixir_day07/test/elixir_day07_test.exs)
+  | [Go](./2019/07/go_day07/day07.go)
+  [(test)](./2019/07/go_day07/day07_test.go)
+- **Day 8**: [Writeup](./2019/08/README.md)
+  | [Python](./2019/08/python_day08/day08.py)
 
 ## 2018
 
@@ -106,5 +115,5 @@
 
 ```
 Created:       Mon 02 Dec 2019 05:12:40 PM CST
-Last Modified: Fri 06 Dec 2019 03:32:11 PM CST
+Last Modified: Sun 08 Dec 2019 03:53:20 PM CST
 ```
