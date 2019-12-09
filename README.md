@@ -58,6 +58,8 @@
   [(test)](./2019/09/python_day09/day09_test.py)
   | [Elixir](./2019/09/elixir_day09/lib/)
   [(test)](./2019/09/elixir_day09/test/elixir_day09_test.exs)
+  | [Go](./2019/09/go_day09/day09.go)
+  [(test)](./2019/09/go_day09/day09_test.go)
 
 ## 2018
 
@@ -120,5 +122,5 @@
 
 ```
 Created:       Mon 02 Dec 2019 05:12:40 PM CST
-Last Modified: Mon 09 Dec 2019 01:20:29 PM CST
+Last Modified: Mon 09 Dec 2019 05:09:07 PM CST
 ```

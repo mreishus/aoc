@@ -7,6 +7,8 @@
 - [Python](./python_day09/day09.py) [(test)](./python_day09/day09_test.py)
 - [Elixir](./elixir_day09/lib/)
   [(test)](./elixir_day09/test/elixir_day09_test.exs)
+- [Go](./go_day09/day09.go)
+  [(test)](./go_day09/day09_test.go)
 
 ## Problem Description
 
