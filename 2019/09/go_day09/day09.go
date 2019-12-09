@@ -12,17 +12,19 @@ import (
 )
 
 var (
-	MODE_POSITION    = 0
-	MODE_IMMEDIATE   = 1
-	OP_ADD           = 1
-	OP_MULT          = 2
-	OP_SAVE          = 3
-	OP_WRITE         = 4
-	OP_JUMP_IF_TRUE  = 5
-	OP_JUMP_IF_FALSE = 6
-	OP_LESS_THAN     = 7
-	OP_EQUALS        = 8
-	OP_STOP          = 99
+	MODE_POSITION        = 0
+	MODE_IMMEDIATE       = 1
+	MODE_RELATIVE        = 2
+	OP_ADD               = 1
+	OP_MULT              = 2
+	OP_SAVE              = 3
+	OP_WRITE             = 4
+	OP_JUMP_IF_TRUE      = 5
+	OP_JUMP_IF_FALSE     = 6
+	OP_LESS_THAN         = 7
+	OP_EQUALS            = 8
+	OP_SET_RELATIVE_BASE = 9
+	OP_STOP              = 99
 )
 
 type Computer struct {
@@ -30,6 +32,7 @@ type Computer struct {
 	Inputs          []int
 	Outputs         []int
 	PC              int
+	RelativeBase    int
 	Halted          bool
 	WaitingForInput bool
 }
@@ -48,13 +51,17 @@ func Solve(program []int, inputs []int) []int {
 
 // NewComputer initializes a new computer, given a program to run and inputs
 func NewComputer(program []int, inputs []int) Computer {
-	memory := make([]int, len(program))
+	// memory := make([]int, len(program))
+	// copy(memory, program)
+
+	// Unsure if this approach works
+	memory := make([]int, len(program)+10000)
 	copy(memory, program)
 
 	myInputs := make([]int, len(inputs))
 	copy(myInputs, inputs)
 
-	c := Computer{Memory: memory, Inputs: inputs, PC: 0}
+	c := Computer{Memory: memory, Inputs: inputs, PC: 0, RelativeBase: 0}
 	return c
 }
 
@@ -74,6 +81,26 @@ func (c Computer) Lookup(n int) int {
 		return c.Memory[c.Direct(n)]
 	} else if mode == MODE_IMMEDIATE {
 		return c.Direct(n)
+	} else if mode == MODE_RELATIVE {
+		address := c.Direct(n) + c.RelativeBase
+		return c.Memory[address]
+	} else {
+		log.Fatal("Unknown mode")
+	}
+	return 0
+}
+
+func (c Computer) LookupLeft(n int) int {
+	// Now: LookupLeft is same as direct
+	instruction := c.Memory[c.PC]
+	mode := DigitFromRight(instruction, n+1)
+	if mode == MODE_POSITION {
+		return c.Direct(n)
+	} else if mode == MODE_IMMEDIATE {
+		return c.Direct(n)
+	} else if mode == MODE_RELATIVE {
+		address := c.Direct(n) + c.RelativeBase
+		return address
 	} else {
 		log.Fatal("Unknown mode")
 	}
@@ -108,10 +135,10 @@ func (c *Computer) Execute() {
 func (c *Computer) Step() {
 	instruction := c.Memory[c.PC] % 100
 	if instruction == OP_ADD {
-		c.Memory[c.Direct(3)] = c.Lookup(1) + c.Lookup(2)
+		c.Memory[c.LookupLeft(3)] = c.Lookup(1) + c.Lookup(2)
 		c.PC += 4
 	} else if instruction == OP_MULT {
-		c.Memory[c.Direct(3)] = c.Lookup(1) * c.Lookup(2)
+		c.Memory[c.LookupLeft(3)] = c.Lookup(1) * c.Lookup(2)
 		c.PC += 4
 	} else if instruction == OP_SAVE {
 		if len(c.Inputs) == 0 {
@@ -122,7 +149,7 @@ func (c *Computer) Step() {
 			c.WaitingForInput = false
 			input := c.Inputs[0]
 			c.Inputs = c.Inputs[1:]
-			c.Memory[c.Direct(1)] = input
+			c.Memory[c.LookupLeft(1)] = input
 			c.PC += 2
 		}
 	} else if instruction == OP_WRITE {
@@ -142,18 +169,21 @@ func (c *Computer) Step() {
 		}
 	} else if instruction == OP_LESS_THAN {
 		if c.Lookup(1) < c.Lookup(2) {
-			c.Memory[c.Direct(3)] = 1
+			c.Memory[c.LookupLeft(3)] = 1
 		} else {
-			c.Memory[c.Direct(3)] = 0
+			c.Memory[c.LookupLeft(3)] = 0
 		}
 		c.PC += 4
 	} else if instruction == OP_EQUALS {
 		if c.Lookup(1) == c.Lookup(2) {
-			c.Memory[c.Direct(3)] = 1
+			c.Memory[c.LookupLeft(3)] = 1
 		} else {
-			c.Memory[c.Direct(3)] = 0
+			c.Memory[c.LookupLeft(3)] = 0
 		}
 		c.PC += 4
+	} else if instruction == OP_SET_RELATIVE_BASE {
+		c.RelativeBase += c.Lookup(1)
+		c.PC += 2
 	} else if instruction == OP_STOP {
 		c.Halted = true
 	} else {
