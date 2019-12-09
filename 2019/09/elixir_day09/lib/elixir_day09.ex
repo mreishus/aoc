@@ -2,7 +2,7 @@ defmodule ElixirDay09 do
   @moduledoc """
   Documentation for ElixirDay09.
   """
-  alias ElixirDay09.{ComputerServer}
+  alias ElixirDay09.{Computer, ComputerServer}
 
   def parse(filename) do
     File.stream!(filename)
@@ -111,12 +111,12 @@ defmodule ElixirDay09 do
   end
 
   def main do
-    parse("../../07/input.txt")
-    |> amplify_once_max_seq()
-    |> IO.inspect(label: "day 7 part1")
+    parse("../../09/input.txt")
+    |> Computer.solve([1])
+    |> IO.inspect(label: "day 9 part 1")
 
-    parse("../../07/input.txt")
-    |> amplify_loop_max_seq()
-    |> IO.inspect(label: "day 7 part2")
+    parse("../../09/input.txt")
+    |> Computer.solve([2])
+    |> IO.inspect(label: "day 9 part 2")
   end
 end

@@ -4,7 +4,61 @@ defmodule ElixirDay09Test do
 
   alias ElixirDay09.{Computer, ComputerServer}
 
+  ## Day 9 specific tests
+  test "day9_testprog1" do
+    test_prog91 = [109, 1, 204, -1, 1001, 100, 1, 100, 1008, 100, 16, 101, 1006, 101, 0, 99]
+    outputs = Computer.solve(test_prog91, [])
+    # Quine
+    assert outputs == test_prog91
+  end
+
+  test "day9_testprog2" do
+    test_prog92 = [1102, 34_915_192, 34_915_192, 7, 4, 7, 99, 0]
+    outputs = Computer.solve(test_prog92, [])
+    assert outputs == [1_219_070_632_396_864]
+  end
+
+  test "day9_testprog3" do
+    test_prog93 = [104, 1_125_899_906_842_624, 99]
+    outputs = Computer.solve(test_prog93, [])
+    assert outputs == [1_125_899_906_842_624]
+  end
+
+  test "day9_part1" do
+    outputs =
+      ElixirDay09.parse("../../09/input.txt")
+      |> Computer.solve([1])
+
+    assert outputs == [3_780_860_499]
+  end
+
+  test "day9_part2" do
+    outputs =
+      ElixirDay09.parse("../../09/input.txt")
+      |> Computer.solve([2])
+
+    assert outputs == [33343]
+  end
+
   ## Day 7 Specific Tests
+  test "day7_part1" do
+    {got_seq, got_val} =
+      ElixirDay09.parse("../../07/input.txt")
+      |> ElixirDay09.amplify_once_max_seq()
+
+    assert got_seq == [2, 0, 3, 1, 4]
+    assert got_val == 13848
+  end
+
+  test "day7_part2" do
+    {got_seq, got_val} =
+      ElixirDay09.parse("../../07/input.txt")
+      |> ElixirDay09.amplify_loop_max_seq()
+
+    assert got_seq == [6, 8, 7, 5, 9]
+    assert got_val == 12_932_154
+  end
+
   test "amplify_once" do
     prog_a_1 = [3, 15, 3, 16, 1002, 16, 10, 16, 1, 16, 15, 15, 4, 15, 99, 0, 0]
 
