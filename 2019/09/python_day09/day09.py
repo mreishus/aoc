@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 from itertools import permutations
+from collections import defaultdict
 
 # DEBUG = True
 DEBUG = False
@@ -31,8 +32,9 @@ def digit_from_right(x, n):
 
 class Computer(object):
     def __init__(self, memory, inputs):
-        self.memory = memory.copy()
-        self.memory += [0] * 10000
+        self.memory = defaultdict(lambda: 0)
+        for i, k in enumerate(memory):
+            self.memory[i] = k
         self.inputs = inputs.copy()
         self.outputs = []
         self.pc = 0
@@ -86,7 +88,6 @@ class Computer(object):
             print("Refusing to execute; is halted")
         self.state = "running"
         while True:
-            raw_instruction = self.memory[self.pc]
             instruction = self.memory[self.pc] % 100
             # print(self.memory[self.pc])
             if instruction == OP.ADD:
@@ -250,58 +251,6 @@ def amplify_loop_max_seq(program_in):
 
 
 if __name__ == "__main__":
-    test_prog1 = [
-        109,
-        1,
-        204,
-        -1,
-        1001,
-        100,
-        1,
-        100,
-        1008,
-        100,
-        16,
-        101,
-        1006,
-        101,
-        0,
-        99,
-    ]
-    outputs = solve1(test_prog1, [])
-    assert outputs == [
-        109,
-        1,
-        204,
-        -1,
-        1001,
-        100,
-        1,
-        100,
-        1008,
-        100,
-        16,
-        101,
-        1006,
-        101,
-        0,
-        99,
-    ]
-    print("Test Prog1:")
-    print(outputs)
-
-    test_prog2 = [1102, 34915192, 34915192, 7, 4, 7, 99, 0]
-    outputs = solve1(test_prog2, [])
-    assert outputs == [1219070632396864]
-    print("Test Prog2:")
-    print(outputs)
-
-    test_prog3 = [104, 1125899906842624, 99]
-    outputs = solve1(test_prog3, [])
-    assert outputs == [1125899906842624]
-    print("Test Prog3:")
-    print(outputs)
-
     file_data = parse("../input.txt")
     print("Part 1:")
     outputs = solve1(file_data, [1])
@@ -309,9 +258,3 @@ if __name__ == "__main__":
     print("Part 2:")
     outputs = solve1(file_data, [2])
     print(outputs)
-    # [max_val, max_seq] = part1(file_data)
-    # print(f"Max val: {max_val} Max Seq: {max_seq}")
-
-    # print("Part 2")
-    # [max_val, max_seq] = part2(file_data)
-    # print(f"Max val: {max_val} Max Seq: {max_seq}")

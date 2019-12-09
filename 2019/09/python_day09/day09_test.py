@@ -222,6 +222,51 @@ class Programs7:
     ]
 
 
+class Day09TestCase(TestCase):
+    def test_prog1(self):
+        test_prog1 = [
+            109,
+            1,
+            204,
+            -1,
+            1001,
+            100,
+            1,
+            100,
+            1008,
+            100,
+            16,
+            101,
+            1006,
+            101,
+            0,
+            99,
+        ]
+        outputs = solve1(test_prog1, [])
+        # Quine
+        self.assertEqual(outputs, test_prog1)
+
+    def test_prog2(self):
+        test_prog2 = [1102, 34915192, 34915192, 7, 4, 7, 99, 0]
+        outputs = solve1(test_prog2, [])
+        self.assertEqual(outputs, [1219070632396864])
+
+    def test_prog3(self):
+        test_prog3 = [104, 1125899906842624, 99]
+        outputs = solve1(test_prog3, [])
+        self.assertEqual(outputs, [1125899906842624])
+
+    def test_part1(self):
+        file_data = parse("../../09/input.txt")
+        outputs = solve1(file_data, [1])
+        self.assertEqual(outputs, [3780860499])
+
+    def test_part2(self):
+        file_data = parse("../../09/input.txt")
+        outputs = solve1(file_data, [2])
+        self.assertEqual(outputs, [33343])
+
+
 class Day07TestCase(TestCase):
     def test_part1(self):
         file_data = parse("../../07/input.txt")
