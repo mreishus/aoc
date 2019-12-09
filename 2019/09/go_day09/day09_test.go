@@ -6,6 +6,60 @@ import (
 	"testing"
 )
 
+func TestDay9Part1(t *testing.T) {
+	program := Parse("../../09/input.txt")
+	got := Solve(program, []int{1})
+	want := []int{3780860499}
+	if !reflect.DeepEqual(got, want) {
+		t.Errorf("got %v want %v", got, want)
+	}
+}
+
+func TestDay9Part2(t *testing.T) {
+	program := Parse("../../09/input.txt")
+	got := Solve(program, []int{2})
+	want := []int{33343}
+	if !reflect.DeepEqual(got, want) {
+		t.Errorf("got %v want %v", got, want)
+	}
+}
+
+func TestDay9TestProgs(t *testing.T) {
+	quineProg := []int{109, 1, 204, -1, 1001, 100, 1, 100, 1008, 100, 16, 101, 1006, 101, 0, 99}
+
+	tests := []struct {
+		name   string
+		prog   []int
+		output []int
+	}{
+		{
+			name:   "day 9 test 1",
+			prog:   quineProg,
+			output: quineProg,
+		},
+		{
+			name:   "day 9 test 2",
+			prog:   []int{1102, 34915192, 34915192, 7, 4, 7, 99, 0},
+			output: []int{1219070632396864},
+		},
+		{
+			name:   "day 9 test 3",
+			prog:   []int{104, 1125899906842624, 99},
+			output: []int{1125899906842624},
+		},
+	}
+
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			got := Solve(test.prog, []int{})
+			want := test.output
+			if !reflect.DeepEqual(got, want) {
+				t.Errorf("got %v want %v", got, want)
+			}
+		})
+	}
+}
+
 func TestPauseOnMissingInput(t *testing.T) {
 	// Run this program with no inputs
 	program := []int{3, 9, 8, 9, 10, 9, 4, 9, 99, -1, 8}

@@ -156,6 +156,8 @@ func (c *Computer) Step() {
 		c.PC += 4
 	} else if instruction == OP_STOP {
 		c.Halted = true
+	} else {
+		log.Fatalf("Unknown instruction %v", instruction)
 	}
 }
 
@@ -305,13 +307,12 @@ func permutations(arr []int) [][]int {
 }
 
 func main() {
-	program := Parse("../../07/input.txt")
-	p1MaxSeq, p1MaxValue := AmplifyOnceMaxSeq(program)
+	fmt.Println("Advent of Code 2019 Day 9")
+	program := Parse("../../09/input.txt")
+	output1 := Solve(program, []int{1})
 	fmt.Println("Part 1:")
-	fmt.Println(p1MaxSeq)
-	fmt.Println(p1MaxValue)
-	p2MaxSeq, p2MaxValue := AmplifyLoopMaxSeq(program)
+	fmt.Println(output1)
+	output2 := Solve(program, []int{2})
 	fmt.Println("Part 2:")
-	fmt.Println(p2MaxSeq)
-	fmt.Println(p2MaxValue)
+	fmt.Println(output2)
 }
