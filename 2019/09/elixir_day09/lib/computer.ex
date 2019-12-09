@@ -2,6 +2,7 @@ defmodule ElixirDay09.Computer do
   defstruct [
     :memory,
     :pc,
+    :relative_base,
     :inputs,
     :outputs,
     :halted,
@@ -16,10 +17,12 @@ defmodule ElixirDay09.Computer do
   @op_jump_if_false 6
   @op_less_than 7
   @op_equals 8
+  @op_set_rel_base 9
   @op_halt 99
 
   @mode_position 0
   @mode_immediate 1
+  @mode_relative 2
 
   alias ElixirDay09.Computer
 
@@ -31,10 +34,12 @@ defmodule ElixirDay09.Computer do
 
   def new(memory, inputs) when is_list(memory) and is_list(inputs) do
     %Computer{
-      memory: Array.from_list(memory),
+      # Hackish 'unlimited memory'
+      memory: Array.from_list(memory ++ List.duplicate(0, 10000)),
       inputs: inputs,
       outputs: [],
       pc: 0,
+      relative_base: 0,
       halted: false,
       waiting_for_input: false
     }
@@ -51,7 +56,7 @@ defmodule ElixirDay09.Computer do
   end
 
   # Get the dereferenced value of the Nth arg, after checking the Nth mode of the current instruction.
-  def lookup(%Computer{pc: pc, memory: memory} = computer, n) do
+  def lookup(%Computer{pc: pc, memory: memory, relative_base: relative_base} = computer, n) do
     raw_instruction = Array.get(memory, pc)
     # If instruction is 105, and n=1, mode is the "1", or the 2nd digit
     # from right 0 indexed (3rd when counting naturally)
@@ -64,6 +69,31 @@ defmodule ElixirDay09.Computer do
 
       @mode_immediate ->
         direct(computer, n)
+
+      @mode_relative ->
+        position = direct(computer, n) + relative_base
+        Array.get(memory, position)
+
+      _ ->
+        raise "Unknown mode"
+    end
+  end
+
+  def lookup_left(%Computer{pc: pc, memory: memory, relative_base: relative_base} = computer, n) do
+    raw_instruction = Array.get(memory, pc)
+    # If instruction is 105, and n=1, mode is the "1", or the 2nd digit
+    # from right 0 indexed (3rd when counting naturally)
+    mode = digit_from_right(raw_instruction, n + 1)
+
+    case mode do
+      @mode_position ->
+        direct(computer, n)
+
+      @mode_immediate ->
+        direct(computer, n)
+
+      @mode_relative ->
+        direct(computer, n) + relative_base
 
       _ ->
         raise "Unknown mode"
@@ -108,7 +138,7 @@ defmodule ElixirDay09.Computer do
   # ADD: 3 = 1 + 2
   def do_execute_step(%Computer{pc: pc, memory: memory} = c, @op_add) do
     result = lookup(c, 1) + lookup(c, 2)
-    new_memory = Array.set(memory, direct(c, 3), result)
+    new_memory = Array.set(memory, lookup_left(c, 3), result)
     new_pc = pc + 4
     %Computer{c | memory: new_memory, pc: new_pc}
   end
@@ -116,7 +146,7 @@ defmodule ElixirDay09.Computer do
   # MULT: 3 = 1 * 2
   def do_execute_step(%Computer{pc: pc, memory: memory} = c, @op_mult) do
     result = lookup(c, 1) * lookup(c, 2)
-    new_memory = Array.set(memory, direct(c, 3), result)
+    new_memory = Array.set(memory, lookup_left(c, 3), result)
     new_pc = pc + 4
     %Computer{c | memory: new_memory, pc: new_pc}
   end
@@ -129,7 +159,7 @@ defmodule ElixirDay09.Computer do
   # SAVE: 1 = Input (Inputs Exist)
   def do_execute_step(%Computer{pc: pc, memory: memory, inputs: inputs} = c, @op_save) do
     [this_input | new_inputs] = inputs
-    new_memory = Array.set(memory, direct(c, 1), this_input)
+    new_memory = Array.set(memory, lookup_left(c, 1), this_input)
     new_pc = pc + 2
     %Computer{c | memory: new_memory, pc: new_pc, inputs: new_inputs, waiting_for_input: false}
   end
@@ -171,16 +201,24 @@ defmodule ElixirDay09.Computer do
 
   def do_execute_step(%Computer{pc: pc, memory: memory} = c, @op_less_than) do
     result = if lookup(c, 1) < lookup(c, 2), do: 1, else: 0
-    new_memory = Array.set(memory, direct(c, 3), result)
+    new_memory = Array.set(memory, lookup_left(c, 3), result)
     new_pc = pc + 4
     %Computer{c | memory: new_memory, pc: new_pc}
   end
 
   def do_execute_step(%Computer{pc: pc, memory: memory} = c, @op_equals) do
     result = if lookup(c, 1) == lookup(c, 2), do: 1, else: 0
-    new_memory = Array.set(memory, direct(c, 3), result)
+    new_memory = Array.set(memory, lookup_left(c, 3), result)
     new_pc = pc + 4
     %Computer{c | memory: new_memory, pc: new_pc}
+  end
+
+  def do_execute_step(%Computer{pc: pc, relative_base: relative_base} = c, @op_set_rel_base) do
+    adjustment = lookup(c, 1)
+    new_relative_base = relative_base + adjustment
+
+    new_pc = pc + 2
+    %Computer{c | pc: new_pc, relative_base: new_relative_base}
   end
 
   def do_execute_step(_, opcode) do
