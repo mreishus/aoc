@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 from collections import Counter
-from itertools import zip_longest
 from fractions import Fraction
+import math
 
 
 class Day01:
@@ -31,18 +31,29 @@ def display(grid):
         print("")
 
 
+# With my coordinate system
+# up and a little left = 359
+# up and a little right = 1
+# right = 270
+# down = 180
+# left = 90
+def angle(x1, y1, x2, y2):
+    return (math.atan2(x2 - x1, y2 - y1) * 180 / math.pi) + 180
+    # return (math.atan2(y2 - y1, x2 - x1) * 180 / math.pi) + 180
+
+
 def part1(grid):
-    display(grid)
+    # display(grid)
     size_y = len(grid)
     size_x = len(grid[0])
-    print(f"{size_x} x {size_y}")
+    # print(f"{size_x} x {size_y}")
 
     max_sight = 0
     max_x = 0
     max_y = 0
     for y in range(size_y):
         for x in range(size_x):
-            seen = how_many_seen(grid, x, y)
+            seen, _ = how_many_seen(grid, x, y)
             # print(f"x{x} y{y} seen {seen}")
             if seen > max_sight:
                 max_sight = seen
@@ -53,7 +64,7 @@ def part1(grid):
 
 def how_many_seen(grid, x, y):
     if grid[y][x] == ".":
-        return 0
+        return 0, []
     # Build Blocked dict
     size_y = len(grid)
     size_x = len(grid[0])
@@ -122,6 +133,7 @@ def how_many_seen(grid, x, y):
                 blocked[(blocked_y, blocked_x)] = True
 
     count = 0
+    seen_list = []
     for ax in range(size_x):
         for ay in range(size_y):
             if grid[ay][ax] != "#":
@@ -133,8 +145,45 @@ def how_many_seen(grid, x, y):
                 continue
             # print(f" See {ax} {ay}")
             count += 1
+            seen_list.append((ax, ay))
 
-    return count
+    return count, seen_list
+
+
+def part2(grid):
+    deletes = part2_deletes(grid)
+    (x, y) = deletes[200 - 1]
+    return x * 100 + y
+
+
+def part2_deletes(grid):
+    (station_x, station_y, count) = part1(grid)
+
+    last_ang = 0.00001
+    count, seen_list = how_many_seen(grid, station_x, station_y)
+
+    deleted = []
+
+    while True:
+        if count == 0:
+            break
+        del_x, del_y, last_ang = get_next(station_x, station_y, seen_list, last_ang)
+        # print(f"{del_x} {del_y} {last_ang}")
+        deleted.append((del_x, del_y))
+        grid[del_y][del_x] = "."
+        count, seen_list = how_many_seen(grid, station_x, station_y)
+
+    return deleted
+
+
+def get_next(station_x, station_y, seen_list, last_ang):
+    seen_list_ang = [(x, y, angle(station_x, station_y, x, y)) for (x, y) in seen_list]
+    seen_list_ang.sort(key=lambda x: x[2], reverse=True)
+    filtered = list(filter(lambda elem: elem[2] < last_ang, seen_list_ang))
+
+    if len(filtered) > 0:
+        return filtered[0]
+    return seen_list_ang[0]
 
 
 if __name__ == "__main__":
@@ -173,17 +222,14 @@ if __name__ == "__main__":
     assert y == 13
     assert count == 210
 
-    # # print(part1(grid))
-    # x = 11
-    # y = 13
-    # print(f"Let's examine {x} {y}!!!")
-    # print(how_many_seen(grid, x, y))
-
     print("Part1: ")
     grid = parse("./input.txt")
-    # You guessed 219.
     print(part1(grid))
 
-    print("Part2: ")
-    # print(solve(245182, 790572))
-    # print(solve2(245182, 790572))
+    # grid = parse("./input_small6.txt")
+    # (x, y, count) = part1(grid)
+    # print((x, y, count))
+
+    print("Part 2:")
+    grid = parse("./input.txt")
+    print(part2(grid))
