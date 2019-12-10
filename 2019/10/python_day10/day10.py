@@ -20,14 +20,13 @@ def display(grid):
 
 
 # With my coordinate system
-# up and a little left = 359
-# up and a little right = 1
+# up and a little left = 1
+# up and a little right = 359
 # right = 270
 # down = 180
 # left = 90
 def angle(x1, y1, x2, y2):
     return (math.atan2(x2 - x1, y2 - y1) * 180 / math.pi) + 180
-    # return (math.atan2(y2 - y1, x2 - x1) * 180 / math.pi) + 180
 
 
 def part1(grid):
@@ -63,48 +62,13 @@ def how_many_seen(grid, x, y):
                 continue
             if grid[ay][ax] == ".":
                 continue
-            x_diff = ax - x
-            y_diff = ay - y
-            x_diff_scaled = x_diff
-            y_diff_scaled = y_diff
-            if x_diff == 0:
-                if y_diff_scaled > 0:
-                    y_diff_scaled = 1
-                else:
-                    y_diff_scaled = -1
-            elif y_diff == 0:
-                if x_diff_scaled > 0:
-                    x_diff_scaled = 1
-                else:
-                    x_diff_scaled = -1
-            else:
-                slope1 = Fraction(x_diff, y_diff)
-                slope2 = Fraction(y_diff, x_diff)
-                if abs(slope1.numerator) < abs(x_diff):
-                    x_diff_scaled = slope1.numerator
-                    y_diff_scaled = slope1.denominator
-                elif abs(slope2.numerator) < abs(y_diff):
-                    y_diff_scaled = slope1.numerator
-                    x_diff_scaled = slope1.denominator
-            # -2/-4 reduces to 1/2, we want it to be -1/-2
-            # Other sign cases that can go wrong here
-            if x_diff < 0 and x_diff_scaled > 0:
-                x_diff_scaled *= -1
-            if x_diff > 0 and x_diff_scaled < 0:
-                x_diff_scaled *= -1
-            if y_diff < 0 and y_diff_scaled > 0:
-                y_diff_scaled *= -1
-            if y_diff > 0 and y_diff_scaled < 0:
-                y_diff_scaled *= -1
-
-            # print(f"What does {ax} {ay} block?")
-            # print(f"  [{x_diff} {y_diff}] -> [{x_diff_scaled} {y_diff_scaled}]")
+            y_diff, x_diff = reduce_ratio(ay - y, ax - x)
 
             blocked_x = ax
             blocked_y = ay
             while True:
-                blocked_x += x_diff_scaled
-                blocked_y += y_diff_scaled
+                blocked_x += x_diff
+                blocked_y += y_diff
                 if (
                     blocked_x >= size_x
                     or blocked_x <= -1
@@ -133,6 +97,32 @@ def how_many_seen(grid, x, y):
     return count, seen_list
 
 
+# Given a ratio like 10/2, reduce to 5/1
+def reduce_ratio(y_diff, x_diff):
+    x_diff_scaled = x_diff
+    y_diff_scaled = y_diff
+    if x_diff == 0:
+        y_diff_scaled = 1  # Later code will fix the sign
+    elif y_diff == 0:
+        x_diff_scaled = 1  # Later code will fix the sign
+    else:
+        slope1 = Fraction(x_diff, y_diff)
+        slope2 = Fraction(y_diff, x_diff)
+        if abs(slope1.numerator) < abs(x_diff):
+            x_diff_scaled = slope1.numerator
+            y_diff_scaled = slope1.denominator
+        elif abs(slope2.numerator) < abs(y_diff):
+            y_diff_scaled = slope1.numerator
+            x_diff_scaled = slope1.denominator
+    # -2/-4 reduces to 1/2, we want it to be -1/-2
+    # Other sign cases that can go wrong here
+    if (x_diff < 0 < x_diff_scaled) or (x_diff_scaled < 0 < x_diff):
+        x_diff_scaled *= -1
+    if (y_diff < 0 < y_diff_scaled) or (y_diff_scaled < 0 < y_diff):
+        y_diff_scaled *= -1
+    return y_diff_scaled, x_diff_scaled
+
+
 def part2(grid):
     deletes = part2_deletes(grid)
     (x, y) = deletes[200 - 1]
@@ -147,11 +137,8 @@ def part2_deletes(grid):
 
     deleted = []
 
-    while True:
-        if count == 0:
-            break
+    while count > 0:
         del_x, del_y, last_ang = get_next(station_x, station_y, seen_list, last_ang)
-        # print(f"{del_x} {del_y} {last_ang}")
         deleted.append((del_x, del_y))
         grid[del_y][del_x] = "."
         count, seen_list = how_many_seen(grid, station_x, station_y)
