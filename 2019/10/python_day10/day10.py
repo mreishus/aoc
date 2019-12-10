@@ -1,23 +1,11 @@
 #!/usr/bin/env python
-from collections import Counter
 from fractions import Fraction
 import math
 
 
-class Day01:
-    """Main module for solving Day01."""
-
-    def __init__(self, name):
-        self.name = name
-        self.zero = 0
-
-    def add_one_class(self, input_val: int) -> int:
-        """Add one to a number, and example of class function."""
-        return input_val + 1 + self.zero
-
-
 def parse(filename):
-    return [parse_line(line.strip()) for line in open(filename).readlines()]
+    with open(filename) as f:
+        return [parse_line(line.strip()) for line in f.readlines()]
 
 
 def parse_line(line):
@@ -95,16 +83,11 @@ def how_many_seen(grid, x, y):
                 if abs(slope1.numerator) < abs(x_diff):
                     x_diff_scaled = slope1.numerator
                     y_diff_scaled = slope1.denominator
-                    # -2/-4 reduces to 1/2, we want it to be -1/-2
-                    # if x_diff < 0 and y_diff < 0:
-                    #     x_diff_scaled *= -1
-                    #     y_diff_scaled *= -1
                 elif abs(slope2.numerator) < abs(y_diff):
                     y_diff_scaled = slope1.numerator
                     x_diff_scaled = slope1.denominator
-                    # if x_diff < 0 and y_diff < 0:
-                    #     x_diff_scaled *= -1
-                    #     y_diff_scaled *= -1
+            # -2/-4 reduces to 1/2, we want it to be -1/-2
+            # Other sign cases that can go wrong here
             if x_diff < 0 and x_diff_scaled > 0:
                 x_diff_scaled *= -1
             if x_diff > 0 and x_diff_scaled < 0:
@@ -187,49 +170,10 @@ def get_next(station_x, station_y, seen_list, last_ang):
 
 
 if __name__ == "__main__":
-    ## WORKING
-    grid = parse("./input_small.txt")
-    (x, y, count) = part1(grid)
-    assert x == 3
-    assert y == 4
-    assert count == 8
-
-    ## WORKING
-    grid = parse("./input_small2.txt")
-    (x, y, count) = part1(grid)
-    assert x == 5
-    assert y == 8
-    assert count == 33
-
-    ## WORKING
-    grid = parse("./input_small3.txt")
-    (x, y, count) = part1(grid)
-    assert x == 1
-    assert y == 2
-    assert count == 35
-
-    ## WORKING
-    grid = parse("./input_small4.txt")
-    (x, y, count) = part1(grid)
-    assert x == 6
-    assert y == 3
-    assert count == 41
-
-    ## WORKING
-    grid = parse("./input_small5.txt")
-    (x, y, count) = part1(grid)
-    assert x == 11
-    assert y == 13
-    assert count == 210
-
     print("Part1: ")
-    grid = parse("./input.txt")
+    grid = parse("../input.txt")
     print(part1(grid))
 
-    # grid = parse("./input_small6.txt")
-    # (x, y, count) = part1(grid)
-    # print((x, y, count))
-
     print("Part 2:")
-    grid = parse("./input.txt")
+    grid = parse("../input.txt")
     print(part2(grid))
