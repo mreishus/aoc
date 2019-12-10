@@ -2,6 +2,18 @@
 
 ## Approach and Reflections
 
+Here, we're to add another mode to our intcode virtual machine: relative mode.
+We keep track of a 'relative base', which a new opcode can change. Any
+addresses given in relative mode are offset by the relative base. This can be
+used to implement lookups like `a[5]` in whatever language compiles down to
+intcode.
+
+The virtual machine is now finished! Programming the virtual machine and
+bringing along all of the test suites from the previous days gives me a great
+deal of satisfaction. I have three working intcode VMs: Python, Elixir, and
+Go. The Go version is about 30x faster than the Python version. The Elixir
+version is in the middle, about 10x faster than Python, and 3x slower than Go.
+
 ## Solutions
 
 - [Python](./python_day09/day09.py) [(test)](./python_day09/day09_test.py)

@@ -2,8 +2,8 @@
 
 ## Approach and Reflections
 
-Day2 introduced us to _Intcode_! We had to implement a simple assembly
-language that includes only 2 opcodes (for now): Add and Multiply. The
+Day2 introduced us to _Intcode_! We had to implement a simple virtual
+machine that includes only 2 opcodes (for now): Add and Multiply. The
 program and data areas are mixed, so technically, the program we are emulating
 is self-modifying.
 
@@ -187,5 +187,5 @@ verb=2, the answer would be 1202.)
 
 ```
 Created:       Mon 02 Dec 2019 05:12:11 PM CST
-Last Modified: Tue 03 Dec 2019 08:49:02 AM CST
+Last Modified: Tue 10 Dec 2019 04:04:50 PM CST
 ```

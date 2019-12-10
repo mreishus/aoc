@@ -2,6 +2,10 @@
 
 ## Approach and Reflections
 
+This seems to be a breather after working on the Virtual Machine in day 7.
+It's a simpleish program doing some basic array/grid manipulation to decode
+a message written across many layers of pixels, some transparent.
+
 ## Solutions
 
 - [Python](./python_day08/day08.py)
@@ -104,5 +108,5 @@ What message is produced after decoding your image?
 
 ```
 Created:       Sun 08 Dec 2019 03:47:28 PM CST
-Last Modified: Sun 08 Dec 2019 03:47:28 PM CST
+Last Modified: Tue 10 Dec 2019 04:08:48 PM CST
 ```

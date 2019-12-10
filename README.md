@@ -60,6 +60,9 @@
   [(test)](./2019/09/elixir_day09/test/elixir_day09_test.exs)
   | [Go](./2019/09/go_day09/day09.go)
   [(test)](./2019/09/go_day09/day09_test.go)
+- **Day 10**: [Writeup](./2019/10/README.md)
+  | [Python](./2019/10/python_day10/day10.py)
+  [(test)](./2019/10/python_day10/day10_test.py)
 
 ## 2018
 
@@ -122,5 +125,5 @@
 
 ```
 Created:       Mon 02 Dec 2019 05:12:40 PM CST
-Last Modified: Mon 09 Dec 2019 05:09:07 PM CST
+Last Modified: Tue 10 Dec 2019 04:04:02 PM CST
 ```

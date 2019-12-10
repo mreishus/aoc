@@ -3,7 +3,7 @@
 ## Approach and Reflections
 
 They're ramping up the complexity early this year! We had to build an
-assembly interpreter that understands a version of IntCode with 8 operations,
+virtual machine that understands a version of IntCode with 8 operations,
 and two reference modes for each parameter (immediate, or indirect).
 
 The computer/interpreter also has input and output stacks. I wonder if we
