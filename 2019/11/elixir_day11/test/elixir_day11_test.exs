@@ -2,7 +2,28 @@ defmodule ElixirDay11Test do
   use ExUnit.Case
   doctest ElixirDay11
 
-  alias ElixirDay11.{Computer, ComputerServer}
+  alias ElixirDay11.{Computer, ComputerServer, PainterRobot}
+
+  ## Day 11 specific tests
+  test "day11_part1" do
+    got =
+      ElixirDay11.parse("../../11/input.txt")
+      |> PainterRobot.new(0)
+      |> PainterRobot.execute()
+      |> PainterRobot.count_painted_squares()
+
+    assert got == 2539
+  end
+
+  test "day11_part2" do
+    got =
+      ElixirDay11.parse("../../11/input.txt")
+      |> PainterRobot.new(1)
+      |> PainterRobot.execute()
+      |> PainterRobot.count_painted_squares()
+
+    assert got == 248
+  end
 
   ## Day 9 specific tests
   test "day9_testprog1" do

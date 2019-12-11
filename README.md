@@ -66,6 +66,8 @@
 - **Day 11**: [Writeup](./2019/11/README.md)
   | [Python](./2019/11/python_day11/day11.py)
   [(test)](./2019/11/python_day11/day11_test.py)
+  | [Elixir](./2019/11/elixir_day11/lib)
+  [(test)](./2019/11/elixir_day11/test/elixir_day11_test.exs)
   | [Go](./2019/11/go_day11/day11.go)
   [(test)](./2019/11/go_day11/day11_test.go)
 
@@ -130,5 +132,5 @@
 
 ```
 Created:       Mon 02 Dec 2019 05:12:40 PM CST
-Last Modified: Wed 11 Dec 2019 12:54:19 PM CST
+Last Modified: Wed 11 Dec 2019 03:23:46 PM CST
 ```

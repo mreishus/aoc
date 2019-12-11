@@ -5,6 +5,8 @@
 ## Solutions
 
 - [Python](./python_day11/day11.py) [(test)](./python_day11/day11_test.py)
+- [Elixir](./elixir_day11/lib/)
+  [(test)](./elixir_day11/test/elixir_day11_test.exs)
 - [Go](./go_day11/day11.go) [(test)](./go_day11/day11_test.go)
 
 ## Problem Description
