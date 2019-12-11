@@ -379,7 +379,7 @@ def part2(program_in):
 
 
 if __name__ == "__main__":
-    program = parse("../11/input.txt")
+    program = parse("../../11/input.txt")
     # part1(program)
     part2(program)
     # print("Part 1:")
