@@ -44,7 +44,7 @@ defmodule ElixirDay11Test do
   test "day7_part1" do
     {got_seq, got_val} =
       ElixirDay11.parse("../../07/input.txt")
-      |> ElixirDay11.amplify_once_max_seq()
+      |> ElixirDay11.Amplify.amplify_once_max_seq()
 
     assert got_seq == [2, 0, 3, 1, 4]
     assert got_val == 13848
@@ -53,7 +53,7 @@ defmodule ElixirDay11Test do
   test "day7_part2" do
     {got_seq, got_val} =
       ElixirDay11.parse("../../07/input.txt")
-      |> ElixirDay11.amplify_loop_max_seq()
+      |> ElixirDay11.Amplify.amplify_loop_max_seq()
 
     assert got_seq == [6, 8, 7, 5, 9]
     assert got_val == 12_932_154
@@ -136,14 +136,14 @@ defmodule ElixirDay11Test do
     # Test amplify_once
     test_cases
     |> Enum.each(fn {prog, phase_seq, want_val} ->
-      got_val = ElixirDay11.amplify_once(prog, phase_seq)
+      got_val = ElixirDay11.Amplify.amplify_once(prog, phase_seq)
       assert got_val == want_val
     end)
 
     # Test amplify_once_max_seq
     test_cases
     |> Enum.each(fn {prog, want_seq, want_val} ->
-      {got_seq, got_val} = ElixirDay11.amplify_once_max_seq(prog)
+      {got_seq, got_val} = ElixirDay11.Amplify.amplify_once_max_seq(prog)
       assert got_seq == want_seq
       assert got_val == want_val
     end)
@@ -250,14 +250,14 @@ defmodule ElixirDay11Test do
     # Test amplify_loop
     test_cases
     |> Enum.each(fn {prog, phase_seq, want_val} ->
-      got_val = ElixirDay11.amplify_loop(prog, phase_seq)
+      got_val = ElixirDay11.Amplify.amplify_loop(prog, phase_seq)
       assert got_val == want_val
     end)
 
     # Test amplify_loop_max_seq
     test_cases
     |> Enum.each(fn {prog, want_seq, want_val} ->
-      {got_seq, got_val} = ElixirDay11.amplify_loop_max_seq(prog)
+      {got_seq, got_val} = ElixirDay11.Amplify.amplify_loop_max_seq(prog)
       assert got_seq == want_seq
       assert got_val == want_val
     end)
