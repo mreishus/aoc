@@ -301,15 +301,15 @@ def part1(program_in):
     while True:
         current_square = grid[location]
         cpu.add_input(current_square)
-        print(
-            f"location[{location}] current_square=input[{current_square}] direction[{direction}]"
-        )
+        # print(
+        #     f"location[{location}] current_square=input[{current_square}] direction[{direction}]"
+        # )
         cpu.execute()
         if cpu.state == "halted":
             break
         paint_color = cpu.pop_output()
         turn_dir = cpu.pop_output()
-        print(f"  output: paint_color[{paint_color}] turn direction[{turn_dir}]")
+        # print(f"  output: paint_color[{paint_color}] turn direction[{turn_dir}]")
         grid[location] = paint_color
         if turn_dir == 1:
             direction = turn_right(direction)
@@ -318,7 +318,46 @@ def part1(program_in):
         else:
             raise "Dnuno"
         location += DIRECTIONS[direction]
-        print("  new dir: [{direction}] location[{location}]")
+        # print("  new dir: [{direction}] location[{location}]")
+    # print("it halted")
+    # print(grid)
+    # print(list(grid.values()).count(1))
+    # (You guessed 1398.)
+    print(len(list(grid.keys())))
+    # Correct answer (You guessed 2539.)
+    # Input to program: 0 if over black (.) , 1 if over white (#)
+    # Outputs two values: color to paint 0/black/. 1/white/#, then 0 = turn left, 1 = turn right
+    print("Dunno")
+
+
+def part2(program_in):
+    cpu = Computer(program_in, [])
+    grid = defaultdict(lambda: 0)
+    location = complex(0, 0)
+    direction = "U"
+    painted_at_least_once = {}
+    grid[location] = 1
+    while True:
+        current_square = grid[location]
+        cpu.add_input(current_square)
+        # print(
+        #     f"location[{location}] current_square=input[{current_square}] direction[{direction}]"
+        # )
+        cpu.execute()
+        if cpu.state == "halted":
+            break
+        paint_color = cpu.pop_output()
+        turn_dir = cpu.pop_output()
+        # print(f"  output: paint_color[{paint_color}] turn direction[{turn_dir}]")
+        grid[location] = paint_color
+        if turn_dir == 1:
+            direction = turn_right(direction)
+        elif turn_dir == 0:
+            direction = turn_left(direction)
+        else:
+            raise "Dnuno"
+        location += DIRECTIONS[direction]
+        # print("  new dir: [{direction}] location[{location}]")
     print("it halted")
     print(grid)
     # print(list(grid.values()).count(1))
@@ -329,10 +368,20 @@ def part1(program_in):
     # Outputs two values: color to paint 0/black/. 1/white/#, then 0 = turn left, 1 = turn right
     print("Dunno")
 
+    for y in range(-5, 10):
+        for x in range(-5, 45):
+            value = grid[complex(x, y)]
+            if value == 1:
+                print("#", end="")
+            else:
+                print(" ", end="")
+        print("")
+
 
 if __name__ == "__main__":
     program = parse("../11/input.txt")
-    part1(program)
+    # part1(program)
+    part2(program)
     # print("Part 1:")
     # outputs = solve1(file_data, [1])
     # print(outputs)
