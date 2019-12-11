@@ -63,6 +63,11 @@
 - **Day 10**: [Writeup](./2019/10/README.md)
   | [Python](./2019/10/python_day10/day10.py)
   [(test)](./2019/10/python_day10/day10_test.py)
+- **Day 11**: [Writeup](./2019/11/README.md)
+  | [Python](./2019/11/python_day11/day11.py)
+  [(test)](./2019/11/python_day11/day11_test.py)
+  | [Go](./2019/11/go_day11/day11.go)
+  [(test)](./2019/11/go_day11/day11_test.go)
 
 ## 2018
 
@@ -125,5 +130,5 @@
 
 ```
 Created:       Mon 02 Dec 2019 05:12:40 PM CST
-Last Modified: Tue 10 Dec 2019 04:04:02 PM CST
+Last Modified: Wed 11 Dec 2019 12:54:19 PM CST
 ```
