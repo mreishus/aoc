@@ -4,9 +4,10 @@
 
 Here, we are hooking up multiple copies of the intcode Virtual Machine, taking
 outputs from one machine and sending them as input to another machine. Part
-1 sets up a line of 5 machines, and part 2 sets up a loop! This was a great
-mix of challenging, fun, and satisfying. The challenge made sure that we had
-a good, abstract, ecapsulated way of handling our virtual machines.
+1 sets up a line of 5 machines, and part 2 sets up a loop! This problem struck
+a great balance between challenge and fun; solving it was quite satisfying.
+The challenge made sure that we had a good, abstract, ecapsulated way of
+handling our virtual machines.
 
 ## Solutions
 
@@ -166,5 +167,5 @@ loop. What is the highest signal that can be sent to the thrusters?
 
 ```
 Created:       Sun 08 Dec 2019 03:41:52 PM CST
-Last Modified: Tue 10 Dec 2019 04:10:21 PM CST
+Last Modified: Thu 12 Dec 2019 03:43:37 PM CST
 ```
