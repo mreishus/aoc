@@ -43,6 +43,9 @@ class Computer(object):
         self.state = "new"
         self.relative_base = 0
 
+    def is_halted(self):
+        return self.state == "halted"
+
     def direct(self, n):
         """ Get the direct value of the memory address of the Nth arg, or PC + N"""
         return self.memory[self.pc + n]
@@ -272,6 +275,56 @@ def turn(direction, n):
 class PainterRobot(object):
     def __init__(self, program):
         self.program = program
+
+    def run_and_return_grid(self, *, initial_color=0):
+        cpu = Computer(self.program, [])
+        grid = defaultdict(lambda: 0)
+        location = complex(0, 0)
+        direction = "U"
+        grid[location] = initial_color
+        # Input to program: 0 if over black (.) , 1 if over white (#)
+        # Outputs two values: color to paint 0/black/. 1/white/#, then 0 = turn left, 1 = turn right
+        while True:
+            current_square = grid[location]
+            cpu.add_input(current_square)
+            cpu.execute()
+            if cpu.state == "halted":
+                break
+            paint_color = cpu.pop_output()
+            turn_dir = cpu.pop_output()
+            grid[location] = paint_color
+            if turn_dir == 1:
+                direction = turn_right(direction)
+            elif turn_dir == 0:
+                direction = turn_left(direction)
+            else:
+                raise "Told to turn an invalid direction"
+            location += COMPLEX_OF_DIR[direction]
+        return grid
+
+    @staticmethod
+    def part1(program_in,  *, initial_color=0):
+        robot = PainterRobot(program_in)
+        grid = robot.run_and_return_grid(initial_color=initial_color)
+        return len(list(grid.keys()))
+
+    @staticmethod
+    def part2(program_in):
+        robot = PainterRobot(program_in)
+        grid = robot.run_and_return_grid(initial_color=1)
+        for y in range(-3, 7):
+            for x in range(-5, 45):
+                value = grid[complex(x, y)]
+                if value == 1:
+                    print("#", end="")
+                else:
+                    print(" ", end="")
+            print("")
+        return "Look above ^"
+
+class Breakout():
+    def __init__(self, program_in):
+        self.program = program_in
         self.cpu = Computer(self.program, [])
         self.grid = defaultdict(lambda: 0)
 
@@ -295,81 +348,76 @@ class PainterRobot(object):
 
         return grid
 
-    def part2(self):
-        return 5
+    def is_halted(self):
+        return self.cpu.is_halted()
+
+    def display(self):
+        system("clear")
+        for y in range(25):
+            for x in range(45):
+                char = self.grid[complex(x, y)]
+                print_char = " "
+                if char == 1:
+                    print_char = "W"
+                elif char == 2:
+                    print_char = "B"
+                elif char == 3:
+                    print_char = "="
+                elif char == 4:
+                    print_char = "*"
+                print(print_char, end="")
+            print("")
+        print(f"Score {self.grid[complex(-1, 0)]}")
+
+    def score(self):
+        return self.grid[complex(-1, 0)]
 
 
-def get_move(grid):
-    ball = list(grid.keys())[list(grid.values()).index(4)]
-    ball_x = int(ball.real)
-    paddle = list(grid.keys())[list(grid.values()).index(3)]
-    paddle_x = int(paddle.real)
-    if ball_x > paddle_x:
-        return "r"
-    if ball_x < paddle_x:
-        return "l"
-    return "n"
+    def get_move(self):
+        grid = self.grid
+        ball = list(grid.keys())[list(grid.values()).index(4)]
+        ball_x = int(ball.real)
+        paddle = list(grid.keys())[list(grid.values()).index(3)]
+        paddle_x = int(paddle.real)
+        if ball_x > paddle_x:
+            return "r"
+        if ball_x < paddle_x:
+            return "l"
+        return "."
 
-
-def part1(program_in):
-    robot = PainterRobot(program_in)
-    grid = robot.run_and_return_grid()
-    robot.add_quarters()
-    display(grid)
-    while True:
-        a = get_move(grid)
-        # a = input()
-        if a == "l":
-            robot.input(-1)
-        elif a == "r":
-            robot.input(1)
-        else:
-            robot.input(0)
+    @staticmethod
+    def part1(program_in):
+        robot = Breakout(program_in)
         grid = robot.run_and_return_grid()
-        display(grid)
+        return list(grid.values()).count(2)
 
-    # print(grid)
-    # print(list(grid.values()).count(2))
-    return len(list(grid.keys()))
-
-
-def display(grid):
-    system("clear")
-    for y in range(25):
-        for x in range(45):
-            char = grid[complex(x, y)]
-            print_char = " "
-            if char == 1:
-                print_char = "W"
-            elif char == 2:
-                print_char = "B"
-            elif char == 3:
-                print_char = "="
-            elif char == 4:
-                print_char = "*"
-            print(print_char, end="")
-        print("")
-    print(f"Score {grid[complex(-1, 0)]}")
-
-
-def part2(program_in):
-    robot = PainterRobot(program_in)
-    grid = robot.run_and_return_grid()
-    for y in range(-3, 7):
-        for x in range(-5, 45):
-            value = grid[complex(x, y)]
-            if value == 1:
-                print("#", end="")
+    @staticmethod
+    def part2(program_in, *, display_to_screen=False):
+        robot = Breakout(program_in)
+        grid = robot.run_and_return_grid()
+        robot.add_quarters()
+        if display_to_screen:
+            robot.display()
+        while True:
+            a = robot.get_move()
+            if a == "l":
+                robot.input(-1)
+            elif a == "r":
+                robot.input(1)
             else:
-                print(" ", end="")
-        print("")
-    return "Look above ^"
+                robot.input(0)
+            if robot.is_halted():
+                break
+            grid = robot.run_and_return_grid()
+            if display_to_screen:
+                robot.display()
+        return robot.score()
 
 
 if __name__ == "__main__":
-    system("clear")
-    a = input()
     program = parse("../../13/input.txt")
-    print(part1(program))
-    # print("Part 2:")
-    # print(part2(program))
+    print("Part 1:")
+    print(Breakout.part1(program))
+    print("Part 2:")
+    #print(Breakout.part2(program, display_to_screen=True))
+    print(Breakout.part2(program))
