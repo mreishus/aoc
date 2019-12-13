@@ -107,9 +107,17 @@ func (c Computer) LookupLeft(n int) int {
 	return 0
 }
 
+func (c *Computer) SetMemory(location int, value int) {
+	c.Memory[location] = value
+}
+
 // AddInput adds an input to a computer
 func (c *Computer) AddInput(newInput int) {
 	c.Inputs = append(c.Inputs, newInput)
+}
+
+func (c *Computer) HasOutput() bool {
+	return len(c.Outputs) > 0
 }
 
 // PopOutput returns the oldest output, and removes it from the computer's output
@@ -449,16 +457,120 @@ func DisplayGrid(grid map[Coord]int) {
 	}
 }
 
+///////// PREVIOUS INTCODE END //////////////
+
+type Breakout struct {
+	Computer Computer
+	Grid     map[Coord]int
+}
+
+func NewBreakout(program []int) Breakout {
+	cpu := NewComputer(program, []int{})
+	grid := make(map[Coord]int, 0)
+	return Breakout{Computer: cpu, Grid: grid}
+}
+
+func (b *Breakout) Display() {
+	for y := 0; y < 25; y++ {
+		for x := 0; x < 45; x++ {
+			char := b.Grid[Coord{x, y}]
+			print_str := " "
+			if char == 1 {
+				print_str = "W"
+			} else if char == 2 {
+				print_str = "B"
+			} else if char == 3 {
+				print_str = "="
+			} else if char == 4 {
+				print_str = "*"
+			}
+			fmt.Print(print_str)
+		}
+		fmt.Println("")
+	}
+}
+
+func (b *Breakout) RunAndReturnGrid() map[Coord]int {
+	b.Computer.SetMemory(0, 2)
+	b.Computer.Execute()
+	for b.Computer.HasOutput() {
+		x, err := b.Computer.PopOutput()
+		if err != nil {
+			log.Fatal("Breakout: Couldn't read x")
+		}
+		y, err := b.Computer.PopOutput()
+		if err != nil {
+			log.Fatal("Breakout: Couldn't read y")
+		}
+		what, err := b.Computer.PopOutput()
+		if err != nil {
+			log.Fatal("Breakout: Couldn't read blocktype/what")
+		}
+		location := Coord{x, y}
+		b.Grid[location] = what
+	}
+	return b.Grid
+}
+
+func (b Breakout) GetMove() int {
+	foundBall := false
+	foundPaddle := false
+	ballX := -1
+	paddleX := -1
+	for k, v := range b.Grid {
+		if v == 4 {
+			foundBall = true
+			ballX = k.X
+		}
+		if v == 3 {
+			foundPaddle = true
+			paddleX = k.X
+		}
+		if foundBall && foundPaddle {
+			break
+		}
+	}
+	if ballX > paddleX {
+		return 1
+	}
+	if ballX < paddleX {
+		return -1
+	}
+	return 0
+}
+
+func (b *Breakout) Input(move int) {
+	b.Computer.AddInput(move)
+}
+
+func Day13Part1(program []int) int {
+	b := NewBreakout(program)
+	grid := b.RunAndReturnGrid()
+	count := 0
+	for _, v := range grid {
+		if v == 2 {
+			count += 1
+		}
+	}
+	return count
+}
+
+func Day13Part2(program []int) int {
+	b := NewBreakout(program)
+	b.RunAndReturnGrid()
+	for !b.Computer.Halted {
+		move := b.GetMove()
+		b.Input(move)
+		b.RunAndReturnGrid()
+		// b.Display()
+	}
+	return b.Grid[Coord{-1, 0}]
+}
+
 func main() {
-	fmt.Println("Advent of Code 2019 Day 9")
+	fmt.Println("Advent of Code 2019 Day 13")
 
-	program := Parse("../../11/input.txt")
-	grid1 := PainterRobot(program, 0)
-	fmt.Println("Part 1:")
-	fmt.Println(NumPaintedSquares(grid1))
-
-	grid2 := PainterRobot(program, 1)
-	fmt.Println("Part 2:")
-	fmt.Println(NumPaintedSquares(grid2))
-	DisplayGrid(grid2)
+	program := Parse("../../13/input.txt")
+	fmt.Println(Day13Part1(program))
+	fmt.Println(Day13Part2(program))
 }

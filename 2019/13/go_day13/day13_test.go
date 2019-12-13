@@ -6,6 +6,24 @@ import (
 	"testing"
 )
 
+func TestDay13Part1(t *testing.T) {
+	program := Parse("../../13/input.txt")
+	got := Day13Part1(program)
+	want := 270
+	if want != got {
+		t.Errorf("got %v want %v", got, want)
+	}
+}
+
+func TestDay13Part2(t *testing.T) {
+	program := Parse("../../13/input.txt")
+	got := Day13Part2(program)
+	want := 12535
+	if want != got {
+		t.Errorf("got %v want %v", got, want)
+	}
+}
+
 func TestDay11Part1(t *testing.T) {
 	program := Parse("../../11/input.txt")
 	grid1 := PainterRobot(program, 0)
