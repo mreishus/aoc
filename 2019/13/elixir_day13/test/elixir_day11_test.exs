@@ -2,7 +2,24 @@ defmodule ElixirDay13Test do
   use ExUnit.Case
   doctest ElixirDay13
 
-  alias ElixirDay13.{Computer, ComputerServer, PainterRobot}
+  alias ElixirDay13.{Breakout, Computer, ComputerServer, PainterRobot}
+
+  ## Day 13 specific tests
+  test "day13_part1" do
+    got =
+      ElixirDay13.parse("../../13/input.txt")
+      |> Breakout.part1()
+
+    assert got == 270
+  end
+
+  test "day13_part2" do
+    got =
+      ElixirDay13.parse("../../13/input.txt")
+      |> Breakout.part2()
+
+    assert got == 12535
+  end
 
   ## Day 11 specific tests
   test "day11_part1" do

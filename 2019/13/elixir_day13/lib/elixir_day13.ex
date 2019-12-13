@@ -2,7 +2,7 @@ defmodule ElixirDay13 do
   @moduledoc """
   Documentation for ElixirDay13.
   """
-  alias ElixirDay13.{PainterRobot}
+  alias ElixirDay13.{Breakout}
 
   def parse(filename) do
     File.stream!(filename)
@@ -13,16 +13,12 @@ defmodule ElixirDay13 do
   end
 
   def main do
-    parse("../../11/input.txt")
-    |> PainterRobot.new(0)
-    |> PainterRobot.execute()
-    |> PainterRobot.count_painted_squares()
-    |> IO.inspect(label: "day 11 part 1")
+    parse("../../13/input.txt")
+    |> Breakout.part1()
+    |> IO.inspect(label: "Day 13, Part 1: ")
 
-    parse("../../11/input.txt")
-    |> PainterRobot.new(1)
-    |> PainterRobot.execute()
-    |> PainterRobot.display()
-    |> IO.puts()
+    parse("../../13/input.txt")
+    |> Breakout.part2()
+    |> IO.inspect(label: "Day 13, Part 2: ")
   end
 end

@@ -116,6 +116,14 @@ defmodule ElixirDay13.Computer do
 
   def outputs(%Computer{outputs: outputs}), do: outputs
 
+  def set_memory(%Computer{memory: memory} = c, index, value) do
+    new_memory = Array.set(memory, index, value)
+    %Computer{c | memory: new_memory}
+  end
+
+  def has_output?(%Computer{outputs: []}), do: false
+  def has_output?(%Computer{}), do: true
+
   @doc """
   pop_output/1: Return the oldest output, and a computer with that output removed from it
   pop_output(computer) = {oldest_output, new_computer}
