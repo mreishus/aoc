@@ -56,9 +56,11 @@ def index_of_first(lst, pred):
 
 
 def part2(rules):
-    try_me = [1000]
+    # Manual Binary Search
+    try_me = [1_993_284]
     for v in try_me:
-        print(f"fuel{v} answer{part1(rules, v)}")
+        a = part1(rules, v)
+        print(f"fuel {v} answer {a} answer {a / 1_000_000_000}")
 
 
 def part1(rules, initial_fuel=1):
@@ -115,10 +117,20 @@ def part1(rules, initial_fuel=1):
                 if elm.quantity >= use_this.quantity:
                     # print(f"     ++ This one is safe. Doing it!")
                     # This one is always safe; invoking a rule to transform 10A when we have 14.
+                    # times = 1
+                    # if elm.quantity % use_this.quantity == 0:
+                    times = elm.quantity // use_this.quantity
+
                     delete_indexes.append(i)
-                    new_elm = Element(elm.thing, elm.quantity - use_this.quantity)
-                    additions += [new_elm]
-                    additions += produces
+                    new_elm = Element(
+                        elm.thing, elm.quantity - (use_this.quantity * times)
+                    )
+                    if new_elm.quantity > 0:
+                        additions += [new_elm]
+                    for this_elm in produces:
+                        additions += [
+                            Element(this_elm.thing, this_elm.quantity * times)
+                        ]
                     break
                 else:
                     # Actually, not safe/possible, we need to get more, but we will waste some
@@ -155,6 +167,7 @@ def part1(rules, initial_fuel=1):
         # print("")
         # print("What I need:")
         # print(what_i_need)
+        # print("")
 
         if len(what_i_need) == 1 and what_i_need[0].thing == "ORE":
             break
@@ -186,8 +199,8 @@ if __name__ == "__main__":
     print("Part1: ")
     print(part1(rules))
 
-    # print("Part2: ")
-    # print(part2(rules))
+    print("Part2: ")
+    print(part2(rules))
 
     # print(solve(245182, 790572))
     # print(solve2(245182, 790572))
