@@ -5,7 +5,8 @@ import collections
 
 
 def parse(filename):
-    return [parse_line(line.strip()) for line in open(filename).readlines()]
+    with open(filename) as f:
+        return [parse_line(line.strip()) for line in f.readlines()]
 
 
 Element = collections.namedtuple("Element", "thing quantity")
@@ -66,15 +67,11 @@ def part2(rules):
 def part1(rules, initial_fuel=1):
     d = {}
     for rule in rules:
-        # print("Rule")
         if rule.result in d:
-            print("========DUP===== (Didnt plan for this)")
+            raise ValueError("didn't expect to see duplicate rules")
         d[rule.result] = rule.materials
-        # print(rule.result)
 
     what_i_need = [Element(thing="FUEL", quantity=initial_fuel)]
-    # print("What I need:")
-    # print(what_i_need)
     negatives = []
     while True:
         additions = []
@@ -149,9 +146,6 @@ def part1(rules, initial_fuel=1):
                 # else:
                 # print(f"     ?? Decided to skip for now.")
 
-            # else:
-            # print("not sure what to do")
-
         # Process Marked Deletes/Adds
         for i in sorted(delete_indexes, reverse=True):
             what_i_need.pop(i)
@@ -183,24 +177,9 @@ def part1(rules, initial_fuel=1):
 
 
 if __name__ == "__main__":
-    # rules = parse("../input_p1_31.txt")  # PASS
-    # rules = parse("../input_p1_165.txt")  # PASS
-    # rules = parse("../input_p1_13312.txt")  # Pass
-    # rules = parse("../input_p1_180697.txt")  # Pass
-    # rules = parse("../input_p1_2210736.txt")
-
-    # Your answer is too high.
-    # (You guessed 830608.)
-    # 779604 <-- This is when I remove the break from the depth builder,
-    # 733180 <-- This is using depth builder 2, which also fails on shit.
-    # But I don't trust it because it makes me fail other tests?
-
     rules = parse("../input.txt")
     print("Part1: ")
     print(part1(rules))
 
     print("Part2: ")
     print(part2(rules))
-
-    # print(solve(245182, 790572))
-    # print(solve2(245182, 790572))
