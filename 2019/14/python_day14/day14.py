@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 from collections import namedtuple, defaultdict
+from scipy.optimize import bisect
 
 Element = namedtuple("Element", "thing quantity")
 Rule = namedtuple("Rule", "materials result")
@@ -46,12 +47,13 @@ def approx_match(d, elm):
     raise ValueError("Approx_match: The world is wrong")
 
 
+def part2_loss(rules, initial_fuel):
+    TRILLION = 1_000_000_000_000
+    return TRILLION - part1(rules, initial_fuel)
+
+
 def part2(rules):
-    # Manual Binary Search
-    try_me = [1_993_284]
-    for v in try_me:
-        a = part1(rules, v)
-        print(f"fuel {v} answer {a} answer {a / 1_000_000_000}")
+    return int(bisect(lambda x: part2_loss(rules, x), 1, 100_000_000))
 
 
 def part1(rules, initial_fuel=1):
@@ -112,7 +114,6 @@ def part1(rules, initial_fuel=1):
 
 
 if __name__ == "__main__":
-    # rules = parse("../input_p1_165.txt")
     rules = parse("../input.txt")
     print("Part1: ")
     print(part1(rules))
