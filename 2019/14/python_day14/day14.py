@@ -48,43 +48,6 @@ def approx_match(d, elm):
     )
 
 
-def calculate_depth2(d):
-    depths = {"FUEL": 100}
-    while True:
-        last_depths = depths.copy()
-        for k, v in d.items():
-            if k.thing in depths:
-                for this_v in v:
-                    if this_v.thing not in depths:
-                        depths[this_v.thing] = depths[k.thing] - 1
-
-        if last_depths == depths:
-            break
-    return depths
-
-
-def calculate_depth(d):
-    depths = {"ORE": 1}
-    # 165 ORE => 6 DCFZ
-    #   (v)         (k)
-    # Look for values that are in our depths dictionary, and
-    # mark anything on the right side as depth + 1
-    while True:
-        last_depths = depths.copy()
-        for k, v in d.items():
-            # if any(1 for x in v if (v.thing in depths)): # Didn't work
-            for this_v in v:
-                if this_v.thing in depths:
-                    depths[k.thing] = depths[this_v.thing] + 1
-                    # print("")
-                    # print(f"Thinking about {this_v}")
-                    # print(f"Setting {k.thing} --> {depths[this_v.thing] + 1}")
-            #     print(f"{k} {v}")
-        if last_depths == depths:
-            break
-    return depths
-
-
 def index_of_first(lst, pred):
     for i, v in enumerate(lst):
         if pred(v):
@@ -107,9 +70,6 @@ def part1(rules, initial_fuel=1):
         d[rule.result] = rule.materials
         # print(rule.result)
 
-    # depth_of_thing = calculate_depth(d)
-    depth_of_thing = calculate_depth2(d)
-
     what_i_need = [Element(thing="FUEL", quantity=initial_fuel)]
     # print("What I need:")
     # print(what_i_need)
@@ -117,26 +77,6 @@ def part1(rules, initial_fuel=1):
     while True:
         additions = []
         delete_indexes = []
-
-        i_with_deepest_unsafe_approx_match = -1
-        max_depth = (-1, -1)
-        for i, elm in enumerate(what_i_need):
-            if elm not in d and approx_match(d, elm):
-                use_this = approx_match(d, elm)
-                produces = d[use_this]
-                if elm.quantity < use_this.quantity:
-                    p_depths = [depth_of_thing[p.thing] for p in produces]
-                    u_depth = depth_of_thing[use_this.thing]
-                    # depth = (u_depth, max(p_depths))
-                    depth = (max(p_depths), u_depth)
-                    # print(
-                    #     f"i[{i}]  u_depth[{u_depth}] p_depths[{p_depths}] min_p[{min(p_depths)}]"
-                    # )
-                    if depth >= max_depth:
-                        max_depth = depth
-                        # print("^ picked that one")
-                        i_with_deepest_unsafe_approx_match = i
-        # print(f"chose {i_with_deepest_unsafe_approx_match}")
 
         for i, elm in enumerate(what_i_need):
             # Is there a negative thing (EXTRA)?
@@ -180,7 +120,7 @@ def part1(rules, initial_fuel=1):
                     additions += [new_elm]
                     additions += produces
                     break
-                elif i == i_with_deepest_unsafe_approx_match:
+                else:
                     # Actually, not safe/possible, we need to get more, but we will waste some
                     # We only need 8 A but the rule is 10 ORE => 10 A
                     delete_indexes.append(i)
