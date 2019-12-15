@@ -1,13 +1,22 @@
-#!/usr/bin/env python
+"""
+Breakout: Module for playing breakout game in 
+Advent of Code 2019 day 15.
 
-from collections import defaultdict
+Usage example:
+
+from aoc.breakout import Breakout
+
+program = parse("../../13/input.txt")
+print("Part 1:")
+print(Breakout.part1(program))
+print("Part 2:")
+# print(Breakout.part2(program, display_to_screen=True))
+print(Breakout.part2(program))
+"""
+
 from os import system
+from collections import defaultdict
 from aoc.computer import Computer
-
-
-def parse(filename):
-    with open(filename) as f:
-        return [int(num) for num in f.readline().strip().split(",")]
 
 
 class Breakout:
@@ -99,12 +108,3 @@ class Breakout:
             if display_to_screen:
                 robot.display()
         return robot.score()
-
-
-if __name__ == "__main__":
-    program = parse("../../13/input.txt")
-    print("Part 1:")
-    print(Breakout.part1(program))
-    print("Part 2:")
-    # print(Breakout.part2(program, display_to_screen=True))
-    print(Breakout.part2(program))
