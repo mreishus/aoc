@@ -136,6 +136,19 @@ class GridMapper15:
             self.grid[self.location] = GRID.SPACE
             self.oxygen_location = self.location
 
+    def smart_random_move(self):
+        move_bias = []
+        for direction in DIRECTIONS:
+            delta = COMPLEX_OF_DIR[direction]
+            square = self.grid[self.location + delta]
+            weight = 1
+            if square == GRID.UNK:
+                weight = 4
+            elif square == GRID.WALL:
+                weight = 0
+            move_bias.append(weight)
+        self.random_move(move_bias)
+
     # Bias list: Like (0.8, 0.2, 0.1, 0.1)
     def random_move(self, bias_list):
         i = roll(4, bias_list) - 1
@@ -143,14 +156,16 @@ class GridMapper15:
         self.move(direction)
 
     def display(self):
-        reals = [c.real for c in self.grid.keys()]
-        imags = [c.imag for c in self.grid.keys()]
+        reals = [c.real for c in self.grid.keys() if self.grid[c] != GRID.UNK]
+        imags = [c.imag for c in self.grid.keys() if self.grid[c] != GRID.UNK]
         system("clear")
-        for y in range(int(min(imags)), int(max(imags)) + 3):
-            for x in range(int(min(reals)), int(max(reals)) + 3):
+        for y in range(int(min(imags)) - 2, int(max(imags)) + 3):
+            for x in range(int(min(reals)) - 2, int(max(reals)) + 3):
                 char = self.grid[complex(x, y)]
                 print_char = " "
-                if char == GRID.SPACE:
+                if self.location == complex(x, y):
+                    print_char = "R"
+                elif char == GRID.SPACE:
                     print_char = " "
                 elif char == GRID.WALL:
                     print_char = "#"
@@ -160,60 +175,19 @@ class GridMapper15:
             print("")
 
     def explore(self):
-        # for k in range(20):
-        #     for j in range(25):
-        #         for i in range(3000):
-        #             self.random_move((0.25, 0.25, 0.25, 0.25))
-        # return
-        for j in range(25):
-            for i in range(3000):
-                self.random_move((0.50, 0.25, 0.12, 0.13))
-            for i in range(3000):
-                self.random_move((0.25, 0.25, 0.25, 0.25))
-            for i in range(3000):
-                self.random_move((0.13, 0.50, 0.25, 0.12))
-            for i in range(3000):
-                self.random_move((0.25, 0.25, 0.25, 0.25))
-            for i in range(3000):
-                self.random_move((0.12, 0.13, 0.50, 0.25))
-            for i in range(3000):
-                self.random_move((0.25, 0.25, 0.25, 0.25))
-            for i in range(3000):
-                self.random_move((0.25, 0.12, 0.13, 0.50))
-            for i in range(3000):
-                self.random_move((0.25, 0.25, 0.25, 0.25))
-
-            for i in range(3000):
-                self.random_move((0.50, 0.12, 0.25, 0.13))
-            for i in range(3000):
-                self.random_move((0.25, 0.25, 0.25, 0.25))
-            for i in range(3000):
-                self.random_move((0.13, 0.50, 0.12, 0.25))
-            for i in range(3000):
-                self.random_move((0.25, 0.25, 0.25, 0.25))
-            for i in range(3000):
-                self.random_move((0.25, 0.13, 0.50, 0.12))
-            for i in range(3000):
-                self.random_move((0.25, 0.25, 0.25, 0.25))
-            for i in range(3000):
-                self.random_move((0.12, 0.25, 0.13, 0.50))
-            for i in range(3000):
-                self.random_move((0.25, 0.25, 0.25, 0.25))
-
-            for i in range(3000):
-                self.random_move((0.50, 0.12, 0.13, 0.25))
-            for i in range(3000):
-                self.random_move((0.25, 0.25, 0.25, 0.25))
-            for i in range(3000):
-                self.random_move((0.25, 0.50, 0.12, 0.13))
-            for i in range(3000):
-                self.random_move((0.25, 0.25, 0.25, 0.25))
-            for i in range(3000):
-                self.random_move((0.13, 0.25, 0.50, 0.12))
-            for i in range(3000):
-                self.random_move((0.25, 0.25, 0.25, 0.25))
-            for i in range(3000):
-                self.random_move((0.12, 0.13, 0.25, 0.50))
+        r = random.SystemRandom()
+        weights = [0.50, 0.25, 0.12, 0.13]
+        equal_weights = [1, 1, 1, 1]
+        for j in range(2000):
+            for i in range(150):
+                self.smart_random_move()
+            for i in range(150):
+                self.random_move(equal_weights)
+            r.shuffle(weights)
+            for i in range(150):
+                self.random_move(weights)
+            # if j % 15 == 0:
+            #     self.display()
 
 
 class Day15:
