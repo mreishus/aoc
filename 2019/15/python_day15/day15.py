@@ -6,6 +6,7 @@ from os import system
 import sys
 import random
 from collections import deque
+from copy import copy
 import pickle
 
 # DEBUG = True
@@ -432,6 +433,7 @@ class GRID:
     UNK = 0
     SPACE = 1
     WALL = 2
+    OXYGEN = 3
 
 
 # Above
@@ -635,9 +637,19 @@ def construct_path(node, meta):
     return actions
 
 
+# class GRID:
+#     UNK = 0
+#     SPACE = 1
+#     WALL = 2
+#     OXYGEN = 3
+
+
 class Day15:
     @staticmethod
     def part1(program_in):
+        ## Does Random Walk to explore grid, then
+        ## saves it to a pickle file (Slow, 1-2 minutes)
+        #
         # gm = GridMapper15(program_in)
         # gm.explore()
         # mygrid = {k: v for k, v in gm.grid.items()}
@@ -645,6 +657,7 @@ class Day15:
         # with open("gm_pkl", "wb") as output:
         #     pickle.dump(stuff, output, pickle.HIGHEST_PROTOCOL)
 
+        ## Opens pickle file from earlier
         with open("gm_pkl", "rb") as input:
             stuff = pickle.load(input)
             gm = GridMapper15(program_in)
@@ -656,14 +669,43 @@ class Day15:
             a = bfs(gm.grid, complex(0, 0), gm.oxygen_location)
             print(a)
 
+            print(Day15.part2(gm.grid, gm.oxygen_location))
+
     @staticmethod
-    def part2(program_in):
-        return "5"
+    def part2(grid, oxygen_location):
+        grid[oxygen_location] = GRID.OXYGEN
+        minutes_passed = 0
+        while True:
+            grid = Day15.spread_oxygen(grid, oxygen_location)
+            minutes_passed += 1
+            if Day15.oxygen_fully_spread(grid):
+                break
+        return minutes_passed
+
+    @staticmethod
+    def spread_oxygen(grid_in, oxygen_location):
+        grid = copy(grid_in)
+        deltas = list(COMPLEX_OF_DIR.values())
+        to_add = set()
+
+        current_oxy = [k for k, v in grid.items() if v == GRID.OXYGEN]
+        for space in current_oxy:
+            for delta in deltas:
+                if grid[space + delta] == GRID.SPACE:
+                    to_add.add(space + delta)
+
+        for space in to_add:
+            grid[space] = GRID.OXYGEN
+        return grid
+
+    @staticmethod
+    def oxygen_fully_spread(grid):
+        return len([k for k, v in grid.items() if v == GRID.SPACE]) == 0
 
 
 if __name__ == "__main__":
     program = parse("../../15/input.txt")
     print("Part 1:")
     print(Day15.part1(program))
-    print("Part 2:")
-    print(Day15.part2(program))
+    # print("Part 2:")
+    # print(Day15.part2(program))
