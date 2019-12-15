@@ -80,6 +80,11 @@
   [(test)](./2019/13/elixir_day13/test/elixir_day13_test.exs)
   | [Go](./2019/13/go_day13/day13.go)
   [(test)](./2019/13/go_day13/day13_test.go)
+- Day 14: [Writeup](./2019/14/README.md)
+  | [Python](./2019/14/python_day14/day14.py)
+  [(test)](./2019/14/python_day14/day14_test.py)
+- Day 15: [Writeup](./2019/15/README.md)
+  | [Python](./2019/15/python_day15/aoc/day15.py)
 
 ## 2018
 
@@ -101,7 +106,7 @@
 - **Day 6**: [Writeup](./2018/6/README.md)
   | [Elixir](./2018/6/advent_of_code_2018_06/lib/advent_of_code_2018_06.ex)
   | [Ruby](./2018/6/ruby/test.rb)
-- Day 7: [Writeup](./2018/7/README.md)
+- **Day 7**: [Writeup](./2018/7/README.md)
   | [Elixir](./2018/7/advent_of_code_2018_07/lib/advent_of_code_2018_07.ex)
   | [Ruby](./2018/7/ruby/7.rb)
 
@@ -148,5 +153,5 @@
 
 ```
 Created:       Mon 02 Dec 2019 05:12:40 PM CST
-Last Modified: Fri 13 Dec 2019 03:47:04 PM CST
+Last Modified: Sun 15 Dec 2019 01:15:10 PM CST
 ```
