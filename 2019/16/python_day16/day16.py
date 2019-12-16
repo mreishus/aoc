@@ -3,6 +3,7 @@
 ## Note: Day 2 doesn't work yet
 
 import itertools
+from collections import deque
 
 # import numpy as np
 
@@ -10,7 +11,7 @@ import itertools
 # np.core.arrayprint._line_width = 180
 
 # from aoc.computer import Computer
-from aoc.day15 import Day15
+# from aoc.day15 import Day15
 
 
 def parse(filename):
@@ -77,20 +78,56 @@ def multiple_transform(digits, n):
     return digits
 
 
+def transform_secondhalf(digits):
+    result = deque()
+    num = 0
+    for i in range(len(digits)):
+        num = (num + digits.pop()) % 10
+        result.appendleft(num)
+    return result
+    # result = deque()
+    # num = 0
+    # for i in range(len(digits) - 1, -1, -1):
+    #     num = (num + digits[i]) % 10
+    #     result.appendleft(num)
+    # return result
+
+
+def part1_secondhalf(digits):
+    start_slice = len(digits) // 2
+    second_half = digits[start_slice:]
+    second_half = deque(second_half)
+
+    for i in range(100):
+        second_half = transform_secondhalf(second_half)
+    print(second_half)
+
+
 def part1(digits):
     result = multiple_transform(digits, 100)
+    return result
     # print(result)
-    return "".join(str(x) for x in result[:8])
+    # return "".join(str(x) for x in result[:8])
 
 
 def part2(digits):
     # Message offset = first 7 digits converted to a number
     message_offset = int("".join(str(x) for x in digits[:7]))
     print(f"Computing part 2 with message offset {message_offset}...")
-    digits *= 10_000
 
-    result = multiple_transform(digits, 100)
-    skip = message_offset
+    # digits *= 10_000
+    second_half = deque(digits * 5000)
+    print("Starting to iterate")
+    for i in range(100):
+        # for i in range(3):
+        print(f"Step {i}")
+        second_half = transform_secondhalf(second_half)
+
+    # result = multiple_transform(digits, 100)
+    result = list(second_half)
+    skip = message_offset - (len(digits) * 5000)
+    print(f"Skip [{skip}]")
+    print(f"Result length [{len(result)}]")
     answer = result[skip : 8 + skip]
     print(f"Found answer {answer} ...")
     return answer
@@ -107,7 +144,10 @@ if __name__ == "__main__":
 
     print("---")
     digits = parse16("../../16/input.txt")
-    print(part1(digits))
+
+    print("P1 end: Look for 985635")
+    # print(part1(digits))
+    # print(part1_secondhalf(digits))
     print(part2(digits))
 
     # inn = parse16("../../16/input.txt")
