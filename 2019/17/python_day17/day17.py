@@ -11,6 +11,22 @@ def parse(filename):
         return [int(num) for num in f.readline().strip().split(",")]
 
 
+COMPLEX_OF_ROBOTCHAR = {
+    "^": complex(0, -1),
+    ">": complex(1, 0),
+    "v": complex(0, 1),
+    "<": complex(-1, 0),
+}
+
+
+def turn_right(direction):
+    return direction * complex(0, 1)
+
+
+def turn_left(direction):
+    return direction * complex(0, -1)
+
+
 class RepairDroid:
     def __init__(self, program):
         self.program = program
@@ -43,8 +59,122 @@ class RepairDroid:
         for y in range(int(min(imags)) - 2, int(max(imags)) + 3):
             for x in range(int(min(reals)) - 2, int(max(reals)) + 3):
                 char = self.grid[complex(x, y)]
-                print(char, end="")
+                # print(char, end="")
+                if x == 34 and y == 16:
+                    print("?", end="")
+                else:
+                    print(char, end="")
             print("")
+
+    def trace_path(self):
+        print("Trace")
+        location, direct = self.robot_location()
+        steps = []
+        steps_taken = 0
+        while True:
+            force_turn = False
+            x = int(location.real)
+            y = int(location.imag)
+            # 34 16
+            if x == 34 and y == 16 and direct == complex(1, 0):
+                force_turn = True
+            if x == 34 and y == 16 and direct == complex(-1, 0):
+                force_turn = True
+            if self.grid[location + direct] != "#" or force_turn:
+                # print(f"Need to turn {x} {y}")
+                if self.grid[location + turn_right(direct)] == "#":
+                    steps.append(steps_taken)
+                    steps_taken = 0
+                    steps.append("R")
+                    direct = turn_right(direct)
+                elif self.grid[location + turn_left(direct)] == "#":
+                    steps.append(steps_taken)
+                    steps_taken = 0
+                    steps.append("L")
+                    direct = turn_left(direct)
+                else:
+                    steps.append(steps_taken)
+                    print("Done!")
+                    break
+            else:
+                location += direct
+                steps_taken += 1
+
+        # Drop first 0
+        steps.pop(0)
+        steps2 = []
+        # print(steps)
+        while len(steps) > 0:
+            turn = str(steps.pop(0))
+            how_far = str(steps.pop(0))
+            steps2.append(turn + how_far)
+
+        print(location)
+        print(direct)
+        print(steps2)
+        return steps2
+        # Find location
+
+    def create_program(self):
+        # trace = self.trace_path()
+        # 'R6', 'L12', 'R6', 'R6', 'L12', 'R6', 'L12', 'R6', 'L8', 'L12', 'R12', 'L10', 'L10', 'L12', 'R6', 'L8', 'L12', 'R12', 'L10', 'L10', 'L12', 'R6', 'L8', 'L12', 'R12', 'L10', 'L10', 'L12', 'R6', 'L8', 'L12', 'R6', 'L12', 'R6'
+
+        # 'R6', 'L12', 'R6',
+        # 'R6', 'L12', 'R6',
+        # 'L12', 'R6', 'L8', 'L12',
+        # 'R12', 'L10', 'L10',
+        # 'L12', 'R6', 'L8', 'L12',
+        # 'R12', 'L10', 'L10',
+        # 'L12', 'R6', 'L8', 'L12',
+        # 'R12', 'L10', 'L10',
+        # 'L12', 'R6', 'L8', 'L12',
+        # 'R6', 'L12', 'R6'
+
+        # A 'R6', 'L12', 'R6',
+        # A 'R6', 'L12', 'R6',
+        # B 'L12', 'R6', 'L8', 'L12',
+        # C 'R12', 'L10', 'L10',
+        # B 'L12', 'R6', 'L8', 'L12',
+        # C 'R12', 'L10', 'L10',
+        # B 'L12', 'R6', 'L8', 'L12',
+        # C 'R12', 'L10', 'L10',
+        # B 'L12', 'R6', 'L8', 'L12',
+        # A 'R6', 'L12', 'R6'
+
+        prog_a = "R,6,L,12,R,6\n"
+        prog_b = "L,12,R,6,L,8,L,12\n"
+        prog_c = "R,12,L,10,L,10\n"
+        prog_main = "A,A,B,C,B,C,B,C,B,A\n"
+        everything = (
+            self.prog_to_ascii(prog_main)
+            + self.prog_to_ascii(prog_a)
+            + self.prog_to_ascii(prog_b)
+            + self.prog_to_ascii(prog_c)
+            + self.prog_to_ascii("n\n")
+        )
+        return everything
+
+    def prog_to_ascii(self, string):
+        return [ord(s) for s in string]
+
+    def robot_location(self):
+        reals = [c.real for c in self.grid.keys() if self.grid[c] != 0]
+        imags = [c.imag for c in self.grid.keys() if self.grid[c] != 0]
+        found_robot = False
+        location = complex(-1, -1)
+        robot_char = ""
+        for y in range(int(min(imags)) - 2, int(max(imags)) + 3):
+            for x in range(int(min(reals)) - 2, int(max(reals)) + 3):
+                char = self.grid[complex(x, y)]
+                if char == "^" or char == "v" or char == "<" or char == ">":
+                    location = complex(x, y)
+                    robot_char = char
+                    found_robot = True
+                    break
+            if found_robot:
+                break
+
+        return location, COMPLEX_OF_ROBOTCHAR[robot_char]
 
     def part1(self):
         reals = [c.real for c in self.grid.keys() if self.grid[c] != 0]
@@ -74,6 +204,21 @@ if __name__ == "__main__":
     rd.load_pic()
     rd.display()
     print(rd.part1())
+    rd.trace_path()
+
+    prog = rd.create_program()
+
+    # Load prog
+    cpu = Computer(program, [])
+    cpu.memory[0] = 2
+    for instruction in prog:
+        cpu.add_input(instruction)
+    cpu.execute()
+    result = []
+    while cpu.has_output():
+        result.append(cpu.pop_output())
+    print(result)
+
     # print(rd.grid)
     # a = rd.execute()
     # print(a)
