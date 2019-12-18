@@ -67,20 +67,14 @@ class RepairDroid:
             print("")
 
     def trace_path(self):
-        print("Trace")
+        # print("Trace")
         location, direct = self.robot_location()
         steps = []
         steps_taken = 0
         while True:
-            force_turn = False
             x = int(location.real)
             y = int(location.imag)
-            # 34 16
-            if x == 34 and y == 16 and direct == complex(1, 0):
-                force_turn = True
-            if x == 34 and y == 16 and direct == complex(-1, 0):
-                force_turn = True
-            if self.grid[location + direct] != "#" or force_turn:
+            if self.grid[location + direct] != "#":
                 # print(f"Need to turn {x} {y}")
                 if self.grid[location + turn_right(direct)] == "#":
                     steps.append(steps_taken)
@@ -94,7 +88,7 @@ class RepairDroid:
                     direct = turn_left(direct)
                 else:
                     steps.append(steps_taken)
-                    print("Done!")
+                    # print("Done!")
                     break
             else:
                 location += direct
@@ -109,26 +103,18 @@ class RepairDroid:
             how_far = str(steps.pop(0))
             steps2.append(turn + how_far)
 
-        print(location)
-        print(direct)
-        print(steps2)
+        # print(location)
+        # print(direct)
+        # print(steps2)
         return steps2
         # Find location
 
     def create_program(self):
-        # trace = self.trace_path()
+        trace = self.trace_path()
+        print("==========")
+        print(trace)
+        print("==========")
         # 'R6', 'L12', 'R6', 'R6', 'L12', 'R6', 'L12', 'R6', 'L8', 'L12', 'R12', 'L10', 'L10', 'L12', 'R6', 'L8', 'L12', 'R12', 'L10', 'L10', 'L12', 'R6', 'L8', 'L12', 'R12', 'L10', 'L10', 'L12', 'R6', 'L8', 'L12', 'R6', 'L12', 'R6'
-
-        # 'R6', 'L12', 'R6',
-        # 'R6', 'L12', 'R6',
-        # 'L12', 'R6', 'L8', 'L12',
-        # 'R12', 'L10', 'L10',
-        # 'L12', 'R6', 'L8', 'L12',
-        # 'R12', 'L10', 'L10',
-        # 'L12', 'R6', 'L8', 'L12',
-        # 'R12', 'L10', 'L10',
-        # 'L12', 'R6', 'L8', 'L12',
-        # 'R6', 'L12', 'R6'
 
         # A 'R6', 'L12', 'R6',
         # A 'R6', 'L12', 'R6',
@@ -217,9 +203,5 @@ if __name__ == "__main__":
     result = []
     while cpu.has_output():
         result.append(cpu.pop_output())
-    print(result)
-
-    # print(rd.grid)
-    # a = rd.execute()
-    # print(a)
-    # print(Day15.part1(program))
+    print("Part 2")
+    print(result[-1])
