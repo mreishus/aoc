@@ -109,33 +109,46 @@ class RepairDroid:
         return steps2
         # Find location
 
+    # Is there a better way?
+    def is_sublist(self, needle, haystack):
+        return self.to_str_comma(needle) in self.to_str_comma(haystack)
+
+    def to_str_comma(self, a):
+        return ",".join([str(x) for x in a])
+
     def create_program(self):
         trace = self.trace_path()
-        print("==========")
-        print(trace)
-        print("==========")
-        # 'R6', 'L12', 'R6', 'R6', 'L12', 'R6', 'L12', 'R6', 'L8', 'L12', 'R12', 'L10', 'L10', 'L12', 'R6', 'L8', 'L12', 'R12', 'L10', 'L10', 'L12', 'R6', 'L8', 'L12', 'R12', 'L10', 'L10', 'L12', 'R6', 'L8', 'L12', 'R6', 'L12', 'R6'
+        # print("==========")
+        # print(trace)
+        # print("==========")
 
-        # A 'R6', 'L12', 'R6',
-        # A 'R6', 'L12', 'R6',
-        # B 'L12', 'R6', 'L8', 'L12',
-        # C 'R12', 'L10', 'L10',
-        # B 'L12', 'R6', 'L8', 'L12',
-        # C 'R12', 'L10', 'L10',
-        # B 'L12', 'R6', 'L8', 'L12',
-        # C 'R12', 'L10', 'L10',
-        # B 'L12', 'R6', 'L8', 'L12',
-        # A 'R6', 'L12', 'R6'
+        patterns = {}
+        pattern_names = ["A", "B", "C"]
+        for n in pattern_names:
+            patterns[n] = []
 
-        prog_a = "R,6,L,12,R,6\n"
-        prog_b = "L,12,R,6,L,8,L,12\n"
-        prog_c = "R,12,L,10,L,10\n"
-        prog_main = "A,A,B,C,B,C,B,C,B,A\n"
+            for i, item in enumerate(trace):
+                if item in pattern_names:
+                    if len(patterns[n]) > 0:
+                        break
+                    continue
+                patterns[n].append(item)
+                pattern_length = sum(len(x) + 2 for x in patterns[n]) - 1
+                if pattern_length > 20 or not self.is_sublist(patterns[n], trace[i+1:]):
+                    patterns[n].pop()
+                    break
+
+            p_str = self.to_str_comma(patterns[n])
+            trace_str = self.to_str_comma(trace)
+            trace = trace_str.replace(p_str, n).split(",")
+
+
+        prog = ",".join(trace) + "\n"
+        for p in patterns.values():
+            prog += ",".join(p).replace("R", "R,").replace("L", "L,") + "\n"
+
         everything = (
-            self.prog_to_ascii(prog_main)
-            + self.prog_to_ascii(prog_a)
-            + self.prog_to_ascii(prog_b)
-            + self.prog_to_ascii(prog_c)
+            self.prog_to_ascii(prog)
             + self.prog_to_ascii("n\n")
         )
         return everything
@@ -205,3 +218,4 @@ if __name__ == "__main__":
         result.append(cpu.pop_output())
     print("Part 2")
     print(result[-1])
+    assert result[-1] == 1063081
