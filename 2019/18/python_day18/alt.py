@@ -5,6 +5,8 @@ import networkx as nx
 import string
 import copy
 
+path_lens_cache = {}
+
 
 class Finder:
     def __init__(self, filename):
@@ -15,7 +17,7 @@ class Finder:
         return self.do_solve(m, [], 0, [])
 
     def do_solve(self, m, keys_unlocked, steps, unlock_these):
-        # print(f"Do SOLVE [{keys_unlocked}] {steps}")
+        print(f"Do SOLVE [{keys_unlocked}] {steps}")
         for this_key in unlock_these:
             # print(f"Keys unlocked [{keys_unlocked}] Unlocking [{this_key}]")
             # print(f"Ask M its unlocked doors {m.unlocked_doors}")
@@ -25,7 +27,7 @@ class Finder:
         # print(m.accessible_keys)
 
         possible_keys = list(m.accessible_keys.keys())
-        possible_path_lens = [len(x) - 1 for x in list(m.accessible_keys.values())]
+        possible_path_lens = [x for x in list(m.accessible_keys.values())]
 
         if len(possible_keys) == 0:
             return steps
@@ -37,10 +39,11 @@ class Finder:
 
         candidates = {}
         for next_key, next_steps in zip(possible_keys, possible_path_lens):
-            # Don't know if this skip is valid or not
-            if next_steps > smallest * 7 and len(possible_path_lens) > 5:
-                print("Skipped")
-                continue
+            # # Don't know if this skip is valid or not
+            # if next_steps > smallest * 7 and len(possible_path_lens) > 5:
+            #     print(list(zip(possible_keys, possible_path_lens)))
+            #     print("Skipped")
+            #     continue
             m_clone = copy.deepcopy(m)
             candidates[next_key] = self.do_solve(
                 m_clone, keys_unlocked + [next_key], steps + next_steps, [next_key]
@@ -66,8 +69,23 @@ class Maze:
         self.hero_loc = complex(-99, -99)
         self.accessible_keys = {}
         self.graph = None
+        self.path_lens_cache = {}
         # print("Init")
         self.compute()
+
+    def cache_spl(self, graph, loc1, loc2, filename):
+        cache_key = (loc1, loc2, filename)
+        if cache_key in self.path_lens_cache:
+            return self.path_lens_cache[cache_key]
+
+        try:
+            result = nx.shortest_path_length(graph, loc1, loc2)
+            self.path_lens_cache[cache_key] = result
+            return result
+        except nx.NetworkXNoPath:
+            if cache_key in self.path_lens_cache:
+                del self.path_lens_cache[cache_key]
+            raise
 
     def compute(self):
         # print("Compute")
@@ -131,9 +149,16 @@ class Maze:
             #     continue
             # print(f"Hero {self.hero_loc} -> {key_name} {self.loc_of_key[key_name]}")
             try:
-                path = nx.dijkstra_path(G, self.hero_loc, self.loc_of_key[key_name])
-                accessible_keys[key_name] = path
+                # path = nx.dijkstra_path(G, self.hero_loc, self.loc_of_key[key_name])
+                steps_taken = self.cache_spl(
+                    G, self.hero_loc, self.loc_of_key[key_name], self.filename
+                )
+                # steps_taken = nx.shortest_path_length(
+                #     G, self.hero_loc, self.loc_of_key[key_name]
+                # )
+                accessible_keys[key_name] = steps_taken
             except nx.NetworkXNoPath:
+                # print(f"Exception #{key_name}")
                 a = 0
 
         return accessible_keys
@@ -151,7 +176,9 @@ class Maze:
         loc = self.loc_of_key[key_name]
         # path = nx.dijkstra_path(self.graph, self.hero_loc, loc)
         # path = nx.shortest_path(self.graph, self.hero_loc, loc)
-        steps_taken = nx.shortest_path_length(self.graph, self.hero_loc, loc)
+        # steps_taken = nx.shortest_path_length(self.graph, self.hero_loc, loc)
+        # steps_taken = self.cache_spl(self.graph, self.hero_loc, loc, self.filename)
+        steps_taken = self.accessible_keys[key_name]
 
         # print(f"path {path}")
         # print(f"path2 {path2}")
@@ -228,29 +255,29 @@ class Maze:
 
 
 if __name__ == "__main__":
-    # f = Finder("../input.txt")
-    # print("Real Part 1")
+    f = Finder("../input.txt")
+    print("Real Part 1")
+    print(f.solve())
+
+    # f = Finder("../input_small.txt")
+    # print("Small: Expect 8")
     # print(f.solve())
 
-    f = Finder("../input_small.txt")
-    print("Small: Expect 8")
-    print(f.solve())
+    # f = Finder("../input_86.txt")
+    # print("Expect 86")
+    # print(f.solve())
 
-    f = Finder("../input_86.txt")
-    print("Expect 86")
-    print(f.solve())
+    # f = Finder("../input_81.txt")
+    # print("Expect 81")
+    # print(f.solve())
 
-    f = Finder("../input_81.txt")
-    print("Expect 81")
-    print(f.solve())
+    # f = Finder("../input_132.txt")
+    # print("Expect 132")
+    # print(f.solve())
 
-    f = Finder("../input_132.txt")
-    print("Expect 132")
-    print(f.solve())
-
-    f = Finder("../input_136.txt")
-    print("Expect 136")
-    print(f.solve())
+    # f = Finder("../input_136.txt")
+    # print("Expect 136")
+    # print(f.solve())
 
     #############
 
