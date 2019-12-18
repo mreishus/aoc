@@ -1,74 +1,26 @@
 #!/usr/bin/env python
-from collections import defaultdict
-from os import system
-import networkx as nx
 import string
+import networkx as nx
+from heapq import heappush, heappop
+from collections import namedtuple, defaultdict
+from heapdict import heapdict
 
-
-class Finder:
-    def __init__(self, filename):
-        self.filename = filename
-
-    def solve(self):
-        return self.do_solve([], 0)
-
-    def do_solve(self, keys_unlocked, steps):
-        # print(f"Do SOLVE [{keys_unlocked}] {steps}")
-        m = Maze(self.filename)
-        for this_key in keys_unlocked:
-            m.collect_key(this_key)
-
-        # print("Accessible keys")
-        # print(m.accessible_keys)
-        possible_keys = list(m.accessible_keys.keys())
-        possible_path_lens = [len(x) - 1 for x in list(m.accessible_keys.values())]
-        m = None
-        if len(possible_keys) == 0:
-            return steps
-
-        candidates = {}
-        for next_key, next_steps in zip(possible_keys, possible_path_lens):
-            candidates[next_key] = self.do_solve(
-                keys_unlocked + [next_key], steps + next_steps
-            )
-        # print("Candidates")
-        # print(candidates)
-        # print(f"Best candidate: {min(candidates, key=candidates.get)}")
-        # print(
-        #     f"Returning {steps} + {min(candidates.values())} = { steps + min(candidates.values())   }"
-        # )
-        return min(candidates.values())
-
+PathInfo = namedtuple('PathInfo', ('length', 'doors'))
+State = namedtuple('State', ('location', 'collected_keys'))
+Step = namedtuple('Step', ('state', 'length'))
 
 class Maze:
-    """Main module for solving Day01."""
-
     def __init__(self, filename):
         self.grid = None  # defaultdict(lambda: "?")
-        self.filename = filename
-        self.unlocked_doors = []
-        self.loc_of_door = {}
-        self.loc_of_key = {}
-        self.hero_loc = complex(-99, -99)
-        self.accessible_keys = {}
         self.graph = None
-        self.compute()
-
-    def compute(self):
-        if self.grid is None:
-            grid, loc_of_door, loc_of_key = self.parse(self.filename)
-            self.grid = grid
-            self.loc_of_door = loc_of_door
-            self.loc_of_key = loc_of_key
-        self.graph = self.build_graph()
-        self.accessible_keys = self.find_accessible_keys()
-
-    def reset(self):
-        self.grid = None
-        self.compute()
+        self.loc_of_door = None
+        self.door_of_loc = None
+        self.loc_of_key = None
+        self.between_keys = None
+        self.parse(filename)
 
     def parse(self, filename):
-        grid = defaultdict(lambda: "?")
+        grid = {}
         loc_of_door = {}
         loc_of_key = {}
         location = complex(0, 0)
@@ -88,86 +40,32 @@ class Maze:
                     location += complex(1, 0)
                 location += complex(0, 1)
                 location = complex(0, location.imag)
-        return grid, loc_of_door, loc_of_key
 
-    def display(self):
-        reals = [c.real for c in self.grid.keys() if self.grid[c] != "?"]
-        imags = [c.imag for c in self.grid.keys() if self.grid[c] != "?"]
-        # system("clear")
-        for y in range(int(min(imags)) - 1, int(max(imags)) + 2):
-            for x in range(int(min(reals)) - 1, int(max(reals)) + 2):
-                char = self.grid[complex(x, y)]
-                print(char, end="")
-            print("")
+        self.grid = grid
+        self.loc_of_door = loc_of_door
+        self.loc_of_key = loc_of_key
+        self.door_of_loc = dict(map(reversed, self.loc_of_door.items()))
+        self.all_keys = frozenset(loc_of_key.keys())
 
     def valid_char(self, char):
         if char == "?" or char == "#":
             return False
-        if char in string.ascii_uppercase and char not in self.unlocked_doors:
-            return False
+        # See through all doors:
+        # Check for doors later
+        # if char in string.ascii_uppercase: # and char not in self.unlocked_doors:
+        #     return False
         return True
-
-    def find_accessible_keys(self):
-        G = self.graph
-        accessible_keys = {}
-        for key_name in self.loc_of_key.keys():
-            # if key_name == "b":
-            #     continue
-            # print(f"Hero {self.hero_loc} -> {key_name} {self.loc_of_key[key_name]}")
-            try:
-                path = nx.dijkstra_path(G, self.hero_loc, self.loc_of_key[key_name])
-                accessible_keys[key_name] = path
-            except nx.NetworkXNoPath:
-                a = 0
-
-        return accessible_keys
-
-    def move_hero(self, location):
-        self.grid[self.hero_loc] = "."
-        self.grid[location] = "@"
-        self.hero_loc = location
-
-    def collect_key(self, key_name):
-        if key_name not in string.ascii_lowercase:
-            raise ValueError("Expected an uppercase door name")
-
-        # Where is the key and how to get there?
-        loc = self.loc_of_key[key_name]
-        path = nx.dijkstra_path(self.graph, self.hero_loc, loc)
-
-        # Move hero
-        self.move_hero(loc)
-        steps_taken = len(path) - 1
-
-        # Delete key (move_hero took care of the grid)
-        del self.loc_of_key[key_name]
-
-        # Unlock door
-        door_name = key_name.upper()
-        if door_name in self.loc_of_door:
-            self.unlock_door(key_name.upper())
-        else:
-            self.compute()
-        return steps_taken
-
-    def unlock_door(self, door_name):
-        if door_name not in string.ascii_uppercase:
-            raise ValueError("Expected an uppercase door name")
-
-        self.unlocked_doors.append(door_name)
-        loc = self.loc_of_door[door_name]
-        self.grid[loc] = "."
-        del self.loc_of_door[door_name]
-        self.compute()
 
     def build_graph(self):
         G = nx.Graph()
 
         reals = [c.real for c in self.grid.keys() if self.grid[c] != "?"]
         imags = [c.imag for c in self.grid.keys() if self.grid[c] != "?"]
-        for y in range(int(min(imags)) - 1, int(max(imags)) + 2):
-            for x in range(int(min(reals)) - 1, int(max(reals)) + 2):
+        for y in range(int(min(imags)) - 1, int(max(imags)) + 1):
+            for x in range(int(min(reals)) - 1, int(max(reals)) + 1):
                 location = complex(x, y)
+                if location not in self.grid:
+                    continue
                 char = self.grid[location]
                 if not self.valid_char(char):
                     continue
@@ -184,48 +82,87 @@ class Maze:
                     if self.valid_char(neighbor_char):
                         G.add_edge(location, neighbor)
 
+        self.graph = G
         return G
 
+    def find_doors_on_path(self, path):
+        return frozenset([self.door_of_loc[step].lower() for step in path if step in self.door_of_loc])
+
+    def build_key_paths(self):
+        G = self.graph
+        important_locs = list(self.loc_of_key.values()) + [self.hero_loc]
+        path_info = {}
+
+        for loc1 in important_locs:
+            for loc2 in important_locs:
+                if loc1 == loc2 or (loc1, loc2) in path_info:
+                    continue
+                path = nx.dijkstra_path(G, loc1, loc2)
+                steps_taken = len(path) - 1
+                doors_on_path = self.find_doors_on_path(path)
+
+                path_info[(loc1, loc2)] = PathInfo(steps_taken, doors_on_path)
+                path_info[(loc2, loc1)] = PathInfo(steps_taken, doors_on_path)
+        self.path_info = path_info
+
+    def solve(self):
+        dist_to = defaultdict(lambda: 999_999_999)
+        edge_to = {}
+        hd = heapdict()
+
+        collected_keys = frozenset({})
+        state = State(self.hero_loc, collected_keys)
+        dist_to[state] = 0
+        hd[state] = 0
+        while len(hd) > 0:
+            (state, length) = hd.popitem()
+            steps = self.possible_steps(state)
+            for new_state, length in steps:
+                if dist_to[new_state] > dist_to[state] + length:
+                    dist_to[new_state] = dist_to[state] + length
+                    edge_to[new_state] = state
+                    hd[new_state] = dist_to[new_state]
+
+        print("==Done==")
+        # for k, v in edge_to.items():
+        #     print(f"{v} {k}")
+        for k, v in dist_to.items():
+            if k.location == complex(-1, -1):
+                print(f"{v} {k}")
+                return v
+        return 0
+
+
+    def possible_steps(self, state):
+        (location, collected_keys) = state
+        steps = []
+        remaining_keys = self.all_keys - collected_keys
+
+        # Special case: Free move to -1, -1 if collected all keys to indicate
+        # problem is solved
+        if len(remaining_keys) == 0 and location != complex(-1, -1):
+            new_state = State(complex(-1, -1), collected_keys)
+            steps.append(Step(new_state, 0))
+
+        for key in remaining_keys:
+            info = self.path_info[(location, self.loc_of_key[key])]
+            blocking_doors = info.doors - collected_keys
+            if len(blocking_doors) > 0:
+                continue
+
+            new_state = State(self.loc_of_key[key], collected_keys | frozenset({key}))
+            steps.append(Step(new_state, info.length))
+        return steps
 
 if __name__ == "__main__":
-    f = Finder("../input.txt")
-    print("Real Part 1")
+    #f = Maze("../input_small.txt")
+    f = Maze("../input.txt")
+    #f = Maze("../input_86.txt")
+    #f = Maze("../input_136.txt")
+    f.build_graph()
+    f.build_key_paths()
     print(f.solve())
-
-    f = Finder("../input_small.txt")
-    print("Small: Expect 8")
-    print(f.solve())
-
-    f = Finder("../input_81.txt")
-    print("Expect 81")
-    print(f.solve())
-
-    #############
-
-    # m = Maze("../input_small.txt")
-    # m.display()
-    # m.build_graph()
-    # print(m.loc_of_key)
-    # print(m.graph)
-
-    # print("Accessible keys")
-    # print(m.accessible_keys)
-
-    # steps = m.collect_key("a")
-    # print(f"Steps = {steps}")
-    # m.display()
-
-    # steps = m.collect_key("b")
-    # print(f"Steps = {steps}")
-    # m.display()
-
-    # print("\nAccessible keys")
-    # print(m.accessible_keys)
-
-    # m.reset()
-
-    # grid = parse("../input_small.txt")
-    # display(grid)
-    # print("Part1: ")
-    # print(grid)
-    # print("Part2: ")
+    # print(f.path_info)
+    # print(f.all_keys)
+    # print(f.grid)
+    # print(f.build_graph().edges())

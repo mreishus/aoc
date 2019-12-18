@@ -19,7 +19,7 @@ def get_maze(filename, keys_unlocked):
 
     m_in = get_maze(filename, tuple(keys))
     m = copy.deepcopy(m_in)
-    print(f"{keys} --> {this_key}")
+    # print(f"{keys} --> {this_key}")
     m.collect_key(this_key)
 
     return m
@@ -68,7 +68,7 @@ class Finder:
 
         ######
         m = get_maze(self.filename, tuple(keys_unlocked))
-        print(get_maze.cache_info())
+        # print(get_maze.cache_info())
         #######
         # maze_cache_key = ""
         # if len(keys_unlocked) > 1:
@@ -128,6 +128,21 @@ class Finder:
         self.cache[cache_key] = answer
         return answer
 
+path_lens_cache = {}
+@lru_cache(262_144)
+def cache_spl(graph, loc1, loc2, filename):
+    cache_key = (loc1, loc2, filename)
+    if False and cache_key in path_lens_cache:
+        return path_lens_cache[cache_key]
+
+    try:
+        result = nx.shortest_path_length(graph, loc1, loc2)
+        path_lens_cache[cache_key] = result
+        return result
+    except nx.NetworkXNoPath:
+        if cache_key in path_lens_cache:
+            del path_lens_cache[cache_key]
+        raise
 
 class Maze:
     """Main module for solving Day01."""
@@ -145,19 +160,6 @@ class Maze:
         # print("Init")
         self.compute()
 
-    def cache_spl(self, graph, loc1, loc2, filename):
-        cache_key = (loc1, loc2, filename)
-        if cache_key in self.path_lens_cache:
-            return self.path_lens_cache[cache_key]
-
-        try:
-            result = nx.shortest_path_length(graph, loc1, loc2)
-            self.path_lens_cache[cache_key] = result
-            return result
-        except nx.NetworkXNoPath:
-            if cache_key in self.path_lens_cache:
-                del self.path_lens_cache[cache_key]
-            raise
 
     def compute(self):
         # print("Compute")
@@ -222,7 +224,7 @@ class Maze:
             # print(f"Hero {self.hero_loc} -> {key_name} {self.loc_of_key[key_name]}")
             try:
                 # path = nx.dijkstra_path(G, self.hero_loc, self.loc_of_key[key_name])
-                steps_taken = self.cache_spl(
+                steps_taken = cache_spl(
                     G, self.hero_loc, self.loc_of_key[key_name], self.filename
                 )
                 # steps_taken = nx.shortest_path_length(
@@ -380,3 +382,4 @@ if __name__ == "__main__":
     # print("Part1: ")
     # print(grid)
     # print("Part2: ")
+
