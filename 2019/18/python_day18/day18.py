@@ -17,6 +17,7 @@ class Maze:
         self.door_of_loc = None
         self.loc_of_key = None
         self.between_keys = None
+        self.hero_locs = []
         self.parse(filename)
 
     def parse(self, filename):
@@ -36,7 +37,7 @@ class Maze:
                     if char in string.ascii_lowercase:
                         loc_of_key[char] = location
                     if char == "@":
-                        self.hero_loc = location
+                        self.hero_locs.append(location)
                     location += complex(1, 0)
                 location += complex(0, 1)
                 location = complex(0, location.imag)
@@ -90,14 +91,18 @@ class Maze:
 
     def build_key_paths(self):
         G = self.graph
-        important_locs = list(self.loc_of_key.values()) + [self.hero_loc]
+        important_locs = list(self.loc_of_key.values()) + self.hero_locs
         path_info = {}
 
         for loc1 in important_locs:
             for loc2 in important_locs:
                 if loc1 == loc2 or (loc1, loc2) in path_info:
                     continue
-                path = nx.dijkstra_path(G, loc1, loc2)
+                path = None
+                try:
+                    path = nx.dijkstra_path(G, loc1, loc2)
+                except nx.NetworkXNoPath:
+                    continue
                 steps_taken = len(path) - 1
                 doors_on_path = self.find_doors_on_path(path)
 
@@ -111,7 +116,7 @@ class Maze:
         hd = heapdict()
 
         collected_keys = frozenset({})
-        state = State(self.hero_loc, collected_keys)
+        state = State(tuple(self.hero_locs), collected_keys)
         dist_to[state] = 0
         hd[state] = 0
         while len(hd) > 0:
@@ -134,31 +139,51 @@ class Maze:
 
 
     def possible_steps(self, state):
-        (location, collected_keys) = state
+        (locations, collected_keys) = state
         steps = []
         remaining_keys = self.all_keys - collected_keys
 
         # Special case: Free move to -1, -1 if collected all keys to indicate
         # problem is solved
-        if len(remaining_keys) == 0 and location != complex(-1, -1):
+        if len(remaining_keys) == 0 and locations != complex(-1, -1):
             new_state = State(complex(-1, -1), collected_keys)
             steps.append(Step(new_state, 0))
 
         for key in remaining_keys:
-            info = self.path_info[(location, self.loc_of_key[key])]
+
+            info = None
+            loc_to_update = None
+            for i, this_location in enumerate(locations):
+                pair = (this_location, self.loc_of_key[key])
+                if pair in self.path_info:
+                    info = self.path_info[pair]
+                    loc_to_update = i
+
             blocking_doors = info.doors - collected_keys
             if len(blocking_doors) > 0:
                 continue
 
-            new_state = State(self.loc_of_key[key], collected_keys | frozenset({key}))
+            new_locations = list(locations)
+            new_locations[loc_to_update] = self.loc_of_key[key]
+            new_locations = tuple(new_locations)
+
+            new_state = State(new_locations, collected_keys | frozenset({key}))
             steps.append(Step(new_state, info.length))
         return steps
 
 if __name__ == "__main__":
     #f = Maze("../input_small.txt")
-    f = Maze("../input.txt")
     #f = Maze("../input_86.txt")
     #f = Maze("../input_136.txt")
+
+    f = Maze("../input.txt")
+    print("Part1:")
+    f.build_graph()
+    f.build_key_paths()
+    print(f.solve())
+
+    f = Maze("../input_p2.txt")
+    print("Part2:")
     f.build_graph()
     f.build_key_paths()
     print(f.solve())
