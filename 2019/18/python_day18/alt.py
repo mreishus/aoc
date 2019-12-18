@@ -9,12 +9,48 @@ from functools import lru_cache
 path_lens_cache = {}
 
 
-# @lru_cache(2048)
-# def get_maze(filename, keys_unlocked):
-#     m = Maze(filename)
-#     for key in keys_unlocked:
-#         m.collect_key(key)
+@lru_cache(262_144)
+def get_maze(filename, keys_unlocked):
+    if len(keys_unlocked) == 0:
+        return Maze(filename)
+
+    keys = list(keys_unlocked)
+    this_key = keys.pop()
+
+    m_in = get_maze(filename, tuple(keys))
+    m = copy.deepcopy(m_in)
+    print(f"{keys} --> {this_key}")
+    m.collect_key(this_key)
+
+    return m
+
+# @lru_cache(262_144)
+# def get_maze2(filename, keys_unlocked):
+#     all_but_last, last = get_maze_args(keys_unlocked)
+#     if last == None:
+#         return Maze(filename)
+
+#     m_in = get_maze2(filename, tuple(all_but_last))
+#     m = copy.deepcopy(m_in)
+#     m.collect_key(last)
 #     return m
+
+# def get_maze_args(keys_unlocked):
+#     all_but_last = None
+#     last = None
+#     if len(keys_unlocked) == 0:
+#         all_but_last = frozenset()
+#         last = None
+#     elif len(keys_unlocked) == 1:
+#         all_but_last = frozenset()
+#         last = keys_unlocked[0]
+#     else:
+#         all_but_last = frozenset(keys_unlocked[:-1])
+#         last = keys_unlocked[-1]
+
+#     return all_but_last, last
+
+#     #     maze_cache_key = (frozenset(keys_unlocked[:-1]), keys_unlocked[-1])
 
 
 class Finder:
@@ -24,36 +60,36 @@ class Finder:
         self.maze_cache = {}
 
     def solve(self):
-        m = Maze(self.filename)
-        return self.do_solve(m, [], [])
+        # m = Maze(self.filename)
+        return self.do_solve([], [])
 
-    def do_solve(self, m_in, keys_unlocked, unlock_these):
+    def do_solve(self, keys_unlocked, unlock_these):
         # print(f"Do SOLVE [{keys_unlocked}]")
 
         ######
-        # m = get_maze(self.filename, tuple(keys_unlocked))
-        # print(get_maze.cache_info())
+        m = get_maze(self.filename, tuple(keys_unlocked))
+        print(get_maze.cache_info())
         #######
-        maze_cache_key = ""
-        if len(keys_unlocked) > 1:
-            maze_cache_key = (frozenset(keys_unlocked[:-1]), keys_unlocked[-1])
-        elif len(unlock_these) == 1:
-            maze_cache_key = unlock_these[0]
+        # maze_cache_key = ""
+        # if len(keys_unlocked) > 1:
+        #     maze_cache_key = (frozenset(keys_unlocked[:-1]), keys_unlocked[-1])
+        # elif len(unlock_these) == 1:
+        #     maze_cache_key = unlock_these[0]
 
-        if maze_cache_key in self.maze_cache:
-            # print(f"Cache hit {maze_cache_key}")
-            m = self.maze_cache[maze_cache_key]
-        else:
-            m = copy.deepcopy(m_in)
-            for this_key in unlock_these:
-                # print(f"Keys unlocked [{keys_unlocked}] Unlocking [{this_key}]")
-                # print(f"Ask M its unlocked doors {m.unlocked_doors}")
-                m.collect_key(this_key)
-            self.maze_cache[maze_cache_key] = m
+        # if maze_cache_key in self.maze_cache:
+        #     # print(f"Cache hit {maze_cache_key}")
+        #     m = self.maze_cache[maze_cache_key]
+        # else:
+        #     m = copy.deepcopy(m_in)
+        #     for this_key in unlock_these:
+        #         # print(f"Keys unlocked [{keys_unlocked}] Unlocking [{this_key}]")
+        #         # print(f"Ask M its unlocked doors {m.unlocked_doors}")
+        #         m.collect_key(this_key)
+        #     self.maze_cache[maze_cache_key] = m
 
-        if len(self.maze_cache) > 200_000:
-            print("Clearing Maze Cache")
-            self.maze_cache.clear()
+        # if len(self.maze_cache) > 1000:
+        #     # print("Clearing Maze Cache")
+        #     self.maze_cache.clear()
         # print(len(self.maze_cache))
         ####
 
@@ -61,7 +97,6 @@ class Finder:
         # print(m.accessible_keys)
 
         possible_keys = list(m.accessible_keys.keys())
-        # cache_key = frozenset(possible_keys + [m.hero_loc])
         cache_key = frozenset(possible_keys + [m.hero_loc])
         possible_path_lens = [x for x in list(m.accessible_keys.values())]
         # print(possible_keys)
@@ -84,14 +119,8 @@ class Finder:
             #     print("Skipped")
             #     continue
             candidates[next_key] = next_steps + self.do_solve(
-                m, keys_unlocked + [next_key], [next_key]
+                keys_unlocked + [next_key], [next_key]
             )
-        # print("Candidates")
-        # print(candidates)
-        # print(f"Best candidate: {min(candidates, key=candidates.get)}")
-        # print(
-        #     f"Returning {steps} + {min(candidates.values())} = { steps + min(candidates.values())   }"
-        # )
 
         answer = min(candidates.values())
         if cache_key in self.cache and self.cache[cache_key] != answer:
@@ -298,29 +327,29 @@ class Maze:
 
 
 if __name__ == "__main__":
-    f = Finder("../input.txt")
-    print("Real Part 1")
+    # f = Finder("../input.txt")
+    # print("Real Part 1")
+    # print(f.solve())
+
+    f = Finder("../input_small.txt")
+    print("Small: Expect 8")
     print(f.solve())
 
-    # f = Finder("../input_small.txt")
-    # print("Small: Expect 8")
-    # print(f.solve())
+    f = Finder("../input_86.txt")
+    print("Expect 86")
+    print(f.solve())
 
-    # f = Finder("../input_86.txt")
-    # print("Expect 86")
-    # print(f.solve())
+    f = Finder("../input_81.txt")
+    print("Expect 81")
+    print(f.solve())
 
-    # f = Finder("../input_81.txt")
-    # print("Expect 81")
-    # print(f.solve())
+    f = Finder("../input_132.txt")
+    print("Expect 132")
+    print(f.solve())
 
-    # f = Finder("../input_132.txt")
-    # print("Expect 132")
-    # print(f.solve())
-
-    # f = Finder("../input_136.txt")
-    # print("Expect 136")
-    # print(f.solve())
+    f = Finder("../input_136.txt")
+    print("Expect 136")
+    print(f.solve())
 
     #############
 
