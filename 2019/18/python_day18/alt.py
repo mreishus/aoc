@@ -11,26 +11,46 @@ path_lens_cache = {}
 class Finder:
     def __init__(self, filename):
         self.filename = filename
+        self.cache = {}
+        self.maze_cache = {}
 
     def solve(self):
         m = Maze(self.filename)
-        return self.do_solve(m, [], 0, [])
+        return self.do_solve(m, [], [])
 
-    def do_solve(self, m, keys_unlocked, steps, unlock_these):
-        print(f"Do SOLVE [{keys_unlocked}] {steps}")
-        for this_key in unlock_these:
-            # print(f"Keys unlocked [{keys_unlocked}] Unlocking [{this_key}]")
-            # print(f"Ask M its unlocked doors {m.unlocked_doors}")
-            m.collect_key(this_key)
+    def do_solve(self, m_in, keys_unlocked, unlock_these):
+        # print(f"Do SOLVE [{keys_unlocked}]")
+
+        maze_cache_key = ""
+        if len(keys_unlocked) > 1:
+            maze_cache_key = (frozenset(keys_unlocked[:-1]), keys_unlocked[-1])
+        elif len(unlock_these) == 1:
+            maze_cache_key = unlock_these[0]
+
+        if False and maze_cache_key in self.maze_cache:
+            # print(f"Cache hit {maze_cache_key}")
+            m = self.maze_cache[maze_cache_key]
+        else:
+            m = copy.deepcopy(m_in)
+            for this_key in unlock_these:
+                # print(f"Keys unlocked [{keys_unlocked}] Unlocking [{this_key}]")
+                # print(f"Ask M its unlocked doors {m.unlocked_doors}")
+                m.collect_key(this_key)
+            self.maze_cache[maze_cache_key] = m
 
         # print("Accessible keys")
         # print(m.accessible_keys)
 
         possible_keys = list(m.accessible_keys.keys())
+        # cache_key = frozenset(possible_keys + [m.hero_loc])
+        cache_key = frozenset(possible_keys + [m.hero_loc])
         possible_path_lens = [x for x in list(m.accessible_keys.values())]
+        # print(possible_keys)
 
         if len(possible_keys) == 0:
-            return steps
+            return 0
+        if cache_key in self.cache:
+            return self.cache[cache_key]
 
         smallest = min(possible_path_lens)
         # print("")
@@ -44,9 +64,8 @@ class Finder:
             #     print(list(zip(possible_keys, possible_path_lens)))
             #     print("Skipped")
             #     continue
-            m_clone = copy.deepcopy(m)
-            candidates[next_key] = self.do_solve(
-                m_clone, keys_unlocked + [next_key], steps + next_steps, [next_key]
+            candidates[next_key] = next_steps + self.do_solve(
+                m, keys_unlocked + [next_key], [next_key]
             )
         # print("Candidates")
         # print(candidates)
@@ -54,7 +73,12 @@ class Finder:
         # print(
         #     f"Returning {steps} + {min(candidates.values())} = { steps + min(candidates.values())   }"
         # )
-        return min(candidates.values())
+
+        answer = min(candidates.values())
+        if cache_key in self.cache and self.cache[cache_key] != answer:
+            print(f"Cached answer {self.cache[cache_key]} computed {answer}")
+        self.cache[cache_key] = answer
+        return answer
 
 
 class Maze:
@@ -255,29 +279,29 @@ class Maze:
 
 
 if __name__ == "__main__":
-    f = Finder("../input.txt")
-    print("Real Part 1")
+    # f = Finder("../input.txt")
+    # print("Real Part 1")
+    # print(f.solve())
+
+    f = Finder("../input_small.txt")
+    print("Small: Expect 8")
     print(f.solve())
 
-    # f = Finder("../input_small.txt")
-    # print("Small: Expect 8")
-    # print(f.solve())
+    f = Finder("../input_86.txt")
+    print("Expect 86")
+    print(f.solve())
 
-    # f = Finder("../input_86.txt")
-    # print("Expect 86")
-    # print(f.solve())
+    f = Finder("../input_81.txt")
+    print("Expect 81")
+    print(f.solve())
 
-    # f = Finder("../input_81.txt")
-    # print("Expect 81")
-    # print(f.solve())
+    f = Finder("../input_132.txt")
+    print("Expect 132")
+    print(f.solve())
 
-    # f = Finder("../input_132.txt")
-    # print("Expect 132")
-    # print(f.solve())
-
-    # f = Finder("../input_136.txt")
-    # print("Expect 136")
-    # print(f.solve())
+    f = Finder("../input_136.txt")
+    print("Expect 136")
+    print(f.solve())
 
     #############
 
