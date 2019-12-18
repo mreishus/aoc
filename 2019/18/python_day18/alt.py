@@ -17,18 +17,30 @@ class Finder:
     def do_solve(self, m, keys_unlocked, steps, unlock_these):
         # print(f"Do SOLVE [{keys_unlocked}] {steps}")
         for this_key in unlock_these:
+            # print(f"Keys unlocked [{keys_unlocked}] Unlocking [{this_key}]")
+            # print(f"Ask M its unlocked doors {m.unlocked_doors}")
             m.collect_key(this_key)
 
         # print("Accessible keys")
         # print(m.accessible_keys)
+
         possible_keys = list(m.accessible_keys.keys())
         possible_path_lens = [len(x) - 1 for x in list(m.accessible_keys.values())]
-        # print(list(zip(possible_keys, possible_path_lens)))
+
         if len(possible_keys) == 0:
             return steps
 
+        smallest = min(possible_path_lens)
+        # print("")
+        # print(list(zip(possible_keys, possible_path_lens)))
+        # print(smallest)
+
         candidates = {}
         for next_key, next_steps in zip(possible_keys, possible_path_lens):
+            # Don't know if this skip is valid or not
+            if next_steps > smallest * 7 and len(possible_path_lens) > 5:
+                print("Skipped")
+                continue
             m_clone = copy.deepcopy(m)
             candidates[next_key] = self.do_solve(
                 m_clone, keys_unlocked + [next_key], steps + next_steps, [next_key]
@@ -54,9 +66,11 @@ class Maze:
         self.hero_loc = complex(-99, -99)
         self.accessible_keys = {}
         self.graph = None
+        # print("Init")
         self.compute()
 
     def compute(self):
+        # print("Compute")
         if self.grid is None:
             grid, loc_of_door, loc_of_key = self.parse(self.filename)
             self.grid = grid
@@ -135,11 +149,17 @@ class Maze:
 
         # Where is the key and how to get there?
         loc = self.loc_of_key[key_name]
-        path = nx.dijkstra_path(self.graph, self.hero_loc, loc)
+        # path = nx.dijkstra_path(self.graph, self.hero_loc, loc)
+        # path = nx.shortest_path(self.graph, self.hero_loc, loc)
+        steps_taken = nx.shortest_path_length(self.graph, self.hero_loc, loc)
+
+        # print(f"path {path}")
+        # print(f"path2 {path2}")
 
         # Move hero
         self.move_hero(loc)
-        steps_taken = len(path) - 1
+
+        # steps_taken = len(path) - 1
 
         # Delete key (move_hero took care of the grid)
         del self.loc_of_key[key_name]
@@ -149,7 +169,11 @@ class Maze:
         if door_name in self.loc_of_door:
             self.unlock_door(key_name.upper())
         else:
-            self.compute()
+            # print("Unlocking a door that doesn't exist")
+            # print(door_name)
+            # print(self.loc_of_door)
+            self.accessible_keys = self.find_accessible_keys()
+            # self.compute()
         return steps_taken
 
     def unlock_door(self, door_name):
@@ -160,7 +184,21 @@ class Maze:
         loc = self.loc_of_door[door_name]
         self.grid[loc] = "."
         del self.loc_of_door[door_name]
-        self.compute()
+
+        # Rebuild Grid
+        location = loc
+        self.graph.add_node(location)
+        up = location + complex(0, -1)
+        down = location + complex(0, 1)
+        left = location + complex(-1, 0)
+        right = location + complex(1, 0)
+
+        for neighbor in [up, down, left, right]:
+            neighbor_char = self.grid[neighbor]
+            if self.valid_char(neighbor_char):
+                self.graph.add_edge(location, neighbor)
+        self.accessible_keys = self.find_accessible_keys()
+        # self.compute()
 
     def build_graph(self):
         G = nx.Graph()
@@ -204,6 +242,10 @@ if __name__ == "__main__":
 
     f = Finder("../input_81.txt")
     print("Expect 81")
+    print(f.solve())
+
+    f = Finder("../input_132.txt")
+    print("Expect 132")
     print(f.solve())
 
     f = Finder("../input_136.txt")
