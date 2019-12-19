@@ -1,6 +1,5 @@
 import copy
 from collections import defaultdict
-from collections import deque
 from aoc.computer import Computer
 
 COMPLEX_OF_DIR = {
@@ -11,53 +10,6 @@ COMPLEX_OF_DIR = {
 }
 COMMAND_OF_DIR = {"U": 1, "R": 4, "D": 2, "L": 3}
 DIRECTIONS = list(COMPLEX_OF_DIR.keys())
-
-
-def possible_steps(grid, here):
-    for direction in DIRECTIONS:
-        delta = COMPLEX_OF_DIR[direction]
-        if grid[here + delta] == GRID.SPACE:
-            yield {"child": here + delta, "action": direction}
-
-
-def construct_path(node, meta):
-    actions = deque()
-    while node in meta:
-        node, action = meta[node]
-        actions.appendleft(action)
-    return actions
-
-
-def bfs(grid, start, finish):
-    open_set = deque()
-    open_set.append(start)
-    closed_set = deque()
-    meta = {}
-    min_range = 1e6
-
-    while len(open_set) > 0:
-        here = open_set.pop()
-        if here == finish:
-            path = construct_path(here, meta)
-            a_range = len(path)
-            if a_range < min_range:
-                min_range = a_range
-            if a_range > min_range:
-                continue
-
-        for step in possible_steps(grid, here):
-            child = step["child"]
-            action = step["action"]
-            if child in closed_set:
-                continue
-            meta[child] = [here, action]
-            if child not in open_set:
-                open_set.appendleft(child)
-
-        if here not in closed_set:
-            closed_set.append(here)
-
-    return min_range
 
 
 class RepairDroid:
@@ -152,12 +104,20 @@ class GridMapper15:
             print("")
 
     def explore(self):
-        # key: coordinate (complex) value: boolean (Have we visited it?)
+        # visited: key: coordinate (complex) value: boolean (Have we visited it?)
         self.visited = {}
         self.path_to = {}
         self.state_for_coord = {}
         self.source = self.location  # (0, 0)
         self.explore_dfs(self.source)
+
+    def steps_to_oxygen(self):
+        where = self.oxygen_location
+        count = 0
+        while where != complex(0, 0):
+            where = self.path_to[where]
+            count += 1
+        return count
 
     def explore_dfs(self, coord):
         if coord != self.location:
@@ -191,7 +151,7 @@ class Day15:
     def part1_and_2(program_in):
         gm = GridMapper15(program_in)
         gm.explore()
-        p1 = bfs(gm.grid, complex(0, 0), gm.oxygen_location)
+        p1 = gm.steps_to_oxygen()
         p2 = Day15.part2_from_gm(gm)
         return p1, p2
 

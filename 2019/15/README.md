@@ -35,6 +35,10 @@ even though the recursion would eventually lead to big gaps in exploration
 15,15 in the tree and search there), it was no problem. Instead of taking
 a minute or two to explore, it was done in a second or so. Much nicer!
 
+I was also able to remove the separate search for the oxygen sensor after the
+maze is mapped out. The DFS records path information, so I just use that to
+find the path needed in Part 1.
+
 ### Part 2
 
 Part2 asks how long it takes for oxygen to fill all of the maze. I used
