@@ -2,6 +2,8 @@
 
 ## 2019
 
+- Missing Writeups: 11, 13, 14, 15, 16, 17
+
 - **Day 1**: [Writeup + Visualization](./2019/01/README.md)
   | [Ruby](./2019/01/ruby_day01/01.rb) (Tests Embedded)
   | [Elixir](./2019/01/elixir_day01/lib/elixir_day01.ex)
@@ -16,7 +18,7 @@
   [Lib](./2019/01/haskell-day01/src/Lib.hs)
   [(test)](./2019/01/haskell-day01/test/Spec.hs)
   | [React](./2019/01/react_day01/src/) (Visualization only)
-- **Day 2**: [Writeup + Visualization](./2019/02/README.md)
+- **Day 2** _(Intcode)_: [Writeup + Visualization](./2019/02/README.md)
   | [Ruby](./2019/02/ruby_day02/02.rb)
   | [Python](./2019/02/python_day02/02.py) (Features Gradient Descent)
   | [Go](./2019/02/go_day02/day02.go)
@@ -34,7 +36,7 @@
   [(test)](./2019/04/elixir_day04/test/elixir_day04_test.exs)
   | [Go](./2019/04/go_day04/day04.go)
   [(test)](./2019/04/go_day04/day04_test.go)
-- **Day 5**: [Writeup + Visualization + Benchmark](./2019/05/README.md)
+- **Day 5** _(Intcode)_: [Writeup + Visualization + Benchmark](./2019/05/README.md)
   | [Python](./2019/05/python_day05/day05.py)
   [(test)](./2019/05/python_day05/day05_test.py)
   | [Elixir](./2019/05/elixir_day05/lib/elixir_day05.ex)
@@ -44,7 +46,7 @@
   [(test)](./2019/05/go_day05/day05_test.go)
 - **Day 6**: [Writeup](./2019/06/README.md)
   | [Python](./2019/06/python_day06/day06.py)
-- **Day 7**: [Writeup](./2019/07/README.md)
+- **Day 7** _(Intcode)_: [Writeup](./2019/07/README.md)
   | [Python](./2019/07/python_day07/day07.py)
   [(test)](./2019/07/python_day07/day07_test.py)
   | [Elixir](./2019/07/elixir_day07/lib/)
@@ -53,7 +55,7 @@
   [(test)](./2019/07/go_day07/day07_test.go)
 - **Day 8**: [Writeup](./2019/08/README.md)
   | [Python](./2019/08/python_day08/day08.py)
-- **Day 9**: [Writeup](./2019/09/README.md)
+- **Day 9** _(Intcode)_: [Writeup](./2019/09/README.md)
   | [Python](./2019/09/python_day09/day09.py)
   [(test)](./2019/09/python_day09/day09_test.py)
   | [Elixir](./2019/09/elixir_day09/lib/)
@@ -63,7 +65,7 @@
 - **Day 10**: [Writeup](./2019/10/README.md)
   | [Python](./2019/10/python_day10/day10.py)
   [(test)](./2019/10/python_day10/day10_test.py)
-- **Day 11**: [Writeup](./2019/11/README.md)
+- **Day 11** _(Intcode)_: [Writeup](./2019/11/README.md)
   | [Python](./2019/11/python_day11/day11.py)
   [(test)](./2019/11/python_day11/day11_test.py)
   | [Elixir](./2019/11/elixir_day11/lib)
@@ -73,18 +75,24 @@
 - **Day 12**: [Writeup](./2019/12/README.md)
   | [Python](./2019/12/python_day12/day12.py)
   [(test)](./2019/12/python_day12/day12_test.py)
-- **Day 13**: [Writeup](./2019/13/README.md)
+- **Day 13** _(Intcode)_: [Writeup](./2019/13/README.md)
   | [Python](./2019/13/python_day13/day13.py)
   [(test)](./2019/13/python_day13/day13_test.py)
   | [Elixir](./2019/13/elixir_day13/lib/breakout.ex)
   [(test)](./2019/13/elixir_day13/test/elixir_day13_test.exs)
   | [Go](./2019/13/go_day13/day13.go)
   [(test)](./2019/13/go_day13/day13_test.go)
-- Day 14: [Writeup](./2019/14/README.md)
+- **Day 14**: [Writeup](./2019/14/README.md)
   | [Python](./2019/14/python_day14/day14.py)
   [(test)](./2019/14/python_day14/day14_test.py)
-- Day 15: [Writeup](./2019/15/README.md)
+- **Day 15** _(Intcode)_: [Writeup](./2019/15/README.md)
   | [Python](./2019/15/python_day15/aoc/day15.py)
+- **Day 16**: [Writeup](./2019/16/README.md)
+  | [Python](./2019/16/python_day16/aoc/day16.py)
+- **Day 17** _(Intcode)_: [Writeup](./2019/17/README.md)
+  | [Python](./2019/17/python_day17/aoc/day17.py)
+- **Day 18**: [Writeup](./2019/18/README.md)
+  | [Python](./2019/18/python_day18/aoc/day18.py)
 
 ## 2018
 
@@ -153,5 +161,5 @@
 
 ```
 Created:       Mon 02 Dec 2019 05:12:40 PM CST
-Last Modified: Sun 15 Dec 2019 01:15:10 PM CST
+Last Modified: Wed 18 Dec 2019 09:03:41 PM CST
 ```
