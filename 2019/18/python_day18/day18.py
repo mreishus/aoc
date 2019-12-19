@@ -121,6 +121,14 @@ class Maze:
         hd[state] = 0
         while len(hd) > 0:
             (state, length) = hd.popitem()
+
+            # Stop searching if solution
+            if state.location == complex(-1, -1):
+                break
+
+            # loc_string = "".join(state.collected_keys)
+            # print(f"{dist_to[state]:>7} {str(state.location):12} {loc_string}")
+
             steps = self.possible_steps(state)
             for new_state, length in steps:
                 if dist_to[new_state] > dist_to[state] + length:
@@ -175,8 +183,8 @@ if __name__ == "__main__":
     #f = Maze("../input_small.txt")
     #f = Maze("../input_86.txt")
     #f = Maze("../input_136.txt")
-
     f = Maze("../input.txt")
+
     print("Part1:")
     f.build_graph()
     f.build_key_paths()
@@ -187,7 +195,3 @@ if __name__ == "__main__":
     f.build_graph()
     f.build_key_paths()
     print(f.solve())
-    # print(f.path_info)
-    # print(f.all_keys)
-    # print(f.grid)
-    # print(f.build_graph().edges())
