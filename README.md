@@ -2,7 +2,7 @@
 
 ## 2019
 
-- Missing Writeups: 11, 13, 14, 15, 16, 17
+Missing Writeups: 11, 13, 14, 15, 16, 17
 
 - **Day 1**: [Writeup + Visualization](./2019/01/README.md)
   | [Ruby](./2019/01/ruby_day01/01.rb) (Tests Embedded)
@@ -161,5 +161,5 @@
 
 ```
 Created:       Mon 02 Dec 2019 05:12:40 PM CST
-Last Modified: Wed 18 Dec 2019 09:03:41 PM CST
+Last Modified: Wed 18 Dec 2019 09:24:50 PM CST
 ```
