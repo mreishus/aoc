@@ -11,5 +11,8 @@ def parse(filename):
 
 if __name__ == "__main__":
     program = parse("../../15/input.txt")
+    p1, p2 = Day15.part1_and_2(program)
     print("Part 1:")
-    print(Day15.part1(program))
+    print(p1)
+    print("Part 2:")
+    print(p2)
