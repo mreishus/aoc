@@ -2,9 +2,51 @@
 
 ## Approach and Reflections
 
+### Part 1
+
+We need to map out an unknown ship and find the shortest path the oxygen
+generator. However, we're only able to explore the ship by issuing commands to
+a robot controlled by intcode. The robot has no distance vision; to know where
+a wall exists, you have to bump into it.
+
+My hasty approach when solving the problem was to issue random walk commands until
+the entire maze was mapped out. This worked, but it was unneccessarily slow:
+it took about a minute or two to finish. After the entire grid was mapped
+out, I used BFS to find the shortest path to the generator. I didn't use BFS
+for the initial exploration because it seemed difficult, since all exploration
+was done with a stateful robot that I had to send individual movement commands
+to. I couldn't just move to arbitrary squares as the algorithm would need me
+to do.
+
+I tried tweaking the random walk by biasing it in certain directions, which
+rotated, or having the robot bias towards unknown squares.. but these small
+improvements didn't help that much. The algorithm was fundamentally random and
+thus, slow, since it would often do repeated work. This is a deeper lesson
+I've learned this AOC. Making small tweaks upon a fundamentally incorrect
+algorithm doesn't help much, and it's easy to lose a lot of time here. It's
+often better to throw away the algorithm and use a different one. That's
+where huge gains are.
+
+A few days later, I went back and reworked the exploration algorithm to use
+DFS. For each location, I stored the state of the Intcode VM's memory, then
+before issuing a movement command I would restore the state. This meant that
+even though the recursion would eventually lead to big gaps in exploration
+(issue the last command from square 20,20, find nothing, then pop back to
+15,15 in the tree and search there), it was no problem. Instead of taking
+a minute or two to explore, it was done in a second or so. Much nicer!
+
+### Part 2
+
+Part2 asks how long it takes for oxygen to fill all of the maze. I used
+a simple flood fill, scanning over the maze, marking the squares that would be
+filled with oxygen next, adding it to the marked squares and repeating. The
+key here seems to be not mixing your scanning and adding phases. Another
+approach would be to find the longest depth from the oxygen generator using
+BFS/DFS.
+
 ## Solutions
 
-- [Python](./python_day15/day15.py)
+- [Python](./python_day15/day15.py) [(test)](./python_day15/day15_test.py)
 
 ## Problem Description
 

@@ -2,7 +2,7 @@
 
 ## 2019
 
-Missing Writeups: 11, 13, 14, 15, 16, 17, 18, 19
+Missing Writeups: 11, 13, 14, 16, 17, 18, 19
 
 - **Day 1**: [Writeup + Visualization](./2019/01/README.md)
   | [Ruby](./2019/01/ruby_day01/01.rb) (Tests Embedded)
@@ -87,6 +87,7 @@ Missing Writeups: 11, 13, 14, 15, 16, 17, 18, 19
   [(test)](./2019/14/python_day14/day14_test.py)
 - **Day 15** _(Intcode)_: [Writeup](./2019/15/README.md)
   | [Python](./2019/15/python_day15/aoc/day15.py)
+  [(test)](./2019/15/python_day15/day15_test.py)
 - **Day 16**: [Writeup](./2019/16/README.md)
   | [Python](./2019/16/python_day16/day16.py)
 - **Day 17** _(Intcode)_: [Writeup](./2019/17/README.md)
@@ -124,6 +125,8 @@ Missing Writeups: 11, 13, 14, 15, 16, 17, 18, 19
 - **Day 10**: [Ruby](./2018/10/10.rb)
 - **Day 11**: [Ruby](./2018/11/11.rb)
 - **Day 12**: [Ruby](./2018/12/12.rb)
+- **Day 13**: [Ruby](./2018/13/13.rb)
+- **Day 14**: [Ruby](./2018/14/14.rb)
 
 ## 2017
 
@@ -168,5 +171,5 @@ Missing Writeups: 11, 13, 14, 15, 16, 17, 18, 19
 
 ```
 Created:       Mon 02 Dec 2019 05:12:40 PM CST
-Last Modified: Thu 19 Dec 2019 09:58:38 AM CST
+Last Modified: Thu 19 Dec 2019 05:16:46 PM CST
 ```

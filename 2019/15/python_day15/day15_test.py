@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 from unittest import TestCase, main
 
-from day15 import parse
+from day15 import Day15, parse
 from aoc.breakout import Breakout
 from aoc.painter_robot import PainterRobot
 from aoc.computer import solve1
@@ -220,6 +220,14 @@ class Programs7:
         0,
         10,
     ]
+
+
+class Day15TestCase(TestCase):
+    def test_part1_and2(self):
+        program = parse("../../15/input.txt")
+        p1, p2 = Day15.part1_and_2(program)
+        self.assertEqual(p1, 226)
+        self.assertEqual(p2, 342)
 
 
 class Day13TestCase(TestCase):
