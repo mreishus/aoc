@@ -96,7 +96,8 @@ Missing Writeups: 11, 13, 14, 16, 17, 18, 19
 - **Day 18** ........: [Writeup](./2019/18/README.md)
   | [Python](./2019/18/python_day18/day18.py)
 - **Day 19** _(Intcode)_: [Writeup](./2019/19/README.md)
-  | [Python](./2019/19/python_day19/day19.py)
+  | [Python](./2019/19/python_day19/aoc/day19.py)
+  [(test)](./2019/19/python_day19/day19_test.py)
 
 ## 2018
 
@@ -172,5 +173,5 @@ Missing Writeups: 11, 13, 14, 16, 17, 18, 19
 
 ```
 Created:       Mon 02 Dec 2019 05:12:40 PM CST
-Last Modified: Thu 19 Dec 2019 06:51:11 PM CST
+Last Modified: Thu 19 Dec 2019 07:44:41 PM CST
 ```

@@ -2,8 +2,9 @@
 from unittest import TestCase, main
 
 from day19 import parse
-from aoc.day15 import Day15
+from aoc.day19 import Day19
 from aoc.day17 import Day17Droid
+from aoc.day15 import Day15
 from aoc.breakout import Breakout
 from aoc.painter_robot import PainterRobot
 from aoc.computer import solve1
@@ -226,12 +227,22 @@ class Programs7:
 
 class Day19TestCase(TestCase):
     def test_part1(self):
-        print("No unit tests for Day19 Part 1 yet - too slow")
-        self.assertEqual(1, 1)
+        program = parse("../../19/input.txt")
+        d9 = Day19(program)
+        got = d9.part1()
+        want = 141
+        self.assertEqual(got, want)
 
     def test_part2(self):
-        print("No unit tests for Day19 Part 2 yet - too slow")
-        self.assertEqual(1, 1)
+        print(
+            "Day 19 Part 2: This test is slow, comment out for a faster feedback loop"
+        )
+        program = parse("../../19/input.txt")
+        d9 = Day19(program)
+        got = d9.part2()
+        want = 15641348
+        self.assertEqual(got, want)
+
 
 class Day17TestCase(TestCase):
     def test_part1(self):

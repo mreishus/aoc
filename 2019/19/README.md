@@ -4,7 +4,7 @@
 
 ## Solutions
 
-- [Python](./python_day19/day19.py)
+- [Python](./python_day19/aoc/day19.py) [(test)](./python_day19/day19_test.py)
 
 ## Problem Description
 
