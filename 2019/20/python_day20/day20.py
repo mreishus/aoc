@@ -5,12 +5,9 @@ from collections import defaultdict
 import networkx as nx
 
 
-def parse(filename):
-    with open(filename) as f:
-        return [int(num) for num in f.readline().strip().split(",")]
-
-
 def parse_20(filename):
+    """ Turn a filename into a grid (dict with complex keys.  values are "#",
+    "." or portal names like "AB") """
     grid = {}
     with open(filename) as file:
         y = 0
@@ -25,120 +22,128 @@ def parse_20(filename):
 
 
 def is_upper(letter_or_neg1):
+    """ Given a character, is it an uppercase letter? """
     return letter_or_neg1 != -1 and letter_or_neg1 in string.ascii_uppercase
 
 
 def is_maze(letter_or_neg1):
-    if letter_or_neg1 == -1:
-        return False
-    return letter_or_neg1 in "#."
+    """ Given a character, is it part of the maze?  It should be a # or . """
+    return letter_or_neg1 != -1 and letter_or_neg1 in "#."
 
 
-def parse_double_letters(grid):
-    reals = [c.real for c in grid.keys() if grid[c] != "q"]
-    imags = [c.imag for c in grid.keys() if grid[c] != "q"]
+def grid_get_reals_imags(grid):
+    """ Given a grid (dict with complex keys), get a list of all of its real
+    (x) and imaginary (y) components """
+    reals = [c.real for c in grid.keys()]
+    imags = [c.imag for c in grid.keys()]
+    return reals, imags
+
+
+def generate_coords(grid):
+    """ Given a grid, return a generator iterating over x, y coordinates.
+    Note: Each coordinate is not guarenteed to be in the grid. """
+    reals, imags = grid_get_reals_imags(grid)
+    for y in range(int(min(imags)) - 0, int(max(imags)) + 0):
+        for x in range(int(min(reals)) - 0, int(max(reals)) + 0):
+            yield x, y
+
+
+def get_midpoints(grid):
+    """ Given a grid, find the x and y midpoints """
+    reals, imags = grid_get_reals_imags(grid)
 
     mid_y = (int(min(imags)) + int(max(imags))) // 2
     mid_x = (int(min(reals)) + int(max(reals))) // 2
+    return mid_x, mid_y
 
+
+def parse_double_letters(grid):
+    mid_x, mid_y = get_midpoints(grid)
     outer_or_inner = {}
-    for y in range(int(min(imags)) - 0, int(max(imags)) + 0):
-        for x in range(int(min(reals)) - 0, int(max(reals)) + 0):
-            val = grid.get(complex(x, y), -1)
-            if not is_upper(val):
-                continue
-            val_r = grid.get(complex(x + 1, y), -1)
-            val_l = grid.get(complex(x - 1, y), -1)
-            val_u = grid.get(complex(x, y - 1), -1)
-            val_d = grid.get(complex(x, y + 1), -1)
-            # Case: Bottom letter of a vertical AB on a top edge
-            if is_upper(val_u) and is_maze(val_d):
-                ident = val_u + val
-                del grid[complex(x, y - 1)]
-                grid[complex(x, y)] = ident
+    for x, y in generate_coords(grid):
+        val = grid.get(complex(x, y), -1)
+        if not is_upper(val):
+            continue
+        val_r = grid.get(complex(x + 1, y), -1)
+        val_l = grid.get(complex(x - 1, y), -1)
+        val_u = grid.get(complex(x, y - 1), -1)
+        val_d = grid.get(complex(x, y + 1), -1)
+        # Case: Bottom letter of a vertical AB on a top edge
+        if is_upper(val_u) and is_maze(val_d):
+            ident = val_u + val
+            del grid[complex(x, y - 1)]
+            grid[complex(x, y)] = ident
 
-                inout = ""
-                if y < mid_y:
-                    inout = "outer"
-                else:
-                    inout = "inner"
-                outer_or_inner[complex(x, y)] = inout
-            # Case: Top letter of a vertical AB on a bottom edge
-            if is_upper(val_d) and is_maze(val_u):
-                ident = val + val_d
-                del grid[complex(x, y + 1)]
-                grid[complex(x, y)] = ident
+            inout = "outer" if y < mid_y else "inner"
+            outer_or_inner[complex(x, y)] = inout
+        # Case: Top letter of a vertical AB on a bottom edge
+        if is_upper(val_d) and is_maze(val_u):
+            ident = val + val_d
+            del grid[complex(x, y + 1)]
+            grid[complex(x, y)] = ident
 
-                inout = ""
-                if y < mid_y:
-                    inout = "inner"
-                else:
-                    inout = "outer"
-                outer_or_inner[complex(x, y)] = inout
-            # Case: Right letter of a horizontal AB on a left edge
-            if is_upper(val_l) and is_maze(val_r):
-                ident = val_l + val
-                del grid[complex(x - 1, y)]
-                grid[complex(x, y)] = ident
+            inout = "inner" if y < mid_y else "outer"
+            outer_or_inner[complex(x, y)] = inout
+        # Case: Right letter of a horizontal AB on a left edge
+        if is_upper(val_l) and is_maze(val_r):
+            ident = val_l + val
+            del grid[complex(x - 1, y)]
+            grid[complex(x, y)] = ident
 
-                inout = ""
-                if x < mid_x:
-                    inout = "outer"
-                else:
-                    inout = "inner"
-                outer_or_inner[complex(x, y)] = inout
-            # Case: Left letter of a horizontal AB on a right edge
-            if is_upper(val_r) and is_maze(val_l):
-                ident = val + val_r
-                del grid[complex(x + 1, y)]
-                grid[complex(x, y)] = ident
+            inout = "outer" if x < mid_x else "inner"
+            outer_or_inner[complex(x, y)] = inout
+        # Case: Left letter of a horizontal AB on a right edge
+        if is_upper(val_r) and is_maze(val_l):
+            ident = val + val_r
+            del grid[complex(x + 1, y)]
+            grid[complex(x, y)] = ident
 
-                inout = ""
-                if x < mid_x:
-                    inout = "inner"
-                else:
-                    inout = "outer"
-                outer_or_inner[complex(x, y)] = inout
+            inout = "inner" if x < mid_x else "outer"
+            outer_or_inner[complex(x, y)] = inout
     return grid, outer_or_inner
 
 
 def find_start(grid):
+    """ Find the start of the maze. (The clear spot next to the AA portal) """
     zz = next(find_spaces_for(grid, "AA"))
     return clear_space_next_to(zz, grid)
 
 
 def find_end(grid):
+    """ Find the end of the maze. (The clear spot next to the ZZ portal) """
     zz = next(find_spaces_for(grid, "ZZ"))
     return clear_space_next_to(zz, grid)
 
 
 def find_spaces_for(grid, letters):
+    """ Given a grid, and two letters like "AB", return a generator
+    iterating over all coordinates that contain those letters. """
     for k, v in grid.items():
         if v == letters:
             yield k
 
 
-def clear_space_next_to(coord, grid):
+def generate_neighbors(coord):
+    """ Given a coordinate (complex), return a generator iterating over its 4 direct neighbors. """
     x = int(coord.real)
     y = int(coord.imag)
-    up = complex(x, y - 1)
-    down = complex(x, y + 1)
-    right = complex(x + 1, y)
-    left = complex(x - 1, y)
-    if grid.get(up) == ".":
-        return up
-    if grid.get(down) == ".":
-        return down
-    if grid.get(right) == ".":
-        return right
-    if grid.get(left) == ".":
-        return left
+    yield complex(x, y - 1)
+    yield complex(x, y + 1)
+    yield complex(x + 1, y)
+    yield complex(x - 1, y)
+
+
+def clear_space_next_to(coord, grid):
+    """ Given a grid and a coordinate to a portal, find the one clear space
+    next to it. """
+    for neighbor in generate_neighbors(coord):
+        if grid.get(neighbor) == ".":
+            return neighbor
     raise ValueError("Couldn't find clear space")
-    return coord
 
 
 def find(f, seq):
-    """Return first item in sequence where f(item) == True."""
+    """ Return first item in sequence where f(item) == True. """
     for item in seq:
         if f(item):
             return item
@@ -146,108 +151,93 @@ def find(f, seq):
 
 def generate_graph(grid):
     G = nx.Graph()
-    reals = [c.real for c in grid.keys() if grid[c] != "q"]
-    imags = [c.imag for c in grid.keys() if grid[c] != "q"]
-    for y in range(int(min(imags)) - 0, int(max(imags)) + 0):
-        for x in range(int(min(reals)) - 0, int(max(reals)) + 0):
-            location = complex(x, y)
-            val = grid.get(location)
-            if val != ".":
-                continue
+    for x, y in generate_coords(grid):
+        location = complex(x, y)
+        val = grid.get(location)
+        if val != ".":
+            continue
 
-            G.add_node(location)
+        G.add_node(location)
 
-            up = location + complex(0, -1)
-            down = location + complex(0, 1)
-            left = location + complex(-1, 0)
-            right = location + complex(1, 0)
+        for neighbor in generate_neighbors(location):
+            nval = grid.get(neighbor, "")
+            if nval == ".":
+                G.add_edge(location, neighbor)
+            elif len(nval) == 2:
+                portal_squares = find_spaces_for(grid, nval)
+                clear_squares = [clear_space_next_to(sq, grid) for sq in portal_squares]
+                not_me = find(lambda x: x != location, clear_squares)
+                if not_me is not None:
+                    G.add_edge(location, not_me)
+    return G
 
-            for neighbor in [up, down, left, right]:
-                nval = grid.get(neighbor, "")
-                if nval == ".":
-                    G.add_edge(location, neighbor)
-                elif len(nval) == 2:
+
+def generate_recursive_graph(grid, outer_or_inner):
+    G = nx.Graph()
+    max_layers = 30
+    for x, y in generate_coords(grid):
+        location = complex(x, y)
+        val = grid.get(location)
+        if val != ".":
+            continue
+
+        for z in range(max_layers):
+            G.add_node((location, z))
+
+        for neighbor in generate_neighbors(location):
+            nval = grid.get(neighbor, "")
+            if nval == ".":  # Clear space
+                for z in range(max_layers):
+                    G.add_edge((location, z), (neighbor, z))
+            elif len(nval) == 2:  # Portal
+                inout = outer_or_inner[neighbor]
+
+                for z in range(max_layers):
+                    # Outer portals on level 0 go nowhere
+                    if z == 0 and inout == "outer":
+                        continue
+                    # Inner portals on max level go nowhere
+                    if z == (max_layers - 1) and inout == "inner":
+                        continue
+
                     portal_squares = find_spaces_for(grid, nval)
                     clear_squares = [
                         clear_space_next_to(sq, grid) for sq in portal_squares
                     ]
                     not_me = find(lambda x: x != location, clear_squares)
                     if not_me is not None:
-                        G.add_edge(location, not_me)
-    return G
-
-
-def generate_recursive_graph(grid, outer_or_inner):
-    G = nx.Graph()
-    reals = [c.real for c in grid.keys() if grid[c] != "q"]
-    imags = [c.imag for c in grid.keys() if grid[c] != "q"]
-    max_layers = 30
-    for y in range(int(min(imags)) - 0, int(max(imags)) + 0):
-        for x in range(int(min(reals)) - 0, int(max(reals)) + 0):
-            location = complex(x, y)
-            val = grid.get(location)
-            if val != ".":
-                continue
-
-            for z in range(max_layers):
-                G.add_node((location, z))
-
-            up = location + complex(0, -1)
-            down = location + complex(0, 1)
-            left = location + complex(-1, 0)
-            right = location + complex(1, 0)
-
-            for neighbor in [up, down, left, right]:
-                nval = grid.get(neighbor, "")
-                if nval == ".":
-                    for z in range(max_layers):
-                        G.add_edge((location, z), (neighbor, z))
-                elif len(nval) == 2:
-                    inout = outer_or_inner[neighbor]
-
-                    for z in range(max_layers):
-                        # Outer portals on level 0 go nowhere
-                        if z == 0 and inout == "outer":
-                            continue
-                        # Inner portals on max level go nowhere
-                        if z == (max_layers - 1) and inout == "inner":
-                            continue
-
-                        portal_squares = find_spaces_for(grid, nval)
-                        clear_squares = [
-                            clear_space_next_to(sq, grid) for sq in portal_squares
-                        ]
-                        not_me = find(lambda x: x != location, clear_squares)
-                        if not_me is not None:
-                            if inout == "outer":
-                                G.add_edge((location, z), (not_me, z - 1))
-                            elif inout == "inner":
-                                G.add_edge((location, z), (not_me, z + 1))
-                            else:
-                                raise ValueError("Dont know if in or out")
+                        # Outer portals go to lower levels, inner to higher
+                        if inout == "outer":
+                            G.add_edge((location, z), (not_me, z - 1))
+                        elif inout == "inner":
+                            G.add_edge((location, z), (not_me, z + 1))
+                        else:
+                            raise ValueError("Dont know if in or out")
 
     return G
+
+
+def part1(filename):
+    grid, outer_or_inner = parse_20(filename)
+    G = generate_graph(grid)
+    start = find_start(grid)
+    end = find_end(grid)
+    path = nx.shortest_path(G, start, end)
+    return len(path) - 1
+
+
+def part2(filename):
+    grid, outer_or_inner = parse_20(filename)
+    G2 = generate_recursive_graph(grid, outer_or_inner)
+    start_3d = (find_start(grid), 0)
+    end_3d = (find_end(grid), 0)
+    path2 = nx.shortest_path(G2, start_3d, end_3d)
+    return len(path2) - 1
 
 
 if __name__ == "__main__":
-    print("Main")
-    # grid, outer_or_inner = parse_20("../../20/input_23.txt")
-    # grid, outer_or_inner = parse_20("../../20/input_58.txt")
-    # grid, outer_or_inner = parse_20("../../20/input_recursive_396.txt")
-    grid, outer_or_inner = parse_20("../../20/input.txt")
-
-    start = find_start(grid)
-    end = find_end(grid)
-    print(list(find_spaces_for(grid, "BC")))
-    G = generate_graph(grid)
-    path = nx.shortest_path(G, start, end)
-    # print(path)
+    filename = "../../20/input.txt"
     print("Part 1: Shortest path length: ")
-    print(len(path) - 1)
-
-    G2 = generate_recursive_graph(grid, outer_or_inner)
-    start_3d = (start, 0)
-    end_3d = (end, 0)
-    path2 = nx.shortest_path(G2, start_3d, end_3d)
+    print(part1(filename))
     print("Part 2: Shortest recursive path length: ")
-    print(len(path2) - 1)
+    print(part2(filename))
