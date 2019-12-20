@@ -149,6 +149,20 @@ def find(f, seq):
             return item
 
 
+def find_connected_portal(grid, location, portal_neighbor):
+    """ Look through connections through portals.  Pass a grid, and two sets of coordinates:
+    one to a clear space, the second to a neighboring portal. Returns a connected clear space
+    if it can be found.
+    (14, 13) = Clear space, (13, 13) = "AB" portal, (27, 27) = "AB" portal, (27, 28) = Clear space
+    Example: find_connected_portal(grid, complex(14, 13), complex(13, 13)) = complex(27, 28)
+    """
+    portal_label = grid.get(portal_neighbor, "")
+    portal_squares = find_spaces_for(grid, portal_label)
+    clear_squares = [clear_space_next_to(sq, grid) for sq in portal_squares]
+    not_me = find(lambda x: x != location, clear_squares)
+    return not_me
+
+
 def generate_graph(grid):
     G = nx.Graph()
     for x, y in generate_coords(grid):
@@ -164,11 +178,9 @@ def generate_graph(grid):
             if nval == ".":
                 G.add_edge(location, neighbor)
             elif len(nval) == 2:
-                portal_squares = find_spaces_for(grid, nval)
-                clear_squares = [clear_space_next_to(sq, grid) for sq in portal_squares]
-                not_me = find(lambda x: x != location, clear_squares)
-                if not_me is not None:
-                    G.add_edge(location, not_me)
+                connected_space = find_connected_portal(grid, location, neighbor)
+                if connected_space is not None:
+                    G.add_edge(location, connected_space)
     return G
 
 
@@ -191,6 +203,7 @@ def generate_recursive_graph(grid, outer_or_inner):
                     G.add_edge((location, z), (neighbor, z))
             elif len(nval) == 2:  # Portal
                 inout = outer_or_inner[neighbor]
+                connected_space = find_connected_portal(grid, location, neighbor)
 
                 for z in range(max_layers):
                     # Outer portals on level 0 go nowhere
@@ -200,17 +213,12 @@ def generate_recursive_graph(grid, outer_or_inner):
                     if z == (max_layers - 1) and inout == "inner":
                         continue
 
-                    portal_squares = find_spaces_for(grid, nval)
-                    clear_squares = [
-                        clear_space_next_to(sq, grid) for sq in portal_squares
-                    ]
-                    not_me = find(lambda x: x != location, clear_squares)
-                    if not_me is not None:
+                    if connected_space is not None:
                         # Outer portals go to lower levels, inner to higher
                         if inout == "outer":
-                            G.add_edge((location, z), (not_me, z - 1))
+                            G.add_edge((location, z), (connected_space, z - 1))
                         elif inout == "inner":
-                            G.add_edge((location, z), (not_me, z + 1))
+                            G.add_edge((location, z), (connected_space, z + 1))
                         else:
                             raise ValueError("Dont know if in or out")
 
