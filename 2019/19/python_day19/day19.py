@@ -38,27 +38,29 @@ class Day19:
         print("Constructing")
 
         x_started = None
-        x_ended = None
-        for y in range(1700):
-            use_opt = y > 6
+        x_stopped = None
+        for y in range(1600):
+            use_optimize = y > 7
             scan_range = range(10)
-
-            if use_opt and x_started is not None:
-                scan_range = range(x_started, 50)
-            if use_opt and x_started is not None and x_stopped is not None:
+            if use_optimize:
                 scan_range = range(x_started, x_stopped + 3)
 
             seen_light = False
+            x_stopped_last = x_stopped
             x_stopped = None
             for x in scan_range:
-                this_value = solve1(self.program, [x, y])[0]
+                if use_optimize and seen_light and x <= x_stopped_last:
+                    this_value = 1
+                else:
+                    this_value = solve1(self.program, [x, y])[0]
+
                 self.grid[complex(x, y)] = this_value
                 if this_value == 1:
                     self.filled_squares[complex(x, y)] = 1
-                    if seen_light == False:
+                    if not seen_light:
                         seen_light = True
                         x_started = x
-                if this_value == 0 and seen_light == True and x_stopped is None:
+                if this_value == 0 and seen_light and x_stopped is None:
                     x_stopped = x
         print("Done Constructing")
 
