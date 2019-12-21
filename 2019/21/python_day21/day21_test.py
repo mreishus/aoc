@@ -1,7 +1,8 @@
 #!/usr/bin/env python
 from unittest import TestCase, main
 
-from day19 import parse
+from day21 import parse
+from aoc.day21 import Day21
 from aoc.day19 import Day19
 from aoc.day17 import Day17Droid
 from aoc.day15 import Day15
@@ -225,11 +226,30 @@ class Programs7:
     ]
 
 
+class Day21TestCase(TestCase):
+    def test_part1(self):
+        program = parse("../../21/input.txt")
+        d21 = Day21(program)
+        got = d21.part1()
+        want = 19358870
+        self.assertEqual(got, want)
+
+    def test_part2(self):
+        print(
+            "Day 21 Part 2: This test is slow, comment out for a faster feedback loop"
+        )
+        program = parse("../../21/input.txt")
+        d21 = Day21(program)
+        got = d21.part2()
+        want = 1143356492
+        self.assertEqual(got, want)
+
+
 class Day19TestCase(TestCase):
     def test_part1(self):
         program = parse("../../19/input.txt")
-        d9 = Day19(program)
-        got = d9.part1()
+        d19 = Day19(program)
+        got = d19.part1()
         want = 141
         self.assertEqual(got, want)
 
@@ -238,8 +258,8 @@ class Day19TestCase(TestCase):
             "Day 19 Part 2: This test is slow, comment out for a faster feedback loop"
         )
         program = parse("../../19/input.txt")
-        d9 = Day19(program)
-        got = d9.part2()
+        d19 = Day19(program)
+        got = d19.part2()
         want = 15641348
         self.assertEqual(got, want)
 
