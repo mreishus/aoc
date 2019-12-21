@@ -5,7 +5,7 @@ import copy
 import math
 
 
-class Moon(object):
+class Moon:
     def __init__(self, x, y, z):
         self.x = x
         self.y = y

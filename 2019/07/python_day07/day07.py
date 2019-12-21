@@ -27,7 +27,7 @@ def digit_from_right(x, n):
     return x // (10 ** n) % 10
 
 
-class Computer(object):
+class Computer:
     def __init__(self, memory, inputs):
         self.memory = memory.copy()
         self.inputs = inputs.copy()

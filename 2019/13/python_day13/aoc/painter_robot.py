@@ -24,7 +24,7 @@ def turn_left(direction):
     return turn(direction, -1)
 
 
-class PainterRobot(object):
+class PainterRobot:
     def __init__(self, program):
         self.program = program
 

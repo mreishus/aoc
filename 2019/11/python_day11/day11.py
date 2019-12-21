@@ -30,7 +30,7 @@ def digit_from_right(x, n):
     return x // (10 ** n) % 10
 
 
-class Computer(object):
+class Computer:
     def __init__(self, memory, inputs):
         self.memory = defaultdict(lambda: 0)
         for i, k in enumerate(memory):
@@ -264,7 +264,7 @@ def turn(direction, n):
     return directions[new_index]
 
 
-class PainterRobot(object):
+class PainterRobot:
     def __init__(self, program):
         self.program = program
 

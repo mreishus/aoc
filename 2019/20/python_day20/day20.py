@@ -147,6 +147,7 @@ def find(f, seq):
     for item in seq:
         if f(item):
             return item
+    return None
 
 
 def find_connected_portal(grid, location, portal_neighbor):
