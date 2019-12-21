@@ -47,11 +47,25 @@ if __name__ == "__main__":
     d21 = Day21(program)
     d21.run()
     this_prog = [
-        "NOT C J",
-        "AND D J",
+        # (J) Jump if (C3) is missing and (D4) is filled
+        #  - But not if E(5) and H8 are missing
+        #  1. Fill J with E5 present or H5 present
+        "NOT E J",
+        "NOT J J",
+        "OR H J",
+        #  2. Fill T with C3 missing and D4 filled
+        "NOT C T",
+        "AND D T",
+        # 3. Move T to J somehow
+        "AND T J",
+        # Also jump if A(1) is missing
         "NOT A T",
         "OR T J",
-        "WALK"
+        # Also jump if A(2) is missing and D4 is filled  (Probably need to add somethign here)
+        "NOT B T",
+        "AND D T",
+        "OR T J",
+        "RUN"
     ]
 
     d21.send("\n".join(this_prog) + "\n")
