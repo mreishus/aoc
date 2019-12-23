@@ -13,10 +13,7 @@ defmodule ElixirDay23 do
   end
 
   @doc """
-  That's not the right answer; your answer is too high. If you're stuck, make
-  sure you're using the full input data; there are also some general tips on the
-  about page, or you can ask for hints on the subreddit. Please wait one minute
-  before trying again. (You guessed 30757.) [Return to Day 23]
+  First 255 packet: 30757, 22134
   """
   def main do
     program = parse("../../23/input.txt")

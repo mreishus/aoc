@@ -165,19 +165,24 @@ defmodule ElixirDay23.ComputerNW do
     %ComputerNW{c | memory: new_memory, pc: new_pc}
   end
 
-  # # SAVE: 1 = Input (No Inputs)
-  # def do_execute_step(%ComputerNW{pc: pc, memory: memory, inputs: []} = c, @op_save) do
-  #   # Network CHANGE: If no input exists,
-  #   # don't block, use -1
-  #   this_input = -1
-  #   new_memory = Array.set(memory, lookup_left(c, 1), this_input)
-  #   new_pc = pc + 2
-  #   %ComputerNW{c | memory: new_memory, pc: new_pc}
-  # end
+  # SAVE: 1 = Input (No Inputs)
+  def do_execute_step(
+        %ComputerNW{pc: pc, memory: memory, inputs: [], coordinator_pid: coordinator_pid} = c,
+        @op_save
+      ) do
+    # Network CHANGE: If no input exists,
+    # Don't block, Ask the coordinator for an input
+
+    # don't block, use -1
+    [this_input | new_inputs] = Coordinator.get_packet(coordinator_pid)
+
+    new_memory = Array.set(memory, lookup_left(c, 1), this_input)
+    new_pc = pc + 2
+    %ComputerNW{c | memory: new_memory, pc: new_pc, inputs: new_inputs, waiting_for_input: false}
+  end
 
   # SAVE: 1 = Input (No Inputs)
   def do_execute_step(%ComputerNW{inputs: []} = c, @op_save) do
-    # "no inputs" |> IO.inspect()
     %ComputerNW{c | waiting_for_input: true}
   end
 

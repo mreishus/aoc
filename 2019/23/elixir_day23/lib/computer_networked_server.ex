@@ -52,34 +52,17 @@ defmodule ElixirDay23.ComputerNWServer do
     # program to finish executing (they're blocked). Can be fixed
     # by having the GenServer send an execute() message to itself.
     # c = ComputerNW.new(program, input) |> ComputerNW.execute()
-    c = ComputerNW.new(program, input, coordinator_pid) |> ComputerNW.execute()
-    # 10ms
-    schedule_tick(10)
+
+    # c = ComputerNW.new(program, input, coordinator_pid) |> ComputerNW.execute()
+    c = ComputerNW.new(program, input, coordinator_pid)
+    Process.send_after(self(), :execute, 10)
+
     {:ok, c}
   end
 
-  defp schedule_tick(interval) do
-    Process.send_after(self(), :tick, interval)
-  end
-
-  def handle_info(:tick, state) do
-    # "Tick" |> IO.inspect()
-
-    # state |> IO.inspect()
-
-    new_state =
-      if state.waiting_for_input do
-        # "TIck add" |> IO.inspect()
-
-        state
-        |> ComputerNW.add_input(-1)
-        |> ComputerNW.execute()
-      else
-        state
-      end
-
-    schedule_tick(10)
-    {:noreply, new_state}
+  def handle_info(:execute, state) do
+    c = state |> ComputerNW.execute()
+    {:noreply, c}
   end
 
   def handle_call(:outputs, _from, state) do
