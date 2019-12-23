@@ -49,22 +49,24 @@ defmodule ElixirDay23.Coordinator do
     # pid_map |> IO.inspect(label: "pid_map")
     # inputs_for_pid |> IO.inspect(label: "inputs_for_pid")
 
-    {:ok, %{pid_map: pid_map, inputs_for_pid: inputs_for_pid}}
+    {:ok, %{pid_map: pid_map, inputs_for_pid: inputs_for_pid, nat_value: [nil, nil]}}
   end
 
   def handle_cast({:send_packet, three_packet_list}, %{
         pid_map: pid_map,
-        inputs_for_pid: inputs_for_pid
+        inputs_for_pid: inputs_for_pid,
+        nat_value: nat_value
       }) do
     [address, x, y] = three_packet_list
     pid = Map.get(pid_map, address, nil)
 
     new_inputs_for_pid =
       if pid == nil do
-        "Trying to send packet to invalid address"
-        |> IO.inspect()
+        # Uncomment for part 1
+        # "Trying to send packet to invalid address"
+        # |> IO.inspect()
 
-        three_packet_list |> IO.inspect()
+        # three_packet_list |> IO.inspect()
         inputs_for_pid
       else
         queue = Map.get(inputs_for_pid, pid, [])
@@ -72,7 +74,14 @@ defmodule ElixirDay23.Coordinator do
         Map.put(inputs_for_pid, pid, new_queue)
       end
 
-    new_state = %{pid_map: pid_map, inputs_for_pid: new_inputs_for_pid}
+    nat_value =
+      if address == 255 do
+        [x, y]
+      else
+        nat_value
+      end
+
+    new_state = %{pid_map: pid_map, inputs_for_pid: new_inputs_for_pid, nat_value: nat_value}
     {:noreply, new_state}
   end
 
@@ -84,12 +93,23 @@ defmodule ElixirDay23.Coordinator do
     {:reply, Map.get(state, key), state}
   end
 
-  def handle_call(:get_packet, {from_pid, _}, %{pid_map: pid_map, inputs_for_pid: inputs_for_pid}) do
+  def handle_call(:get_packet, {from_pid, _}, %{
+        pid_map: pid_map,
+        inputs_for_pid: inputs_for_pid,
+        nat_value: nat_value
+      }) do
+    # Pull out packet from queue (or -1 if empty)
     queue = Map.get(inputs_for_pid, from_pid, [])
     {reply, new_queue} = get_packet_from_queue(queue)
-    new_inputs_for_pid = Map.put(inputs_for_pid, from_pid, new_queue)
 
-    new_state = %{pid_map: pid_map, inputs_for_pid: new_inputs_for_pid}
+    # Save new queue, and insert a special message if we detect it's idle
+    new_inputs_for_pid =
+      inputs_for_pid
+      |> Map.put(from_pid, new_queue)
+      |> check_for_idle(pid_map, nat_value)
+
+    # Build new state
+    new_state = %{pid_map: pid_map, inputs_for_pid: new_inputs_for_pid, nat_value: nat_value}
     {:reply, reply, new_state}
   end
 
@@ -99,5 +119,29 @@ defmodule ElixirDay23.Coordinator do
 
   defp get_packet_from_queue(short_queue) do
     {[-1], short_queue}
+  end
+
+  defp check_for_idle(inputs_for_pid, pid_map, [nil, nil]) do
+    inputs_for_pid
+  end
+
+  defp check_for_idle(inputs_for_pid, pid_map, nat_value) do
+    non_empty_queue_count =
+      inputs_for_pid
+      |> Map.values()
+      |> Enum.map(&length/1)
+      |> Enum.filter(fn x -> x > 0 end)
+      |> length
+
+    if non_empty_queue_count == 0 do
+      "Idle network detected" |> IO.inspect(label: "label")
+      nat_value |> IO.inspect()
+      pid = Map.get(pid_map, 0)
+
+      inputs_for_pid
+      |> Map.put(pid, nat_value)
+    else
+      inputs_for_pid
+    end
   end
 end
