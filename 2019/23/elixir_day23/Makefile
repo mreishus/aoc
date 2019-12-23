@@ -1,5 +1,5 @@
 run:
-	mix run -e "ElixirDay23.main()" --no-halt
+	mix run -e "ElixirDay23.main()"
 .PHONY: test
 test:
 	mix test

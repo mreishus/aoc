@@ -19,10 +19,16 @@ defmodule ElixirDay23 do
     program = parse("../../23/input.txt")
     how_many = 50
 
-    {ok, pid} = Coordinator.start(program, how_many)
+    {ok, pid} = Coordinator.start(program, how_many, self())
 
     pid
     |> IO.inspect(label: "coordinator pid")
+
+    receive do
+      {:answers, p1, p2} ->
+        p1 |> IO.inspect(label: "Part 1")
+        p2 |> IO.inspect(label: "Part 2")
+    end
   end
 
   # This might need to be moved to test

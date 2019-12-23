@@ -5,8 +5,8 @@ defmodule ElixirDay23.Coordinator do
   # start(program, how_many).  Start how_many copies of Computers,
   # all initialized with program, as well as their network address for 
   # the first input.
-  def start(program, how_many) when is_list(program) and is_integer(how_many) do
-    GenServer.start(__MODULE__, {program, how_many})
+  def start(program, how_many, send_answers_to) when is_list(program) and is_integer(how_many) do
+    GenServer.start(__MODULE__, {program, how_many, send_answers_to})
   end
 
   # send_packet(pid, [address, x, y]): A computer calls this to send
@@ -25,7 +25,7 @@ defmodule ElixirDay23.Coordinator do
 
   #### Implementation ####
 
-  def init({program, how_many}) when is_list(program) and is_integer(how_many) do
+  def init({program, how_many, send_answers_to}) when is_list(program) and is_integer(how_many) do
     "Coordinator starting" |> IO.inspect()
     coordinator_pid = self()
 
@@ -42,26 +42,34 @@ defmodule ElixirDay23.Coordinator do
         Map.put(acc, pid, [])
       end)
 
-    {:ok,
-     %{pid_map: pid_map, inputs_for_pid: inputs_for_pid, nat_value: [nil, nil], idle_count: 0}}
+    state = %{
+      pid_map: pid_map,
+      inputs_for_pid: inputs_for_pid,
+      nat_value: [nil, nil],
+      last_wakeup_sent: nil,
+      idle_count: 0,
+      p1_answer: nil,
+      p2_answer: nil,
+      should_stop: false,
+      send_answers_to: send_answers_to
+    }
+
+    {:ok, state}
   end
 
-  def handle_cast({:send_packet, three_packet_list}, %{
-        pid_map: pid_map,
-        inputs_for_pid: inputs_for_pid,
-        nat_value: nat_value,
-        idle_count: idle_count
-      }) do
+  def handle_cast(
+        {:send_packet, three_packet_list},
+        %{
+          pid_map: pid_map,
+          inputs_for_pid: inputs_for_pid,
+          nat_value: nat_value
+        } = state
+      ) do
     [address, x, y] = three_packet_list
     pid = Map.get(pid_map, address, nil)
 
     inputs_for_pid =
       if pid == nil do
-        # Uncomment for part 1
-        # "Trying to send packet to invalid address"
-        # |> IO.inspect()
-
-        # three_packet_list |> IO.inspect()
         inputs_for_pid
       else
         queue = Map.get(inputs_for_pid, pid, [])
@@ -69,14 +77,20 @@ defmodule ElixirDay23.Coordinator do
         Map.put(inputs_for_pid, pid, new_queue)
       end
 
-    nat_value = if address == 255, do: [x, y], else: nat_value
+    nat_value =
+      if address == 255 do
+        [x, y]
+      else
+        nat_value
+      end
 
-    new_state = %{
-      pid_map: pid_map,
-      inputs_for_pid: inputs_for_pid,
-      nat_value: nat_value,
-      idle_count: idle_count
-    }
+    new_state =
+      state
+      |> Map.put(:inputs_for_pid, inputs_for_pid)
+      |> Map.put(:nat_value, nat_value)
+      |> check_for_p1_answer()
+
+    # Don't check for p2_answer here, it only triggers when sending a wakeup
 
     {:noreply, new_state}
   end
@@ -98,7 +112,11 @@ defmodule ElixirDay23.Coordinator do
       |> update_idle_count()
       |> send_wakeup_message()
 
-    {:reply, reply, new_state}
+    if Map.get(new_state, :should_stop, false) do
+      {:stop, :normal, new_state}
+    else
+      {:reply, reply, new_state}
+    end
   end
 
   # From an input queue, pull off the oldest packet (two numbers).
@@ -143,20 +161,76 @@ defmodule ElixirDay23.Coordinator do
     %{nat_value: nat_value, inputs_for_pid: inputs_for_pid, pid_map: pid_map} = state
 
     # Write message to console
-    "Idle network detected" |> IO.inspect(label: "label")
-    nat_value |> IO.inspect()
+    # "Idle network detected" |> IO.inspect(label: "label")
+    # nat_value |> IO.inspect()
 
     # Send special message
     pid0 = Map.get(pid_map, 0)
     inputs_for_pid = inputs_for_pid |> Map.put(pid0, nat_value)
 
     state
+    |> check_for_p2_answer(nat_value)
     |> Map.put(:inputs_for_pid, inputs_for_pid)
     |> Map.put(:idle_count, 0)
+    |> Map.put(:last_wakeup_sent, nat_value)
+    |> check_for_both_answers()
   end
 
   # If we've been idle less than 200 ticks, don't send any wakeup message
   defp send_wakeup_message(state) do
     state
+  end
+
+  # No p1 answer when nat_value is nil
+  defp check_for_p1_answer(%{nat_value: [nil, nil]} = state), do: state
+
+  # p1 answer is the first non-nil nat value
+  defp check_for_p1_answer(%{p1_answer: nil, nat_value: nat_value} = state) do
+    [_x, y] = nat_value
+
+    state
+    |> Map.put(:p1_answer, y)
+  end
+
+  # p1 answer never changes
+  defp check_for_p1_answer(state), do: state
+
+  defp check_for_p2_answer(
+         %{p2_answer: nil, last_wakeup_sent: last_wakeup_sent} = state,
+         wakeup_sent
+       )
+       when last_wakeup_sent == wakeup_sent do
+    [_x, y] = wakeup_sent
+
+    state
+    |> Map.put(:p2_answer, y)
+  end
+
+  defp check_for_p2_answer(state, _wakeup_sent), do: state
+
+  defp check_for_both_answers(
+         %{p1_answer: p1_answer, p2_answer: p2_answer, send_answers_to: send_answers_to} = state
+       )
+       when not is_nil(p1_answer) and not is_nil(p2_answer) do
+    # p1_answer |> IO.inspect(label: "Part 1")
+    # p2_answer |> IO.inspect(label: "Part 2")
+
+    halt_all_computers(state)
+    send(send_answers_to, {:answers, p1_answer, p2_answer})
+
+    state
+    |> Map.put(:should_stop, true)
+  end
+
+  defp check_for_both_answers(state) do
+    state
+  end
+
+  defp halt_all_computers(state) do
+    state.pid_map
+    |> Map.values()
+    |> Enum.each(fn pid ->
+      Process.exit(pid, :kill)
+    end)
   end
 end
