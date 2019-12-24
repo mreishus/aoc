@@ -2,7 +2,7 @@ defmodule ElixirDay23 do
   @moduledoc """
   Documentation for ElixirDay23.
   """
-  alias ElixirDay23.{Breakout, Coordinator}
+  alias ElixirDay23.{Coordinator}
 
   def parse(filename) do
     File.stream!(filename)

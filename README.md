@@ -2,7 +2,7 @@
 
 ## 2019
 
-Missing Writeups: 11, 13, 14, 16, 17, 18, 19, 20, 21
+Missing Writeups: 11, 13, 14, 16, 17, 18, 19, 20, 21, 22, 23
 
 - **Day 1**: [Writeup + Visualization](./2019/01/README.md)
   | [Ruby](./2019/01/ruby_day01/01.rb) (Tests Embedded)
@@ -104,6 +104,14 @@ Missing Writeups: 11, 13, 14, 16, 17, 18, 19, 20, 21
 - **Day 21** _(Intcode)_: [Writeup](./2019/21/README.md)
   | [Python](./2019/21/python_day21/aoc/day21.py)
   [(test)](./2019/21/python_day21/day21_test.py)
+- **Day 22**: [Writeup](./2019/22/README.md)
+  | [Python](./2019/22/python_day22/day22.py)
+  [(test)](./2019/22/python_day22/day22_test.py)
+- **Day 23** _(Intcode)_: [Writeup](./2019/23/README.md)
+  | [Python](./2019/23/python_day23/aoc/day23.py)
+  [(test)](./2019/23/python_day23/day23_test.py)
+  | [Elixir](./2019/23/elixir_day23/lib/coordinator.ex)
+  [(test)](./2019/23/elixir_day23/test/elixir_day23_test.exs)
 
 ## 2018
 
@@ -179,5 +187,5 @@ Missing Writeups: 11, 13, 14, 16, 17, 18, 19, 20, 21
 
 ```
 Created:       Mon 02 Dec 2019 05:12:40 PM CST
-Last Modified: Sat 21 Dec 2019 02:58:17 PM CST
+Last Modified: Mon 23 Dec 2019 07:10:34 PM CST
 ```
