@@ -6,20 +6,9 @@ layer_min = -150
 layer_max = 150
 
 
-def grid_get_reals_imags(grid):
-    """ Given a grid (dict with complex keys), get a list of all of its real
-    (x) and imaginary (y) components """
-    reals = [c.real for c, z in grid.keys()]
-    imags = [c.imag for c, z in grid.keys()]
-    return reals, imags
-
-
-def gen_coords(grid):
-    """ Given a grid, return a generator iterating over x, y coordinates.
-    Note: Each coordinate is not guarenteed to be in the grid. """
-    reals, imags = grid_get_reals_imags(grid)
-    for y in range(int(min(imags)) - 0, int(max(imags)) + 1):
-        for x in range(int(min(reals)) - 0, int(max(reals)) + 1):
+def gen_coords():
+    for y in range(5):
+        for x in range(5):
             yield x, y
 
 
@@ -31,6 +20,21 @@ def in_bounds(coord):
     x = int(coord.real)
     y = int(coord.imag)
     return 0 <= x <= 4 and 0 <= y <= 4
+
+
+def gen_2d_neighbors(coord):
+    x = int(coord.real)
+    y = int(coord.imag)
+    candidates = [
+        complex(x, y - 1),
+        complex(x, y + 1),
+        complex(x + 1, y),
+        complex(x - 1, y),
+    ]
+
+    for coord in candidates:
+        if in_bounds(coord):
+            yield coord
 
 
 def gen_3d_neighbors(coord, z):
@@ -104,7 +108,7 @@ class Day24:
 
     def step(self):
         new_grid = defaultdict(lambda: ".")
-        for x, y in gen_coords(self.grid):
+        for x, y in gen_coords():
             is_center = x == 2 and y == 2
             if is_center:
                 continue
@@ -123,28 +127,46 @@ class Day24:
                 new_grid[complex(x, y), z] = new_char
         self.grid = new_grid
 
+    def step_2d(self):
+        new_grid = defaultdict(lambda: ".")
+        z = 0
+        for x, y in gen_coords():
+            char = self.grid[complex(x, y), z]
+
+            adj_bugs = sum(
+                1 for n in gen_2d_neighbors(complex(x, y)) if self.grid[n, z] == "#"
+            )
+
+            new_char = char
+            if char == "#" and adj_bugs != 1:
+                new_char = "."
+            elif char == "." and (adj_bugs in [1, 2]):
+                new_char = "#"
+            new_grid[complex(x, y), z] = new_char
+        self.grid = new_grid
+
     def display(self, z):
-        reals, imags = grid_get_reals_imags(self.grid)
-        for y in range(int(min(imags)) - 0, int(max(imags)) + 1):
-            for x in range(int(min(reals)) - 0, int(max(reals)) + 1):
+        for y in range(5):
+            for x in range(5):
                 char = self.grid[complex(x, y), z]
                 print(char, end="")
             print("")
 
     def num_bugs(self):
         count = 0
-        for x, y in gen_coords(self.grid):
+        for x, y in gen_coords():
             for z in range(layer_min, layer_max):
                 location = (complex(x, y), z)
                 if location in self.grid and self.grid[location] == "#":
                     count += 1
         return count
 
-    def score(self):
+    def score_2d(self):
+        z = 0
         n = 1
         score = 0
-        for x, y in gen_coords(self.grid):
-            if self.grid[complex(x, y)] == "#":
+        for x, y in gen_coords():
+            if self.grid[complex(x, y), z] == "#":
                 score += n
             n *= 2
         return score
@@ -152,16 +174,20 @@ class Day24:
     def loop_till_dupe(self):
         seen = {}
         while True:
-            a_score = self.score()
+            a_score = self.score_2d()
             if a_score in seen:
                 return a_score
             seen[a_score] = 1
-            self.step()
+            self.step_2d()
 
 
 if __name__ == "__main__":
     d24 = Day24("../../24/input.txt")
+    print("Part 1, first repeating biodiversity score [2d]:")
+    print(d24.loop_till_dupe())
+
+    d24 = Day24("../../24/input.txt")
     for i in range(200):
         d24.step()
-    print("How many bugs present:")
+    print("Part 2, how many bugs present, after 200 steps [3d, recursive]:")
     print(d24.num_bugs())
