@@ -2,6 +2,7 @@
 from unittest import TestCase, main
 
 from day23 import parse
+from aoc.day23 import Day23
 from aoc.day21 import Day21
 from aoc.day19 import Day19
 from aoc.day17 import Day17Droid
@@ -224,6 +225,15 @@ class Programs7:
         0,
         10,
     ]
+
+
+class Day23TestCase(TestCase):
+    def test_part1_and2(self):
+        program = parse("../../23/input.txt")
+        d23 = Day23(program)
+        p1, p2 = d23.execute()
+        self.assertEqual(p1, 22134)
+        self.assertEqual(p2, 16084)
 
 
 class Day21TestCase(TestCase):
