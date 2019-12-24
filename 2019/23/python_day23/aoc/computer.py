@@ -81,6 +81,9 @@ class Computer:
     def add_input(self, x):
         self.inputs.append(x)
 
+    def len_output(self):
+        return len(self.outputs)
+
     def has_output(self):
         return len(self.outputs) > 0
 
