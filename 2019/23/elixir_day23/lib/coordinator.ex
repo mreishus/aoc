@@ -3,7 +3,7 @@ defmodule ElixirDay23.Coordinator do
   alias ElixirDay23.{ComputerNWServer}
 
   # start(program, how_many).  Start how_many copies of Computers,
-  # all initialized with program, as well as their network address for 
+  # all initialized with program, as well as their network address for
   # the first input.
   def start(program, how_many, send_answers_to) when is_list(program) and is_integer(how_many) do
     GenServer.start(__MODULE__, {program, how_many, send_answers_to})

@@ -2,7 +2,24 @@ defmodule ElixirDay23Test do
   use ExUnit.Case
   doctest ElixirDay23
 
-  alias ElixirDay23.{Breakout, Computer, ComputerServer, PainterRobot}
+  alias ElixirDay23.{Breakout, Coordinator, Computer, ComputerServer, PainterRobot}
+
+  ## Day 23 specific tests
+  test "day23_part1and2" do
+    program = ElixirDay23.parse("../../23/input.txt")
+    how_many = 50
+
+    {:ok, pid} = Coordinator.start(program, how_many, self())
+
+    pid
+    |> IO.inspect(label: "coordinator pid")
+
+    receive do
+      {:answers, p1, p2} ->
+        assert p1 == 22134
+        assert p2 == 16084
+    end
+  end
 
   ## Day 13 specific tests
   test "day13_part1" do

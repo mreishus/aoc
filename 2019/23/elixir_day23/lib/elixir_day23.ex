@@ -19,7 +19,7 @@ defmodule ElixirDay23 do
     program = parse("../../23/input.txt")
     how_many = 50
 
-    {ok, pid} = Coordinator.start(program, how_many, self())
+    {:ok, pid} = Coordinator.start(program, how_many, self())
 
     pid
     |> IO.inspect(label: "coordinator pid")
@@ -29,16 +29,5 @@ defmodule ElixirDay23 do
         p1 |> IO.inspect(label: "Part 1")
         p2 |> IO.inspect(label: "Part 2")
     end
-  end
-
-  # This might need to be moved to test
-  def old_main do
-    parse("../../13/input.txt")
-    |> Breakout.part1()
-    |> IO.inspect(label: "Day 13, Part 1: ")
-
-    parse("../../13/input.txt")
-    |> Breakout.part2()
-    |> IO.inspect(label: "Day 13, Part 2: ")
   end
 end
