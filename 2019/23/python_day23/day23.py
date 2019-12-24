@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-from collections import defaultdict, deque
+from collections import defaultdict, deque, Counter
 from aoc.computer import Computer, solve1
 from aoc.day21 import Day21
 
@@ -30,7 +30,11 @@ class Day23:
     def execute(self):
         done = False
         p1_answer = None
+        nat_value = None
+        idle_last_tick = False
+        last_wakeup_y_sent = None
         while not done:
+            address_sent_message = Counter()
             for address in range(self.how_many):
                 cpu = self.computers[address]
 
@@ -43,26 +47,48 @@ class Day23:
 
                 cpu.execute()
                 if cpu.len_output() >= 3:
-                    address = cpu.pop_output()
+                    address_out = cpu.pop_output()
                     x = cpu.pop_output()
                     y = cpu.pop_output()
-                    self.queue_for_address[address].append((x, y))
+                    if address_out == 255:
+                        nat_value = (x, y)
+                    else:
+                        self.queue_for_address[address_out].append((x, y))
+                    address_sent_message[address] += 1
 
-                if len(self.queue_for_address[255]) > 0:
-                    (x, y) = self.queue_for_address[255].popleft()
+                if p1_answer is None and nat_value is not None:
+                    (x, y) = nat_value
                     p1_answer = y
-                    done = True
-                    break
+                    # done = True
+                    # break
 
-        return p1_answer
+                # If idle last rotation and this rotation, send special
+                # wakeup message
+                idle_this_tick = sum(address_sent_message.values()) == 0
+                if idle_last_tick and idle_this_tick and nat_value is not None:
+                    (x, y) = nat_value
+                    # print(f"Sending {x} {y} Wakeup")
+
+                    address_out = 0
+                    self.queue_for_address[address_out].append((x, y))
+                    address_sent_message[255] += 1
+
+                    if last_wakeup_y_sent == y:
+                        p2_answer = y
+                        done = True
+                        break
+                    last_wakeup_y_sent = y
+
+            idle_last_tick = sum(address_sent_message.values()) == 0
+
+        return p1_answer, p2_answer
 
 
 if __name__ == "__main__":
     program = parse("../../23/input.txt")
     d23 = Day23(program)
-    p1 = d23.execute()
+    p1, p2 = d23.execute()
     print("part 1")
     print(p1)
-    # print(d21.part1())
-    # print("part 2")
-    # print(d21.part2())
+    print("part 2")
+    print(p2)
