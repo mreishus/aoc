@@ -2,18 +2,11 @@
 
 from collections import defaultdict
 
-layer_min = -150
-layer_max = 150
-
 
 def gen_coords():
     for y in range(5):
         for x in range(5):
             yield x, y
-
-
-def ok_z(z):
-    return layer_min <= z < layer_max
 
 
 def in_bounds(coord):
@@ -39,7 +32,7 @@ def gen_2d_neighbors(coord):
 
 def gen_3d_neighbors(coord, z):
     for this_coord, this_z in gen_3d_neighbors_raw(coord, z):
-        if this_coord != complex(2, 2) and ok_z(this_z) and in_bounds(this_coord):
+        if this_coord != complex(2, 2) and in_bounds(this_coord):
             yield this_coord, this_z
 
 
@@ -90,8 +83,14 @@ def gen_3d_neighbors_raw(coord, z):
 
 class Day24:
     def __init__(self, filename):
+        self.filename = filename
+        self.reset()
+
+    def reset(self):
         self.grid = None  # defaultdict(lambda: "?")
-        self.parse(filename)
+        self.parse(self.filename)
+        self.current_layer_min = -2
+        self.current_layer_max = 2
 
     def parse(self, filename):
         grid = defaultdict(lambda: ".")
@@ -106,13 +105,13 @@ class Day24:
                 location = complex(0, location.imag)
         self.grid = grid
 
-    def step(self):
+    def step_3d(self):
         new_grid = defaultdict(lambda: ".")
         for x, y in gen_coords():
             is_center = x == 2 and y == 2
             if is_center:
                 continue
-            for z in range(layer_min, layer_max):
+            for z in range(self.current_layer_min, self.current_layer_max):
                 char = self.grid[complex(x, y), z]
 
                 adj_bugs = sum(
@@ -126,6 +125,8 @@ class Day24:
                     new_char = "#"
                 new_grid[complex(x, y), z] = new_char
         self.grid = new_grid
+        self.current_layer_max += 1
+        self.current_layer_min -= 1
 
     def step_2d(self):
         new_grid = defaultdict(lambda: ".")
@@ -155,7 +156,7 @@ class Day24:
     def num_bugs(self):
         count = 0
         for x, y in gen_coords():
-            for z in range(layer_min, layer_max):
+            for z in range(self.current_layer_min, self.current_layer_max):
                 location = (complex(x, y), z)
                 if location in self.grid and self.grid[location] == "#":
                     count += 1
@@ -180,14 +181,21 @@ class Day24:
             seen[a_score] = 1
             self.step_2d()
 
+    def part1(self):
+        self.reset()
+        return self.loop_till_dupe()
+
+    def part2(self, num_steps=200):
+        self.reset()
+        for _ in range(num_steps):
+            self.step_3d()
+        return self.num_bugs()
+
 
 if __name__ == "__main__":
     d24 = Day24("../../24/input.txt")
     print("Part 1, first repeating biodiversity score [2d]:")
-    print(d24.loop_till_dupe())
+    print(d24.part1())
 
-    d24 = Day24("../../24/input.txt")
-    for i in range(200):
-        d24.step()
     print("Part 2, how many bugs present, after 200 steps [3d, recursive]:")
-    print(d24.num_bugs())
+    print(d24.part2())
