@@ -30,8 +30,8 @@ def sequence(n):
 def transform(digits):
     result = []
     for output_i, _ in enumerate(digits):
-        # Skip N + 1 | Combine with slicing "for digits in digits[output:i]" to skip
-        # half the triangle
+        # Skip N + 1 | Combine with slicing "for digits in digits[output:i]" to
+        # skip half the triangle
         seq = itertools.islice(sequence(output_i + 1), 1 + output_i, None)
 
         this_digit = 0

@@ -1,8 +1,14 @@
 # Advent Of Code
 
-## 2019
+## Stars Earned By Year
 
-Missing Writeups: 11, 13, 14, 16
+- 2019 - 50 stars
+- 2018 - 50 stars
+- 2017 - 9 stars
+- 2016 - 1 star
+- 2015 - 0 stars
+
+## 2019
 
 | Day                           | Intcode | Comment                                  | Python                                                                                       | Elixir                                                                                                           | Go                                                                           | Others                                                                 |
 | ----------------------------- | ------- | ---------------------------------------- | -------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------- | ---------------------------------------------------------------------- |
@@ -33,17 +39,21 @@ Missing Writeups: 11, 13, 14, 16
 | [Day 24](./2019/24/README.md) |         | Recursive/3d game of life                | [Python](./2019/24/python_day24/day24.py) [(test)](./2019/24/python_day24/day24_test.py)     |                                                                                                                  |                                                                              |                                                                        |
 | [Day 25](./2019/25/README.md) | ✅      | Text Adventure on VM                     | [Python](./2019/25/python_day25/day25.py)                                                    |                                                                                                                  |                                                                              |                                                                        |
 
-### Hardest Problems
+### Hardest Problems 2019
 
 - 18 - Seemingly O(n!) maze with doors and keys
 - 22 - Number Theory (Shuffling a trillion card deck a trillion times)
+- 16 - Discrete FFT over modulo
+- 14 - Resource Chains
 
-### Favorite Problems
+### Favorite Problems 2019
 
-- 23 - Networking 50 VMs
 - 25 - Text Adventure on VM
+- 23 - Networking 50 VMs
+- 18 - Seemingly O(n!) maze with doors and keys
+- IntCode in general
 
-### Day 01 extra languages
+### Day 01 extra languages 2019
 
 - [React](./2019/01/react_day01/src/) (Visualization only)
 - Haskell [Main](./2019/01/haskell-day01/app/Main.hs) [Lib](./2019/01/haskell-day01/src/Lib.hs) [(test)](./2019/01/haskell-day01/test/Spec.hs)
@@ -51,7 +61,7 @@ Missing Writeups: 11, 13, 14, 16
 - [Raku](./2019/01/raku_day01/01.p6)
 - [Ruby](./2019/01/ruby_day01/01.rb) (Tests Embedded)
 
-### Personal Stats
+### Personal Stats 2019
 
 ```
 You have 31 points.
@@ -85,6 +95,41 @@ Day       Time  Rank  Score       Time  Rank  Score
   1   00:15:43  1660      0   00:15:53  1041      0
 ```
 
+### Overall Thoughts 2019
+
+This was my second advent of code; I enjoyed it greatly and plan to continue
+with the event in the future. Some problems were difficult (18 and 22), but
+completing them means you learned something.
+
+I loved the focus on IntCode: On days 2, 7, 5, and 9 we built a working
+Virtual Machine that ran problems in IntCode. Every other day after that, our
+challenge involved interacting with an IntCode program in one way or another.
+This creative approach leant to problems and inputs that we would not be able
+to see with basic text files (For example, exploring a maze by issuing
+commands to a robot.)
+
+My primary language in 2018 was Ruby, in 2019 it was Python. I've been
+learning Python this year, and completing all 25 programs in it was a way for
+me to feel that I have a general grasp on the language. I think that it's
+a great language for these types of problems, with a rich set of data
+structures baked in. (Disappointly, the heap/priority queue does not allow
+for reassignment of priority for items already in the queue.) I did miss
+Ruby's allowances for functional-like programming, though. Since Python is
+the #2 language in the world currently, I feel like I'm speaking the same
+language as the rest of the world.
+
+I also used Elixir and Go. Elixir continues to be the functional language
+that I know the best and I'm most productive with. However, with these sorts
+of problems, the functional approach is not always the easiest, in my opinion.
+Functional works well as another tool in my toolbox, and not "the best and
+only way" to program.
+
+Go blew me away with its speed (regularly 40x faster than python), and it's
+nowhere near as difficult to use as C, C++ or Rust. It's a fantastic "get
+stuff done" language, with a distribution and deployment story much nicer than
+Python's, and I'll be looking forward to use it more in the future. Of course,
+I miss some constructs like `map`, `filter`, etc while using it.
+
 ## 2018
 
 - **Day 1**: [Writeup](./2018/1/README.md)
@@ -116,7 +161,7 @@ Day       Time  Rank  Score       Time  Rank  Score
 - **Day 13**: [Ruby](./2018/13/13.rb)
 - **Day 14**: [Ruby](./2018/14/14.rb)
 
-### Personal Stats
+### Personal Stats 2018
 
 ```
       --------Part 1--------   --------Part 2--------
@@ -191,5 +236,5 @@ Day       Time   Rank  Score       Time   Rank  Score
 
 ```
 Created:       Mon 02 Dec 2019 05:12:40 PM CST
-Last Modified: Thu 26 Dec 2019 12:20:56 PM CST
+Last Modified: Thu 26 Dec 2019 04:30:31 PM CST
 ```

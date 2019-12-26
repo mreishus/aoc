@@ -2,6 +2,17 @@
 
 ## Approach and Reflections
 
+We're given an IntCode program that's an interface to a Painter Robot, which
+works similarily to [Langton's
+Ant](https://en.wikipedia.org/wiki/Langton%27s_ant). We feed the Robot
+information about what it is seeing, it tells us what it want to paint and
+where it wants to go, and we track and record that information. Eventually it
+spells out a message for us to read.
+
+This was a straightforward interface with an intcode computer with using
+a grid-based datastructure to store info, along with keeping direction facing
+and calculating turns.
+
 ## Solutions
 
 - [Python](./python_day11/day11.py) [(test)](./python_day11/day11_test.py)

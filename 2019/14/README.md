@@ -2,6 +2,27 @@
 
 ## Approach and Reflections
 
+We're given a list of production rules with materials and quantities. Example:
+7 A and 1 B can produce 1 FUEL. With our list, we need to find out how much
+of the most basic, raw element we need (ORE) to produce the most refined
+element (FUEL). One tricky portion is that not everything will fit together,
+sometimes we will have to produce waste (Let's say we can only produce ABC in
+groups of 5, but we only need 4 of it). We must minimize waste and find the
+most efficient answer.
+
+This is definitely one of the tough ones. I started out with a hand-rolled
+topological sort in order to ensure that we produce elements in the right
+order, as to minimize waste. I wasn't successful with this method; no matter
+how I tweaked the sort I couldn't get correct answers consistently. I would
+always pass some of the test cases and fail others.
+
+The key insight for me was to keep track of leftovers. If I created extras,
+for example if I only needed 4 BCDs but created 6, I would mark "2 leftover"
+that I could use in subsequent steps. Surprisingly, keeping track of
+leftovers removed the need to topologically sort the rules, and the program
+worked in any order, as long as I kept looping over the rules, looking for
+reactions to do.
+
 ## Solutions
 
 - [Python](./python_day14/day14.py) [(test)](./python_day14/day14_test.py)

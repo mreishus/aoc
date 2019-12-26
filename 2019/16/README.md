@@ -2,6 +2,28 @@
 
 ## Approach and Reflections
 
+We're asked to implement something like a [Fast-Fourier Transform
+(FFT)](https://en.wikipedia.org/wiki/Fourier_transform); except our 'sine
+wave' looks like `0, 1, 1, 0, 0, -1, -1, 0, 0, 1, 1, 0, 0, -1, -1, ....`, and
+we take the modulo 10 of each result. A Discrete Fourier Transform (DFT) over
+a ring (modulo 10) is called a [Number-Theoertic Transform
+(NTT)](<https://en.wikipedia.org/wiki/Discrete_Fourier_transform_(general)>).
+Part 1 is small enough problem that a basic simulation works; Part 2 is large
+and needs some math or optimization.
+
+For Part 1, I went with the straightforward simulation. I was able to combine
+`chain`, `cycle`, and `repeat` from python's `itertools` library to make an
+iterator that described my 'carrier wave' for each step.
+
+Part 2 was quite difficult and stumped me for a while. A regular simulation
+would run way too slowly to ever compete. I didn't understand the advanced
+math well enough to apply a Number-Theoertic Transform (NTT) to the problem.
+A friend helped by pointing out that only needing numbers from the second half
+of the result greatly simplified the problem. With this insight, I examined
+the example matrices closely, worked backwards, and was able to come up with
+a "shortcut" solution for calculating any number in the second half of the
+output.
+
 ## Solutions
 
 - [Python](./python_day16/day16.py)

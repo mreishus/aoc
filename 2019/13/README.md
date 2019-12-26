@@ -2,6 +2,15 @@
 
 ## Approach and Reflections
 
+We're given a intcode program that implements the classic breakout game. We
+need to find the winning score of the game, but it provides a paddle only one
+character long.
+
+This was a test of how modular/reusable our intcode machine was. Could we run
+this program on it and build out an interface? When it came to playing the
+game, a very simple AI was all that's needed to automatically win. (If the
+ball is right of the paddle, move right; repeat with left.)
+
 ## Solutions
 
 - [Python](./python_day13/day13.py) [(test)](./python_day13/day13_test.py)
