@@ -101,23 +101,33 @@ Missing Writeups: 11, 13, 14, 16, 17, 18, 19, 20, 21, 22, 23
 - **Day 20**: [Writeup](./2019/20/README.md)
   | [Python](./2019/20/python_day20/day20.py)
   [(test)](./2019/20/python_day20/day20_test.py)
-- **Day 21** _(Intcode)_: [Writeup](./2019/21/README.md)
-  | [Python](./2019/21/python_day21/aoc/day21.py)
-  [(test)](./2019/21/python_day21/day21_test.py)
-- **Day 22**: [Writeup](./2019/22/README.md)
-  | [Python](./2019/22/python_day22/day22.py)
-  [(test)](./2019/22/python_day22/day22_test.py)
-- **Day 23** _(Intcode)_: [Writeup](./2019/23/README.md)
-  | [Python](./2019/23/python_day23/aoc/day23.py)
-  [(test)](./2019/23/python_day23/day23_test.py)
-  | [Elixir](./2019/23/elixir_day23/lib/coordinator.ex)
-  [(test)](./2019/23/elixir_day23/test/elixir_day23_test.exs)
 
-| Day    | Intcode   | Python | Elixir                                        | Go  | Others                                              |
-| ------ | --------- | ------ | --------------------------------------------- | --- | --------------------------------------------------- |
-|        |           |        |                                               |     |                                                     |
-|        |           |        |                                               |     |                                                     |
-| Day 23 | (Intcode) |        | [Python](./2019/23/python_day23/aoc/day23.py) |     | [Elixir](./2019/23/elixir_day23/lib/coordinator.ex) |
+| Day                           | Intcode | Python                                                                                       | Elixir                                                                                                          | Go  | Others |
+| ----------------------------- | ------- | -------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------- | --- | ------ |
+|                               |         |                                                                                              |                                                                                                                 |     |        |
+| [Day 0l](./2019/01/README.md) |         |                                                                                              |                                                                                                                 |     |        |
+| [Day 02](./2019/02/README.md) | ✅      |                                                                                              |                                                                                                                 |     |        |
+| [Day 03](./2019/03/README.md) |         |                                                                                              |                                                                                                                 |     |        |
+| [Day 04](./2019/04/README.md) |         |                                                                                              |                                                                                                                 |     |        |
+| [Day 05](./2019/05/README.md) | ✅      |                                                                                              |                                                                                                                 |     |        |
+| [Day 06](./2019/06/README.md) |         |                                                                                              |                                                                                                                 |     |        |
+| [Day 07](./2019/07/README.md) | ✅      |                                                                                              |                                                                                                                 |     |        |
+| [Day 08](./2019/08/README.md) |         |                                                                                              |                                                                                                                 |     |        |
+| [Day 09](./2019/09/README.md) | ✅      |                                                                                              |                                                                                                                 |     |        |
+| [Day 10](./2019/10/README.md) |         |                                                                                              |                                                                                                                 |     |        |
+| [Day 11](./2019/11/README.md) | ✅      |                                                                                              |                                                                                                                 |     |        |
+| [Day 12](./2019/12/README.md) |         |                                                                                              |                                                                                                                 |     |        |
+| [Day 13](./2019/13/README.md) | ✅      |                                                                                              |                                                                                                                 |     |        |
+| [Day 14](./2019/14/README.md) |         |                                                                                              |                                                                                                                 |     |        |
+| [Day 15](./2019/15/README.md) | ✅      |                                                                                              |                                                                                                                 |     |        |
+| [Day 16](./2019/16/README.md) |         |                                                                                              |                                                                                                                 |     |        |
+| [Day 17](./2019/17/README.md) | ✅      |                                                                                              |                                                                                                                 |     |        |
+| [Day 18](./2019/18/README.md) |         |                                                                                              |                                                                                                                 |     |        |
+| [Day 19](./2019/19/README.md) | ✅      |                                                                                              |                                                                                                                 |     |        |
+| [Day 20](./2019/20/README.md) |         |                                                                                              |                                                                                                                 |     |        |
+| [Day 21](./2019/21/README.md) | ✅      | [Python](./2019/21/python_day21/aoc/day21.py) [(test)](./2019/21/python_day21/day21_test.py) |                                                                                                                 |     |        |
+| [Day 22](./2019/22/README.md) |         | [Python](./2019/22/python_day22/day22.py) [(test)](./2019/22/python_day22/day22_test.py)     |                                                                                                                 |     |        |
+| [Day 23](./2019/23/README.md) | ✅      | [Python](./2019/23/python_day23/aoc/day23.py) [(test)](./2019/23/python_day23/day23_test.py) | [Elixir](./2019/23/elixir_day23/lib/coordinator.ex) [(test)](./2019/23/elixir_day23/test/elixir_day23_test.exs) |     |        |
 
 ## 2018
 
@@ -193,5 +203,5 @@ Missing Writeups: 11, 13, 14, 16, 17, 18, 19, 20, 21, 22, 23
 
 ```
 Created:       Mon 02 Dec 2019 05:12:40 PM CST
-Last Modified: Wed 25 Dec 2019 06:21:28 PM CST
+Last Modified: Wed 25 Dec 2019 06:28:36 PM CST
 ```
