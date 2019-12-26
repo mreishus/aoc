@@ -2,6 +2,49 @@
 
 ## Approach and Reflections
 
+The problem defines 3 specific operations for shuffling a deck with
+parameters. For part 1, it asks us to shuffle a 10,000 card deck once. For
+part 2, we're asked to shuffle a one trillion card deck a trillion times.
+
+This was the hardest problem this year, and I needed outside help for it. This
+was the only problem this year I couldn't solve on my own. Part 1 was solved
+easily enough with a `deque` simulation, but Part 2 would require multiple
+terabytes of memory to simulate, and let's not forget about the CPU runtime
+required. Clearly a different approach is needed!
+
+I browsed the solutions thread on reddit to see the approaches others took,
+then I knew which concepts I needed to research and apply. The key insight
+here is that every shuffle operation can be expressed as a linear
+transformation of the form `y = mx + b`, or `card = m * index + b` _operating
+in a modulo space_. The deck starts with `m == 1` and `b == 0`, such that
+`card = index`, or the 2nd slot holds the card labeled 2.
+
+Each shuffle operation is a linear transformation which modifies the `m` and
+`b` variables. Playing around with these variables lets you find them; but
+for one you will need to use `inverse modulo`, which might be new to you (it
+was new to me).
+
+Since linear transformations can be composed, we can take
+a list of 100 shuffle operations and compress it to one `y = mx + b` equation
+that describes the deck. Since we're operating in a modulo space, it's always
+safe to set `m = m % deck_size` or `b = b % deck_size` if the numbers get too
+large.
+
+Finally, for applying the shuffle a trillion times, we can compose the
+equation with itself to build up one equation that describes shuffling the
+deck a trillion times. Doubling is especially useful here and gets us to
+a O(ln x) of building up this equation. I used matrix multiplication here, as
+that made the most sense to me intuitively. ( [3blue1brown's videos on linear
+algebra](https://www.youtube.com/watch?v=XkY2DOUCWMU&list=PLZHQObOWTQDPD3MizzM2xVFitgF8hE_ab&index=4)
+helped me build up this intuition.
+
+Overall, this was a difficult problem, found contentious by the community.
+Did it even belong in Advent of Code? Where are the data structures? I can
+see both sides of the argument; it was a bit frustrating in the moment, but
+I came out on the other side having learned something. It's also amazing just
+how quickly my final program calculates the result of shuffling a trillion
+card deck a trillion times; granted it's only looking in one position.
+
 ## Solutions
 
 - [Python](./python_day22/day22.py) [(test)](./python_day22/day22_test.py)

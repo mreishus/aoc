@@ -2,6 +2,22 @@
 
 ## Approach and Reflections
 
+We load some code in our VM that lets us interact with a springdroid, a robot
+that advances forward through a 2d game plane, jumping over gaps. It can see
+a few tiles ahead of it, and we must program it using a very bare bones
+assembly language. The program reacts to what it sees and tells it when to
+jump.
+
+Approach: Like everyone, I manually programmed the robot, writing assembly,
+seeing what worked and what didn't, then tweaking it based on my failures.
+I guess this one plays to my individual strengths, because I placed on the
+[global leaderboard](https://adventofcode.com/2019/leaderboard/day/21) for the
+first time ever! (Out of 1000s of people competing, only the first 100 get
+leaderboard spots).
+
+Overall, I found it fun, while I'm also glad I don't have to program assembly
+regularly. Even writing out some simple boolean equations can be a pain.
+
 ## Solutions
 
 - [Python](./python_day21/aoc/day21.py) [(test)](./python_day21/day21_test.py)

@@ -2,6 +2,24 @@
 
 ## Approach and Reflections
 
+Day 24 was a cellular automata or "game of life" style problem. Part 1 was
+fairly straightforward, while part 2 added an interesting twist: The game is
+recursive, with each middle square in the gameboard being another gameboard.
+Additionally, the initial gameboard is surrounded by a larger board where
+the starting board is just a single square.
+
+Part1 was a basic grid based simulation. For part2, I added a third dimension,
+z, which represents which level you're on. The hardest part of the problem was
+the rules of neighboring cells between layers. I ended up hardcoding most of
+the rules in `gen_3d_neighbors_raw`, a python generator, which I'm not
+entirely happy with but seemed to be a practical solution with a reasonable
+tradeoff.
+
+Potential Improvements: My part2 is a little bit slow. It takes about 10
+seconds to solve. It does limit the z layers it initially scans, and
+gradually expands them, so that obvious optimization is done. I'm not sure
+what else to optimize, and left it as the performance seems acceptable.
+
 ## Solutions
 
 - [Python](./python_day24/day24.py) [(test)](./python_day24/day24_test.py)

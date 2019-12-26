@@ -2,6 +2,31 @@
 
 ## Approach and Reflections
 
+This year ended with a text adventure game that runs on our intcode VMs! To
+finish the game, you must collect the right set of items and pass through the
+security checkpoint. It was fun, creative, and a great way to end the event.
+
+To solve the game on the night of, I hooked up some basic I/O to my intcode VM
+and played the game manually. I went back and later added an autosolver, which
+uses DFS with save states to build a graph of the game map while noting the
+location of all items. It then uses `networkx` to navigate throughout the
+maze, picking up all items. (Why `networkx`? The basic info collected during
+the initial DFS is only sufficient to plan paths starting from the root node.)
+
+With all items, it heads to the security checkpoint and brute forces all
+combinations of items to see which are allowed to pass.
+
+Potential room for improvement: Some items should not be picked up and make
+the game crash in creative ways. The VM could be programmed to save state and
+try picking up an item, then restore and blacklist the item if it didn't
+work. Instead, it uses a manually coded blacklist I created while playing the
+game manually.
+
+Another point of improvement would be to make the brute force item search at
+the end a bit smarter. The game tells you if you're too heavy or too light,
+so any combinations of items that contain subsets of items that are too heavy
+on their own don't need to be tried.
+
 ## Solutions
 
 - [Python](./python_day25/day25.py)
@@ -32,15 +57,13 @@ As the droid moves through its environment, it will describe what it
 encounters. When it says Command?, you can give it a single instruction
 terminated with a newline (ASCII code 10). Possible instructions are:
 
-- Movement via north, south, east, or west.
-- To take an item the droid sees in the environment, use the command take
-  <name of item>. For example, if the droid reports seeing a red ball, you can
-  pick it up with take red ball.
-- To drop an item the droid is carrying, use the command drop <name of item>.
-  For example, if the droid is carrying a green ball, you can drop it with
-  drop green ball.
+- Movement via `north`, `south`, `east`, or `west`.
+- To take an item the droid sees in the environment, use the command `take <name of item>`. For example, if the droid reports seeing a `red ball`, you
+  can pick it up with take `red ball`.
+- To drop an item the droid is carrying, use the command `drop <name of item>`. For example, if the droid is carrying a `green ball`, you can drop
+  it with `drop green ball`.
 - To get a list of all of the items the droid is currently carrying, use the
-  command inv (for "inventory").
+  command `inv` (for "inventory").
 
 Extra spaces or other characters aren't allowed - instructions must be
 provided precisely.

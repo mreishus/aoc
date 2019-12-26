@@ -2,6 +2,19 @@
 
 ## Approach and Reflections
 
+We're given a donut-shaped maze with a list of portals. Walking through one
+portal labled BC will teleport you to the other BC portal. For part 1, it's
+a simple pathfinding problem. For part 2, we go recursive: The middle of each
+donut maze contains another smaller copy of the maze. Some portals warp you in
+deeper levels, some warp you to shallower levels. Now you must find a way
+through, traversing through a possible infinite stack of mazes.
+
+This was another pathfinding problem, but it really doesn't stack up to the
+hellish difficulty that was day 18. This problem was like a nice break after
+day 18. As long as you are good with BFS or Dijkstra's, this won't be
+a problem. The hardest part was parsing out the portal names (2 character
+strings running in vertical or horizontal directions). I did `import networkx`, but that's just being efficient. :)
+
 ## Solutions
 
 - [Python](./python_day20/day20.py) [(test)](./python_day20/day20_test.py)

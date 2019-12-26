@@ -2,7 +2,7 @@
 
 ## 2019
 
-Missing Writeups: 11, 13, 14, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25
+Missing Writeups: 11, 13, 14, 16, 17, 18
 
 | Day                           | Intcode | Comment                                  | Python                                                                                       | Elixir                                                                                                           | Go                                                                           | Others                                                                 |
 | ----------------------------- | ------- | ---------------------------------------- | -------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------- | ---------------------------------------------------------------------- |
@@ -32,6 +32,16 @@ Missing Writeups: 11, 13, 14, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25
 | [Day 23](./2019/23/README.md) | ✅      | Networking 50 VMs                        | [Python](./2019/23/python_day23/aoc/day23.py) [(test)](./2019/23/python_day23/day23_test.py) | [Elixir](./2019/23/elixir_day23/lib/coordinator.ex) [(test)](./2019/23/elixir_day23/test/elixir_day23_test.exs)  |                                                                              |                                                                        |
 | [Day 24](./2019/24/README.md) |         | Recursive/3d game of life                | [Python](./2019/24/python_day24/aoc/day24.py) [(test)](./2019/24/python_day24/day24_test.py) |                                                                                                                  |                                                                              |                                                                        |
 | [Day 25](./2019/25/README.md) | ✅      | Text Adventure on VM                     | [Python](./2019/25/python_day25/aoc/day25.py)                                                |                                                                                                                  |                                                                              |                                                                        |
+
+### Hardest Problems
+
+- 18 - Seemingly O(n!) maze with doors and keys
+- 22 - Number Theory (Shuffling a trillion card deck a trillion times)
+
+### Favorite Problems
+
+- 23 - Networking 50 VMs
+- 25 - Text Adventure on VM
 
 ### Day 01 extra languages
 
@@ -181,5 +191,5 @@ Day       Time   Rank  Score       Time   Rank  Score
 
 ```
 Created:       Mon 02 Dec 2019 05:12:40 PM CST
-Last Modified: Wed 25 Dec 2019 07:23:11 PM CST
+Last Modified: Wed 25 Dec 2019 09:02:00 PM CST
 ```

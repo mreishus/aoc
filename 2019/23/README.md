@@ -2,6 +2,32 @@
 
 ## Approach and Reflections
 
+Day 23 was a blast! We had to spawn 50 copies of our intcode computers and
+have them send messages to each other over a network.
+
+I went with two approaches; Python for a cooperative multitasking
+/ timeslicing approach, and Elixir for a truely concurrent approach.
+
+Up until this point, my VMs always paused if they needed input that was not
+available. I assumed most others built theirs this way too. The specs for
+this problem indiciate that the VMs must run non-blocking and receive a -1 if
+they ask for input when there is nothing in their network queue.
+
+A fairly simple approach of holding a network queue for each machine, stepping
+through each VM, inputting either -1 or a packet from its network queue,
+letting it run until it asked for input again, then pausing and moving to the
+next VM was enough to work. This is what the python solution does.
+A drawback here is that it requires cooperation from the VMs; if one of them
+goes rogue and loops infinitely, the entire system is stuck and stops working.
+This was not an issue in today's problem, though.
+
+My elixir solution uses a more sophisticated approach: All 50 VMs run in their
+own process and get input/output from a single coordinator process, which
+stores a network queue for each machine. This is a more robust solution, as
+1 VM infinitely looping would no longer take down the entire system. It also
+uses multiple cores to their full effect. The downside is, more VMs are busy
+looping, but that is a downside of the intcode program itself.
+
 ## Solutions
 
 - [Python](./python_day23/aoc/day23.py) [(test)](./python_day23/day23_test.py)

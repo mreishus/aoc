@@ -2,6 +2,21 @@
 
 ## Approach and Reflections
 
+We're given an IntCode machine that can scan a grid, looking for a tractor
+beam. It takes a coordinate, churns a bit, and slowly returns if the beam is
+on or off. We have to find the spot closest to the origin where a 100x100
+square can fit inside the beam.
+
+Since the scanning is so slow, you have to be a little bit smarter than
+scanning every square. When going line by line, the x-coordinates of the
+starting and ending edges only move by 0 or 1 spaces in the grid each time, so
+that's all you need to check. No use in checking the obviously blank or
+obviously filled in spaces. My program is still a bit slow, (20 seconds to
+run, or 2 seconds in pypy), so there are still some optimizations to be made,
+but I'll take it.
+
+This was a fairly easy problem intended as a break after Day 18, I'm guessing.
+
 ## Solutions
 
 - [Python](./python_day19/aoc/day19.py) [(test)](./python_day19/day19_test.py)
