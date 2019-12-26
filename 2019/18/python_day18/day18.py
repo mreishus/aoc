@@ -1,26 +1,44 @@
 #!/usr/bin/env python
+
 import string
-import networkx as nx
-from heapq import heappush, heappop
 from collections import namedtuple, defaultdict
+import networkx as nx
 from heapdict import heapdict
 
-PathInfo = namedtuple('PathInfo', ('length', 'doors'))
-State = namedtuple('State', ('location', 'collected_keys'))
-Step = namedtuple('Step', ('state', 'length'))
+# A path between two keys contains a length (int) and a list of doors along
+# that path (List of strings)
+PathInfo = namedtuple("PathInfo", ("length", "doors"))
+
+# A state in our final search contains our hero locations and the collected
+# keys (frozenset)
+State = namedtuple("State", ("location", "collected_keys"))
+
+# A Edge, a possible action to take in our final search, brings us to a new
+# state with cost `length` of steps
+Edge = namedtuple("Edge", ("state", "length"))
+
 
 class Maze:
     def __init__(self, filename):
-        self.grid = None  # defaultdict(lambda: "?")
+        self.grid = None
         self.graph = None
         self.loc_of_door = None
         self.door_of_loc = None
         self.loc_of_key = None
-        self.between_keys = None
         self.hero_locs = []
         self.parse(filename)
 
     def parse(self, filename):
+        """ Given a filename, read the grid and fill out many variables.
+
+        grid: dictionary with complex numbers representing coords as keys,
+        characters as values.
+        loc_of_door: Hash with door names as keys, complex coordinates as values.
+        loc_of_key: Hash with key names as keys, complex coordinates as values.
+        door_of_loc: Hash with complex coordinates as keys, door names as values.
+        all_keys: Frozenset of all keys seen.
+        hero_locs: List of all hero locations (complex coordinates).
+        """
         grid = {}
         loc_of_door = {}
         loc_of_key = {}
@@ -49,47 +67,70 @@ class Maze:
         self.all_keys = frozenset(loc_of_key.keys())
 
     def valid_char(self, char):
-        if char == "?" or char == "#":
-            return False
-        # See through all doors:
-        # Check for doors later
-        # if char in string.ascii_uppercase: # and char not in self.unlocked_doors:
-        #     return False
-        return True
+        """ For build_graph().  Is a character valid to walk on?
+        See through all doors: the only "invalid" chars are walls. """
+        return char != "#"
+
+    def gen_coords(self, grid):
+        """ Given a dictionary with keys as complex numbers representing
+        coorindates, return a generator iterating over all coordinates in x, y
+        format.  Assumes the grid is not sparse. """
+        reals = [c.real for c in grid.keys()]
+        imags = [c.imag for c in grid.keys()]
+        for y in range(int(min(imags)), int(max(imags)) + 1):
+            for x in range(int(min(reals)), int(max(reals)) + 1):
+                yield x, y
+
+    def gen_neighbors(self, coord):
+        """ Given a complex coordinate, return a generator iterating over
+        its 4 direct neighbors """
+        yield coord + complex(0, -1)
+        yield coord + complex(0, 1)
+        yield coord + complex(-1, 0)
+        yield coord + complex(1, 0)
 
     def build_graph(self):
+        """ Iterate over the grid and build a networkx graph of
+        adjoining spaces, pretending that doors do not exist.
+        We will use this to find the path between all sets of keys. """
         G = nx.Graph()
 
-        reals = [c.real for c in self.grid.keys() if self.grid[c] != "?"]
-        imags = [c.imag for c in self.grid.keys() if self.grid[c] != "?"]
-        for y in range(int(min(imags)) - 1, int(max(imags)) + 1):
-            for x in range(int(min(reals)) - 1, int(max(reals)) + 1):
-                location = complex(x, y)
-                if location not in self.grid:
-                    continue
-                char = self.grid[location]
-                if not self.valid_char(char):
-                    continue
+        for x, y in self.gen_coords(self.grid):
+            location = complex(x, y)
+            if location not in self.grid:
+                continue
+            char = self.grid[location]
+            if not self.valid_char(char):
+                continue
 
-                G.add_node(location)
+            G.add_node(location)
 
-                up = location + complex(0, -1)
-                down = location + complex(0, 1)
-                left = location + complex(-1, 0)
-                right = location + complex(1, 0)
-
-                for neighbor in [up, down, left, right]:
-                    neighbor_char = self.grid[neighbor]
-                    if self.valid_char(neighbor_char):
-                        G.add_edge(location, neighbor)
+            for neighbor in self.gen_neighbors(location):
+                neighbor_char = self.grid[neighbor]
+                if self.valid_char(neighbor_char):
+                    G.add_edge(location, neighbor)
 
         self.graph = G
-        return G
 
     def find_doors_on_path(self, path):
-        return frozenset([self.door_of_loc[step].lower() for step in path if step in self.door_of_loc])
+        """ Given a path (a list of complex coordinates), return a frozenset
+        containing all doors on that path.
+        Example input value:  [ [(43+3j), (43+2j), (43+1j), (44+1j), (45+1j),
+        (46+1j), ... ]
+        Example return value: frozenset({'v', 'h', 'u', 'p'})
+        """
+        return frozenset(
+            [
+                self.door_of_loc[step].lower()
+                for step in path
+                if step in self.door_of_loc
+            ]
+        )
 
     def build_key_paths(self):
+        """ Examine all pairs of keys and calculate the shortest path between
+        them, if one exists.  Save the length of that path, and any doors along
+        that path, in self.path_info. """
         G = self.graph
         important_locs = list(self.loc_of_key.values()) + self.hero_locs
         path_info = {}
@@ -111,16 +152,20 @@ class Maze:
         self.path_info = path_info
 
     def solve(self):
+        """ Main solver.  Run Dijkstra's algorithm between all nodes containing
+        State, or a list of hero locations and a frozenset of all keys
+        collected. We assume the paths between all keys has already been
+        calculated in self.path.info. """
         dist_to = defaultdict(lambda: 999_999_999)
         edge_to = {}
-        hd = heapdict()
+        queue = heapdict()
 
         collected_keys = frozenset({})
         state = State(tuple(self.hero_locs), collected_keys)
         dist_to[state] = 0
-        hd[state] = 0
-        while len(hd) > 0:
-            (state, length) = hd.popitem()
+        queue[state] = 0
+        while len(queue) > 0:
+            (state, length) = queue.popitem()
 
             # Stop searching if solution
             if state.location == complex(-1, -1):
@@ -129,24 +174,25 @@ class Maze:
             # loc_string = "".join(state.collected_keys)
             # print(f"{dist_to[state]:>7} {str(state.location):12} {loc_string}")
 
-            steps = self.possible_steps(state)
+            steps = self.possible_edges(state)
             for new_state, length in steps:
                 if dist_to[new_state] > dist_to[state] + length:
                     dist_to[new_state] = dist_to[state] + length
                     edge_to[new_state] = state
-                    hd[new_state] = dist_to[new_state]
+                    queue[new_state] = dist_to[new_state]
 
         print("==Done==")
-        # for k, v in edge_to.items():
-        #     print(f"{v} {k}")
         for k, v in dist_to.items():
+            # -1, -1 represents the solved state: All keys collected.
             if k.location == complex(-1, -1):
                 print(f"{v} {k}")
                 return v
         return 0
 
-
-    def possible_steps(self, state):
+    def possible_edges(self, state):
+        """ Given a State (list of hero locations and keys collected), what the
+        steps we can take from that state? A Edge() contains a new state and
+        the number of steps taken to get to that state. """
         (locations, collected_keys) = state
         steps = []
         remaining_keys = self.all_keys - collected_keys
@@ -155,7 +201,7 @@ class Maze:
         # problem is solved
         if len(remaining_keys) == 0 and locations != complex(-1, -1):
             new_state = State(complex(-1, -1), collected_keys)
-            steps.append(Step(new_state, 0))
+            steps.append(Edge(new_state, 0))
 
         for key in remaining_keys:
 
@@ -176,13 +222,14 @@ class Maze:
             new_locations = tuple(new_locations)
 
             new_state = State(new_locations, collected_keys | frozenset({key}))
-            steps.append(Step(new_state, info.length))
+            steps.append(Edge(new_state, info.length))
         return steps
 
+
 if __name__ == "__main__":
-    #f = Maze("../input_small.txt")
-    #f = Maze("../input_86.txt")
-    #f = Maze("../input_136.txt")
+    # f = Maze("../input_small.txt")
+    # f = Maze("../input_86.txt")
+    # f = Maze("../input_136.txt")
     f = Maze("../input.txt")
 
     print("Part1:")

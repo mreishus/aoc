@@ -2,6 +2,34 @@
 
 ## Approach and Reflections
 
+For part 1, we're given an intcode program that generates an ASCII view of
+some scaffolding and we're asked to map it out.
+
+For part 2, we need to trace along a path for a simple robot to visit all
+parts of the scaffolding, picking up dust, in the format of "Turn Right or
+Left", then "Advance X number of steps". The scaffolding is quite
+complicated, but luckily advancing until you can't advance anymore, then
+turning in the only direction available is enough to trace out the entire
+path.
+
+Additionally for part 2, we need to program our final list of directions into
+the robot's limited memory. We can fill programs A, B, and C, each with
+a list of steps no longer than 20 ascii characters, then fill a main program
+that calls programs A, B, C in a particular order with repeats allowed.
+
+Part 1 was making sure that we had an ascii interface for our intcode
+computer. Not too difficult.
+
+The tracing the path in Part 2 perhaps seemed difficult at first, but it was
+traced with a basic algorithm described above. Compressing the program was
+difficult, and many did it manually with a text editor (I did, the night of
+the problm).
+
+At the [Dallas Ruby Meetup](http://www.dallasrb.org/),
+[Aaron](https://github.com/AaronLasseigne) helped design a basic greedy
+algorithm that compressed the program to specs. It doesn't backtrack, so I'm
+unsure if it would work with all inputs, but it worked fine here.
+
 ## Solutions
 
 - [Python](./python_day17/day17.py) [(test)](./python_day17/day17_test.py)

@@ -1,6 +1,6 @@
 from collections import defaultdict
-from aoc.computer import Computer
 from os import system
+from aoc.computer import Computer
 
 COMPLEX_OF_ROBOTCHAR = {
     "^": complex(0, -1),
@@ -16,6 +16,17 @@ def turn_right(direction):
 
 def turn_left(direction):
     return direction * complex(0, -1)
+
+
+def gen_coords(grid):
+    """ Given a dictionary with keys as complex numbers representing
+    coorindates, return a generator iterating over all coordinates in x, y
+    format.  Assumes the grid is not sparse. """
+    reals = [c.real for c in grid.keys()]
+    imags = [c.imag for c in grid.keys()]
+    for y in range(int(min(imags)), int(max(imags)) + 1):
+        for x in range(int(min(reals)), int(max(reals)) + 1):
+            yield x, y
 
 
 class Day17Droid:
@@ -51,11 +62,7 @@ class Day17Droid:
         for y in range(int(min(imags)) - 2, int(max(imags)) + 3):
             for x in range(int(min(reals)) - 2, int(max(reals)) + 3):
                 char = self.grid[complex(x, y)]
-                # print(char, end="")
-                if x == 34 and y == 16:
-                    print("?", end="")
-                else:
-                    print(char, end="")
+                print(char, end="")
             print("")
 
     def trace_path(self):
@@ -64,8 +71,6 @@ class Day17Droid:
         steps = []
         steps_taken = 0
         while True:
-            x = int(location.real)
-            y = int(location.imag)
             if self.grid[location + direct] != "#":
                 # print(f"Need to turn {x} {y}")
                 if self.grid[location + turn_right(direct)] == "#":
@@ -142,41 +147,31 @@ class Day17Droid:
         return [ord(s) for s in string]
 
     def robot_location(self):
-        reals = [c.real for c in self.grid.keys() if self.grid[c] != 0]
-        imags = [c.imag for c in self.grid.keys() if self.grid[c] != 0]
-        found_robot = False
         location = complex(-1, -1)
         robot_char = ""
-        for y in range(int(min(imags)) - 2, int(max(imags)) + 3):
-            for x in range(int(min(reals)) - 2, int(max(reals)) + 3):
-                char = self.grid[complex(x, y)]
-                if char == "^" or char == "v" or char == "<" or char == ">":
-                    location = complex(x, y)
-                    robot_char = char
-                    found_robot = True
-                    break
-            if found_robot:
+        for x, y in gen_coords(self.grid):
+            char = self.grid[complex(x, y)]
+            if char == "^" or char == "v" or char == "<" or char == ">":
+                location = complex(x, y)
+                robot_char = char
                 break
 
         return location, COMPLEX_OF_ROBOTCHAR[robot_char]
 
     def part1(self):
-        reals = [c.real for c in self.grid.keys() if self.grid[c] != 0]
-        imags = [c.imag for c in self.grid.keys() if self.grid[c] != 0]
         intersections = 0
         score = 0
-        for y in range(int(min(imags)) - 2, int(max(imags)) + 3):
-            for x in range(int(min(reals)) - 2, int(max(reals)) + 3):
-                char = self.grid[complex(x, y)]
-                if char != "#":
-                    continue
-                char_n = self.grid[complex(x, y - 1)]
-                char_s = self.grid[complex(x, y + 1)]
-                char_w = self.grid[complex(x - 1, y)]
-                char_e = self.grid[complex(x + 1, y)]
-                if char_n == "#" and char_s == "#" and char_w == "#" and char_e == "#":
-                    intersections += 1
-                    score += x * y
+        for x, y in gen_coords(self.grid):
+            char = self.grid[complex(x, y)]
+            if char != "#":
+                continue
+            char_n = self.grid[complex(x, y - 1)]
+            char_s = self.grid[complex(x, y + 1)]
+            char_w = self.grid[complex(x - 1, y)]
+            char_e = self.grid[complex(x + 1, y)]
+            if char_n == "#" and char_s == "#" and char_w == "#" and char_e == "#":
+                intersections += 1
+                score += x * y
 
         return score
 
@@ -193,4 +188,3 @@ class Day17Droid:
         while cpu.has_output():
             result.append(cpu.pop_output())
         return result[-1]
-

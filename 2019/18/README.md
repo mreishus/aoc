@@ -2,6 +2,25 @@
 
 ## Approach and Reflections
 
+We're given a maze with a twist: The maze contains doors and keys. Each door
+is only opened when you collect the corresponding key. You must find the
+fastest way to collect all the keys, but the order in which you do it is
+unknown. Additionally, a simple heuristic like "collecting the nearest" key
+does not work; an example is given where declining to take a nearby key
+actually saves steps in the long run. Each key taken changes the path in the
+maze, and there are 26 keys. Seemingly, this is a O(n!) problem, where
+n = 26.
+
+This problem was brutal. If day 15 was the most memorable problem of AoC
+2018, then day 18 is definitely the most memorable of AoC 2019. The search
+space was huge and absolutely must be cut down. I went to bed letting my
+first version of the program run; after 8 hours of runtime it had not made 1%
+progress.
+
+For part 2, we actually have 4 heroes to track in 4 different mazes.
+
+Key insights described in [SPOILERS.md](./SPOILERS.md).
+
 ## Solutions
 
 - [Python](./python_day18/day18.py)

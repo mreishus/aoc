@@ -2,7 +2,7 @@
 
 ## 2019
 
-Missing Writeups: 11, 13, 14, 16, 17, 18
+Missing Writeups: 11, 13, 14, 16
 
 | Day                           | Intcode | Comment                                  | Python                                                                                       | Elixir                                                                                                           | Go                                                                           | Others                                                                 |
 | ----------------------------- | ------- | ---------------------------------------- | -------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------- | ---------------------------------------------------------------------- |
@@ -30,8 +30,8 @@ Missing Writeups: 11, 13, 14, 16, 17, 18
 | [Day 21](./2019/21/README.md) | ✅      | SpringScript assembly w/ registers       | [Python](./2019/21/python_day21/aoc/day21.py) [(test)](./2019/21/python_day21/day21_test.py) |                                                                                                                  |                                                                              |                                                                        |
 | [Day 22](./2019/22/README.md) |         | Number Theory                            | [Python](./2019/22/python_day22/day22.py) [(test)](./2019/22/python_day22/day22_test.py)     |                                                                                                                  |                                                                              |                                                                        |
 | [Day 23](./2019/23/README.md) | ✅      | Networking 50 VMs                        | [Python](./2019/23/python_day23/aoc/day23.py) [(test)](./2019/23/python_day23/day23_test.py) | [Elixir](./2019/23/elixir_day23/lib/coordinator.ex) [(test)](./2019/23/elixir_day23/test/elixir_day23_test.exs)  |                                                                              |                                                                        |
-| [Day 24](./2019/24/README.md) |         | Recursive/3d game of life                | [Python](./2019/24/python_day24/aoc/day24.py) [(test)](./2019/24/python_day24/day24_test.py) |                                                                                                                  |                                                                              |                                                                        |
-| [Day 25](./2019/25/README.md) | ✅      | Text Adventure on VM                     | [Python](./2019/25/python_day25/aoc/day25.py)                                                |                                                                                                                  |                                                                              |                                                                        |
+| [Day 24](./2019/24/README.md) |         | Recursive/3d game of life                | [Python](./2019/24/python_day24/day24.py) [(test)](./2019/24/python_day24/day24_test.py)     |                                                                                                                  |                                                                              |                                                                        |
+| [Day 25](./2019/25/README.md) | ✅      | Text Adventure on VM                     | [Python](./2019/25/python_day25/day25.py)                                                    |                                                                                                                  |                                                                              |                                                                        |
 
 ### Hardest Problems
 
@@ -191,5 +191,5 @@ Day       Time   Rank  Score       Time   Rank  Score
 
 ```
 Created:       Mon 02 Dec 2019 05:12:40 PM CST
-Last Modified: Wed 25 Dec 2019 09:02:00 PM CST
+Last Modified: Thu 26 Dec 2019 12:20:56 PM CST
 ```

@@ -1,3 +1,13 @@
+# This is from https://github.com/DanielStutzbach/heapdict
+#
+# heapdict: a heap with decreased-key and increase-key operations
+# It's a priority queue that supports changing of priority.
+#
+# Unlike the Python standard library's heapq module, the heapdict supports
+# efficiently changing the priority of an existing object (often called
+# "decrease-key" in textbooks). Altering the priority is important for many
+# algorithms such as Dijkstra's Algorithm and A*.
+#
 try:
     from collections.abc import MutableMapping
 except ImportError:
@@ -5,12 +15,13 @@ except ImportError:
 
 
 def doc(s):
-    if hasattr(s, '__call__'):
+    if hasattr(s, "__call__"):
         s = s.__doc__
 
     def f(g):
         g.__doc__ = s
         return g
+
     return f
 
 
@@ -34,7 +45,7 @@ class heapdict(MutableMapping):
         wrapper = [value, key, len(self)]
         self.d[key] = wrapper
         self.heap.append(wrapper)
-        self._decrease_key(len(self.heap)-1)
+        self._decrease_key(len(self.heap) - 1)
 
     def _min_heapify(self, i):
         n = len(self.heap)
@@ -112,5 +123,4 @@ class heapdict(MutableMapping):
 
 
 del doc
-__all__ = ['heapdict']
-
+__all__ = ["heapdict"]
