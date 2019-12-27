@@ -4,7 +4,7 @@
 
 - 2019 - 50 stars
 - 2018 - 50 stars
-- 2017 - 10 stars
+- 2017 - 11 stars
 - 2016 - 1 star
 - 2015 - 0 stars
 
@@ -225,10 +225,10 @@ Day       Time   Rank  Score       Time   Rank  Score
   | [Python](./2017/05/python_day05/day05.py)
   | [Ruby](./2017/05/ruby_day05/day05.rb)
 
-| Day                           | Comment       | Python                                                                                   | Elixir | Go  | Others |
-| ----------------------------- | ------------- | ---------------------------------------------------------------------------------------- | ------ | --- | ------ |
-|                               |               |                                                                                          |        |     |        |
-| [Day 10](./2019/10/README.md) | Hash Function | [Python](./2017/10/python_day10/day10.py) [(test)](./2017/10/python_day10/day10_test.py) |        |     |        |
+| Day                           | Comment       | Python                                                                                   | Elixir                                                                                                          | Go  | Others |
+| ----------------------------- | ------------- | ---------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------- | --- | ------ |
+| [Day 10](./2019/10/README.md) | Hash Function | [Python](./2017/10/python_day10/day10.py) [(test)](./2017/10/python_day10/day10_test.py) |                                                                                                                 |     |        |
+| [Day 11](./2019/11/README.md) | Hex Grid      |                                                                                          | [Elixir](./2017/11/elixir_day11/lib/elixir_day11.ex) [(test)](./2017/11/elixir_day11/test/elixir_day11_test.exs |     |        |
 
 ## 2016
 
@@ -241,5 +241,5 @@ Day       Time   Rank  Score       Time   Rank  Score
 
 ```
 Created:       Mon 02 Dec 2019 05:12:40 PM CST
-Last Modified: Fri 27 Dec 2019 12:05:59 PM CST
+Last Modified: Fri 27 Dec 2019 03:25:24 PM CST
 ```
