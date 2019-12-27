@@ -4,7 +4,7 @@
 
 - 2019 - 50 stars
 - 2018 - 50 stars
-- 2017 - 9 stars
+- 2017 - 10 stars
 - 2016 - 1 star
 - 2015 - 0 stars
 
@@ -225,6 +225,11 @@ Day       Time   Rank  Score       Time   Rank  Score
   | [Python](./2017/05/python_day05/day05.py)
   | [Ruby](./2017/05/ruby_day05/day05.rb)
 
+| Day                           | Comment       | Python                                                                                   | Elixir | Go  | Others |
+| ----------------------------- | ------------- | ---------------------------------------------------------------------------------------- | ------ | --- | ------ |
+|                               |               |                                                                                          |        |     |        |
+| [Day 10](./2019/10/README.md) | Hash Function | [Python](./2017/10/python_day10/day10.py) [(test)](./2017/10/python_day10/day10_test.py) |        |     |        |
+
 ## 2016
 
 - **Day 1**:
@@ -236,5 +241,5 @@ Day       Time   Rank  Score       Time   Rank  Score
 
 ```
 Created:       Mon 02 Dec 2019 05:12:40 PM CST
-Last Modified: Thu 26 Dec 2019 04:30:31 PM CST
+Last Modified: Fri 27 Dec 2019 12:05:59 PM CST
 ```
