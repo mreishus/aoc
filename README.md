@@ -227,10 +227,10 @@ Day       Time   Rank  Score       Time   Rank  Score
 
 | Day                           | Comment              | Python                                                                                   | Elixir                                                                                                           | Go                                                                           | Others |
 | ----------------------------- | -------------------- | ---------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------- | ------ |
-| [Day 10](./2019/10/README.md) | Hash Function        | [Python](./2017/10/python_day10/day10.py) [(test)](./2017/10/python_day10/day10_test.py) |                                                                                                                  |                                                                              |        |
-| [Day 11](./2019/11/README.md) | Hex Grid             |                                                                                          | [Elixir](./2017/11/elixir_day11/lib/elixir_day11.ex) [(test)](./2017/11/elixir_day11/test/elixir_day11_test.exs) |                                                                              |        |
-| [Day 12](./2019/12/README.md) | Connected components |                                                                                          |                                                                                                                  | [Go](./2017/12/go_day12/day12.go) [(test)](./2017/12/go_day12/day12_test.go) |        |
-| [Day 13](./2019/13/README.md) | Simulation / Modulo  |                                                                                          | [Elixir](./2017/13/elixir_day13/lib/elixir_day13.ex) [(test)](./2017/13/elixir_day13/test/elixir_day13_test.exs) |                                                                              |        |
+| [Day 10](./2017/10/README.md) | Hash Function        | [Python](./2017/10/python_day10/day10.py) [(test)](./2017/10/python_day10/day10_test.py) |                                                                                                                  |                                                                              |        |
+| [Day 11](./2017/11/README.md) | Hex Grid             |                                                                                          | [Elixir](./2017/11/elixir_day11/lib/elixir_day11.ex) [(test)](./2017/11/elixir_day11/test/elixir_day11_test.exs) |                                                                              |        |
+| [Day 12](./2017/12/README.md) | Connected components |                                                                                          |                                                                                                                  | [Go](./2017/12/go_day12/day12.go) [(test)](./2017/12/go_day12/day12_test.go) |        |
+| [Day 13](./2017/13/README.md) | Simulation / Modulo  |                                                                                          | [Elixir](./2017/13/elixir_day13/lib/elixir_day13.ex) [(test)](./2017/13/elixir_day13/test/elixir_day13_test.exs) |                                                                              |        |
 
 ## 2016
 
@@ -243,5 +243,5 @@ Day       Time   Rank  Score       Time   Rank  Score
 
 ```
 Created:       Mon 02 Dec 2019 05:12:40 PM CST
-Last Modified: Sat 28 Dec 2019 12:12:15 PM CST
+Last Modified: Sat 28 Dec 2019 05:29:18 PM CST
 ```
