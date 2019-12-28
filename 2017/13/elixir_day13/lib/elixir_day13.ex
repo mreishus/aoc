@@ -23,6 +23,30 @@ defmodule ElixirDay13 do
   end
 
   @doc """
+   Depth     6
+   Position  0 1 2 3 4 5 4 3 2 1 0 1 2 3 4 5 4 3 2 1 0
+   Delta     d u u u u u d d d d d u u u u u d d d d d
+   Cycle_Pos 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0
+
+   The function takes position + delta and converts it to cycle_pos.
+
+   We're repeating with a cycle length of (depth + depth - 2)
+   We need to translate (position, up_or_down) into a one dimensional cycling number
+   If U: Simply take the position number
+   If D: Example, depth = 6, position 3.  Take 5(max pos) - 3(current pos) = 2, then 2 + 5(maxpos) = 7
+  """
+  def scanner_cycle_pos(%{depth: _depth, scanner: 0, delta: _delta}), do: 0
+
+  def scanner_cycle_pos(%{depth: _depth, scanner: pos, delta: 1}), do: pos
+
+  def scanner_cycle_pos(%{depth: depth, scanner: pos, delta: -1}) do
+    maxpos = depth - 1
+    rem(maxpos - pos + maxpos, depth * 2 - 2)
+  end
+
+  def scanner_cycle_pos(_), do: raise("Unexpected delta")
+
+  @doc """
   Advance scanners N steps.
   in: layer_map, N
   out: layer_map
@@ -100,10 +124,23 @@ defmodule ElixirDay13 do
   end
 
   @doc """
+  Does moving through the map at layer_map get caught?
+  Uses modulo to only calculate the final position of each scanner,
+  instead of stepping forward all layers at all steps.
+  """
+  def fast_caught?(layer_map, delay) do
+    layer_map
+    |> Stream.map(fn {index, layer} ->
+      rem(delay + scanner_cycle_pos(layer) + index, layer.depth * 2 - 2)
+    end)
+    |> Enum.any?(fn pos -> pos == 0 end)
+  end
+
+  @doc """
   What is the lowest delay we can move through the network without being caught?
   Uses a simulation approach.  Takes 2 minutes on my computer..
   """
-  def part2(layer_map) do
+  def part2_sim(layer_map) do
     do_part2(layer_map, 0)
   end
 
@@ -116,13 +153,25 @@ defmodule ElixirDay13 do
     end
   end
 
+  def part2_mod(layer_map) do
+    part2_mod(layer_map, 0)
+  end
+
+  def part2_mod(layer_map, delay) do
+    if not fast_caught?(layer_map, delay) do
+      delay
+    else
+      part2_mod(layer_map, delay + 1)
+    end
+  end
+
   def main do
     Parse.parse_file("../input.txt")
     |> trip_severity()
     |> IO.inspect(label: "Part 1")
 
     Parse.parse_file("../input.txt")
-    |> part2()
+    |> part2_mod()
     |> IO.inspect(label: "Part 2")
   end
 end

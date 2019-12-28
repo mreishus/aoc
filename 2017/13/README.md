@@ -2,6 +2,37 @@
 
 ## Approach and Reflections
 
+We're given a description of a firewall with "layers" and "security scanners".
+Each layer is a 1d grid with a different depth, and each scanner is bouncing
+up and down that layer as time passes. For part 1, we need to determine at
+what steps a packet gliding through the top layers gets "caught" by a scanner.
+For part2, we need to find the shortest amount of delay to wait before we can
+send a packet through without being caught.
+
+This problem took an approach that's becoming increasingly familiar to me for
+Advent of Code problems. Describe a process, iterated in steps that can be
+simulated in data structures easily for part 1. Then, for part 2, make the
+numbers so large that it won't run in a reasonable amount of time. You'll
+either need to optimize or to switch to a new, math based approach instead of
+simulation based.
+
+I wrote a simulation, but couldn't get past part 2 without adding the
+following basic optimizations:
+
+- When calculating layers after delays, remember the previous layers instead
+  of starting from scratch. If we are to try the layers after a 1,000
+  nanosecond delay, remember what they looked like after a 999 delay and
+  increment once. (Don't start from 0 and step 1,000 times).
+- As soon as you detect a packet is caught by a scanner, stop simulating.
+  What happens in the future doesn't matter, since that delay is no longer
+  a possible answer.
+
+This got me the answer in about 2 minutes of runtime.
+
+Then, I was able to remove layers of iterations by calculating the position of
+each scanner as I would arrive to it by using modulo math. This got me down
+to 10 seconds runtime. Not bad...
+
 ## Solutions
 
 - [Elixir](./elixir_day13/lib/elixir_day13.ex) [(test)](./elixir_day13/test/elixir_day13_test.exs)

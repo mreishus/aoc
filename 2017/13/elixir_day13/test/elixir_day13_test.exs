@@ -111,7 +111,15 @@ defmodule ElixirDay13Test do
   test "Part 2 Examples" do
     got =
       Parse.parse_file("../input_small.txt")
-      |> ElixirDay13.part2()
+      |> ElixirDay13.part2_sim()
+
+    want = 10
+
+    assert got == want
+
+    got =
+      Parse.parse_file("../input_small.txt")
+      |> ElixirDay13.part2_mod()
 
     want = 10
 
