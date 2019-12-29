@@ -240,6 +240,7 @@ Day       Time   Rank  Score       Time   Rank  Score
 ## Misc
 
 - [aocdl, a util for downloading input.txt](https://github.com/GreenLightning/advent-of-code-downloader)
+- [Synacor challenge, another challenge by the same creator](https://challenge.synacor.com/)
 
 ```
 Created:       Mon 02 Dec 2019 05:12:40 PM CST
