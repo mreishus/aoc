@@ -13,7 +13,7 @@ from functools import reduce
 
 
 def knot_hash(string):
-    return part2(string)
+    return part2_10(string)
 
 
 def transform(nums, input_lengths, num_rounds=1):
@@ -78,12 +78,12 @@ def string_to_input_nums(string):
     return inputs
 
 
-def part1(length, inputs):
+def part1_10(length, inputs):
     p1_list = transform(list(range(length)), inputs)
     return p1_list[0] * p1_list[1]
 
 
-def part2(string):
+def part2_10(string):
     inputs = string_to_input_nums(string)
     sparse_hash = transform(list(range(256)), inputs, num_rounds=64)
     dense_hash = densify(sparse_hash)
@@ -92,10 +92,10 @@ def part2(string):
 
 
 if __name__ == "__main__":
-    print("Part1: ")
+    print("part1_10: ")
     length = 256
     inputs = parse_nums("../input.txt")
-    print(part1(length, inputs))
+    print(part1_10(length, inputs))
 
     print("Part 2:")
-    print(part2(parse_string("../input.txt")))
+    print(part2_10(parse_string("../input.txt")))
