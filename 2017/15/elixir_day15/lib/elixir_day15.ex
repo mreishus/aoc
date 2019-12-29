@@ -1,4 +1,5 @@
 defmodule ElixirDay15 do
+  @compile [:native, {:hipe, [:verbose, :o3]}]
   @moduledoc """
   Documentation for ElixirDay15.
   """
