@@ -111,6 +111,69 @@ func Init(size int) ([]int, map[string]string) {
 	return positions, swaps
 }
 
+func ApplyCommandsMultiple(times int, positions_in []int, swaps_in map[string]string, commands []Command) ([]int, map[string]string) {
+	// Copy positions_in -> positions
+	positions := make([]int, len(positions_in))
+	copy(positions, positions_in)
+
+	// Copy swaps_in -> swaps
+	swaps := make(map[string]string, len(swaps_in))
+	for key, value := range swaps_in {
+		swaps[key] = value
+	}
+
+	positions_for_step := make(map[int][]int, 0)
+	swaps_for_step := make(map[int]map[string]string, 0)
+	i := 1
+	positions_for_step[1] = positions
+	swaps_for_step[1] = swaps
+
+	for i < times {
+		// fmt.Println(i)
+		if i*2 < times {
+			// Able to double
+			// fmt.Println("Double")
+			positions, swaps = Compose(positions, swaps, positions, swaps)
+			i *= 2
+		} else {
+			// Can't double, find the largest number we've already computed to add
+			gap := times - i
+			next_step := 1
+			for k, _ := range positions_for_step {
+				if k > next_step && k <= gap {
+					next_step = k
+				}
+			}
+			// fmt.Printf("--> %v\n", next_step)
+			positions, swaps = Compose(positions, swaps, positions_for_step[next_step], swaps_for_step[next_step])
+			i += next_step
+		}
+		positions_for_step[i] = positions
+		swaps_for_step[i] = swaps
+	}
+	return positions, swaps
+}
+
+func Compose(positions_in1 []int, swaps_in1 map[string]string, positions_in2 []int, swaps_in2 map[string]string) ([]int, map[string]string) {
+	positions := make([]int, len(positions_in1))
+	swaps := make(map[string]string, len(swaps_in1))
+
+	// Positions 1 [5, 4, 3, 2, 1, 0]
+	// Positions 2 [0, 2, 1, 3, 4, 5]
+	// Compose these. Use the values in 2 as indexes to look up 1
+	for i, _ := range positions_in1 {
+		val2 := positions_in2[i]
+		positions[i] = positions_in1[val2]
+	}
+
+	// Swaps 1 { "a": "a", "b": "c", "c": "b", "d": "d" }
+	// Swaps 2 { "a": "a", "b": "b", "c": "d", "d": "c" }
+	for key1, value1 := range swaps_in1 {
+		swaps[key1] = swaps_in2[value1]
+	}
+	return positions, swaps
+}
+
 func ApplyCommands(positions_in []int, swaps_in map[string]string, commands []Command) ([]int, map[string]string) {
 	// Copy positions_in -> positions
 	positions := make([]int, len(positions_in))
@@ -167,16 +230,29 @@ func Part1(length int, commands []Command) string {
 	return FinalPositions(length, positions, swaps)
 }
 
-func main() {
-	fmt.Println("Hello, world")
+func Part2(length int, commands []Command) string {
+	positions, swaps := Init(length)
+	positions, swaps = ApplyCommands(positions, swaps, commands)
+	positions, swaps = ApplyCommandsMultiple(1_000_000_000, positions, swaps, commands)
+	return FinalPositions(length, positions, swaps)
+}
 
+func main() {
 	// Test
 	commands := Parse("../input_small.txt")
 	final := Part1(5, commands)
+	fmt.Println("Part 1 Example:")
 	fmt.Println(final)
+	fmt.Println("Part 2 Example:")
+	fmt.Println(Part2(5, commands))
+
+	fmt.Println("")
 
 	// Part 1
 	commands = Parse("../input.txt")
 	final = Part1(16, commands)
+	fmt.Println("Part 1:")
 	fmt.Println(final)
+	fmt.Println("Part 2:")
+	fmt.Println(Part2(16, commands))
 }
