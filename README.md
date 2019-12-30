@@ -227,6 +227,9 @@ Day       Time   Rank  Score       Time   Rank  Score
 
 | Day                           | Comment                       | Python                                                                                   | Elixir                                                                                                           | Go                                                                           | Others |
 | ----------------------------- | ----------------------------- | ---------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------- | ------ |
+| Day 06                        | ?                             |                                                                                          |                                                                                                                  | [Go](./2017/06/go_day06/day06.go) [(test)](./2017/06/go_day06/day06_test.go) |        |
+| Day 07                        | Topological/Recursive Trees   |                                                                                          |                                                                                                                  | [Go](./2017/07/go_day07/day07.go)                                            |        |
+| Day 08                        | Assembly and Registers        |                                                                                          |                                                                                                                  | [Go](./2017/08/go_day08/day08.go)                                            |        |
 | [Day 09](./2017/09/README.md) | Recursive Character Parsing   |                                                                                          |                                                                                                                  | [Go](./2017/09/go_day09/day09.go) [(test)](./2017/09/go_day09/day09_test.go) |        |
 | [Day 10](./2017/10/README.md) | Hash Function                 | [Python](./2017/10/python_day10/day10.py) [(test)](./2017/10/python_day10/day10_test.py) |                                                                                                                  |                                                                              |        |
 | [Day 11](./2017/11/README.md) | Hex Grid                      |                                                                                          | [Elixir](./2017/11/elixir_day11/lib/elixir_day11.ex) [(test)](./2017/11/elixir_day11/test/elixir_day11_test.exs) |                                                                              |        |
@@ -234,6 +237,7 @@ Day       Time   Rank  Score       Time   Rank  Score
 | [Day 13](./2017/13/README.md) | Simulation / Modulo           |                                                                                          | [Elixir](./2017/13/elixir_day13/lib/elixir_day13.ex) [(test)](./2017/13/elixir_day13/test/elixir_day13_test.exs) |                                                                              |        |
 | [Day 14](./2017/14/README.md) | Hash, Grid, Connected Regions | [Python](./2017/14/python_day14/day14.py) [(test)](./2017/14/python_day14/day14_test.py) |                                                                                                                  |                                                                              |        |
 | [Day 15](./2017/15/README.md) | PRNG Generators, Bitwise Math |                                                                                          | [Elixir](./2017/15/elixir_day15/lib/elixir_day15.ex) [(test)](./2017/15/elixir_day15/test)                       |                                                                              |        |
+| [Day 16](./2017/16/README.md) | Composing permutations        |                                                                                          |                                                                                                                  | [Go](./2017/16/go_day16/day16.go)                                            |        |
 
 ## 2016
 
@@ -247,5 +251,5 @@ Day       Time   Rank  Score       Time   Rank  Score
 
 ```
 Created:       Mon 02 Dec 2019 05:12:40 PM CST
-Last Modified: Sun 29 Dec 2019 04:44:37 PM CST
+Last Modified: Mon 30 Dec 2019 04:22:44 PM CST
 ```
