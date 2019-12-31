@@ -3,19 +3,6 @@ defmodule ElixirDay04 do
   Documentation for ElixirDay04.
   """
 
-  @doc """
-  Hello world.
-
-  ## Examples
-
-      iex> ElixirDay04.hello()
-      :world
-
-  """
-  def hello do
-    :world
-  end
-
   def main do
     IO.puts("part 1")
 
