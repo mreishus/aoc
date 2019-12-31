@@ -212,20 +212,11 @@ Day       Time   Rank  Score       Time   Rank  Score
   [(test)](./2017/01/haskell-day01/test/Spec.hs)
 - **Day 2**:
   [Go](./2017/02/go_day02/day02.go) [(test)](./2017/02/go_day02/day02_test.go)
-- **Day 3**:
-  [Python](./2017/03/python_day03/day03.py)
-  [(test)](./2017/03/python_day03/test_day03.py)
-- **Day 4**:
-  [Elixir](./2017/04/elixir_day04/lib/elixir_day04.ex)
-- **Day 5**:
-  [Elixir](./2017/05/elixir_day05/lib/elixir_day05.ex)
-  | [Go](./2017/05/go_day05/day05.go)
-  [(test)](./2017/05/go_day05/day05_test.go)
-  | [Python](./2017/05/python_day05/day05.py)
-  | [Ruby](./2017/05/ruby_day05/day05.rb)
 
 | Day                           | Comment                       | Python                                                                                   | Elixir                                                                                                           | Go                                                                           | Others                                |
 | ----------------------------- | ----------------------------- | ---------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------- | ------------------------------------- |
+| Day 03                        | 2d grid spiral                | [Python](./2017/03/python_day03/day03.py) [(test)](./2017/03/python_day03/test_day03.py) |                                                                                                                  |                                                                              |                                       |
+| Day 04                        | Password Checking             |                                                                                          | [Elixir](./2017/04/elixir_day04/lib/elixir_day04.ex)                                                             |                                                                              |                                       |
 | Day 05                        | VM-Like Jumps                 | [Python](./2017/05/python_day05/day05.py)                                                | [Elixir](./2017/05/elixir_day05/lib/elixir_day05.ex)                                                             | [Go](./2017/05/go_day05/day05.go) [(test)](./2017/05/go_day05/day05_test.go) | [Ruby](./2017/05/ruby_day05/day05.rb) |
 | Day 06                        | ?                             |                                                                                          |                                                                                                                  | [Go](./2017/06/go_day06/day06.go) [(test)](./2017/06/go_day06/day06_test.go) |                                       |
 | Day 07                        | Topological/Recursive Trees   |                                                                                          |                                                                                                                  | [Go](./2017/07/go_day07/day07.go)                                            |                                       |
@@ -252,5 +243,5 @@ Day       Time   Rank  Score       Time   Rank  Score
 
 ```
 Created:       Mon 02 Dec 2019 05:12:40 PM CST
-Last Modified: Mon 30 Dec 2019 08:57:29 PM CST
+Last Modified: Mon 30 Dec 2019 09:11:34 PM CST
 ```
