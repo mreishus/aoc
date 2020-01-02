@@ -1,13 +1,33 @@
-defmodule ElixirDay18.DuetVM do
-  alias ElixirDay18.DuetVM
+defmodule ElixirDay18.DuetVM_V2 do
+  alias ElixirDay18.DuetVM_V2
 
   defstruct [
     :memory,
     :pc,
     :registers,
     :sounds_played,
-    :recovered
+    :partner_pid,
+    :times_sent,
+    :timed_out,
+    :program_id
   ]
+
+  def init_and_wait_for_partner(filename, program_id) do
+    spawn(fn ->
+      vm =
+        new(filename)
+        |> set_program_id(program_id)
+
+      receive do
+        {:partner, pid} ->
+          "VM #{program_id}: Got partner, starting.." |> IO.inspect()
+
+          vm
+          |> set_partner(pid)
+          |> execute_until_timeout()
+      end
+    end)
+  end
 
   # Registers - String version "a"
   def init_registers() do
@@ -34,13 +54,24 @@ defmodule ElixirDay18.DuetVM do
   end
 
   def new(filename) do
-    %DuetVM{
+    %DuetVM_V2{
       memory: parse(filename),
       pc: 0,
       registers: init_registers(),
       sounds_played: [],
-      recovered: nil
+      times_sent: 0,
+      timed_out: false,
+      program_id: nil
     }
+  end
+
+  def set_program_id(vm, id) do
+    registers = Map.put(vm.registers, "p", id)
+    %{vm | registers: registers, program_id: id}
+  end
+
+  def set_partner(vm, pid) do
+    %{vm | partner_pid: pid}
   end
 
   def lookup(_, arg) when is_integer(arg), do: arg
@@ -49,17 +80,18 @@ defmodule ElixirDay18.DuetVM do
     vm.registers |> Map.get(arg)
   end
 
-  def execute_until_recover(vm) do
+  def execute_until_timeout(vm) do
     vm = execute_step(vm)
 
-    if vm.recovered == nil do
-      execute_until_recover(vm)
+    if vm.timed_out == true do
+      "VM #{vm.program_id}: Timed out.  Times sent: #{vm.times_sent}" |> IO.inspect()
+      vm
     else
-      vm.recovered
+      execute_until_timeout(vm)
     end
   end
 
-  def execute_step(%DuetVM{memory: memory, pc: pc} = vm) do
+  def execute_step(%DuetVM_V2{memory: memory, pc: pc} = vm) do
     instruction = memory |> Enum.at(pc)
     do_execute_step(vm, instruction)
   end
@@ -86,18 +118,19 @@ defmodule ElixirDay18.DuetVM do
 
   def do_execute_step(vm, ["snd", arg1]) do
     val = Map.get(vm.registers, arg1)
-    sounds_played = vm.sounds_played ++ [val]
-    %{vm | sounds_played: sounds_played, pc: vm.pc + 1}
+    send(vm.partner_pid, {:value, val})
+    %{vm | pc: vm.pc + 1, times_sent: vm.times_sent + 1}
   end
 
   def do_execute_step(vm, ["rcv", arg1]) do
-    val = Map.get(vm.registers, arg1)
-
-    if val == 0 do
-      %{vm | pc: vm.pc + 1}
-    else
-      last_sound = vm.sounds_played |> List.last()
-      %{vm | recovered: last_sound, pc: vm.pc + 1}
+    receive do
+      {:value, val} ->
+        registers = Map.put(vm.registers, arg1, val)
+        %{vm | registers: registers, pc: vm.pc + 1}
+    after
+      2_000 ->
+        "Recieve timed out" |> IO.inspect()
+        %{vm | timed_out: true}
     end
   end
 
