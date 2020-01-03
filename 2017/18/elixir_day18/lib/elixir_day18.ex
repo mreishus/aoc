@@ -12,6 +12,6 @@ defmodule ElixirDay18 do
     vm1 = DuetVM_V2.init_and_wait_for_partner("../input.txt", 1)
     send(vm1, {:partner, vm0})
     send(vm0, {:partner, vm1})
-    Process.sleep(10 * 1000)
+    Process.sleep(1 * 1000)
   end
 end

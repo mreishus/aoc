@@ -128,7 +128,7 @@ defmodule ElixirDay18.DuetVM_V2 do
         registers = Map.put(vm.registers, arg1, val)
         %{vm | registers: registers, pc: vm.pc + 1}
     after
-      2_000 ->
+      200 ->
         "Recieve timed out" |> IO.inspect()
         %{vm | timed_out: true}
     end
