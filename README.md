@@ -230,6 +230,8 @@ Day       Time   Rank  Score       Time   Rank  Score
 | [Day 15](./2017/15/README.md) | PRNG Generators, Bitwise Math |                                                                                          | [Elixir](./2017/15/elixir_day15/lib/elixir_day15.ex) [(test)](./2017/15/elixir_day15/test)                       |                                                                              |                                       |
 | [Day 16](./2017/16/README.md) | Composing permutations        |                                                                                          |                                                                                                                  | [Go](./2017/16/go_day16/day16.go)                                            |                                       |
 | [Day 17](./2017/17/README.md) | Ring, Modulo                  | [Python](./2017/17/python_day17/day17.py)                                                |                                                                                                                  |                                                                              |                                       |
+| [Day 18](./2017/18/README.md) | 2 VMs Communicating           |                                                                                          | [Elixir](./2017/18/elixir_day18/lib/elixir_day18.ex)                                                             |                                                                              |                                       |
+| [Day 19)(./2017/19/README.md) | Navigating a simple maze      | [Python](./2017/19/python_day19/day19.py)                                                |                                                                                                                  |                                                                              |                                       |
 
 ## 2016
 
@@ -243,5 +245,5 @@ Day       Time   Rank  Score       Time   Rank  Score
 
 ```
 Created:       Mon 02 Dec 2019 05:12:40 PM CST
-Last Modified: Mon 30 Dec 2019 09:11:34 PM CST
+Last Modified: Fri 03 Jan 2020 09:41:25 PM CST
 ```
