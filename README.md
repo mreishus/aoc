@@ -4,7 +4,7 @@
 
 - 2019 - 50 stars
 - 2018 - 50 stars
-- 2017 - 38 stars
+- 2017 - 42 stars
 - 2016 - 2 stars
 - 2015 - 0 stars
 
@@ -233,7 +233,7 @@ Day       Time   Rank  Score       Time   Rank  Score
 | [Day 18](./2017/18/README.md) | 2 VMs Communicating                 |                                                                                          | [Elixir](./2017/18/elixir_day18/lib/elixir_day18.ex)                                                             |                                                                              |                                       |
 | [Day 19](./2017/19/README.md) | Navigating a simple maze            | [Python](./2017/19/python_day19/day19.py)                                                |                                                                                                                  |                                                                              |                                       |
 | [Day 20](./2017/20/README.md) | Stars moving with acceleration      | [Python](./2017/20/python_day20/day20.py)                                                |                                                                                                                  |                                                                              |                                       |
-| [Day 21](./2117/21/README.md) | Grid split, combine, rotation, flip | [Python](./2017/21/python_day21/day21.py)                                                |                                                                                                                  |                                                                              |                                       |
+| [Day 21](./2017/21/README.md) | Grid split, combine, rotation, flip | [Python](./2017/21/python_day21/day21.py)                                                |                                                                                                                  |                                                                              |                                       |
 
 ## 2016
 
@@ -247,5 +247,5 @@ Day       Time   Rank  Score       Time   Rank  Score
 
 ```
 Created:       Mon 02 Dec 2019 05:12:40 PM CST
-Last Modified: Sat 04 Jan 2020 10:45:14 PM CST
+Last Modified: Sat 04 Jan 2020 10:53:29 PM CST
 ```
