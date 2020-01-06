@@ -1,4 +1,7 @@
-defmodule ElixirDay23.VM do
+## Just for fun, I'm including the optimizations I did that
+## were too slow to actually solve the problem.
+## Read from bottom up to see the optimizations as I added them.
+defmodule ElixirDay23.VMFailedOptimizations do
   alias ElixirDay23.{VM, PrimeFactors}
 
   defstruct [
@@ -84,25 +87,105 @@ defmodule ElixirDay23.VM do
     do_execute_step(vm, instruction)
   end
 
-  @doc """
-  Starting at instruction 9, we have two loops:
-
-  for d in range(2, b):
-    for e in range(2, b):
-      if d*e == b:
-        f = 0
-
-  Essentially, it's just checking if b is prime.  If not prime,
-  set f to 0.
-  """
+  ## Optimization of outer loop - Do both loops inside elixir.
+  ## Too slow.  At this point I realize what it's actually doing and
+  ## change to a better prime check.
   def do_execute_step(%VM{pc: 9, registers: r} = vm, _instruction) do
-    new_f = if not PrimeFactors.is_prime?(r["b"]), do: 0, else: 1
+    this_b = r["b"]
+
+    outer_test_pass =
+      2..this_b
+      |> Enum.reduce_while(false, fn this_d, acc_outer ->
+        this_d |> IO.inspect()
+
+        test_pass =
+          2..this_b
+          |> Enum.reduce_while(false, fn this_e, acc ->
+            if this_d * this_e == this_b do
+              {:halt, true}
+            else
+              {:cont, false}
+            end
+          end)
+
+        if test_pass do
+          {:halt, true}
+        else
+          {:cont, false}
+        end
+      end)
+
+    new_f = if outer_test_pass == true, do: 0, else: 1
 
     new_reg =
       vm.registers
       |> Map.put("f", new_f)
 
     %{vm | registers: new_reg, pc: 24}
+  end
+
+  ## Optimization of outer loop - Exit loop early if we set f = 0,
+  ## No need to continue looping.  Works well except those cases
+  ## where we never set f = 0 (prime numbers)
+  def do_execute_step(%VM{pc: 20, registers: r} = vm, instruction) do
+    # instruction: ["sub", "d", -1]
+
+    target = r["b"] - 1
+
+    new_d =
+      if r["f"] == 0 and r["d"] < target do
+        target
+      else
+        r["d"] + 1
+      end
+
+    new_reg =
+      vm.registers
+      |> Map.put("d", new_d)
+
+    %{vm | registers: new_reg, pc: 21}
+  end
+
+  ## Optimization of inner loop - Do loop inside elixir
+  def do_execute_step(%VM{pc: 10, registers: r} = vm, _instruction) do
+    test_pass =
+      2..r["b"]
+      |> Enum.reduce_while(false, fn this_e, acc ->
+        if r["d"] * this_e == r["b"] do
+          {:halt, true}
+        else
+          {:cont, false}
+        end
+      end)
+
+    new_f = if test_pass == true, do: 0, else: r["f"]
+    new_e = r["b"] - 1
+
+    new_reg =
+      vm.registers
+      |> Map.put("f", new_f)
+      |> Map.put("e", new_e)
+
+    %{vm | registers: new_reg, pc: 19}
+  end
+
+  ## Optimization of inner loop - Still loop, but
+  ## Group together instructions
+  def do_execute_step(%VM{pc: 11, registers: r} = vm, _instruction) do
+    zero_test = r["d"] * r["e"] - r["b"]
+    new_f = if zero_test == 0, do: 0, else: r["f"]
+    new_e = r["e"] + 1
+    new_g = new_e - r["b"]
+
+    new_reg =
+      vm.registers
+      |> Map.put("f", new_f)
+      |> Map.put("e", new_e)
+      |> Map.put("g", new_g)
+
+    %{vm | registers: new_reg, pc: 19}
+    # "special instruction" |> IO.inspect()
+    # instruction |> IO.inspect()
   end
 
   def do_execute_step(vm, ["set", arg1, arg2]) do
