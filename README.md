@@ -4,7 +4,7 @@
 
 - 2019 - 50 stars
 - 2018 - 50 stars
-- 2017 - 42 stars
+- 2017 - 50 stars
 - 2016 - 2 stars
 - 2015 - 0 stars
 
@@ -12,7 +12,7 @@
 
 | Day                           | Intcode | Comment                                  | Python                                                                                       | Elixir                                                                                                           | Go                                                                           | Others                                                                 |
 | ----------------------------- | ------- | ---------------------------------------- | -------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------- | ---------------------------------------------------------------------- |
-| [Day 01](./2019/01/README.md) |         | Math and iteration                       | [Python](./2019/01/python_day01/day01.py)                                                    | [Elixir](./2019/01/elixir_day01/lib/elixir_day01.ex) [(test)](./2019/01/elixir_day01/test/elixir_day01_test.exs) | [Go](./2019/01/go_day01/day01.go) [(test)](./2019/01/go_day01/day01_test.go) |                                                                        |
+| [Day 01](./2019/01/README.md) |         | Math and iteration                       | [Python](./2019/01/python_day01/day01.py)                                                    | [Elixir](./2019/01/elixir_day01/lib/elixir_day01.ex) [(test)](./2019/01/elixir_day01/test/elixir_day01_test.exs) | [Go](./2019/01/go_day01/day01.go) [(test)](./2019/01/go_day01/day01_test.go) | See Below                                                              |
 | [Day 02](./2019/02/README.md) | ✅      | Simple VM                                | [Python](./2019/02/python_day02/02.py)                                                       | [Elixir](./2019/02/elixir_day02/lib/elixir_day02.ex)                                                             | [Go](./2019/02/go_day02/day02.go)                                            | [React](./2019/02/react_day02/src/) [Ruby](./2019/02/ruby_day02/02.rb) |
 | [Day 03](./2019/03/README.md) |         | Wire intersection                        | [Python](./2019/03/python_day03/03.py)                                                       | [Elixir](./2019/03/elixir_day03/lib/elixir_day03.ex)                                                             | [Go](./2019/03/go_day03/day03.go)                                            | [Ruby](./2019/03/ruby_day03/03.rb)                                     |
 | [Day 04](./2019/04/README.md) |         | Password rules                           | [Python](./2019/04/python_day04/day04.py) [(test)](./2019/04/python_day04/day04_test.py)     | [Elixir](./2019/04/elixir_day04/lib/elixir_day04.ex) [(test)](./2019/04/elixir_day04/test/elixir_day04_test.exs) | [Go](./2019/04/go_day04/day04.go) [(test)](./2019/04/go_day04/day04_test.go) |                                                                        |
@@ -55,8 +55,12 @@
 ### Day 01 extra languages 2019
 
 - [React](./2019/01/react_day01/src/) (Visualization only)
-- Haskell [Main](./2019/01/haskell-day01/app/Main.hs) [Lib](./2019/01/haskell-day01/src/Lib.hs) [(test)](./2019/01/haskell-day01/test/Spec.hs)
-- Crystal [Main](./2019/01/crystal_day01/src/main.cr) [Lib](./2019/01/crystal_day01/src/crystal_day01.cr) [(test)](./2019/01/crystal_day01/spec/crystal_day01_spec.cr)
+- Haskell [Main](./2019/01/haskell-day01/app/Main.hs)
+  [Lib](./2019/01/haskell-day01/src/Lib.hs)
+  [(test)](./2019/01/haskell-day01/test/Spec.hs)
+- Crystal [Main](./2019/01/crystal_day01/src/main.cr)
+  [Lib](./2019/01/crystal_day01/src/crystal_day01.cr)
+  [(test)](./2019/01/crystal_day01/spec/crystal_day01_spec.cr)
 - [Raku](./2019/01/raku_day01/01.p6)
 - [Ruby](./2019/01/ruby_day01/01.rb) (Tests Embedded)
 
@@ -160,6 +164,16 @@ I miss some constructs like `map`, `filter`, etc while using it.
 - **Day 13**: [Ruby](./2018/13/13.rb)
 - **Day 14**: [Ruby](./2018/14/14.rb)
 
+### Hardest Problems 2018
+
+- 15: Goblins vs Elves
+- (Placeholder)
+
+### Favorite Problems 2018
+
+- 15: Goblins vs Elves
+- (Placeholder)
+
 ### Personal Stats 2018
 
 ```
@@ -192,29 +206,16 @@ Day       Time   Rank  Score       Time   Rank  Score
   1   16:56:46  21119      0   17:59:18  17426      0
 ```
 
-## 2017
+### Overall Thoughts 2018
 
-- **Day 1**:
-  [Python](./2017/01/python_day01/day01.py)
-  [(test)](./2017/01/python_day01/test_day01.py)
-  | [Go](./2017/01/go_day01/day01.go)
-  [(test)](./2017/01/go_day01/day01_test.go)
-  | Ruby
-  [(main)](./2017/01/ruby_day01/main.rb)
-  [(lib)](./2017/01/ruby_day01/lib/day01.rb)
-  [(test)](./2017/01/ruby_day01/spec/day01_spec.rb)
-  | [Crystal](./2017/01/crystal_day01/src/crystal_day01.cr)
-  [(test)](./2017/01/crystal_day01/spec/crystal_day01_spec.cr)
-  | [Elixir](./2017/01/elixir_day01/lib/elixir_day01.ex)
-  [(test)](./2017/01/elixir_day01/test/elixir_day01_test.exs)
-  | Haskell [(main)](./2017/01/haskell-day01/app/Main.hs)
-  [(lib)](./2017/01/haskell-day01/src/Lib.hs)
-  [(test)](./2017/01/haskell-day01/test/Spec.hs)
-- **Day 2**:
-  [Go](./2017/02/go_day02/day02.go) [(test)](./2017/02/go_day02/day02_test.go)
+(Placeholder)
+
+## 2017
 
 | Day                           | Comment                             | Python                                                                                   | Elixir                                                                                                           | Go                                                                           | Others                                |
 | ----------------------------- | ----------------------------------- | ---------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------- | ------------------------------------- |
+| Day 01                        | String rotation, comparing          | [Python](./2017/01/python_day01/day01.py) [(test)](./2017/01/python_day01/test_day01.py) | [Elixir](./2017/01/elixir_day01/lib/elixir_day01.ex) [(test)](./2017/01/elixir_day01/test/elixir_day01_test.exs) | [Go](./2017/01/go_day01/day01.go) [(test)](./2017/01/go_day01/day01_test.go) | See below                             |
+| Day 02                        | Basic Math                          |                                                                                          |                                                                                                                  | [Go](./2017/02/go_day02/day02.go) [(test)](./2017/02/go_day02/day02_test.go) |                                       |
 | Day 03                        | 2d grid spiral                      | [Python](./2017/03/python_day03/day03.py) [(test)](./2017/03/python_day03/test_day03.py) |                                                                                                                  |                                                                              |                                       |
 | Day 04                        | Password Checking                   |                                                                                          | [Elixir](./2017/04/elixir_day04/lib/elixir_day04.ex)                                                             |                                                                              |                                       |
 | Day 05                        | VM-Like Jumps                       | [Python](./2017/05/python_day05/day05.py)                                                | [Elixir](./2017/05/elixir_day05/lib/elixir_day05.ex)                                                             | [Go](./2017/05/go_day05/day05.go) [(test)](./2017/05/go_day05/day05_test.go) | [Ruby](./2017/05/ruby_day05/day05.rb) |
@@ -237,6 +238,64 @@ Day       Time   Rank  Score       Time   Rank  Score
 | [Day 22](./2017/22/README.md) | Cellular automata, direction        | [Python](./2017/22/python_day22/day22.py)                                                |                                                                                                                  |                                                                              |                                       |
 | [Day 23](./2017/23/README.md) | Disassembly, optimization           |                                                                                          | [Elixir](./2017/23/elixir_day23/lib/vm.ex)                                                                       |                                                                              |                                       |
 | [Day 24](./2017/24/README.md) | Recursion                           | [Python](./2017/24/python_day24/day24.py)                                                |                                                                                                                  |                                                                              |                                       |
+| [Day 25](./2017/25/README.md) | Turing Machine                      | [Python](./2017/25/python_day25/day25.py)                                                |                                                                                                                  |                                                                              |                                       |
+
+### Hardest Problems 2017
+
+- 23: Disassembly
+- 21: Grid split, combine, rotate, flip
+
+### Favorite Problems 2017
+
+- 18: 2 VMs Communicating
+- 21: Grid split, combine, rotate, flip
+
+### Day 01 extra languages 2017
+
+- Ruby [(main)](./2017/01/ruby_day01/main.rb)
+  [(lib)](./2017/01/ruby_day01/lib/day01.rb)
+  [(test)](./2017/01/ruby_day01/spec/day01_spec.rb)
+- [Crystal](./2017/01/crystal_day01/src/crystal_day01.cr)
+  [(test)](./2017/01/crystal_day01/spec/crystal_day01_spec.cr)
+- Haskell [(main)](./2017/01/haskell-day01/app/Main.hs)
+  [(lib)](./2017/01/haskell-day01/src/Lib.hs)
+  [(test)](./2017/01/haskell-day01/test/Spec.hs)
+
+### Personal Stats 2017
+
+```
+      --------Part 1--------   --------Part 2--------
+Day       Time   Rank  Score       Time   Rank  Score
+ 25       >24h   5805      0       >24h   4850      0
+ 24       >24h   5517      0       >24h   5443      0
+ 23       >24h   6296      0       >24h   5401      0
+ 22       >24h   6253      0       >24h   6113      0
+ 21       >24h   5909      0       >24h   5823      0
+ 20       >24h   7667      0       >24h   7108      0
+ 19       >24h   8121      0       >24h   8008      0
+ 18       >24h   9005      0       >24h   7442      0
+ 17       >24h   9542      0       >24h   8977      0
+ 16       >24h  10226      0       >24h   9319      0
+ 15       >24h  10426      0       >24h  10144      0
+ 14       >24h   9792      0       >24h   9064      0
+ 13       >24h  11755      0       >24h  10739      0
+ 12       >24h  12663      0       >24h  12119      0
+ 11       >24h  12945      0       >24h  12445      0
+ 10       >24h  14074      0       >24h  12637      0
+  9       >24h  15631      0       >24h  15180      0
+  8       >24h  17907      0       >24h  17348      0
+  7       >24h  20687      0       >24h  15836      0
+  6       >24h  23000      0       >24h  21891      0
+  5       >24h  26443      0       >24h  24917      0
+  4       >24h  29919      0       >24h  26769      0
+  3       >24h  31602      0       >24h  23129      0
+  2       >24h  45282      0       >24h  38284      0
+  1       >24h  55024      0       >24h  45454      0
+```
+
+### Overall Thoughts 2017
+
+(Placeholder)
 
 ## 2016
 
@@ -247,8 +306,9 @@ Day       Time   Rank  Score       Time   Rank  Score
 
 - [aocdl, a util for downloading input.txt](https://github.com/GreenLightning/advent-of-code-downloader)
 - [Synacor challenge, another challenge by the same creator](https://challenge.synacor.com/)
+- [Solution time scatterplots](http://www.maurits.vdschee.nl/scatterplot/)
 
 ```
 Created:       Mon 02 Dec 2019 05:12:40 PM CST
-Last Modified: Mon 06 Jan 2020 01:39:54 PM CST
+Last Modified: Mon 06 Jan 2020 04:59:21 PM CST
 ```
