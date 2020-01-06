@@ -43,6 +43,16 @@ First loop I'm stuck on seems to be 12-20:
 19: g -= b
 20:
 
+G is simply building an expression
+
+Test for
+(d * e) - b == 0  or
+d * e == b
+
+If pass, then set F to 0
+
+
+
  a   b         c    d   e     f    g     h
 [1, 106500, 123500, 2, 25509, 1, -80991, 0]
 [12, "set", "g", "d"]

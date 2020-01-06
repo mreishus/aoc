@@ -2,6 +2,30 @@
 
 ## Approach and Reflections
 
+We're asked to implement a simple VM; then we're given a program that will run
+forever and asked to find what its final output would be if it ever finished
+running.
+
+OK, the disassembly problem! I'd done one previously in the 2018 event, so
+I knew a little bit of what to expect. First, I changed the VM to print what
+instruction it's working on, then I let it run for a while and captured the
+output to see what loop it's stuck on.
+
+I optimized that inner loop, first by causing all of its expressions to happen
+in one step, then later by executing the loop itself in elixir, not the VM.
+This made it faster, but it still wasn't fast enough: A second, outer loop was
+taking up most of the time.
+
+The two loops run and set a certain variable (`f`) if a condition met, so
+I changed both loops to exit early if they set the variable. This sped up
+most cases, but there were a few cases where the variables were not being set,
+and the loops would run for too long. I changed both loops to run in elixir,
+but it was still too slow.
+
+By the time I implemented both loops in elixir, I realized what the VM was
+doing, so I was able to implement it directly in my code with a more efficient
+algorithm. (I'm being deliberately obtuse as to not spoil the entire problem.)
+
 ## Solutions
 
 - [Elixir](./elixir_day23/lib/vm.ex)

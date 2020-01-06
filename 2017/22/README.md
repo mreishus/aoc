@@ -2,6 +2,11 @@
 
 ## Approach and Reflections
 
+This was a cellular automata problem with a grid and an agent that has
+a location and a direction. There was not much to this one, just implementing
+the directions carefully. A trick I used was to represent the coordinates
+with complex numbers and to multiply by i or -i to turn 90 degrees.
+
 ## Solutions
 
 - [Python](./python_day22/day22.py)
