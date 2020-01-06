@@ -236,6 +236,7 @@ Day       Time   Rank  Score       Time   Rank  Score
 | [Day 21](./2017/21/README.md) | Grid split, combine, rotation, flip | [Python](./2017/21/python_day21/day21.py)                                                |                                                                                                                  |                                                                              |                                       |
 | [Day 22](./2017/22/README.md) | Cellular automata, direction        | [Python](./2017/22/python_day22/day22.py)                                                |                                                                                                                  |                                                                              |                                       |
 | [Day 23](./2017/23/README.md) | Disassembly, optimization           |                                                                                          | [Elixir](./2017/23/elixir_day23/lib/vm.ex)                                                                       |                                                                              |                                       |
+| [Day 24](./2017/24/README.md) | Recursion                           | [Python](./2017/24/python_day24/day24.py)                                                |                                                                                                                  |                                                                              |                                       |
 
 ## 2016
 
@@ -249,5 +250,5 @@ Day       Time   Rank  Score       Time   Rank  Score
 
 ```
 Created:       Mon 02 Dec 2019 05:12:40 PM CST
-Last Modified: Sun 05 Jan 2020 11:04:19 PM CST
+Last Modified: Mon 06 Jan 2020 01:39:54 PM CST
 ```
