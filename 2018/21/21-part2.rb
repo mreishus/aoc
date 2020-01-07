@@ -219,8 +219,8 @@ puts "All tests passed - #{end_tests.to_ms - begin_tests.to_ms}ms"
 filename = 'input.txt'
 data = parse_file(filename)
 i = 0
-#data[:regs][0] = 9566170
-#data[:regs][0] = 11600695
+# data[:regs][0] = 9_566_170
+# data[:regs][0] = 11_600_695
 loop do
   tick(data)
 
