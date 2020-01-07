@@ -135,44 +135,47 @@ I miss some constructs like `map`, `filter`, etc while using it.
 
 ## 2018
 
-- **Day 1**: [Writeup](./2018/1/README.md)
-  | Elixir [(Part 1)](./2018/1/advent_of_code_2018_01a/lib/advent_of_code_2018_01a.ex)
-  [(Part 2)](./2018/1/advent_of_code_2018_01b/lib/advent_of_code_2018_01b.ex)
-- **Day 2**: [Writeup](./2018/2/README.md)
-  | [JavaScript](./2018/2/fast_js/2.js) (Done quickly)
-  | [Elixir](./2018/2/advent_of_code_2018_02/lib/advent_of_code_2018_02.ex)
-- **Day 3**: [Writeup](./2018/3/README.md)
-  | [Ruby](./2018/3/ruby/)
-  | [Elixir](./2018/3/advent_of_code_2018_03/lib/advent_of_code_2018_03.ex)
-- **Day 4**: [Writeup](./2018/4/README.md)
-  | [Elixir](./2018/4/advent_of_code_2018_04/lib/advent_of_code_2018_04.ex)
-- **Day 5**: [Writeup](./2018/5/README.md)
-  | [Elixir](./2018/5/advent_of_code_2018_05/lib/advent_of_code_2018_05.ex)
-  [(test)](./2018/5/advent_of_code_2018_05/test/advent_of_code_2018_05_test.exs)
-  | [Ruby](./2018/5/ruby/test.rb) (Done quickly)
-- **Day 6**: [Writeup](./2018/6/README.md)
-  | [Elixir](./2018/6/advent_of_code_2018_06/lib/advent_of_code_2018_06.ex)
-  | [Ruby](./2018/6/ruby/test.rb)
-- **Day 7**: [Writeup](./2018/7/README.md)
-  | [Elixir](./2018/7/advent_of_code_2018_07/lib/advent_of_code_2018_07.ex)
-  | [Ruby](./2018/7/ruby/7.rb)
-- **Day 8**: [Ruby](./2018/8/8.rb)
-- **Day 9**: [Ruby](./2018/9/9.rb)
-- **Day 10**: [Ruby](./2018/10/10.rb)
-- **Day 11**: [Ruby](./2018/11/11.rb)
-- **Day 12**: [Ruby](./2018/12/12.rb)
-- **Day 13**: [Ruby](./2018/13/13.rb)
-- **Day 14**: [Ruby](./2018/14/14.rb)
+| Day                          | Comment                      | Ruby                          | Elixir                                                                                                                                                  | Others                              |
+| ---------------------------- | ---------------------------- | ----------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------- |
+| [Day 01](./2018/1/README.md) | Sum numbers, look for repeat |                               | [(Part 1)](./2018/1/advent_of_code_2018_01a/lib/advent_of_code_2018_01a.ex) [(Part 2)](./2018/1/advent_of_code_2018_01b/lib/advent_of_code_2018_01b.ex) |                                     |
+| [Day 02](./2018/2/README.md) | ?                            |                               | [Elixir](./2018/2/advent_of_code_2018_02/lib/advent_of_code_2018_02.ex)                                                                                 | [JavaScript](./2018/2/fast_js/2.js) |
+| [Day 03](./2018/3/README.md) | ?                            | [Ruby](./2018/3/ruby/)        | [Elixir](./2018/3/advent_of_code_2018_03/lib/advent_of_code_2018_03.ex)                                                                                 |                                     |
+| [Day 04](./2018/4/README.md) | ?                            |                               | [Elixir](./2018/4/advent_of_code_2018_04/lib/advent_of_code_2018_04.ex)                                                                                 |                                     |
+| [Day 05](./2018/5/README.md) | ?                            | [Ruby](./2018/5/ruby/test.rb) | [Elixir](./2018/5/advent_of_code_2018_05/lib/advent_of_code_2018_05.ex) [(test)](./2018/5/advent_of_code_2018_05/test/advent_of_code_2018_05_test.exs)  |                                     |
+| [Day 06](./2018/6/README.md) | ?                            | [Ruby](./2018/6/ruby/test.rb) | [Elixir](./2018/6/advent_of_code_2018_06/lib/advent_of_code_2018_06.ex)                                                                                 |                                     |
+| [Day 07](./2018/7/README.md) | ?                            | [Ruby](./2018/7/ruby/7.rb)    | [Elixir](./2018/7/advent_of_code_2018_07/lib/advent_of_code_2018_07.ex)                                                                                 |                                     |
+| Day 08                       | ?                            | [Ruby](./2018/8/8.rb)         |                                                                                                                                                         |                                     |
+| Day 09                       | ?                            | [Ruby](./2018/9/9.rb)         |                                                                                                                                                         |                                     |
+| Day 10                       | ?                            | [Ruby](./2018/10/10.rb)       |                                                                                                                                                         |                                     |
+| Day 11                       | ?                            | [Ruby](./2018/11/11.rb)       |                                                                                                                                                         |                                     |
+| Day 12                       | ?                            | [Ruby](./2018/12/12.rb)       |                                                                                                                                                         |                                     |
+| Day 13                       | ?                            | [Ruby](./2018/13/13.rb)       |                                                                                                                                                         |                                     |
+| Day 14                       | ?                            | [Ruby](./2018/14/14.rb)       |                                                                                                                                                         |                                     |
+| Day 15                       | Goblin vs Elves battle       | [Ruby](./2018/15/15.rb)       |                                                                                                                                                         |                                     |
+| Day 16                       | ?                            | [Ruby](./2018/16/16.rb)       |                                                                                                                                                         |                                     |
+| Day 17                       | Flowing Water                | [Ruby](./2018/17/17.rb)       |                                                                                                                                                         |                                     |
+| Day 18                       | ?                            | [Ruby](./2018/18/18.rb)       |                                                                                                                                                         |                                     |
+| Day 19                       | Disassembly                  | [Ruby](./2018/19/19.rb)       |                                                                                                                                                         |                                     |
+| Day 20                       | ?                            | [Ruby](./2018/20/20.rb)       |                                                                                                                                                         |                                     |
+| Day 21                       | ?                            | [Ruby](./2018/21/21.rb)       |                                                                                                                                                         |                                     |
+| Day 22                       | ?                            | [Ruby](./2018/22/22.rb)       |                                                                                                                                                         |                                     |
+| Day 23                       | ?                            | [Ruby](./2018/23/23.rb)       |                                                                                                                                                         |                                     |
+| Day 24                       | Virus Battle                 | [Ruby](./2018/24/24.rb)       |                                                                                                                                                         |                                     |
+| Day 25                       | ?                            | [Ruby](./2018/25/25.rb)       |                                                                                                                                                         |                                     |
 
 ### Hardest Problems 2018
 
 - 15: Goblins vs Elves
-- (Placeholder)
+- 17: Flowing water
+- 19: Disassembly
+- 23: Nanobots: octohedron vision range
+- 24: Virus battle
 
 ### Favorite Problems 2018
 
 - 15: Goblins vs Elves
-- (Placeholder)
+- 17: Flowing water
+- 24: Virus Battle
 
 ### Personal Stats 2018
 
@@ -310,5 +313,5 @@ Day       Time   Rank  Score       Time   Rank  Score
 
 ```
 Created:       Mon 02 Dec 2019 05:12:40 PM CST
-Last Modified: Mon 06 Jan 2020 04:59:21 PM CST
+Last Modified: Mon 06 Jan 2020 08:08:35 PM CST
 ```
