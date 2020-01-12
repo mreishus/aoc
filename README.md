@@ -5,7 +5,7 @@
 - 2019 - 50 stars
 - 2018 - 50 stars
 - 2017 - 50 stars
-- 2016 - 4 stars
+- 2016 - 6 stars
 - 2015 - 0 stars
 
 ## 2019
@@ -307,6 +307,7 @@ Day       Time   Rank  Score       Time   Rank  Score
 | ---------------------------------- | ----------------- | -------------------------------------- | ---------------------------------------- |
 | Day 01                             | Turning, Stepping | [Python](./2016/01/day01_python/01.py) |                                          |
 | [Day 02](./2016/writeups/day02.md) | Keypad Navigation |                                        | [Elixir](./2016/elixir2016/lib/day02.ex) |
+| [Day 03](./2016/writeups/day03.md) | Column Processing |                                        | [Elixir](./2016/elixir2016/lib/day03.ex) |
 
 ## Misc
 
@@ -316,5 +317,5 @@ Day       Time   Rank  Score       Time   Rank  Score
 
 ```
 Created:       Mon 02 Dec 2019 05:12:40 PM CST
-Last Modified: Sat 11 Jan 2020 07:39:12 PM CST
+Last Modified: Sun 12 Jan 2020 04:36:53 PM CST
 ```
