@@ -23,7 +23,7 @@ defmodule Elixir2016 do
     Day04.part1("../inputs/04/input.txt")
     |> IO.inspect(label: "2016 Day 04 Part 1")
 
-    name = "mm-aaaaa-bbb-z-y-x-"
-    %{name: name} |> Day04.compute_checksum()
+    Day04.part2("../inputs/04/input.txt")
+    |> IO.inspect(label: "2016 Day 04 Part 2")
   end
 end
