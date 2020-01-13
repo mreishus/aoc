@@ -1,17 +1,25 @@
 defmodule Elixir2016 do
   alias Elixir2016.{Day02, Day03, Day04, Day05}
-  alias Elixir2016.{Day06}
+  alias Elixir2016.{Day06, Day07}
 
   @moduledoc """
   Documentation for Elixir2016.
   """
   def main do
     # day1to5()
+    day6to10()
+  end
+
+  def day6to10 do
     Day06.part1("../inputs/06/input.txt")
     |> IO.inspect(label: "2016 Day 06 Part 1")
 
     Day06.part2("../inputs/06/input.txt")
     |> IO.inspect(label: "2016 Day 06 Part 2")
+
+    # 118, too high, for someone else
+    Day07.part1("../inputs/07/input.txt")
+    |> IO.inspect(label: "2016 Day 07 Part 1")
   end
 
   def day1to5 do
