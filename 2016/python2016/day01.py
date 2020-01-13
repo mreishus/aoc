@@ -60,10 +60,7 @@ def solve(steps):
     return answer1, answer2
 
 
-# data = parse("../input_small.txt")
-# data = parse("../input_small2.txt")
-# data = parse("../input_small3.txt")
-data = parse("../input.txt")
+data = parse("../inputs/01/input.txt")
 answer1, answer2 = solve(data)
 print("Part 1:")
 print(answer1)

@@ -305,15 +305,15 @@ Day       Time   Rank  Score       Time   Rank  Score
 
 Missing Reflections: 4, 5, 6, 7
 
-| Day                                | Comment           | Python                                 | Elixir                                   |
-| ---------------------------------- | ----------------- | -------------------------------------- | ---------------------------------------- |
-| Day 01                             | Turning, Stepping | [Python](./2016/01/day01_python/01.py) |                                          |
-| [Day 02](./2016/writeups/day02.md) | Keypad Navigation |                                        | [Elixir](./2016/elixir2016/lib/day02.ex) |
-| [Day 03](./2016/writeups/day03.md) | Column Processing |                                        | [Elixir](./2016/elixir2016/lib/day03.ex) |
-| [Day 04](./2016/writeups/day04.md) | Shift Chipher     |                                        | [Elixir](./2016/elixir2016/lib/day04.ex) |
-| [Day 05](./2016/writeups/day05.md) | MD5 Cracking      |                                        | [Elixir](./2016/elixir2016/lib/day05.ex) |
-| [Day 06](./2016/writeups/day06.md) | Repetition Code   |                                        | [Elixir](./2016/elixir2016/lib/day06.ex) |
-| [Day 07](./2016/writeups/day07.md) | Adv string search |                                        | [Elixir](./2016/elixir2016/lib/day07.ex) |
+| Day                                | Comment           | Python                               | Elixir                                   |
+| ---------------------------------- | ----------------- | ------------------------------------ | ---------------------------------------- |
+| [Day 01](./2016/writeups/day01.md) | Turning, Stepping | [Python](./2016/python2016/day01.py) |                                          |
+| [Day 02](./2016/writeups/day02.md) | Keypad Navigation |                                      | [Elixir](./2016/elixir2016/lib/day02.ex) |
+| [Day 03](./2016/writeups/day03.md) | Column Processing |                                      | [Elixir](./2016/elixir2016/lib/day03.ex) |
+| [Day 04](./2016/writeups/day04.md) | Shift Chipher     |                                      | [Elixir](./2016/elixir2016/lib/day04.ex) |
+| [Day 05](./2016/writeups/day05.md) | MD5 Cracking      |                                      | [Elixir](./2016/elixir2016/lib/day05.ex) |
+| [Day 06](./2016/writeups/day06.md) | Repetition Code   |                                      | [Elixir](./2016/elixir2016/lib/day06.ex) |
+| [Day 07](./2016/writeups/day07.md) | Adv string search |                                      | [Elixir](./2016/elixir2016/lib/day07.ex) |
 
 ## Misc
 
@@ -323,5 +323,5 @@ Missing Reflections: 4, 5, 6, 7
 
 ```
 Created:       Mon 02 Dec 2019 05:12:40 PM CST
-Last Modified: Mon 13 Jan 2020 12:10:21 AM CST
+Last Modified: Mon 13 Jan 2020 10:49:13 AM CST
 ```
