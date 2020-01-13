@@ -2,6 +2,15 @@
 
 ## Approach and Reflections
 
+This was a somewhat tricky problem involving string manipulation. Check the
+description below, it's a little too complex to recount here.
+
+My approach was to break the problem into smaller parts, such as separating
+a string out into "inside hypernet" and "outside hypernet" portions, or
+creating a function that scans a string for ABA patterns. Knowledge of regexp
+was useful here. With these functions, I was able to combine them into making
+an entire solution.
+
 ## Solutions
 
 - [Elixir](../elixir2016/lib/day07.ex)

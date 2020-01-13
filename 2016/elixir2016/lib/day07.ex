@@ -44,6 +44,7 @@ defmodule Elixir2016.Day07 do
     |> Enum.any?(&abba?/1)
   end
 
+  # Looks for patterns like ABBA or XYYX.  The second char must be diff than the first.
   def abba?(string) do
     Regex.match?(~r/(\w)(?!\1)(\w)\2\1/, string)
   end
@@ -57,12 +58,19 @@ defmodule Elixir2016.Day07 do
   [["g", "s"], ["k", "j"]]
   iex> "zazbzczdzd" |> Elixir2016.Day07.aba_list()
   [["z", "a"], ["z", "b"], ["z", "c"], ["z", "d"], ["d", "z"]]
+
+  Finds a list of all patterns like ABA or XYX in a string.
+  ABA would be represented as ["a", "b"].  This makes for easy reversal.
   """
   def aba_list(string) do
     Regex.scan(~r/(\w)(?!\1)(?=(\w)\1)/, string)
     |> Enum.map(fn [_a, b, c] -> [b, c] end)
   end
 
+  @doc """
+  Find all ABAs inside and outside the hyerpnet.  If we flip one side,
+  are there any matches?  If so, it's SSL.
+  """
   def ssl?(string) do
     outside_abas =
       string

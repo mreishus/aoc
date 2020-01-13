@@ -5,7 +5,7 @@
 - 2019 - 50 stars
 - 2018 - 50 stars
 - 2017 - 50 stars
-- 2016 - 6 stars
+- 2016 - 16 stars
 - 2015 - 0 stars
 
 ## 2019
@@ -303,7 +303,7 @@ Day       Time   Rank  Score       Time   Rank  Score
 
 ## 2016
 
-Missing Reflections: 4, 5, 6, 7
+Missing Reflections: 4, 5, 6
 
 | Day                                | Comment           | Python                               | Elixir                                   |
 | ---------------------------------- | ----------------- | ------------------------------------ | ---------------------------------------- |
@@ -314,6 +314,7 @@ Missing Reflections: 4, 5, 6, 7
 | [Day 05](./2016/writeups/day05.md) | MD5 Cracking      |                                      | [Elixir](./2016/elixir2016/lib/day05.ex) |
 | [Day 06](./2016/writeups/day06.md) | Repetition Code   |                                      | [Elixir](./2016/elixir2016/lib/day06.ex) |
 | [Day 07](./2016/writeups/day07.md) | Adv string search |                                      | [Elixir](./2016/elixir2016/lib/day07.ex) |
+| [Day 08](./2016/writeups/day08.md) | Grid manipulation | [Python](./2016/python2016/day08.py) |                                          |
 
 ## Misc
 
@@ -323,5 +324,5 @@ Missing Reflections: 4, 5, 6, 7
 
 ```
 Created:       Mon 02 Dec 2019 05:12:40 PM CST
-Last Modified: Mon 13 Jan 2020 10:49:13 AM CST
+Last Modified: Mon 13 Jan 2020 12:28:52 PM CST
 ```
