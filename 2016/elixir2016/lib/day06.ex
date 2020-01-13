@@ -4,7 +4,13 @@ defmodule Elixir2016.Day06 do
     |> Stream.map(&String.trim/1)
     |> pos_letter_map()
     |> decode_repeat()
-    |> IO.inspect()
+  end
+
+  def part2(filename) do
+    File.stream!(filename)
+    |> Stream.map(&String.trim/1)
+    |> pos_letter_map()
+    |> decode_repeat_least()
   end
 
   @doc """
@@ -58,7 +64,19 @@ defmodule Elixir2016.Day06 do
     |> Enum.sort()
     |> Enum.map(fn i -> pos_letter_map[i] |> Enum.to_list() end)
     |> Enum.map(fn freq_list ->
-      {letter, freq} = Enum.max_by(freq_list, fn {letter, freq} -> freq end)
+      {letter, _freq} = Enum.max_by(freq_list, fn {_letter, freq} -> freq end)
+      letter
+    end)
+    |> Enum.join("")
+  end
+
+  def decode_repeat_least(pos_letter_map) do
+    pos_letter_map
+    |> Map.keys()
+    |> Enum.sort()
+    |> Enum.map(fn i -> pos_letter_map[i] |> Enum.to_list() end)
+    |> Enum.map(fn freq_list ->
+      {letter, _freq} = Enum.max_by(freq_list, fn {_letter, freq} -> 0 - freq end)
       letter
     end)
     |> Enum.join("")
