@@ -6,12 +6,18 @@ defmodule Elixir2016.Day07 do
     |> Enum.count()
   end
 
+  def part2(filename) do
+    File.stream!(filename)
+    |> Stream.map(&String.trim/1)
+    |> Stream.filter(&ssl?/1)
+    |> Enum.count()
+  end
+
   ## Removes anything in brackets
   ## Assuming they're never nested
-  ## Replacing with Z - working as a makeshift "split" here, so we
-  ## don't detect abbas across brackets
+  ## Returns a list of strings
   def remove_hypernet(string) do
-    Regex.replace(~r/\[.*?\]/, string, "Z")
+    Regex.split(~r/\[.*?\]/, string)
   end
 
   @doc """
@@ -35,10 +41,43 @@ defmodule Elixir2016.Day07 do
   def abba_outside_hypernet?(string) do
     string
     |> remove_hypernet()
-    |> abba?()
+    |> Enum.any?(&abba?/1)
   end
 
   def abba?(string) do
     Regex.match?(~r/(\w)(?!\1)(\w)\2\1/, string)
+  end
+
+  ## Part 2 Stuff 
+
+  @doc """
+  iex(1)> "gsg" |> Elixir2016.Day07.aba_list()
+  [["g", "s"]]
+  iex(2)> "gsg kjk" |> Elixir2016.Day07.aba_list()
+  [["g", "s"], ["k", "j"]]
+  iex> "zazbzczdzd" |> Elixir2016.Day07.aba_list()
+  [["z", "a"], ["z", "b"], ["z", "c"], ["z", "d"], ["d", "z"]]
+  """
+  def aba_list(string) do
+    Regex.scan(~r/(\w)(?!\1)(?=(\w)\1)/, string)
+    |> Enum.map(fn [_a, b, c] -> [b, c] end)
+  end
+
+  def ssl?(string) do
+    outside_abas =
+      string
+      |> remove_hypernet()
+      |> Enum.flat_map(&aba_list/1)
+      |> Enum.into(MapSet.new())
+
+    inside_abas =
+      string
+      |> hypernet()
+      |> Enum.flat_map(&aba_list/1)
+      |> Enum.map(&Enum.reverse/1)
+      |> Enum.into(MapSet.new())
+
+    MapSet.intersection(outside_abas, inside_abas)
+    |> Enum.any?()
   end
 end

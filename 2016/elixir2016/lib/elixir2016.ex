@@ -17,9 +17,11 @@ defmodule Elixir2016 do
     Day06.part2("../inputs/06/input.txt")
     |> IO.inspect(label: "2016 Day 06 Part 2")
 
-    # 118, too high, for someone else
     Day07.part1("../inputs/07/input.txt")
     |> IO.inspect(label: "2016 Day 07 Part 1")
+
+    Day07.part2("../inputs/07/input.txt")
+    |> IO.inspect(label: "2016 Day 07 Part 2")
   end
 
   def day1to5 do

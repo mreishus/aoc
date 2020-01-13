@@ -303,7 +303,7 @@ Day       Time   Rank  Score       Time   Rank  Score
 
 ## 2016
 
-Missing Reflections: 4, 5, 6
+Missing Reflections: 4, 5, 6, 7
 
 | Day                                | Comment           | Python                                 | Elixir                                   |
 | ---------------------------------- | ----------------- | -------------------------------------- | ---------------------------------------- |
@@ -313,6 +313,7 @@ Missing Reflections: 4, 5, 6
 | [Day 04](./2016/writeups/day04.md) | Shift Chipher     |                                        | [Elixir](./2016/elixir2016/lib/day04.ex) |
 | [Day 05](./2016/writeups/day05.md) | MD5 Cracking      |                                        | [Elixir](./2016/elixir2016/lib/day05.ex) |
 | [Day 06](./2016/writeups/day06.md) | Repetition Code   |                                        | [Elixir](./2016/elixir2016/lib/day06.ex) |
+| [Day 07](./2016/writeups/day07.md) | Adv string search |                                        | [Elixir](./2016/elixir2016/lib/day07.ex) |
 
 ## Misc
 
@@ -322,5 +323,5 @@ Missing Reflections: 4, 5, 6
 
 ```
 Created:       Mon 02 Dec 2019 05:12:40 PM CST
-Last Modified: Sun 12 Jan 2020 10:09:17 PM CST
+Last Modified: Mon 13 Jan 2020 12:10:21 AM CST
 ```
