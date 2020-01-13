@@ -30,7 +30,7 @@ cliear, though.
 
 ## Problem Description
 
-[2016 Day 03 on AdventOfCode.com](https://adventofcode.com/2016/day/2)
+[2016 Day 03 on AdventOfCode.com](https://adventofcode.com/2016/day/3)
 
 ### Part 1
 

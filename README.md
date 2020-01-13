@@ -303,14 +303,16 @@ Day       Time   Rank  Score       Time   Rank  Score
 
 ## 2016
 
+Missing Reflections: 4, 5, 6
+
 | Day                                | Comment           | Python                                 | Elixir                                   |
 | ---------------------------------- | ----------------- | -------------------------------------- | ---------------------------------------- |
 | Day 01                             | Turning, Stepping | [Python](./2016/01/day01_python/01.py) |                                          |
 | [Day 02](./2016/writeups/day02.md) | Keypad Navigation |                                        | [Elixir](./2016/elixir2016/lib/day02.ex) |
 | [Day 03](./2016/writeups/day03.md) | Column Processing |                                        | [Elixir](./2016/elixir2016/lib/day03.ex) |
-| Day 04                             | Shift Chipher     |                                        | [Elixir](./2016/elixir2016/lib/day04.ex) |
-| Day 05                             | MD5 Cracking      |                                        | [Elixir](./2016/elixir2016/lib/day05.ex) |
-| Day 06                             | Repetition Code   |                                        | [Elixir](./2016/elixir2016/lib/day06.ex) |
+| [Day 04](./2016/writeups/day04.md) | Shift Chipher     |                                        | [Elixir](./2016/elixir2016/lib/day04.ex) |
+| [Day 05](./2016/writeups/day05.md) | MD5 Cracking      |                                        | [Elixir](./2016/elixir2016/lib/day05.ex) |
+| [Day 06](./2016/writeups/day06.md) | Repetition Code   |                                        | [Elixir](./2016/elixir2016/lib/day06.ex) |
 
 ## Misc
 
@@ -320,5 +322,5 @@ Day       Time   Rank  Score       Time   Rank  Score
 
 ```
 Created:       Mon 02 Dec 2019 05:12:40 PM CST
-Last Modified: Sun 12 Jan 2020 10:00:30 PM CST
+Last Modified: Sun 12 Jan 2020 10:09:17 PM CST
 ```
