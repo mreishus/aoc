@@ -309,6 +309,7 @@ Day       Time   Rank  Score       Time   Rank  Score
 | [Day 02](./2016/writeups/day02.md) | Keypad Navigation |                                        | [Elixir](./2016/elixir2016/lib/day02.ex) |
 | [Day 03](./2016/writeups/day03.md) | Column Processing |                                        | [Elixir](./2016/elixir2016/lib/day03.ex) |
 | Day 04                             | Shift Chipher     |                                        | [Elixir](./2016/elixir2016/lib/day04.ex) |
+| Day 05                             | MD5 Cracking      |                                        | [Elixir](./2016/elixir2016/lib/day05.ex) |
 
 ## Misc
 
@@ -318,5 +319,5 @@ Day       Time   Rank  Score       Time   Rank  Score
 
 ```
 Created:       Mon 02 Dec 2019 05:12:40 PM CST
-Last Modified: Sun 12 Jan 2020 07:15:01 PM CST
+Last Modified: Sun 12 Jan 2020 08:57:38 PM CST
 ```
