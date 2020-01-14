@@ -8,6 +8,14 @@ defmodule Elixir2016.Day09 do
     |> String.length()
   end
 
+  def part2(filename) do
+    File.stream!(filename)
+    |> Stream.map(&String.trim/1)
+    |> Enum.to_list()
+    |> List.first()
+    |> expand2()
+  end
+
   def expand(string) do
     do_expand("", string)
   end
@@ -53,6 +61,37 @@ defmodule Elixir2016.Day09 do
         rest = string |> String.slice(start + len + rep_len, String.length(string))
 
         do_expand(prepend <> begin <> repeated, rest)
+    end
+  end
+
+  ## Expand2: like Expand, but recursive, and returns the length only.
+  def expand2(string) do
+    do_expand2(0, string)
+  end
+
+  def do_expand2(prepend, string) do
+    find_marker = ~r/\((\d+)x(\d+)\)/
+
+    case Regex.run(find_marker, string, return: :index) do
+      nil ->
+        prepend + String.length(string)
+
+      [{start, len} | _] ->
+        begin = string |> String.slice(0, start)
+
+        [_, rep_len, rep_times] = Regex.run(find_marker, string)
+        rep_len = String.to_integer(rep_len)
+        rep_times = String.to_integer(rep_times)
+
+        # Recurse
+        # Instead of duplicating the string, get an answer from the simple string
+        # and multiply that answer
+        repeated = string |> String.slice(start + len, rep_len)
+        repeat_count = rep_times * expand2(repeated)
+
+        rest = string |> String.slice(start + len + rep_len, String.length(string))
+
+        do_expand2(prepend + String.length(begin) + repeat_count, rest)
     end
   end
 end

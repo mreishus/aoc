@@ -25,6 +25,9 @@ defmodule Elixir2016 do
 
     Day09.part1("../inputs/09/input.txt")
     |> IO.inspect(label: "2016 Day 09 Part 1")
+
+    Day09.part2("../inputs/09/input.txt")
+    |> IO.inspect(label: "2016 Day 09 Part 2")
   end
 
   def day1to5 do
