@@ -1,12 +1,12 @@
 defmodule Elixir2016 do
   alias Elixir2016.{Day02, Day03, Day04, Day05}
-  alias Elixir2016.{Day06, Day07, Day09}
+  alias Elixir2016.{Day06, Day07, Day09, Day10}
 
   @moduledoc """
   Documentation for Elixir2016.
   """
   def main do
-    # day1to5()
+    day1to5()
     day6to10()
   end
 
@@ -23,11 +23,16 @@ defmodule Elixir2016 do
     Day07.part2("../inputs/07/input.txt")
     |> IO.inspect(label: "2016 Day 07 Part 2")
 
+    "Day 8 Not implemented in elixir" |> IO.inspect()
+
     Day09.part1("../inputs/09/input.txt")
     |> IO.inspect(label: "2016 Day 09 Part 1")
 
     Day09.part2("../inputs/09/input.txt")
     |> IO.inspect(label: "2016 Day 09 Part 2")
+
+    Day10.part1_and_2("../inputs/10/input.txt")
+    |> IO.inspect(label: "2016 Day 10")
   end
 
   def day1to5 do
