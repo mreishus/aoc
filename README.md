@@ -319,6 +319,14 @@ Missing Reflections: 4, 5, 6
 | [Day 10](./2016/writeups/day10.md) | Coordinating Agents        |                                      | [Elixir](./2016/elixir2016/lib/day10.ex) |
 | [Day 11](./2016/writeups/day11.md) | Missionaries and cannibals |                                      | [Elixir](./2016/elixir2016/lib/day11.ex) |
 
+### Hardest Problems 2016
+
+- Day 11: Missionaries and Cannibals
+
+### Favorite Problems 2016
+
+?
+
 ## Misc
 
 - [aocdl, a util for downloading input.txt](https://github.com/GreenLightning/advent-of-code-downloader)
@@ -327,5 +335,5 @@ Missing Reflections: 4, 5, 6
 
 ```
 Created:       Mon 02 Dec 2019 05:12:40 PM CST
-Last Modified: Thu 16 Jan 2020 01:19:27 PM CST
+Last Modified: Thu 16 Jan 2020 01:20:30 PM CST
 ```
