@@ -1,26 +1,49 @@
+defmodule Parallel do
+  def pmap(collection, func) do
+    collection
+    |> Enum.map(&Task.async(fn -> func.(&1) end))
+    |> Enum.map(&Task.await/1)
+  end
+end
+
 defmodule Elixir2016.Day11 do
   def part1() do
-    state = example_start()
     state = input_start()
 
     bfs([state], 0, MapSet.new())
     |> IO.inspect(label: "BFS answer")
   end
 
-  def bfs(wave, num, seen) do
-    if wave |> Enum.any?(&final_state?/1) do
+  def part2() do
+    state = input_part2_start()
+
+    bfs([state], 0, MapSet.new())
+    |> IO.inspect(label: "BFS answer")
+  end
+
+  def bfs(open_set, num, seen) do
+    if open_set |> Enum.any?(&final_state?/1) do
       num
     else
-      nextWave =
-        wave
-        |> Enum.flat_map(&next_states/1)
-        |> Enum.reject(fn state -> MapSet.member?(seen, state) end)
+      length(open_set) |> IO.inspect()
+
+      next_open_set =
+        open_set
+        # |> Stream.flat_map(&next_states/1)
+        # |> Enum.map(&next_states/1)
+        |> Parallel.pmap(&next_states/1)
+        |> Enum.concat()
+        # |> Task.async_stream(&next_states/1, ordered: false, max_concurrency: 8)
+        # |> Enum.reduce([], fn {:ok, list}, acc ->
+        #   acc ++ list
+        # end)
+        |> Stream.reject(fn state -> MapSet.member?(seen, state) end)
         |> Enum.uniq()
 
-      if length(nextWave) == 0 do
+      if length(next_open_set) == 0 do
         nil
       else
-        bfs(nextWave, num + 1, MapSet.union(seen, MapSet.new(nextWave)))
+        bfs(next_open_set, num + 1, MapSet.union(seen, MapSet.new(next_open_set)))
       end
     end
   end
@@ -77,26 +100,10 @@ defmodule Elixir2016.Day11 do
         {[new_item | moved_items], items_left}
       end)
 
-    # state
-    # |> Map.put(this_floor, Enum.sort(items_left))
-    # |> Map.update!(next_floor, fn items -> Enum.sort(items ++ moved_items) end)
-    # |> Map.put(:elevator, next_floor)
-    new_state =
-      state
-      |> Map.put(this_floor, Enum.sort(items_left))
-      |> Map.update!(next_floor, fn items -> Enum.sort(items ++ moved_items) end)
-      |> Map.put(:elevator, next_floor)
-
-    %{
-      new_state: new_state,
-      state: state,
-      i: i,
-      j: j,
-      this_floor: this_floor,
-      next_floor: next_floor
-    }
-
-    new_state
+    state
+    |> Map.put(this_floor, Enum.sort(items_left))
+    |> Map.update!(next_floor, fn items -> Enum.sort(items ++ moved_items) end)
+    |> Map.put(:elevator, next_floor)
   end
 
   def valid_state?(state) do
@@ -163,10 +170,37 @@ defmodule Elixir2016.Day11 do
     # strontium: 1
     # plutonium: 2
     # thulium: 3
-    # ruthenium
+    # ruthenium: 4
+    # curium: 5
     %{
       :elevator => 1,
       1 => Enum.sort([{:gen, 1}, {:chip, 1}, {:gen, 2}, {:chip, 2}]),
+      2 => Enum.sort([{:gen, 3}, {:gen, 4}, {:chip, 4}, {:gen, 5}, {:chip, 5}]),
+      3 => Enum.sort([{:chip, 3}]),
+      4 => []
+    }
+  end
+
+  def input_part2_start() do
+    # Upon entering the isolated containment area, however, you notice some extra parts on the first floor that weren't listed on the record outside:
+
+    #     (6) An elerium generator.
+    #     (6) An elerium-compatible microchip.
+    #     (7) A dilithium generator.
+    #     (7) A dilithium-compatible microchip.
+    %{
+      :elevator => 1,
+      1 =>
+        Enum.sort([
+          {:gen, 1},
+          {:chip, 1},
+          {:gen, 2},
+          {:chip, 2},
+          {:gen, 6},
+          {:chip, 6},
+          {:gen, 7},
+          {:chip, 7}
+        ]),
       2 => Enum.sort([{:gen, 3}, {:gen, 4}, {:chip, 4}, {:gen, 5}, {:chip, 5}]),
       3 => Enum.sort([{:chip, 3}]),
       4 => []

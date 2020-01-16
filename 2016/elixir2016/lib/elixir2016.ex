@@ -9,7 +9,8 @@ defmodule Elixir2016 do
   def main do
     # day1to5()
     # day6to10()
-    Day11.part1()
+    # Day11.part1()
+    Day11.part2()
   end
 
   def day6to10 do
