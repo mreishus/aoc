@@ -9,36 +9,25 @@ end
 defmodule Elixir2016.Day11 do
   def part1() do
     state = input_start()
-
     bfs([state], 0, MapSet.new())
-    |> IO.inspect(label: "BFS answer")
   end
 
   def part2() do
     state = input_part2_start()
-
     bfs([state], 0, MapSet.new())
-    |> IO.inspect(label: "BFS answer")
   end
 
   def bfs(open_set, num, seen) do
     if open_set |> Enum.any?(&final_state?/1) do
       num
     else
-      length(open_set) |> IO.inspect()
-
       next_open_set =
         open_set
-        # |> Stream.flat_map(&next_states/1)
-        # |> Enum.map(&next_states/1)
+        # Task.async_stream is slower
         |> Parallel.pmap(&next_states/1)
         |> Enum.concat()
-        # |> Task.async_stream(&next_states/1, ordered: false, max_concurrency: 8)
-        # |> Enum.reduce([], fn {:ok, list}, acc ->
-        #   acc ++ list
-        # end)
-        |> Stream.reject(fn state -> MapSet.member?(seen, state) end)
         |> Enum.uniq()
+        |> Enum.reject(fn state -> MapSet.member?(seen, state) end)
 
       if length(next_open_set) == 0 do
         nil
@@ -80,6 +69,7 @@ defmodule Elixir2016.Day11 do
         update_state(state, {i, j}, this_floor, next_floor)
       end)
     end)
+    |> Enum.map(&canonical_state/1)
     |> Enum.filter(&valid_state?/1)
   end
 
@@ -102,7 +92,7 @@ defmodule Elixir2016.Day11 do
 
     state
     |> Map.put(this_floor, Enum.sort(items_left))
-    |> Map.update!(next_floor, fn items -> Enum.sort(items ++ moved_items) end)
+    |> Map.update!(next_floor, fn items -> Enum.sort(Enum.concat(items, moved_items)) end)
     |> Map.put(:elevator, next_floor)
   end
 
@@ -140,6 +130,40 @@ defmodule Elixir2016.Day11 do
   def final_state?(state) do
     1..3
     |> Enum.all?(fn floor -> length(state[floor]) == 0 end)
+  end
+
+  # Moves a state to its "canonical" representation.
+  # State A: 1 => [{:chip, 1}, {:gen, 1}], 2 => [{:chip, 4}, {:chip, 3}]
+  # State A: 1 => [{:chip, 4}, {:gen, 4}], 2 => [{:chip, 1}, {:chip, 2}]
+  # State A and B are really the same state.
+  # Unsure about htis, is it too slow/complex?
+  def canonical_state(state) do
+    elevator = state.elevator
+
+    # num_mapping looks like: %{1 => 1, 2 => 2, 3 => 5, 4 => 3, 5 => 4}
+    num_mapping =
+      state
+      |> Map.delete(:elevator)
+      |> Map.keys()
+      |> Enum.sort()
+      |> Enum.map(fn key -> state[key] end)
+      |> Enum.flat_map(fn floor ->
+        Enum.map(floor, fn {_thing, num} -> num end)
+      end)
+      |> Enum.uniq()
+      |> Enum.zip(1..99)
+      |> Enum.into(%{})
+
+    state
+    |> Map.delete(:elevator)
+    |> Enum.reduce(%{}, fn {key, floor}, acc ->
+      new_floor =
+        floor
+        |> Enum.map(fn {thing, num} -> {thing, num_mapping[num]} end)
+
+      acc |> Map.put(key, new_floor)
+    end)
+    |> Map.put(:elevator, elevator)
   end
 
   def example_start() do

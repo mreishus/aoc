@@ -10,7 +10,10 @@ defmodule Elixir2016 do
     # day1to5()
     # day6to10()
     # Day11.part1()
+    # |> IO.inspect(label: "2016 Day 11 Part 1")
+
     Day11.part2()
+    |> IO.inspect(label: "2016 Day 11 Part 2")
   end
 
   def day6to10 do
