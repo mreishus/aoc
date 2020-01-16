@@ -305,16 +305,19 @@ Day       Time   Rank  Score       Time   Rank  Score
 
 Missing Reflections: 4, 5, 6
 
-| Day                                | Comment           | Python                               | Elixir                                   |
-| ---------------------------------- | ----------------- | ------------------------------------ | ---------------------------------------- |
-| [Day 01](./2016/writeups/day01.md) | Turning, Stepping | [Python](./2016/python2016/day01.py) |                                          |
-| [Day 02](./2016/writeups/day02.md) | Keypad Navigation |                                      | [Elixir](./2016/elixir2016/lib/day02.ex) |
-| [Day 03](./2016/writeups/day03.md) | Column Processing |                                      | [Elixir](./2016/elixir2016/lib/day03.ex) |
-| [Day 04](./2016/writeups/day04.md) | Shift Chipher     |                                      | [Elixir](./2016/elixir2016/lib/day04.ex) |
-| [Day 05](./2016/writeups/day05.md) | MD5 Cracking      |                                      | [Elixir](./2016/elixir2016/lib/day05.ex) |
-| [Day 06](./2016/writeups/day06.md) | Repetition Code   |                                      | [Elixir](./2016/elixir2016/lib/day06.ex) |
-| [Day 07](./2016/writeups/day07.md) | Adv string search |                                      | [Elixir](./2016/elixir2016/lib/day07.ex) |
-| [Day 08](./2016/writeups/day08.md) | Grid manipulation | [Python](./2016/python2016/day08.py) |                                          |
+| Day                                | Comment                    | Python                               | Elixir                                   |
+| ---------------------------------- | -------------------------- | ------------------------------------ | ---------------------------------------- |
+| [Day 01](./2016/writeups/day01.md) | Turning, Stepping          | [Python](./2016/python2016/day01.py) |                                          |
+| [Day 02](./2016/writeups/day02.md) | Keypad Navigation          |                                      | [Elixir](./2016/elixir2016/lib/day02.ex) |
+| [Day 03](./2016/writeups/day03.md) | Column Processing          |                                      | [Elixir](./2016/elixir2016/lib/day03.ex) |
+| [Day 04](./2016/writeups/day04.md) | Shift Chipher              |                                      | [Elixir](./2016/elixir2016/lib/day04.ex) |
+| [Day 05](./2016/writeups/day05.md) | MD5 Cracking               |                                      | [Elixir](./2016/elixir2016/lib/day05.ex) |
+| [Day 06](./2016/writeups/day06.md) | Repetition Code            |                                      | [Elixir](./2016/elixir2016/lib/day06.ex) |
+| [Day 07](./2016/writeups/day07.md) | Adv string search          |                                      | [Elixir](./2016/elixir2016/lib/day07.ex) |
+| [Day 08](./2016/writeups/day08.md) | Grid manipulation          | [Python](./2016/python2016/day08.py) |                                          |
+| [Day 09](./2016/writeups/day09.md) | String Expansion           |                                      | [Elixir](./2016/elixir2016/lib/day09.ex) |
+| [Day 10](./2016/writeups/day10.md) | Coordinating Agents        |                                      | [Elixir](./2016/elixir2016/lib/day10.ex) |
+| [Day 11](./2016/writeups/day11.md) | Missionaries and cannibals |                                      | [Elixir](./2016/elixir2016/lib/day11.ex) |
 
 ## Misc
 
@@ -324,5 +327,5 @@ Missing Reflections: 4, 5, 6
 
 ```
 Created:       Mon 02 Dec 2019 05:12:40 PM CST
-Last Modified: Mon 13 Jan 2020 12:28:52 PM CST
+Last Modified: Thu 16 Jan 2020 01:19:27 PM CST
 ```
