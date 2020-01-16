@@ -25,6 +25,8 @@ same because the letters can be transposed safely. I implemented a "canonical
 state" filter, which sped up my part 1 solution but did not have much of an
 effect on my part 2 solution. Unsure why.
 
+My part 2 takes about 3 minutes to run.
+
 I did like how the BFS looked in elixir:
 
 ```elixir
