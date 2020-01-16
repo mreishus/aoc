@@ -1,13 +1,15 @@
 defmodule Elixir2016 do
   alias Elixir2016.{Day02, Day03, Day04, Day05}
   alias Elixir2016.{Day06, Day07, Day09, Day10}
+  alias Elixir2016.{Day11}
 
   @moduledoc """
   Documentation for Elixir2016.
   """
   def main do
-    day1to5()
-    day6to10()
+    # day1to5()
+    # day6to10()
+    Day11.part1()
   end
 
   def day6to10 do
