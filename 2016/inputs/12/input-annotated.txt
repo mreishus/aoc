@@ -1,0 +1,23 @@
+cpy 1 a
+cpy 1 b
+cpy 26 d
+jnz c 2
+jnz 1 5    (4)
+cpy 7 c
+inc d
+dec c
+jnz c -2
+cpy a c    (9)
+inc a      (10) a++
+dec b      (11) b--
+jnz b -2   (12) If b isn't 0, go back to a++
+cpy c b    (13)
+dec d
+jnz d -6
+cpy 19 c   (16) c = 19
+cpy 11 d   (17) d = 11
+inc a      (18) a++
+dec d      (19) d--
+jnz d -2   (20) If d isn't 0, go back to a++
+dec c      (21) c--
+jnz c -5   (22) If c isn't 0, go back to d=11

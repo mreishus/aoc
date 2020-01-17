@@ -2,9 +2,22 @@ defmodule Elixir2016.Day12 do
   alias Elixir2016.Day12.BunnyVM
 
   def part1(filename) do
-    parse(filename)
-    |> BunnyVM.new()
-    |> BunnyVM.execute_till_halt()
+    vm =
+      parse(filename)
+      |> BunnyVM.new()
+      |> BunnyVM.execute()
+
+    vm.registers
+  end
+
+  def part2(filename) do
+    vm =
+      parse(filename)
+      |> BunnyVM.new()
+      |> BunnyVM.register_set("c", 1)
+      |> BunnyVM.execute()
+
+    vm.registers
   end
 
   def parse(filename) do
@@ -30,8 +43,7 @@ defmodule Elixir2016.Day12.BunnyVM do
   defstruct [
     :memory,
     :pc,
-    :registers,
-    :halted
+    :registers
   ]
 
   def init_registers() do
@@ -42,12 +54,22 @@ defmodule Elixir2016.Day12.BunnyVM do
   end
 
   def new(memory) do
+    memory_map =
+      memory
+      |> Enum.with_index()
+      |> Enum.map(fn {line, i} -> {i, line} end)
+      |> Enum.into(%{})
+
     %BunnyVM{
-      memory: memory,
+      memory: memory_map,
       pc: 0,
-      registers: init_registers(),
-      halted: false
+      registers: init_registers()
     }
+  end
+
+  def register_set(vm, reg, value) do
+    registers = Map.put(vm.registers, reg, value)
+    %{vm | registers: registers}
   end
 
   def lookup(_, arg) when is_integer(arg), do: arg
@@ -56,24 +78,46 @@ defmodule Elixir2016.Day12.BunnyVM do
     vm.registers |> Map.get(arg)
   end
 
-  def execute_till_halt(vm) do
-    vm = execute_step(vm)
-
-    if vm.halted == true do
-      vm
-    else
-      execute_till_halt(vm)
-    end
-  end
-
-  def execute_step(%BunnyVM{memory: memory, pc: pc} = vm) do
-    instruction = memory |> Enum.at(pc)
+  def execute(%BunnyVM{memory: memory, pc: pc} = vm) do
+    instruction = memory |> Map.get(pc)
 
     if instruction != nil do
       do_execute_step(vm, instruction)
+      |> execute()
     else
-      %{vm | halted: true}
+      vm
     end
+  end
+
+  # Optimization: pc 4 always jumps to pc 9
+  def do_execute_step(%{pc: 4} = vm, _) do
+    %{vm | pc: 9}
+  end
+
+  # Optimization: pc 10-12: Sets a += b, b = 0, then moves to 13
+  def do_execute_step(%{pc: 10} = vm, _inst) do
+    a = Map.get(vm.registers, "a")
+    b = Map.get(vm.registers, "b")
+
+    registers =
+      vm.registers
+      |> Map.put("a", a + b)
+      |> Map.put("b", 0)
+
+    %{vm | registers: registers, pc: 12}
+  end
+
+  # Optimization: pc 18-20: Sets a += d, d = 0, then moves to 21
+  def do_execute_step(%{pc: 18} = vm, _) do
+    a = Map.get(vm.registers, "a")
+    d = Map.get(vm.registers, "d")
+
+    registers =
+      vm.registers
+      |> Map.put("a", a + d)
+      |> Map.put("d", 0)
+
+    %{vm | registers: registers, pc: 20}
   end
 
   def do_execute_step(vm, ["cpy", arg1, arg2]) do
@@ -93,7 +137,6 @@ defmodule Elixir2016.Day12.BunnyVM do
 
   def do_execute_step(vm, ["jnz", arg1, arg2]) do
     arg1 = lookup(vm, arg1)
-    arg2 = lookup(vm, arg2)
 
     if arg1 != 0 do
       %{vm | pc: vm.pc + arg2}
