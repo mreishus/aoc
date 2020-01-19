@@ -322,6 +322,7 @@ Missing Reflections: 4, 5, 6, 14, 15
 | [Day 13](./2016/writeups/day13.md) | BFS through algo maze      |                                      | [Elixir](./2016/elixir2016/lib/day13.ex) |
 | [Day 14](./2016/writeups/day14.md) | MD5 / One-time pad         |                                      | [Elixir](./2016/elixir2016/lib/day14.ex) |
 | [Day 15](./2016/writeups/day15.md) | Modulo / Chinese Remainder |                                      | [Elixir](./2016/elixir2016/lib/day15.ex) |
+| [Day 16](./2016/writeups/day16.md) | Dragon Curve               |                                      | [Elixir](./2016/elixir2016/lib/day16.ex) |
 
 ### Hardest Problems 2016
 
@@ -339,5 +340,5 @@ Missing Reflections: 4, 5, 6, 14, 15
 
 ```
 Created:       Mon 02 Dec 2019 05:12:40 PM CST
-Last Modified: Sun 19 Jan 2020 02:42:01 PM CST
+Last Modified: Sun 19 Jan 2020 03:54:16 PM CST
 ```
