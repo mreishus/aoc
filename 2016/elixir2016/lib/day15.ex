@@ -34,8 +34,7 @@ defmodule Elixir2016.Day15 do
   end
 
   def part2(filename) do
-    discs = parse(filename)
-    discs = discs ++ [%{index: 7, init_pos: 0, num_pos: 11}]
+    discs = parse(filename) ++ [%{index: 7, init_pos: 0, num_pos: 11}]
 
     Stream.iterate(0, fn x -> x + 1 end)
     |> Stream.filter(fn delay ->
@@ -47,6 +46,6 @@ defmodule Elixir2016.Day15 do
 
   def drop_position(disc, delay) when is_map(disc) and is_integer(delay) do
     pos = disc.init_pos + delay + disc.index
-    pos = rem(pos, disc.num_pos)
+    rem(pos, disc.num_pos)
   end
 end

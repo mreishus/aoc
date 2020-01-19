@@ -303,7 +303,7 @@ Day       Time   Rank  Score       Time   Rank  Score
 
 ## 2016
 
-Missing Reflections: 4, 5, 6
+Missing Reflections: 4, 5, 6, 14, 15
 
 | Day                                | Comment                    | Python                               | Elixir                                   |
 | ---------------------------------- | -------------------------- | ------------------------------------ | ---------------------------------------- |
@@ -320,6 +320,8 @@ Missing Reflections: 4, 5, 6
 | [Day 11](./2016/writeups/day11.md) | Missionaries and cannibals |                                      | [Elixir](./2016/elixir2016/lib/day11.ex) |
 | [Day 12](./2016/writeups/day12.md) | Assembunny VM              |                                      | [Elixir](./2016/elixir2016/lib/day12.ex) |
 | [Day 13](./2016/writeups/day13.md) | BFS through algo maze      |                                      | [Elixir](./2016/elixir2016/lib/day13.ex) |
+| [Day 14](./2016/writeups/day14.md) | MD5 / One-time pad         |                                      | [Elixir](./2016/elixir2016/lib/day14.ex) |
+| [Day 15](./2016/writeups/day15.md) | Modulo / Chinese Remainder |                                      | [Elixir](./2016/elixir2016/lib/day15.ex) |
 
 ### Hardest Problems 2016
 
@@ -337,5 +339,5 @@ Missing Reflections: 4, 5, 6
 
 ```
 Created:       Mon 02 Dec 2019 05:12:40 PM CST
-Last Modified: Fri 17 Jan 2020 07:43:21 PM CST
+Last Modified: Sun 19 Jan 2020 02:42:01 PM CST
 ```
