@@ -11,6 +11,7 @@ defmodule Elixir2016 do
     # day1to5()
     # day6to10()
     # day11to15()
+    # day16to20()
     latest()
   end
 
@@ -20,6 +21,9 @@ defmodule Elixir2016 do
 
     Day16.part2("../inputs/16/input.txt")
     |> IO.inspect(label: "2016 Day 16 Part 2")
+  end
+
+  def day16to20 do
   end
 
   def day11to15 do
