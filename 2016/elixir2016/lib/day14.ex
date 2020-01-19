@@ -1,5 +1,5 @@
 defmodule Elixir2016.Day14 do
-  alias Elixir2016.Day14.HashServer
+  alias Elixir2016.Day14.{Hash, HashServer}
 
   def parse(filename) do
     File.stream!(filename)
@@ -10,15 +10,24 @@ defmodule Elixir2016.Day14 do
 
   def part1(filename) do
     salt = parse(filename)
+    {:ok, pid} = HashServer.start(salt, false)
+    find_64th_pad(pid)
+  end
 
-    {:ok, pid} = HashServer.start(salt)
+  def part2(filename) do
+    salt = parse(filename)
+    {:ok, pid} = HashServer.start(salt, true)
+    find_64th_pad(pid)
+  end
 
+  def find_64th_pad(pid) do
     Stream.iterate(1, fn x -> x + 1 end)
     |> Stream.map(fn num -> HashServer.get(pid, num) end)
     |> Stream.filter(fn info -> info.triple end)
     |> Stream.filter(fn info ->
       num = info.num
 
+      # Can't parallelize this - The Genserver can only process one request at a time
       (num + 1)..(num + 1000)
       |> Stream.map(fn inner_num -> HashServer.get(pid, inner_num) end)
       |> Enum.any?(fn inner_info ->
@@ -35,11 +44,20 @@ end
 defmodule Elixir2016.Day14.Hash do
   ## MD5 Helper (String -> String)
   def md5(input) do
-    :crypto.hash(:md5, input) |> Base.encode16()
+    :crypto.hash(:md5, input) |> Base.encode16(case: :lower)
   end
 
   def md5_salt_n(salt, n) when is_binary(salt) and is_integer(n) do
     md5(salt <> Integer.to_string(n))
+  end
+
+  def stretch_md5_salt_n(salt, n) when is_binary(salt) and is_integer(n) do
+    input = salt <> Integer.to_string(n)
+
+    1..2017
+    |> Enum.reduce(input, fn _x, acc ->
+      md5(acc)
+    end)
   end
 
   def triple?(input_str) do
@@ -61,7 +79,16 @@ defmodule Elixir2016.Day14.Hash do
   end
 
   def info(salt, num) do
-    md5 = md5_salt_n(salt, num)
+    md5_salt_n(salt, num)
+    |> info_from_md5(num)
+  end
+
+  def stretch_info(salt, num) do
+    stretch_md5_salt_n(salt, num)
+    |> info_from_md5(num)
+  end
+
+  defp info_from_md5(md5, num) do
     triple = triple?(md5)
     quint = quint?(md5)
 
@@ -94,13 +121,13 @@ defmodule Elixir2016.Day14.HashServer do
   %{md5: "6EF56B8D791C660573DEA373BF88155F", num: 19, quint: false, triple: false}
   iex(10)> HashServer.get(pid, 19)
   %{md5: "6EF56B8D791C660573DEA373BF88155F", num: 19, quint: false, triple: false}
-  iex(11)> 
+  iex(11)>
   """
   use GenServer
   alias Elixir2016.Day14.Hash
 
-  def start(salt) do
-    GenServer.start(__MODULE__, salt)
+  def start(salt, is_stretch) do
+    GenServer.start(__MODULE__, {salt, is_stretch})
   end
 
   def get(pid, num) do
@@ -109,8 +136,8 @@ defmodule Elixir2016.Day14.HashServer do
 
   #### Implementation ####
 
-  def init(salt) do
-    {:ok, %{salt: salt}}
+  def init({salt, is_stretch}) do
+    {:ok, %{salt: salt, is_stretch: is_stretch}}
   end
 
   def handle_call({:get, num}, _from, state) do
@@ -127,7 +154,12 @@ defmodule Elixir2016.Day14.HashServer do
   end
 
   def add_num(state, num) do
-    info = Hash.info(state.salt, num)
+    info =
+      if state.is_stretch do
+        Hash.stretch_info(state.salt, num)
+      else
+        Hash.info(state.salt, num)
+      end
 
     state
     |> Map.put(num, info)

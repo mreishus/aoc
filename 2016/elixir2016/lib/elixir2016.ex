@@ -16,6 +16,9 @@ defmodule Elixir2016 do
   def latest() do
     Day14.part1("../inputs/14/input.txt")
     |> IO.inspect(label: "2016 Day 14 Part 1")
+
+    Day14.part2("../inputs/14/input.txt")
+    |> IO.inspect(label: "2016 Day 14 Part 2")
   end
 
   def day11to15 do
