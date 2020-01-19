@@ -34,7 +34,15 @@ defmodule Elixir2016.Day15 do
   end
 
   def part2(filename) do
-    "Part 2"
+    discs = parse(filename)
+    discs = discs ++ [%{index: 7, init_pos: 0, num_pos: 11}]
+
+    Stream.iterate(0, fn x -> x + 1 end)
+    |> Stream.filter(fn delay ->
+      discs
+      |> Enum.all?(fn disc -> drop_position(disc, delay) == 0 end)
+    end)
+    |> Enum.take(1)
   end
 
   def drop_position(disc, delay) when is_map(disc) and is_integer(delay) do
