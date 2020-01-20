@@ -2,7 +2,7 @@ defmodule Elixir2016 do
   alias Elixir2016.{Day02, Day03, Day04, Day05}
   alias Elixir2016.{Day06, Day07, Day09, Day10}
   alias Elixir2016.{Day11, Day12, Day13, Day14, Day15}
-  alias Elixir2016.{Day16, Day17}
+  alias Elixir2016.{Day16, Day17, Day18}
 
   @moduledoc """
   Documentation for Elixir2016.
@@ -16,6 +16,28 @@ defmodule Elixir2016 do
   end
 
   def latest() do
+    Day18.part1("../inputs/18/input.txt")
+    |> IO.inspect(label: "2016 Day 18 Part 1")
+
+    Day18.part2("../inputs/18/input.txt")
+    |> IO.inspect(label: "2016 Day 18 Part 2")
+  end
+
+  def day16to20 do
+    Day15.part1("../inputs/15/input.txt")
+    |> IO.inspect(label: "2016 Day 15 Part 1")
+
+    Day15.part2("../inputs/15/input.txt")
+    |> IO.inspect(label: "2016 Day 15 Part 1")
+
+    Day16.part1("../inputs/16/input.txt")
+    |> IO.inspect(label: "2016 Day 16 Part 1")
+
+    "=== Day 16 P2 High Memory (8-10 gigs)" |> IO.inspect()
+    # Day 16 part 2: Uses 8+ gigs of memory
+    # Day16.part2("../inputs/16/input.txt")
+    # |> IO.inspect(label: "2016 Day 16 Part 2")
+
     Day17.part1("../inputs/17/input.txt")
     |> IO.inspect(label: "2017 Day 17 Part 1")
 
@@ -23,18 +45,11 @@ defmodule Elixir2016 do
     |> IO.inspect(label: "2017 Day 17 Part 2")
   end
 
-  def day16to20 do
-    Day16.part1("../inputs/16/input.txt")
-    |> IO.inspect(label: "2016 Day 16 Part 1")
-
-    Day16.part2("../inputs/16/input.txt")
-    |> IO.inspect(label: "2016 Day 16 Part 2")
-  end
-
   def day11to15 do
     Day11.part1()
     |> IO.inspect(label: "2016 Day 11 Part 1")
 
+    "=== Day 11 P2 Slow (3 minutes)" |> IO.inspect()
     # Day11 Part 2 - ~3 minutes
     # Day11.part2()
     # |> IO.inspect(label: "2016 Day 11 Part 2")
@@ -54,15 +69,10 @@ defmodule Elixir2016 do
     Day14.part1("../inputs/14/input.txt")
     |> IO.inspect(label: "2016 Day 14 Part 1")
 
-    # Slow?
-    Day14.part2("../inputs/14/input.txt")
-    |> IO.inspect(label: "2016 Day 14 Part 2")
-
-    Day15.part1("../inputs/15/input.txt")
-    |> IO.inspect(label: "2016 Day 15 Part 1")
-
-    Day15.part2("../inputs/15/input.txt")
-    |> IO.inspect(label: "2016 Day 15 Part 1")
+    "=== Day 14 P2 Slow (1 Minute)" |> IO.inspect()
+    # Day 14 Part2 - Slow, about 1 minute
+    # Day14.part2("../inputs/14/input.txt")
+    # |> IO.inspect(label: "2016 Day 14 Part 2")
   end
 
   def day6to10 do
@@ -78,7 +88,8 @@ defmodule Elixir2016 do
     Day07.part2("../inputs/07/input.txt")
     |> IO.inspect(label: "2016 Day 07 Part 2")
 
-    "Day 8 Not implemented in elixir" |> IO.inspect()
+    "=== Day 8 P1 Not implemented in Elixir" |> IO.inspect()
+    "=== Day 8 P2 Not implemented in Elixir" |> IO.inspect()
 
     Day09.part1("../inputs/09/input.txt")
     |> IO.inspect(label: "2016 Day 09 Part 1")
@@ -91,7 +102,8 @@ defmodule Elixir2016 do
   end
 
   def day1to5 do
-    "Day 1 Not implemented in elixir" |> IO.inspect()
+    "=== Day 1 P1 Not implemented in elixir" |> IO.inspect()
+    "=== Day 1 P2 Not implemented in elixir" |> IO.inspect()
 
     ## Day 2
     Day02.part1("../inputs/02/input.txt")
@@ -114,6 +126,8 @@ defmodule Elixir2016 do
     Day04.part2("../inputs/04/input.txt")
     |> IO.inspect(label: "2016 Day 04 Part 2")
 
+    "=== Day 5 P1 Slow" |> IO.inspect()
+    "=== Day 5 P2 Slow" |> IO.inspect()
     ## Day 5 - Slowish - ~1 minute
     # Day05.part1("uqwqemis")
     # |> IO.inspect(label: "2016 Day 05 Part 1")
