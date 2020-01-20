@@ -1,4 +1,6 @@
 defmodule Elixir2016.Day18 do
+  use Bitwise
+
   def parse(filename) do
     File.read!(filename)
     |> String.trim()
@@ -7,40 +9,56 @@ defmodule Elixir2016.Day18 do
   def part1(filename) do
     parse(filename)
     |> String.graphemes()
+    |> digitify()
     |> part1_count(40)
   end
 
-  def part2(_filename) do
-    "p2"
+  def part2(filename) do
+    parse(filename)
+    |> String.graphemes()
+    |> digitify()
+    |> part1_count(400_000)
   end
 
-  def part1_count(initial_row, num_rows) do
-    all_rows =
-      1..(num_rows - 1)
-      |> Enum.reduce([initial_row], fn _, acc ->
-        new_row = List.last(acc) |> next_row()
-        acc ++ [new_row]
-      end)
+  def part1_count(initial_row, num_rows), do: do_part1_count(initial_row, num_rows, 0)
 
-    Enum.concat(all_rows)
-    |> Enum.filter(fn x -> x == "." end)
-    |> length()
+  def do_part1_count(_initial_row, 0, n), do: n
+
+  def do_part1_count(initial_row, num_rows, n) do
+    next_row = next_row(initial_row)
+
+    this_row_count =
+      initial_row
+      |> Enum.filter(fn x -> x == 0 end)
+      |> length()
+
+    do_part1_count(next_row, num_rows - 1, n + this_row_count)
   end
 
   @doc """
-  iex(2)> Day18.next_row([ ".", ".", "^", "^", "." ])
-  [".", "^", "^", "^", "^"]
+  iex(2)> Day18.digitify([ ".", ".", "^", "^" ])
+  [0, 0, 1, 1]
+  """
+  def digitify(list) do
+    list
+    |> Enum.map(fn x ->
+      case x do
+        "^" -> 1
+        "." -> 0
+        _ -> raise "Invalid input"
+      end
+    end)
+  end
+
+  @doc """
+  iex(2)> Day18.next_row([ 0, 0, 1, 1, 0 ])
+  [0, 1, 1, 1, 1]
   """
   def next_row(list) do
     list
     |> extended_three_window()
-    |> Enum.map(fn [left, mid, right] ->
-      t1 = left == "^" and mid == "^" and right == "."
-      t2 = left == "." and mid == "^" and right == "^"
-      t3 = left == "^" and mid == "." and right == "."
-      t4 = left == "." and mid == "." and right == "^"
-      t = t1 or t2 or t3 or t4
-      if t, do: "^", else: "."
+    |> Enum.map(fn [left, _mid, right] ->
+      left ^^^ right
     end)
   end
 
@@ -53,7 +71,7 @@ defmodule Elixir2016.Day18 do
   iex(3)> ["a", "b", "c", "d", "e"] |> Day18.window(3)
   [["a", "b", "c"], ["b", "c", "d"], ["c", "d", "e"]]
   """
-  def window([x | xs] = list, size) do
+  def window([_x | xs] = list, size) do
     if length(list) < size do
       []
     else
@@ -79,7 +97,7 @@ defmodule Elixir2016.Day18 do
   ]
   """
   def extended_three_window(list) do
-    (["." | list] ++ ["."])
+    ([0 | list] ++ [0])
     |> window(3)
   end
 end
