@@ -2,7 +2,7 @@ defmodule Elixir2016 do
   alias Elixir2016.{Day02, Day03, Day04, Day05}
   alias Elixir2016.{Day06, Day07, Day09, Day10}
   alias Elixir2016.{Day11, Day12, Day13, Day14, Day15}
-  alias Elixir2016.{Day16, Day17, Day18}
+  alias Elixir2016.{Day16, Day17, Day18, Day19}
 
   @moduledoc """
   Documentation for Elixir2016.
@@ -16,11 +16,11 @@ defmodule Elixir2016 do
   end
 
   def latest() do
-    Day18.part1("../inputs/18/input.txt")
-    |> IO.inspect(label: "2016 Day 18 Part 1")
+    Day19.part1("../inputs/19/input.txt")
+    |> IO.inspect(label: "2016 Day 19 Part 1")
 
-    Day18.part2("../inputs/18/input.txt")
-    |> IO.inspect(label: "2016 Day 18 Part 2")
+    Day19.part2("../inputs/19/input.txt")
+    |> IO.inspect(label: "2016 Day 19 Part 2")
   end
 
   def day16to20 do
@@ -43,6 +43,12 @@ defmodule Elixir2016 do
 
     Day17.part2("../inputs/17/input.txt")
     |> IO.inspect(label: "2017 Day 17 Part 2")
+
+    Day18.part1("../inputs/18/input.txt")
+    |> IO.inspect(label: "2016 Day 18 Part 1")
+
+    Day18.part2("../inputs/18/input.txt")
+    |> IO.inspect(label: "2016 Day 18 Part 2")
   end
 
   def day11to15 do
