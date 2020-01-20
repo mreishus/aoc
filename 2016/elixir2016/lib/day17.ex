@@ -23,8 +23,8 @@ defmodule Elixir2016.Day17 do
   end
 
   def part2(filename) do
-    passcode = parse(filename)
-    passcode
+    parse(filename)
+    |> bfs_part2()
   end
 
   def bfs_part1(passcode) when is_binary(passcode) do
@@ -44,6 +44,31 @@ defmodule Elixir2016.Day17 do
     end
   end
 
+  def bfs_part2(passcode) when is_binary(passcode) do
+    bfs_longest([{0, 0, ""}], 0, MapSet.new(), %{passcode: passcode})
+    |> String.length()
+  end
+
+  def bfs_longest([], _, _, _), do: nil
+
+  def bfs_longest(open_set, num, seen, config) do
+    if contains_dest?(open_set) do
+      this_answer = answer(open_set)
+
+      next_open_set = Enum.flat_map(open_set, fn state -> next_states(state, config) end)
+      bfs_answer = bfs_longest(next_open_set, num + 1, seen, config)
+
+      if bfs_answer == nil do
+        this_answer
+      else
+        bfs_answer
+      end
+    else
+      next_open_set = Enum.flat_map(open_set, fn state -> next_states(state, config) end)
+      bfs_longest(next_open_set, num + 1, seen, config)
+    end
+  end
+
   def contains_dest?(open_set) do
     open_set
     |> Enum.any?(fn {x, y, _path} -> x == 3 and y == 3 end)
@@ -57,6 +82,9 @@ defmodule Elixir2016.Day17 do
 
     path
   end
+
+  # Any state at the destination has no more steps
+  def next_states({3, 3, _path}, _config), do: []
 
   def next_states({_x, _y, path} = state, config) do
     # (example) next_dirs = [:r, :d]
