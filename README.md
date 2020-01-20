@@ -5,7 +5,7 @@
 - 2019 - 50 stars
 - 2018 - 50 stars
 - 2017 - 50 stars
-- 2016 - 16 stars
+- 2016 - 36 stars
 - 2015 - 0 stars
 
 ## 2019
@@ -303,7 +303,7 @@ Day       Time   Rank  Score       Time   Rank  Score
 
 ## 2016
 
-Missing Reflections: 4, 5, 6, 14, 15, 16, 17, 18
+Missing Reflections: 4, 5, 6
 
 | Day                                | Comment                    | Python                               | Elixir                                   |
 | ---------------------------------- | -------------------------- | ------------------------------------ | ---------------------------------------- |
@@ -342,5 +342,5 @@ Missing Reflections: 4, 5, 6, 14, 15, 16, 17, 18
 
 ```
 Created:       Mon 02 Dec 2019 05:12:40 PM CST
-Last Modified: Sun 19 Jan 2020 09:56:25 PM CST
+Last Modified: Sun 19 Jan 2020 10:17:45 PM CST
 ```

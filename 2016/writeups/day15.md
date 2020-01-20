@@ -2,6 +2,23 @@
 
 ## Approach and Reflections
 
+There are spinning discs stacked upon one another. Each disc has only 1 blank
+slot and a different period. For example, a disc with period 5 might rotate
+like this: (Clear, Block, Block, Block, Block, Clear, Block, Block, Block ...
+). They all have different initial positions as well. How long do we have to
+wait before we can drop a ball through all disks cleanly?
+
+My solution was halfway between a pure simulation and a closed form math
+equation. I built up a lazy stream that uses modulo to compute each disk's
+position given a delay time. Then I iterate through all possible delay times,
+1-infinity, checking to see if all discs are in position 0 when the ball
+reaches them, using one equation per disc. As soon as the first non-0 is detected,
+the next delay is tried. As soon as an acceptable delay is found, we stop
+computing.
+
+This worked faster than a pure simulation solution, but not as fast as a pure
+math (closed form) solution.
+
 ## Solutions
 
 - [Elixir](../elixir2016/lib/day15.ex)

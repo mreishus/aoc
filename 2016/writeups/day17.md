@@ -2,6 +2,19 @@
 
 ## Approach and Reflections
 
+We're given a maze, except a special MD5 algorithm tells us which directions
+are available in each square.
+
+The path we used to take to a square is considered. For example, there's multiple
+ways to get to the square (2, 2). Two of them are, we could go Right and then
+Down, or we could go Down and then Right. In these cases, there will be
+different doors open, even though we're on the same square.
+
+We're asked to find the shortest path out of the maze, then the longest path.
+
+I implemented with BFS - putting the current path in the state as well as the
+location, then modified BFS to return the longest possible path.
+
 ## Solutions
 
 - [Elixir](../elixir2016/lib/day17.ex)

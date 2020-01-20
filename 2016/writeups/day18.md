@@ -2,6 +2,19 @@
 
 ## Approach and Reflections
 
+We're given a description of a 1d cellular automata. Given a 1d row of two
+possible characters, we can produce the next row by considering each
+character's two neighbors. After expanding for 40, and then 400,000 rows, how
+many characters total are clear?
+
+I solved with these methods:
+
+- A function to create a sliding window over a list.
+- Changed `"^"` and `"."` strings to simple 0 and 1 integers.
+- Reduced complicated rules to simply `left xor right`.
+- When expanding 40,000 rows, keep only the current row, the next row, and
+  a running total of clear squares to avoid holding all rows in memory.
+
 ## Solutions
 
 - [Elixir](../elixir2016/lib/day18.ex)

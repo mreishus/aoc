@@ -1,6 +1,13 @@
-#
+# Day 16: Dragon Checksum
 
 ## Approach and Reflections
+
+We're given an algorithm to build up long strings with non-random data, using
+a [dragon curve](https://en.wikipedia.org/wiki/Dragon_curve), as well as
+a recursive checksum. I simply implemented the algorithms as given, building
+large strings. The program runs in a reasonable amount of time, but part
+2 does use 8-10 gigs of memory, so there is probably some room for improvement
+here.
 
 ## Solutions
 

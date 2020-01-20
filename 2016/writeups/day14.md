@@ -2,6 +2,20 @@
 
 ## Approach and Reflections
 
+This is a tricky problem about computing expensive md5 hashes in a list, and
+looking for certain conditions in the next 1,000 elements for each hash. It's
+complicated to recap; check the description at the bottom.
+
+Here, I used a GenServer to memoize expensive md5 calculation. I started with
+a lazy stream of {number, md5} pairs, but since each element also needs to
+look at the next 1000 elements, I had a problem: Looking ahead in an elixir
+`Stream` consumes that element. Here, a lazy haskell list would have been
+nicer to deal with. So I went with the GenServer instead.
+
+Unfortunately, I'm not able to parallelize the operations, since the GenServer
+represents a bottleneck that blocks when computing. I'm not 100% satisfied
+with my solution, but it is acceptable for the contest.
+
 ## Solutions
 
 - [Elixir](../elixir2016/lib/day14.ex)
