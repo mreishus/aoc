@@ -303,7 +303,7 @@ Day       Time   Rank  Score       Time   Rank  Score
 
 ## 2016
 
-Missing Reflections: 4, 5, 6, 14, 15
+Missing Reflections: 4, 5, 6, 14, 15, 16, 17
 
 | Day                                | Comment                    | Python                               | Elixir                                   |
 | ---------------------------------- | -------------------------- | ------------------------------------ | ---------------------------------------- |
@@ -323,6 +323,7 @@ Missing Reflections: 4, 5, 6, 14, 15
 | [Day 14](./2016/writeups/day14.md) | MD5 / One-time pad         |                                      | [Elixir](./2016/elixir2016/lib/day14.ex) |
 | [Day 15](./2016/writeups/day15.md) | Modulo / Chinese Remainder |                                      | [Elixir](./2016/elixir2016/lib/day15.ex) |
 | [Day 16](./2016/writeups/day16.md) | Dragon Curve               |                                      | [Elixir](./2016/elixir2016/lib/day16.ex) |
+| [Day 17](./2016/writeups/day17.md) | MD5 Maze, Longest Path     |                                      | [Elixir](./2016/elixir2017/lib/day17.ex) |
 
 ### Hardest Problems 2016
 
@@ -340,5 +341,5 @@ Missing Reflections: 4, 5, 6, 14, 15
 
 ```
 Created:       Mon 02 Dec 2019 05:12:40 PM CST
-Last Modified: Sun 19 Jan 2020 03:54:16 PM CST
+Last Modified: Sun 19 Jan 2020 07:16:02 PM CST
 ```
