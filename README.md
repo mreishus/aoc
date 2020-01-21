@@ -325,6 +325,8 @@ Missing Reflections: 4, 5, 6
 | [Day 16](./2016/writeups/day16.md) | Dragon Curve               |                                      | [Elixir](./2016/elixir2016/lib/day16.ex) |
 | [Day 17](./2016/writeups/day17.md) | MD5 Maze, Longest Path     |                                      | [Elixir](./2016/elixir2016/lib/day17.ex) |
 | [Day 18](./2016/writeups/day18.md) | 1d cellular automata       |                                      | [Elixir](./2016/elixir2016/lib/day18.ex) |
+| [Day 19](./2016/writeups/day19.md) | Josephus Problem           |                                      | [Elixir](./2016/elixir2016/lib/day19.ex) |
+| [Day 20](./2016/writeups/day20.md) | Overlapping IP ranges      |                                      | [Elixir](./2016/elixir2016/lib/day20.ex) |
 
 ### Hardest Problems 2016
 
@@ -342,5 +344,5 @@ Missing Reflections: 4, 5, 6
 
 ```
 Created:       Mon 02 Dec 2019 05:12:40 PM CST
-Last Modified: Sun 19 Jan 2020 10:17:45 PM CST
+Last Modified: Mon 20 Jan 2020 08:11:42 PM CST
 ```
