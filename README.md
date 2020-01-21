@@ -327,6 +327,8 @@ Missing Reflections: 4, 5, 6
 | [Day 18](./2016/writeups/day18.md) | 1d cellular automata       |                                      | [Elixir](./2016/elixir2016/lib/day18.ex) |
 | [Day 19](./2016/writeups/day19.md) | Josephus Problem           |                                      | [Elixir](./2016/elixir2016/lib/day19.ex) |
 | [Day 20](./2016/writeups/day20.md) | Overlapping IP ranges      |                                      | [Elixir](./2016/elixir2016/lib/day20.ex) |
+| Day 21                             | String manipulation        |                                      | [Elixir](./2016/elixir2016/lib/day21.ex) |
+| Day 22                             | Swap Position Maze         |                                      | [Elixir](./2016/elixir2016/lib/day22.ex) |
 
 ### Hardest Problems 2016
 
@@ -344,5 +346,5 @@ Missing Reflections: 4, 5, 6
 
 ```
 Created:       Mon 02 Dec 2019 05:12:40 PM CST
-Last Modified: Mon 20 Jan 2020 08:11:42 PM CST
+Last Modified: Tue 21 Jan 2020 04:53:36 PM CST
 ```
