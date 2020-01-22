@@ -5,7 +5,7 @@
 - 2019 - 50 stars
 - 2018 - 50 stars
 - 2017 - 50 stars
-- 2016 - 36 stars
+- 2016 - 50 stars
 - 2015 - 0 stars
 
 ## 2019
@@ -303,7 +303,7 @@ Day       Time   Rank  Score       Time   Rank  Score
 
 ## 2016
 
-Missing Reflections: 4, 5, 6
+Missing Reflections: 4, 5, 6, 21, 22, 23, 24, 25
 
 | Day                                | Comment                    | Python                               | Elixir                                   |
 | ---------------------------------- | -------------------------- | ------------------------------------ | ---------------------------------------- |
@@ -329,6 +329,9 @@ Missing Reflections: 4, 5, 6
 | [Day 20](./2016/writeups/day20.md) | Overlapping IP ranges      |                                      | [Elixir](./2016/elixir2016/lib/day20.ex) |
 | Day 21                             | String manipulation        |                                      | [Elixir](./2016/elixir2016/lib/day21.ex) |
 | Day 22                             | Swap Position Maze         |                                      | [Elixir](./2016/elixir2016/lib/day22.ex) |
+| Day 23                             | VM Disassembly / Optimize  |                                      | [Elixir](./2016/elixir2016/lib/day23.ex) |
+| Day 24                             | Collecting items in maze   |                                      | [Elixir](./2016/elixir2016/lib/day24.ex) |
+| Day 25                             | VM Input/Output searching  |                                      | [Elixir](./2016/elixir2016/lib/day25.ex) |
 
 ### Hardest Problems 2016
 
@@ -346,5 +349,5 @@ Missing Reflections: 4, 5, 6
 
 ```
 Created:       Mon 02 Dec 2019 05:12:40 PM CST
-Last Modified: Tue 21 Jan 2020 04:53:36 PM CST
+Last Modified: Wed 22 Jan 2020 04:36:31 PM CST
 ```
