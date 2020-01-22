@@ -139,7 +139,7 @@ defmodule Elixir2016.Day23.BunnyVM do
     toggle_idx = vm.pc + arg1
 
     if Map.has_key?(vm.memory, toggle_idx) do
-      "Toggling index #{toggle_idx}" |> IO.inspect()
+      # "Toggling index #{toggle_idx}" |> IO.inspect()
       memory = Map.update!(vm.memory, toggle_idx, &toggle_instruction/1)
       %{vm | memory: memory, pc: vm.pc + 1}
     else
