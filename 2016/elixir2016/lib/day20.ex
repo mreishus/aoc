@@ -3,7 +3,7 @@ defmodule Elixir2016.Day20 do
     File.stream!(filename)
     |> Stream.map(&String.trim/1)
     |> Stream.map(&parse_line/1)
-    |> Enum.sort_by(fn {low, high} -> low end)
+    |> Enum.sort_by(fn {low, _high} -> low end)
     |> Enum.to_list()
   end
 
