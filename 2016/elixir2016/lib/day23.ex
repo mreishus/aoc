@@ -12,6 +12,13 @@ defmodule Elixir2016.Day23 do
   end
 
   def part2(filename) do
+    vm =
+      parse(filename)
+      |> BunnyVM.new()
+      |> BunnyVM.register_set("a", 12)
+      |> BunnyVM.execute()
+
+    vm.registers
   end
 
   def parse(filename) do
@@ -78,7 +85,7 @@ defmodule Elixir2016.Day23.BunnyVM do
     instruction = memory |> Map.get(pc)
 
     if instruction != nil do
-      %{pc: pc, i: instruction} |> IO.inspect()
+      # %{pc: pc, i: instruction} |> IO.inspect()
       # %{pc: pc, i: instruction, registers: vm.registers} |> IO.inspect()
 
       do_execute_step(vm, instruction)
@@ -88,36 +95,18 @@ defmodule Elixir2016.Day23.BunnyVM do
     end
   end
 
-  # # Optimization: pc 4 always jumps to pc 9
-  # def do_execute_step(%{pc: 4} = vm, _) do
-  #   %{vm | pc: 9}
-  # end
+  def do_execute_step(%{pc: 3} = vm, _) do
+    b = Map.get(vm.registers, "b")
+    d = Map.get(vm.registers, "d")
 
-  # # Optimization: pc 10-12: Sets a += b, b = 0, then moves to 13
-  # def do_execute_step(%{pc: 10} = vm, _inst) do
-  #   a = Map.get(vm.registers, "a")
-  #   b = Map.get(vm.registers, "b")
+    registers =
+      vm.registers
+      |> Map.put("a", b * d)
+      |> Map.put("c", 0)
+      |> Map.put("d", 0)
 
-  #   registers =
-  #     vm.registers
-  #     |> Map.put("a", a + b)
-  #     |> Map.put("b", 0)
-
-  #   %{vm | registers: registers, pc: 12}
-  # end
-
-  # # Optimization: pc 18-20: Sets a += d, d = 0, then moves to 21
-  # def do_execute_step(%{pc: 18} = vm, _) do
-  #   a = Map.get(vm.registers, "a")
-  #   d = Map.get(vm.registers, "d")
-
-  #   registers =
-  #     vm.registers
-  #     |> Map.put("a", a + d)
-  #     |> Map.put("d", 0)
-
-  #   %{vm | registers: registers, pc: 20}
-  # end
+    %{vm | registers: registers, pc: 10}
+  end
 
   def do_execute_step(vm, ["cpy", arg1, arg2]) do
     registers = Map.put(vm.registers, arg2, lookup(vm, arg1))

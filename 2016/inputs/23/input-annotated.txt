@@ -1,13 +1,13 @@
-0 cpy a b
-1 dec b
-2 cpy a d
-3 cpy 0 a
-4 cpy b c
-5 inc a
-6 dec c
-7 jnz c -2
-8 dec d
-9 jnz d -5
+0 cpy a b      b = a
+1 dec b        b --
+2 cpy a d      d = a
+3 cpy 0 a      a = 0
+4 cpy b c      c = b <->
+5 inc a        a ++
+6 dec c        c --
+7 jnz c -2     Go back 2 if c != 0
+8 dec d        d --
+9 jnz d -5     Go back 5 if d != 0
 10 dec b
 cpy b c
 cpy c d
