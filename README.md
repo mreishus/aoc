@@ -303,7 +303,7 @@ Day       Time   Rank  Score       Time   Rank  Score
 
 ## 2016
 
-Missing Reflections: 4, 5, 6, 21, 22, 23, 24, 25
+Missing Reflections: 4, 5, 6
 
 | Day                                | Comment                    | Python                               | Elixir                                   |
 | ---------------------------------- | -------------------------- | ------------------------------------ | ---------------------------------------- |
@@ -327,19 +327,69 @@ Missing Reflections: 4, 5, 6, 21, 22, 23, 24, 25
 | [Day 18](./2016/writeups/day18.md) | 1d cellular automata       |                                      | [Elixir](./2016/elixir2016/lib/day18.ex) |
 | [Day 19](./2016/writeups/day19.md) | Josephus Problem           |                                      | [Elixir](./2016/elixir2016/lib/day19.ex) |
 | [Day 20](./2016/writeups/day20.md) | Overlapping IP ranges      |                                      | [Elixir](./2016/elixir2016/lib/day20.ex) |
-| Day 21                             | String manipulation        |                                      | [Elixir](./2016/elixir2016/lib/day21.ex) |
-| Day 22                             | Swap Position Maze         |                                      | [Elixir](./2016/elixir2016/lib/day22.ex) |
-| Day 23                             | VM Disassembly / Optimize  |                                      | [Elixir](./2016/elixir2016/lib/day23.ex) |
-| Day 24                             | Collecting items in maze   |                                      | [Elixir](./2016/elixir2016/lib/day24.ex) |
-| Day 25                             | VM Input/Output searching  |                                      | [Elixir](./2016/elixir2016/lib/day25.ex) |
+| [Day 21](./2016/writeups/day21.md) | String manipulation        |                                      | [Elixir](./2016/elixir2016/lib/day21.ex) |
+| [Day 22](./2016/writeups/day22.md) | Swap Position Maze         |                                      | [Elixir](./2016/elixir2016/lib/day22.ex) |
+| [Day 23](./2016/writeups/day23.md) | VM Disassembly / Optimize  |                                      | [Elixir](./2016/elixir2016/lib/day23.ex) |
+| [Day 24](./2016/writeups/day24.md) | Collecting items in maze   |                                      | [Elixir](./2016/elixir2016/lib/day24.ex) |
+| [Day 25](./2016/writeups/day25.md) | VM Input/Output searching  |                                      | [Elixir](./2016/elixir2016/lib/day25.ex) |
 
 ### Hardest Problems 2016
 
 - Day 11: Missionaries and Cannibals
+- Day 19: Josephus Problem
+- Day 22: Swap Position Maze
 
 ### Favorite Problems 2016
 
-?
+- Day 24: Collecting items in maze
+
+### Personal Stats 2016
+
+```
+      --------Part 1--------   --------Part 2--------
+Day       Time   Rank  Score       Time   Rank  Score
+ 25       >24h   2431      0       >24h   2043      0
+ 24       >24h   2397      0       >24h   2378      0
+ 23       >24h   2861      0       >24h   2683      0
+ 22       >24h   3379      0       >24h   2466      0
+ 21       >24h   3529      0       >24h   3290      0
+ 20       >24h   3938      0       >24h   3739      0
+ 19       >24h   4144      0       >24h   3382      0
+ 18       >24h   4023      0       >24h   3985      0
+ 17       >24h   3676      0       >24h   3575      0
+ 16       >24h   4391      0       >24h   4249      0
+ 15       >24h   4294      0       >24h   4258      0
+ 14       >24h   4443      0       >24h   4232      0
+ 13       >24h   4506      0       >24h   4268      0
+ 12       >24h   5377      0       >24h   5296      0
+ 11       >24h   3703      0       >24h   3440      0
+ 10       >24h   6168      0       >24h   6038      0
+  9       >24h   7930      0       >24h   6586      0
+  8       >24h   8633      0       >24h   8449      0
+  7       >24h  10048      0       >24h   8880      0
+  6       >24h  11636      0       >24h  11224      0
+  5       >24h  11479      0       >24h  10868      0
+  4       >24h  12360      0       >24h  11595      0
+  3       >24h  15685      0       >24h  13775      0
+  2       >24h  17004      0       >24h  14917      0
+  1       >24h  21727      0       >24h  16407      0
+```
+
+### Overall Thoughts 2016
+
+This was my 4th Advent of Code; after completing years 2018 and 2019 during
+the event, I went back to do 2017 and now 2016 as I'm attempting to get all
+stars.
+
+Overall, the basic themes of Advent of Code are getting easier to me, which
+means I've grown as a programmer. Searching a graph with a special condition,
+implementing a VM, or knocking out some cellular automata doesn't really take
+much thinking anymore.
+
+I committed myself to doing all of the problems in Elixir. I thought it would
+be painful, but I started to prefer doing BFS in Elixir than say, Python,
+which I didn't expect at all! My functional programming chops definitely
+increased by doing this year in Elixir.
 
 ## Misc
 
@@ -349,5 +399,5 @@ Missing Reflections: 4, 5, 6, 21, 22, 23, 24, 25
 
 ```
 Created:       Mon 02 Dec 2019 05:12:40 PM CST
-Last Modified: Wed 22 Jan 2020 04:36:31 PM CST
+Last Modified: Wed 22 Jan 2020 06:52:33 PM CST
 ```

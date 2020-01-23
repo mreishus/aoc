@@ -2,6 +2,11 @@
 
 ## Approach and Reflections
 
+This was an exercise in basic frequency counting with respect to position in
+a string. Not too bad, but I did have to nest `Enum.Reduce` which always gets
+a bit awkward in my opinion. Maybe there's a better way to implement this in
+Elixir?
+
 ## Solutions
 
 - [Elixir](../elixir2016/lib/day06.ex)

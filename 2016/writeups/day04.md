@@ -2,6 +2,9 @@
 
 ## Approach and Reflections
 
+This is an exercise in regex matching along with some basic string
+manipulation and careful implementation of rules.
+
 ## Solutions
 
 - [Elixir](../elixir2016/lib/day04.ex)

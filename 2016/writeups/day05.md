@@ -2,6 +2,10 @@
 
 ## Approach and Reflections
 
+We're checking passwords, but using an expensive md5 hash operation to see if
+numbers are part of the correct password. I used Elixir's `Flow` library to
+spread the work across multiple cpus.
+
 ## Solutions
 
 - [Elixir](../elixir2016/lib/day05.ex)
