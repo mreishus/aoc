@@ -33,6 +33,6 @@ class Day04:
 
     @staticmethod
     def part2(filename: str) -> int:
-        """ Given a filename, solve 2015 day 21 part 2 """
+        """ Given a filename, solve 2015 day 04 part 2 """
         key = first_line(filename)
         return first_password(key, 6)

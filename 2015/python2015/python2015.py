@@ -7,9 +7,11 @@ from aoc.day01 import Day01
 from aoc.day02 import Day02
 from aoc.day03 import Day03
 from aoc.day04 import Day04
+from aoc.day05 import Day05
 
 
 def day1to5():
+    """ Solves 2015 days 1 - 5. """
     ## Day 1
     print("2015 Day 01 Part 1:", end=" ")
     print(Day01.part1("../inputs/01/input.txt"))
@@ -33,13 +35,14 @@ def day1to5():
 
 
 def latest():
-    pass
-
-
-def main():
-    # day1to5()
-    latest()
+    """ Scratchpad to work on. """
+    ## Day 5
+    print("2015 Day 05 Part 1:", end=" ")
+    print(Day05.part1("../inputs/05/input.txt"))
+    print("2015 Day 05 Part 2:", end=" ")
+    print(Day05.part2("../inputs/05/input.txt"))
 
 
 if __name__ == "__main__":
-    main()
+    # day1to5()
+    latest()
