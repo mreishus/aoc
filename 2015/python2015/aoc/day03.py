@@ -5,12 +5,7 @@ https://adventofcode.com/2015/day/3
 """
 
 from collections import defaultdict
-
-
-def parse(filename: str):
-    """ Given a filename, returns the first line of a file. """
-    with open(filename) as file:
-        return file.readline().strip()
+from aoc.parsers import first_line
 
 
 def count_visited(directions: str, num_santas: int):
@@ -38,11 +33,11 @@ class Day03:
     @staticmethod
     def part1(filename: str) -> int:
         """ Given a filename, solve 2015 day 03 part 1 """
-        directions = parse(filename)
+        directions = first_line(filename)
         return count_visited(directions, 1)
 
     @staticmethod
     def part2(filename: str) -> int:
         """ Given a filename, solve 2015 day 21 part 2 """
-        directions = parse(filename)
+        directions = first_line(filename)
         return count_visited(directions, 2)

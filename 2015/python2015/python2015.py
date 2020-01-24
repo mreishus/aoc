@@ -6,6 +6,7 @@ This is a series of programming problems available at https://adventofcode.com/2
 from aoc.day01 import Day01
 from aoc.day02 import Day02
 from aoc.day03 import Day03
+from aoc.day04 import Day04
 
 
 def day1to5():
@@ -27,11 +28,15 @@ def day1to5():
 
 
 def latest():
-    pass
+    ## Day 4
+    print("2015 Day 04 Part 1:", end=" ")
+    print(Day04.part1("../inputs/04/input.txt"))
+    print("2015 Day 04 Part 2:", end=" ")
+    print(Day04.part2("../inputs/04/input.txt"))
 
 
 def main():
-    day1to5()
+    # day1to5()
     latest()
 
 
