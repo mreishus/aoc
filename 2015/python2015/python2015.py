@@ -9,6 +9,7 @@ from aoc.day03 import Day03
 from aoc.day04 import Day04
 from aoc.day05 import Day05
 from aoc.day06 import Day06
+from aoc.day07 import Day07
 
 
 def day1to5():
@@ -46,6 +47,10 @@ def day6to10():
     print(Day06.part1("../inputs/06/input.txt"))
     print("2015 Day 06 Part 2:", end=" ")
     print(Day06.part2("../inputs/06/input.txt"))
+    print("2015 Day 07 Part 1:", end=" ")
+    print(Day07.part1("../inputs/07/input.txt"))
+    print("2015 Day 07 Part 2:", end=" ")
+    print(Day07.part2("../inputs/07/input.txt"))
 
 
 def latest():
@@ -55,5 +60,5 @@ def latest():
 
 if __name__ == "__main__":
     # day1to5()
-    # day6to10()
+    day6to10()
     latest()

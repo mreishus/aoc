@@ -6,7 +6,7 @@
 - 2018 - 50 stars
 - 2017 - 50 stars
 - 2016 - 50 stars
-- 2015 - 0 stars
+- 2015 - 12 stars
 
 ## 2019
 
@@ -386,6 +386,11 @@ means I've grown as a programmer. Searching a graph with a special condition,
 implementing a VM, or knocking out some cellular automata doesn't really take
 much thinking anymore.
 
+This was the first year I organized differently, by making a single program
+that can run all days instead of a program for each day. I prefer it this way,
+even if each day is no longer stand-alone. It makes for easier code reuse, and
+it's extremely satisfying to run several days worth of solutions at once.
+
 I committed myself to doing all of the problems in Elixir. I thought it would
 be painful, but I started to prefer doing BFS in Elixir than say, Python,
 which I didn't expect at all! My functional programming chops definitely
@@ -410,5 +415,5 @@ increased by doing this year in Elixir.
 
 ```
 Created:       Mon 02 Dec 2019 05:12:40 PM CST
-Last Modified: Fri 24 Jan 2020 12:56:32 PM CST
+Last Modified: Fri 24 Jan 2020 01:00:41 PM CST
 ```
