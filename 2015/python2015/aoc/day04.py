@@ -9,9 +9,8 @@ import hashlib
 
 
 def is_pw(key: str, num: int, leading_zeros: int) -> bool:
-    m = hashlib.md5()
-    k = key + str(num)
-    m.update(k.encode("utf-8"))
+    full_key = key + str(num)
+    m = hashlib.md5(full_key.encode())
     target = "0" * leading_zeros
     return m.hexdigest()[0:leading_zeros] == target
 

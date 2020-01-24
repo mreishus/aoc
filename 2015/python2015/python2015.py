@@ -25,14 +25,15 @@ def day1to5():
     print(Day03.part1("../inputs/03/input.txt"))
     print("2015 Day 03 Part 2:", end=" ")
     print(Day03.part2("../inputs/03/input.txt"))
-
-
-def latest():
     ## Day 4
     print("2015 Day 04 Part 1:", end=" ")
     print(Day04.part1("../inputs/04/input.txt"))
     print("2015 Day 04 Part 2:", end=" ")
     print(Day04.part2("../inputs/04/input.txt"))
+
+
+def latest():
+    pass
 
 
 def main():
