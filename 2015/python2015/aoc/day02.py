@@ -4,16 +4,20 @@ Advent Of Code 2015 Day 2
 https://adventofcode.com/2015/day/2
 """
 
+
 def parse(filename: str):
     with open(filename) as file:
         return [parse_line(line.strip()) for line in file.readlines()]
+
 
 def parse_line(line: str):
     [length, width, height] = [int(num) for num in line.split("x")]
     return Present(length, width, height)
 
-class Present():
+
+class Present:
     """Docstring for Present. """
+
     def __init__(self, length, width, height):
         self.length = length
         self.width = width
@@ -23,7 +27,7 @@ class Present():
         l = self.length
         w = self.width
         h = self.height
-        sides = [2*l*w, 2*w*h, 2*h*l]
+        sides = [2 * l * w, 2 * w * h, 2 * h * l]
         slack = min(sides) // 2
         return sum(sides) + slack
 
@@ -38,8 +42,10 @@ class Present():
     def volume(self) -> int:
         return self.length * self.width * self.height
 
+
 class Day02:
     """ AoC 2015 Day 02 """
+
     @staticmethod
     def part1(filename: str) -> int:
         """ Given a filename, solve 2015 day 02 part 1 """
