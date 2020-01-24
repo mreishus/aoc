@@ -16,8 +16,6 @@ def parse_line(line: str):
 
 
 class Present:
-    """Docstring for Present. """
-
     def __init__(self, length, width, height):
         self.length = length
         self.width = width
