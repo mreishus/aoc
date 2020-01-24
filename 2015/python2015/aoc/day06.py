@@ -5,15 +5,15 @@ https://adventofcode.com/2015/day/6
 """
 
 import re
-import numpy as np
 from typing import Tuple
+import numpy as np
 from aoc.parsers import all_lines
 
-parser = re.compile(r"(turn on|turn off|toggle) (\d+),(\d+) through (\d+),(\d+)")
+PARSER = re.compile(r"(turn on|turn off|toggle) (\d+),(\d+) through (\d+),(\d+)")
 
 
 def parse_line(line: str) -> Tuple[str, int, int, int, int]:
-    (instruction, x1, y1, x2, y2) = re.search(parser, line).groups()
+    (instruction, x1, y1, x2, y2) = re.search(PARSER, line).groups()
     return (instruction, int(x1), int(y1), int(x2), int(y2))
 
 
