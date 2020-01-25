@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 """
-Advent Of Code 2015 Day 6
-https://adventofcode.com/2015/day/6
+Advent Of Code 2015 Day 7
+https://adventofcode.com/2015/day/7
 """
 
 import operator
