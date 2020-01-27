@@ -14,6 +14,7 @@ from aoc.day08 import Day08
 from aoc.day09 import Day09
 from aoc.day10 import Day10
 from aoc.day11 import Day11
+from aoc.day12 import Day12
 
 
 def day1to5():
@@ -73,13 +74,19 @@ def day6to10():
     print("2015 Day 10 Part 2:", end=" ")
     print(Day10.part2("../inputs/10/input.txt"))
 
-
-def latest():
-    """ Scratchpad to work on. """
+def day11to15():
     print("2015 Day 11 Part 1:", end=" ")
     print(Day11.part1("../inputs/11/input.txt"))
     print("2015 Day 11 Part 2:", end=" ")
     print(Day11.part2("../inputs/11/input.txt"))
+
+
+def latest():
+    """ Scratchpad to work on. """
+    print("2015 Day 12 Part 1:", end=" ")
+    print(Day12.part1("../inputs/12/input.txt"))
+    print("2015 Day 12 Part 2:", end=" ")
+    print(Day12.part2("../inputs/12/input.txt"))
 
 
 if __name__ == "__main__":
