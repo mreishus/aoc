@@ -12,6 +12,7 @@ from aoc.day06 import Day06
 from aoc.day07 import Day07
 from aoc.day08 import Day08
 from aoc.day09 import Day09
+from aoc.day10 import Day10
 
 
 def day1to5():
@@ -69,6 +70,10 @@ def day6to10():
 
 def latest():
     """ Scratchpad to work on. """
+    print("2015 Day 10 Part 1:", end=" ")
+    print(Day10.part1("../inputs/10/input.txt"))
+    print("2015 Day 10 Part 2:", end=" ")
+    print(Day10.part2("../inputs/10/input.txt"))
     pass
 
 
