@@ -4,21 +4,14 @@ Advent Of Code 2015 Day 9
 https://adventofcode.com/2015/day/9
 """
 
+from itertools import groupby
 from aoc.parsers import first_line
 
 
 def expand(string: str) -> str:
-    last_char = None
-    count = 0
-    runs = []
-    for char in string:
-        if char != last_char:
-            runs.append((count, last_char))
-            count = 1
-            last_char = char
-        else:
-            count += 1
-    runs.append((count, last_char))
+    # if string = "1112", then
+    # runs = [ (3, '1'), (1, '2') ]
+    runs = [ (len(list(g)), k) for k, g in groupby(string)]
 
     output = ""
     for (count, last_char) in runs[1:]:
