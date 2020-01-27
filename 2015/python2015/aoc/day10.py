@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 """
-Advent Of Code 2015 Day 9
-https://adventofcode.com/2015/day/9
+Advent Of Code 2015 Day 10
+https://adventofcode.com/2015/day/10
 """
 
 from itertools import groupby
@@ -14,7 +14,7 @@ def expand(string: str) -> str:
     runs = [ (len(list(g)), k) for k, g in groupby(string)]
 
     output = ""
-    for (count, last_char) in runs[1:]:
+    for (count, last_char) in runs:
         output += str(count) + last_char
     return output
 
