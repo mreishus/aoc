@@ -14,6 +14,7 @@ ESCAPE_HEX = re.compile(r"\\x[0-9a-fA-F][0-9a-fA-F]")
 BACKSLASH = re.compile(r"\\")
 QUOTE = re.compile(r"\"")
 
+
 def len_code(orig_string: str) -> int:
     if orig_string[0] != '"' or orig_string[-1] != '"':
         raise ValueError("len_code: expected a double quoted string")
@@ -25,6 +26,7 @@ def len_code(orig_string: str) -> int:
     extra_chars = 2 + num_escape_double + num_escape_backslash + (num_escape_hex * 3)
     return len(orig_string) - extra_chars
 
+
 def len_expand(orig_string: str) -> int:
     if orig_string[0] != '"' or orig_string[-1] != '"':
         raise ValueError("len_code: expected a double quoted string")
@@ -33,6 +35,7 @@ def len_expand(orig_string: str) -> int:
     num_backslash = len(re.findall(BACKSLASH, string))
     num_quote = len(re.findall(QUOTE, string))
     return len(orig_string) + 4 + num_backslash + num_quote
+
 
 class Day08:
     """ AoC 2015 Day 08 """

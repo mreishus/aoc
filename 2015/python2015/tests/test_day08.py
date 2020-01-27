@@ -54,5 +54,6 @@ class TestDay08(unittest.TestCase):
         self.assertEqual(len(str4), 6)
         self.assertEqual(len_expand(str4), 11)
 
+
 if __name__ == "__main__":
     unittest.main()

@@ -6,24 +6,26 @@ https://adventofcode.com/2015/day/9
 
 from aoc.parsers import first_line
 
+
 def expand(string: str) -> str:
     last_char = None
     count = 0
     runs = []
     for char in string:
         if char != last_char:
-            runs.append( (count, last_char) )
+            runs.append((count, last_char))
             count = 1
             last_char = char
             pass
         else:
             count += 1
-    runs.append( (count, last_char) )
+    runs.append((count, last_char))
 
     output = ""
     for (count, last_char) in runs[1:]:
         output += str(count) + last_char
     return output
+
 
 class Day10:
     """ AoC 2015 Day 10 """
