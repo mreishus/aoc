@@ -10,6 +10,7 @@ from aoc.parsers import first_line
 PAIR = re.compile(r"(.)\1")
 FORBIDDEN = re.compile(r"[iol]")
 
+
 def inc(password: str) -> str:
     """
     Increments a string.
@@ -20,25 +21,34 @@ def inc(password: str) -> str:
     letters = [c for c in password]
     for i, char in reversed(list(enumerate(letters))):
         letters[i] = inc_char(char)
-        if letters[i] != 'a':
+        if letters[i] != "a":
             break
     return "".join(letters)
 
+
 def is_valid(password: str) -> bool:
-    return not has_forbidden_chars(password) and has_two_pairs(password) and has_run(password)
+    return (
+        not has_forbidden_chars(password)
+        and has_two_pairs(password)
+        and has_run(password)
+    )
+
 
 def has_forbidden_chars(password: str) -> bool:
     return bool(re.search(FORBIDDEN, password))
 
+
 def has_two_pairs(password: str) -> bool:
     matches = re.findall(PAIR, password)
     return len(set(matches)) > 1
+
 
 def has_run(password: str) -> bool:
     for (c1, c2, c3) in zip(password, password[1:], password[2:]):
         if ord(c3) == ord(c2) + 1 and ord(c2) == ord(c1) + 1:
             return True
     return False
+
 
 def inc_char(password: str) -> str:
     num = ord(password)
@@ -56,11 +66,13 @@ def inc_char(password: str) -> str:
         raise ValueError("Don't know how to inc_char this")
     return chr(num)
 
+
 def next_pw(password: str) -> str:
     while True:
         password = inc(password)
         if is_valid(password):
             return password
+
 
 class Day11:
     """ AoC 2015 Day 11 """

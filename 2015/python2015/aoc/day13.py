@@ -9,7 +9,10 @@ from typing import Dict, List, Set, Tuple, Union
 from itertools import permutations
 from aoc.parsers import all_lines
 
-PARSER = re.compile(r"(\w+) would (gain|lose) (\d+) happiness units by sitting next to (\w+)\.")
+PARSER = re.compile(
+    r"(\w+) would (gain|lose) (\d+) happiness units by sitting next to (\w+)\."
+)
+
 
 def parse(lines: List[str]) -> Tuple[Set[str], Dict[Tuple[str, str], int]]:
     people = set()
@@ -30,7 +33,10 @@ def parse(lines: List[str]) -> Tuple[Set[str], Dict[Tuple[str, str], int]]:
 
     return people, seating_pref
 
-def add_you(people: Set[str], seating_pref: Dict[Tuple[str, str], int]) -> Tuple[Set[str], Dict[Tuple[str, str], int]]:
+
+def add_you(
+    people: Set[str], seating_pref: Dict[Tuple[str, str], int]
+) -> Tuple[Set[str], Dict[Tuple[str, str], int]]:
     to_add = "You"
     for person in people:
         seating_pref[(person, to_add)] = 0
@@ -38,12 +44,16 @@ def add_you(people: Set[str], seating_pref: Dict[Tuple[str, str], int]) -> Tuple
     people.add(to_add)
     return people, seating_pref
 
+
 def happiness_of_best(people: Set[str], seating_pref: Dict[Tuple[str, str], int]):
     perms = permutations(list(people))
     winner = max(perms, key=lambda people: happiness(people, seating_pref))
     return happiness(winner, seating_pref)
 
-def happiness(people: Union[List[str], Tuple[str]], seating_pref: Dict[Tuple[str, str], int]):
+
+def happiness(
+    people: Union[List[str], Tuple[str]], seating_pref: Dict[Tuple[str, str], int]
+):
     happiness = 0
     epeople = list(people) + [people[0]]
     for (p1, p2) in zip(epeople, epeople[1:]):

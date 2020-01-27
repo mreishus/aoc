@@ -11,7 +11,7 @@ from aoc.parsers import first_line
 def expand(string: str) -> str:
     # if string = "1112", then
     # runs = [ (3, '1'), (1, '2') ]
-    runs = [ (len(list(g)), k) for k, g in groupby(string)]
+    runs = [(len(list(g)), k) for k, g in groupby(string)]
 
     output = ""
     for (count, last_char) in runs:

@@ -75,6 +75,7 @@ def day6to10():
     print("2015 Day 10 Part 2:", end=" ")
     print(Day10.part2("../inputs/10/input.txt"))
 
+
 def day11to15():
     print("2015 Day 11 Part 1:", end=" ")
     print(Day11.part1("../inputs/11/input.txt"))

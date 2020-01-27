@@ -7,6 +7,7 @@ https://adventofcode.com/2015/day/12
 import json
 from aoc.parsers import first_line
 
+
 def total_nums(data) -> int:
     if isinstance(data, dict):
         total = 0
@@ -18,6 +19,7 @@ def total_nums(data) -> int:
     if isinstance(data, int):
         return data
     return 0
+
 
 def total_nums_no_red(data) -> int:
     if isinstance(data, dict):
@@ -35,6 +37,7 @@ def total_nums_no_red(data) -> int:
     if isinstance(data, int):
         return data
     return 0
+
 
 class Day12:
     """ AoC 2015 Day 12 """
