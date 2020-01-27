@@ -412,6 +412,7 @@ increased by doing this year in Elixir.
 | [Day 10](./2015/writeups/day10.md) | Look-and-Say               | [Python](./2015/python2015/aoc/day10.py) |
 | [Day 11](./2015/writeups/day11.md) | String incrementing, rules | [Python](./2015/python2015/aoc/day11.py) |
 | [Day 12](./2015/writeups/day12.md) | JSON Parsing               | [Python](./2015/python2015/aoc/day12.py) |
+| [Day 13](./2015/writeups/day13.md) | Optimal Seating            | [Python](./2015/python2015/aoc/day13.py) |
 
 ## Misc
 
@@ -421,5 +422,5 @@ increased by doing this year in Elixir.
 
 ```
 Created:       Mon 02 Dec 2019 05:12:40 PM CST
-Last Modified: Mon 27 Jan 2020 07:13:52 AM CST
+Last Modified: Mon 27 Jan 2020 12:03:37 PM CST
 ```

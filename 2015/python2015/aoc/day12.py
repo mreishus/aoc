@@ -4,8 +4,8 @@ Advent Of Code 2015 Day 12
 https://adventofcode.com/2015/day/12
 """
 
-from aoc.parsers import first_line
 import json
+from aoc.parsers import first_line
 
 def total_nums(data) -> int:
     if isinstance(data, dict):
