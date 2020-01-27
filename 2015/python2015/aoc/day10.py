@@ -16,7 +16,6 @@ def expand(string: str) -> str:
             runs.append((count, last_char))
             count = 1
             last_char = char
-            pass
         else:
             count += 1
     runs.append((count, last_char))
@@ -34,7 +33,7 @@ class Day10:
     def part1(filename: str) -> int:
         """ Given a filename, solve 2015 day 10 part 1 """
         nums = first_line(filename)
-        for i in range(40):
+        for _ in range(40):
             nums = expand(nums)
         return len(nums)
 
@@ -42,6 +41,6 @@ class Day10:
     def part2(filename: str) -> int:
         """ Given a filename, solve 2015 day 10 part 2 """
         nums = first_line(filename)
-        for i in range(50):
+        for _ in range(50):
             nums = expand(nums)
         return len(nums)
