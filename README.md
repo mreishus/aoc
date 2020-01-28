@@ -415,7 +415,8 @@ increased by doing this year in Elixir.
 | [Day 13](./2015/writeups/day13.md) | Optimal Seating            | [Python](./2015/python2015/aoc/day13.py) |
 | [Day 14](./2015/writeups/day14.md) | Racing Go-Rest Sequences   | [Python](./2015/python2015/aoc/day14.py) |
 | [Day 15](./2015/writeups/day15.md) | Cookie Optimization        | [Python](./2015/python2015/aoc/day15.py) |
-| [Day 16](./2016/writeups/day16.md) | Logical elimination        | [Python](./2016/python2016/aoc/day16.py) |
+| [Day 16](./2015/writeups/day16.md) | Logical elimination        | [Python](./2016/python2015/aoc/day16.py) |
+| [Day 17](./2015/writeups/day17.md) | Combinations of containers | [Python](./2017/python2015/aoc/day17.py) |
 
 ## Misc
 
@@ -425,5 +426,5 @@ increased by doing this year in Elixir.
 
 ```
 Created:       Mon 02 Dec 2019 05:12:40 PM CST
-Last Modified: Tue 28 Jan 2020 04:41:30 PM CST
+Last Modified: Tue 28 Jan 2020 04:57:32 PM CST
 ```

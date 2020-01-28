@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 """
-Advent Of Code 2016 Day 16
-https://adventofcode.com/2016/day/16
+Advent Of Code 2015 Day 16
+https://adventofcode.com/2015/day/16
 """
 
 import re
@@ -79,16 +79,16 @@ def part2(sues: List[Dict[str, int]]) -> Union[int, None]:
 
 
 class Day16:
-    """ AoC 2016 Day 16 """
+    """ AoC 2015 Day 16 """
 
     @staticmethod
     def part1(filename: str) -> int:
-        """ Given a filename, solve 2016 day 16 part 1 """
+        """ Given a filename, solve 2015 day 16 part 1 """
         sues = [parse_line(line) for line in all_lines(filename)]
         return part1(sues)
 
     @staticmethod
     def part2(filename: str) -> int:
-        """ Given a filename, solve 2016 day 16 part 2 """
+        """ Given a filename, solve 2015 day 16 part 2 """
         sues = [parse_line(line) for line in all_lines(filename)]
         return part2(sues)
