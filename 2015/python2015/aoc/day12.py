@@ -43,14 +43,14 @@ class Day12:
     """ AoC 2015 Day 12 """
 
     @staticmethod
-    def part1(filename: str) -> str:
+    def part1(filename: str) -> int:
         """ Given a filename, solve 2015 day 12 part 1 """
         data = first_line(filename)
         data = json.loads(data)
         return total_nums(data)
 
     @staticmethod
-    def part2(filename: str) -> str:
+    def part2(filename: str) -> int:
         """ Given a filename, solve 2015 day 12 part 2 """
         data = first_line(filename)
         data = json.loads(data)

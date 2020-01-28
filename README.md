@@ -6,7 +6,7 @@
 - 2018 - 50 stars
 - 2017 - 50 stars
 - 2016 - 50 stars
-- 2015 - 12 stars
+- 2015 - 28 stars
 
 ## 2019
 
@@ -413,6 +413,7 @@ increased by doing this year in Elixir.
 | [Day 11](./2015/writeups/day11.md) | String incrementing, rules | [Python](./2015/python2015/aoc/day11.py) |
 | [Day 12](./2015/writeups/day12.md) | JSON Parsing               | [Python](./2015/python2015/aoc/day12.py) |
 | [Day 13](./2015/writeups/day13.md) | Optimal Seating            | [Python](./2015/python2015/aoc/day13.py) |
+| [Day 14](./2015/writeups/day14.md) | Racing Go-Rest Sequences   | [Python](./2015/python2015/aoc/day14.py) |
 
 ## Misc
 
@@ -422,5 +423,5 @@ increased by doing this year in Elixir.
 
 ```
 Created:       Mon 02 Dec 2019 05:12:40 PM CST
-Last Modified: Mon 27 Jan 2020 12:03:37 PM CST
+Last Modified: Tue 28 Jan 2020 11:46:21 AM CST
 ```

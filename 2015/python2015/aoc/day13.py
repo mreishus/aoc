@@ -45,7 +45,9 @@ def add_you(
     return people, seating_pref
 
 
-def happiness_of_best(people: Set[str], seating_pref: Dict[Tuple[str, str], int]):
+def happiness_of_best(
+    people: Set[str], seating_pref: Dict[Tuple[str, str], int]
+) -> int:
     perms = permutations(list(people))
     winner = max(perms, key=lambda people: happiness(people, seating_pref))
     return happiness(winner, seating_pref)
@@ -53,7 +55,7 @@ def happiness_of_best(people: Set[str], seating_pref: Dict[Tuple[str, str], int]
 
 def happiness(
     people: Union[List[str], Tuple[str]], seating_pref: Dict[Tuple[str, str], int]
-):
+) -> int:
     happiness = 0
     epeople = list(people) + [people[0]]
     for (p1, p2) in zip(epeople, epeople[1:]):
@@ -66,13 +68,13 @@ class Day13:
     """ AoC 2015 Day 13 """
 
     @staticmethod
-    def part1(filename: str) -> str:
+    def part1(filename: str) -> int:
         """ Given a filename, solve 2015 day 13 part 1 """
         people, seating_pref = parse(all_lines(filename))
         return happiness_of_best(people, seating_pref)
 
     @staticmethod
-    def part2(filename: str) -> str:
+    def part2(filename: str) -> int:
         """ Given a filename, solve 2015 day 13 part 2 """
         people, seating_pref = parse(all_lines(filename))
         people, seating_pref = add_you(people, seating_pref)
