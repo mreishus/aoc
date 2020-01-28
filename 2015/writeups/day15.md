@@ -10,11 +10,11 @@ have been more elegant, but I wanted to knock it out quickly and YAGNI.
 
 ## Solutions
 
-- [Python](../python2015/aoc/day14.py)
+- [Python](../python2015/aoc/day15.py)
 
 ## Problem Description
 
-[2015 Day 14 on AdventOfCode.com](https://adventofcode.com/2015/day/14)
+[2015 Day 15 on AdventOfCode.com](https://adventofcode.com/2015/day/15)
 
 ### Part One
 

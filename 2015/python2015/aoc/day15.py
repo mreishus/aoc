@@ -8,7 +8,10 @@ import re
 from dataclasses import dataclass
 from aoc.parsers import all_lines
 
-PARSER = re.compile(r"(\w+): capacity (-?\d+), durability (-?\d+), flavor (-?\d+), texture (-?\d+), calories (-?\d+)")
+PARSER = re.compile(
+    r"(\w+): capacity (-?\d+), durability (-?\d+), flavor (-?\d+), texture (-?\d+), calories (-?\d+)"
+)
+
 
 @dataclass
 class Ingred:
@@ -19,12 +22,18 @@ class Ingred:
     texture: int
     calories: int
 
+
 def parse_line(line: str) -> Ingred:
     match = re.search(PARSER, line)
     if not match:
         raise ValueError("can't parse")
-    (name, capacity, durability, flavor, texture, calories) = match.group(1, 2, 3, 4, 5, 6)
-    return Ingred(name, int(capacity), int(durability), int(flavor), int(texture), int(calories))
+    (name, capacity, durability, flavor, texture, calories) = match.group(
+        1, 2, 3, 4, 5, 6
+    )
+    return Ingred(
+        name, int(capacity), int(durability), int(flavor), int(texture), int(calories)
+    )
+
 
 def part1(ings, target_cals):
     maxv = 100
@@ -56,6 +65,7 @@ def part1(ings, target_cals):
                     max_score_seen = this_score
 
     return max_score_seen
+
 
 class Day15:
     """ AoC 2015 Day 15 """
