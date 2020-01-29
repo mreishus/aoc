@@ -417,6 +417,7 @@ increased by doing this year in Elixir.
 | [Day 15](./2015/writeups/day15.md) | Cookie Optimization        | [Python](./2015/python2015/aoc/day15.py) |
 | [Day 16](./2015/writeups/day16.md) | Logical elimination        | [Python](./2016/python2015/aoc/day16.py) |
 | [Day 17](./2015/writeups/day17.md) | Combinations of containers | [Python](./2017/python2015/aoc/day17.py) |
+| [Day 18](./2015/writeups/day18.md) | Game of Life               | [Python](./2018/python2015/aoc/day18.py) |
 
 ## Misc
 
@@ -426,5 +427,5 @@ increased by doing this year in Elixir.
 
 ```
 Created:       Mon 02 Dec 2019 05:12:40 PM CST
-Last Modified: Tue 28 Jan 2020 04:57:32 PM CST
+Last Modified: Tue 28 Jan 2020 06:13:51 PM CST
 ```
