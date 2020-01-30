@@ -109,7 +109,9 @@ def part2(begin: str, rules: Dict[str, List[str]]) -> int:
                 came_from[new_state] = state
                 travel_score[new_state] = tenative_travel_score
                 if new_state not in open_set:
-                    open_set[new_state] = tenative_travel_score + heuristic(new_state, goal)
+                    open_set[new_state] = tenative_travel_score + heuristic(
+                        new_state, goal
+                    )
 
 
 class Day19:
