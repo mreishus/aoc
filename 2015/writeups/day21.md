@@ -2,6 +2,14 @@
 
 ## Approach and Reflections
 
+We're given a list of RPG equipment to buy and rules for a simple battle.
+We're asked the find the cheapest equipment that wins the battle (and most
+expensive equipment that can lose).
+
+I made a function that returns all Equipment Sets, then ran all of them
+throught the battle simulator, then it was a simple filter and max or min to
+find the answers.
+
 ## Solutions
 
 - [Python](../python2015/aoc/day21.py)

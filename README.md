@@ -415,12 +415,12 @@ increased by doing this year in Elixir.
 | [Day 13](./2015/writeups/day13.md) | Optimal Seating               | [Python](./2015/python2015/aoc/day13.py) |
 | [Day 14](./2015/writeups/day14.md) | Racing Go-Rest Sequences      | [Python](./2015/python2015/aoc/day14.py) |
 | [Day 15](./2015/writeups/day15.md) | Cookie Optimization           | [Python](./2015/python2015/aoc/day15.py) |
-| [Day 16](./2015/writeups/day16.md) | Logical elimination           | [Python](./2016/python2015/aoc/day16.py) |
-| [Day 17](./2015/writeups/day17.md) | Combinations of containers    | [Python](./2017/python2015/aoc/day17.py) |
-| [Day 18](./2015/writeups/day18.md) | Game of Life                  | [Python](./2018/python2015/aoc/day18.py) |
-| [Day 19](./2015/writeups/day19.md) | String Expansion Search       | [Python](./2019/python2015/aoc/day19.py) |
-| [Day 20](./2015/writeups/day20.md) | Number Theory, Divisors       | [Python](./2020/python2015/aoc/day20.py) |
-| [Day 21](./2015/writeups/day21.md) | RPG Battle, Item optimization | [Python](./2021/python2015/aoc/day21.py) |
+| [Day 16](./2015/writeups/day16.md) | Logical elimination           | [Python](./2015/python2015/aoc/day16.py) |
+| [Day 17](./2015/writeups/day17.md) | Combinations of containers    | [Python](./2015/python2015/aoc/day17.py) |
+| [Day 18](./2015/writeups/day18.md) | Game of Life                  | [Python](./2015/python2015/aoc/day18.py) |
+| [Day 19](./2015/writeups/day19.md) | String Expansion Search       | [Python](./2015/python2015/aoc/day19.py) |
+| [Day 20](./2015/writeups/day20.md) | Number Theory, Divisors       | [Python](./2015/python2015/aoc/day20.py) |
+| [Day 21](./2015/writeups/day21.md) | RPG Battle, Item optimization | [Python](./2015/python2015/aoc/day21.py) |
 
 ### Hardest Problems 2015
 
@@ -434,5 +434,5 @@ increased by doing this year in Elixir.
 
 ```
 Created:       Mon 02 Dec 2019 05:12:40 PM CST
-Last Modified: Thu 30 Jan 2020 02:20:04 PM CST
+Last Modified: Thu 30 Jan 2020 02:21:39 PM CST
 ```

@@ -14,11 +14,13 @@ from operator import attrgetter
 Item = namedtuple("Item", ("name", "cost", "damage", "armor"))
 ItemSet = namedtuple("ItemSet", ("names", "cost", "damage", "armor"))
 
+
 @dataclass
 class Char:
     hp: int
     damage: int
     armor: int
+
 
 WEAPONS = [
     Item("Dagger", 8, 4, 0),
@@ -46,8 +48,11 @@ RINGS = [
     Item("Def 3", 80, 0, 3),
 ]
 
+
 def collections() -> List[ItemSet]:
-    rings = chain(combinations(RINGS, 2), combinations(RINGS, 1), combinations(RINGS, 0))
+    rings = chain(
+        combinations(RINGS, 2), combinations(RINGS, 1), combinations(RINGS, 0)
+    )
     sets = []
     for (weapon, armor, rings) in product(WEAPONS, ARMORS, rings):
         # A little weirdness in flatting out the 0, 1, or 2 rings with 1 armor and 1 weapon
@@ -61,6 +66,7 @@ def collections() -> List[ItemSet]:
         itemset = ItemSet(names, cost, damage, armor)
         sets.append(itemset)
     return sets
+
 
 def fight(char1, char2):
     """ Char1 and Char2 fight.  Returns True if Char1 wins. """
@@ -79,9 +85,11 @@ def fight(char1, char2):
         if char1.hp <= 0:
             return False
 
+
 def win(itemset, boss):
     player = Char(100, itemset.damage, itemset.armor)
     return fight(player, boss)
+
 
 def part1(sets, boss):
     """ Given a list of item sets and a boss,
@@ -91,6 +99,7 @@ def part1(sets, boss):
     # print("Cheapest winning set:")
     # print(cheapest_winning_set)
     return cheapest_winning_set.cost
+
 
 def part2(sets, boss):
     """ Given a list of item sets and a boss,
@@ -102,7 +111,6 @@ def part2(sets, boss):
     return expensive_losing_set.cost
 
 
-
 class Day21:
     """ AoC 2015 Day 21 """
 
@@ -110,12 +118,12 @@ class Day21:
     def part1(_filename: str) -> int:
         """ Given a filename, solve 2015 day 21 part 1 """
         sets = collections()
-        boss = Char(104, 8, 1) # Easier than parsing input.txt
+        boss = Char(104, 8, 1)  # Easier than parsing input.txt
         return part1(sets, boss)
 
     @staticmethod
     def part2(_filename: str) -> int:
         """ Given a filename, solve 2015 day 21 part 2 """
         sets = collections()
-        boss = Char(104, 8, 1) # Easier than parsing input.txt
+        boss = Char(104, 8, 1)  # Easier than parsing input.txt
         return part2(sets, boss)
