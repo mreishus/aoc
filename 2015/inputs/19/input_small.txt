@@ -1,0 +1,7 @@
+H => HO
+H => OH
+O => HH
+e => H
+e => O
+
+HOH

@@ -109,6 +109,7 @@ def day11to15():
     print("2015 Day 15 Part 2:", end=" ")
     print(Day15.part2("../inputs/15/input.txt"))
 
+
 def day16to20():
     ## Day 16
     print("2015 Day 16 Part 1:", end=" ")
@@ -129,6 +130,7 @@ def day16to20():
 
 def latest():
     """ Scratchpad to work on. """
+    ## Day 19
     print("2015 Day 19 Part 1:", end=" ")
     print(Day19.part1("../inputs/19/input.txt"))
     print("2015 Day 19 Part 2:", end=" ")

@@ -7,17 +7,21 @@ https://adventofcode.com/2015/day/17
 from aoc.parsers import all_lines
 import itertools
 
+
 def all_combinations(xs):
     for i, _ in enumerate(xs, 1):
         yield from itertools.combinations(xs, i)
 
+
 def part1(containers, target):
     return sum(1 for comb in all_combinations(containers) if sum(comb) == target)
+
 
 def part2(containers, target):
     matching = [comb for comb in all_combinations(containers) if sum(comb) == target]
     smallest_len = len(min(matching, key=len))
     return sum(1 for comb in matching if len(comb) == smallest_len)
+
 
 class Day17:
     """ AoC 2015 Day 17 """
