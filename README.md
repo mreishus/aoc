@@ -6,7 +6,7 @@
 - 2018 - 50 stars
 - 2017 - 50 stars
 - 2016 - 50 stars
-- 2015 - 28 stars
+- 2015 - 44 stars
 
 ## 2019
 
@@ -398,33 +398,39 @@ increased by doing this year in Elixir.
 
 ## 2015
 
-| Day                                | Comment                       | Python                                   |
-| ---------------------------------- | ----------------------------- | ---------------------------------------- |
-| [Day 01](./2015/writeups/day01.md) | Character Iteration           | [Python](./2015/python2015/aoc/day01.py) |
-| [Day 02](./2015/writeups/day02.md) | Simple Arithmetic             | [Python](./2015/python2015/aoc/day02.py) |
-| [Day 03](./2015/writeups/day03.md) | Grid Navigation               | [Python](./2015/python2015/aoc/day03.py) |
-| [Day 04](./2015/writeups/day04.md) | MD5 Leading Zeros             | [Python](./2015/python2015/aoc/day04.py) |
-| [Day 05](./2015/writeups/day05.md) | String Rules                  | [Python](./2015/python2015/aoc/day05.py) |
-| [Day 06](./2015/writeups/day06.md) | Subgrid manipulation          | [Python](./2015/python2015/aoc/day06.py) |
-| [Day 07](./2015/writeups/day07.md) | Bitwise Logic, Ordering       | [Python](./2015/python2015/aoc/day07.py) |
-| [Day 08](./2015/writeups/day08.md) | Escaping Strings              | [Python](./2015/python2015/aoc/day08.py) |
-| [Day 09](./2015/writeups/day09.md) | Travelling Salesman           | [Python](./2015/python2015/aoc/day09.py) |
-| [Day 10](./2015/writeups/day10.md) | Look-and-Say                  | [Python](./2015/python2015/aoc/day10.py) |
-| [Day 11](./2015/writeups/day11.md) | String incrementing, rules    | [Python](./2015/python2015/aoc/day11.py) |
-| [Day 12](./2015/writeups/day12.md) | JSON Parsing                  | [Python](./2015/python2015/aoc/day12.py) |
-| [Day 13](./2015/writeups/day13.md) | Optimal Seating               | [Python](./2015/python2015/aoc/day13.py) |
-| [Day 14](./2015/writeups/day14.md) | Racing Go-Rest Sequences      | [Python](./2015/python2015/aoc/day14.py) |
-| [Day 15](./2015/writeups/day15.md) | Cookie Optimization           | [Python](./2015/python2015/aoc/day15.py) |
-| [Day 16](./2015/writeups/day16.md) | Logical elimination           | [Python](./2015/python2015/aoc/day16.py) |
-| [Day 17](./2015/writeups/day17.md) | Combinations of containers    | [Python](./2015/python2015/aoc/day17.py) |
-| [Day 18](./2015/writeups/day18.md) | Game of Life                  | [Python](./2015/python2015/aoc/day18.py) |
-| [Day 19](./2015/writeups/day19.md) | String Expansion Search       | [Python](./2015/python2015/aoc/day19.py) |
-| [Day 20](./2015/writeups/day20.md) | Number Theory, Divisors       | [Python](./2015/python2015/aoc/day20.py) |
-| [Day 21](./2015/writeups/day21.md) | RPG Battle, Item optimization | [Python](./2015/python2015/aoc/day21.py) |
+| Day                                | Comment                                   | Python                                   |
+| ---------------------------------- | ----------------------------------------- | ---------------------------------------- |
+| [Day 01](./2015/writeups/day01.md) | Character Iteration                       | [Python](./2015/python2015/aoc/day01.py) |
+| [Day 02](./2015/writeups/day02.md) | Simple Arithmetic                         | [Python](./2015/python2015/aoc/day02.py) |
+| [Day 03](./2015/writeups/day03.md) | Grid Navigation                           | [Python](./2015/python2015/aoc/day03.py) |
+| [Day 04](./2015/writeups/day04.md) | MD5 Leading Zeros                         | [Python](./2015/python2015/aoc/day04.py) |
+| [Day 05](./2015/writeups/day05.md) | String Rules                              | [Python](./2015/python2015/aoc/day05.py) |
+| [Day 06](./2015/writeups/day06.md) | Subgrid manipulation                      | [Python](./2015/python2015/aoc/day06.py) |
+| [Day 07](./2015/writeups/day07.md) | Bitwise Logic, Ordering                   | [Python](./2015/python2015/aoc/day07.py) |
+| [Day 08](./2015/writeups/day08.md) | Escaping Strings                          | [Python](./2015/python2015/aoc/day08.py) |
+| [Day 09](./2015/writeups/day09.md) | Travelling Salesman                       | [Python](./2015/python2015/aoc/day09.py) |
+| [Day 10](./2015/writeups/day10.md) | Look-and-Say                              | [Python](./2015/python2015/aoc/day10.py) |
+| [Day 11](./2015/writeups/day11.md) | String incrementing, rules                | [Python](./2015/python2015/aoc/day11.py) |
+| [Day 12](./2015/writeups/day12.md) | JSON Parsing                              | [Python](./2015/python2015/aoc/day12.py) |
+| [Day 13](./2015/writeups/day13.md) | Optimal Seating                           | [Python](./2015/python2015/aoc/day13.py) |
+| [Day 14](./2015/writeups/day14.md) | Racing Go-Rest Sequences                  | [Python](./2015/python2015/aoc/day14.py) |
+| [Day 15](./2015/writeups/day15.md) | Cookie Optimization                       | [Python](./2015/python2015/aoc/day15.py) |
+| [Day 16](./2015/writeups/day16.md) | Logical elimination                       | [Python](./2015/python2015/aoc/day16.py) |
+| [Day 17](./2015/writeups/day17.md) | Combinations of containers                | [Python](./2015/python2015/aoc/day17.py) |
+| [Day 18](./2015/writeups/day18.md) | Game of Life                              | [Python](./2015/python2015/aoc/day18.py) |
+| [Day 19](./2015/writeups/day19.md) | String Expansion Search                   | [Python](./2015/python2015/aoc/day19.py) |
+| [Day 20](./2015/writeups/day20.md) | Number Theory, Divisors                   | [Python](./2015/python2015/aoc/day20.py) |
+| [Day 21](./2015/writeups/day21.md) | RPG Battle, Item optimization             | [Python](./2015/python2015/aoc/day21.py) |
+| [Day 22](./2015/writeups/day22.md) | RPG Battle, Ongoing Spells, Minimize Mana | [Python](./2015/python2015/aoc/day22.py) |
 
 ### Hardest Problems 2015
 
 - 19 - String expansion search
+- 22 - RPG Battle, Ongoing Spells, Minimize Mana
+
+### Favorite Problems 2015
+
+- 22 - RPG Battle, Ongoing Spells, Minimize Mana
 
 ## Misc
 
@@ -434,5 +440,5 @@ increased by doing this year in Elixir.
 
 ```
 Created:       Mon 02 Dec 2019 05:12:40 PM CST
-Last Modified: Thu 30 Jan 2020 02:21:39 PM CST
+Last Modified: Thu 30 Jan 2020 04:02:58 PM CST
 ```
