@@ -73,6 +73,7 @@ def hashable(s1: GameState) -> HashableGameState:
         s1.player_armor,
     )
 
+
 def unhashable(s1: HashableGameState) -> GameState:
     return GameState(
         s1.player_hp,
@@ -165,6 +166,7 @@ def apply_effects(state: GameState) -> GameState:
         elif spell_name == "Recharge":
             state.player_mana += 101
     return state
+
 
 def solve(init_state: GameState):
     """ Use Dijkstra's to find the minimum mana needed to kill the boss. """

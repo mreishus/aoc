@@ -422,6 +422,7 @@ increased by doing this year in Elixir.
 | [Day 20](./2015/writeups/day20.md) | Number Theory, Divisors                   | [Python](./2015/python2015/aoc/day20.py) |
 | [Day 21](./2015/writeups/day21.md) | RPG Battle, Item optimization             | [Python](./2015/python2015/aoc/day21.py) |
 | [Day 22](./2015/writeups/day22.md) | RPG Battle, Ongoing Spells, Minimize Mana | [Python](./2015/python2015/aoc/day22.py) |
+| [Day 23](./2015/writeups/day23.md) | Simple Assembly Language, Collatz         | [Python](./2015/python2015/aoc/day23.py) |
 
 ### Hardest Problems 2015
 
@@ -440,5 +441,5 @@ increased by doing this year in Elixir.
 
 ```
 Created:       Mon 02 Dec 2019 05:12:40 PM CST
-Last Modified: Thu 30 Jan 2020 04:02:58 PM CST
+Last Modified: Thu 30 Jan 2020 04:27:35 PM CST
 ```
