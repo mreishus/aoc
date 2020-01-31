@@ -3,7 +3,7 @@
 ## Approach and Reflections
 
 String expansion with a large search space. For Part 2, I tried BFS, which
-failed. Astar with heuristic as difference in string length worked.
+failed. Astar with heuristic as 'difference in string length' worked.
 
 ## Solutions
 

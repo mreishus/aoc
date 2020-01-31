@@ -5,10 +5,10 @@ https://adventofcode.com/2015/day/24
 """
 
 from typing import List
-from aoc.parsers import all_lines
 from itertools import combinations
 from functools import reduce
 from operator import mul
+from aoc.parsers import all_lines
 
 
 def parse(filename: str) -> List[int]:
@@ -21,7 +21,7 @@ def part1(nums: List[int], num_groups: int) -> int:
         raise ValueError("Expected sum of weights to be divisible by num_groups")
     target = total // num_groups
 
-    print(f"total={total} target={target}")
+    # print(f"total={total} target={target}")
     sets = []
     for set_length in range(len(nums) // 3):
         # print(f"set length: {set_length} found so far: {len(sets)}")

@@ -2,12 +2,13 @@
 
 ## Approach and Reflections
 
-This problem is all about escaping, and unescaping strings. It was quite
-mindbending; I had to be very careful to solve this problem. Most of the
-difficulty came in thinking about the different levels of escaping going on;
-sometimes I was dealing with escaping that my program was doing, sometimes
-I was dealing with escaping the characters I was programming in python (and in
-my regexps). Relying on unit tests was essential.
+This problem is all about escaping and unescaping strings. It was quite
+mindbending; I had to be very careful.
+
+Most of the difficulty came in thinking about the different levels of escaping
+going on. Sometimes I was dealing with escaping that my program was doing,
+sometimes I was dealing with escaping the characters I was programming in
+python (and in my regexps). Relying on unit tests was essential.
 
 ## Solutions
 

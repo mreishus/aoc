@@ -2,6 +2,10 @@
 
 ## Approach and Reflections
 
+Problem about finding the sum of divisors for each number, then finding the
+first sum that meets a certain criteria. The sum of divisors is quite jumpy
+and non-monotonic, so a binary search won't work here.
+
 ## Solutions
 
 - [Python](../python2015/aoc/day20.py)

@@ -11,7 +11,8 @@ immediately made me think of the collatz conjecture.
 Second: Since I've done 3 years of Advent of Code in the last month, I'm a bit
 tired of implementing assembly VMs. So I did something different: I simply
 read the program and converted it to python. Python does not have a `goto`
-statement, but that's ok, the flow control here was pretty simple to convert.
+statement, but that's ok, the flow control here was pretty simple to convert
+to `if` statements and a `while` loop.
 
 ## Solutions
 

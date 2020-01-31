@@ -10,7 +10,7 @@ final values on a certain register (or "wire").
 Here, I put all of the gates in a list and repeatedly iterated over the entire
 list, searching for any gate that had two input values specified, but no
 output determined yet. This is not the most efficient - perhaps a topological
-sort would have been needed - but it was sufficient and, YAGNI.
+sort would have been better - but it was sufficient and, YAGNI.
 
 Also, my Python "Gate" dataclass is a little too complex: Calls to the
 constructor are quite ugly.

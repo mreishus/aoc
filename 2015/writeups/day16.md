@@ -2,6 +2,9 @@
 
 ## Approach and Reflections
 
+This problem reminded me of the logic problems in Games magazine with grids of
+squares for you to cross out impossible conditions.
+
 ## Solutions
 
 - [Python](../python2015/aoc/day16.py)

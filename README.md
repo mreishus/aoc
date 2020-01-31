@@ -6,7 +6,9 @@
 - 2018 - 50 stars
 - 2017 - 50 stars
 - 2016 - 50 stars
-- 2015 - 44 stars
+- 2015 - 50 stars
+
+**250 Stars Club - Joined 2020-01-31**
 
 ## 2019
 
@@ -423,6 +425,8 @@ increased by doing this year in Elixir.
 | [Day 21](./2015/writeups/day21.md) | RPG Battle, Item optimization             | [Python](./2015/python2015/aoc/day21.py) |
 | [Day 22](./2015/writeups/day22.md) | RPG Battle, Ongoing Spells, Minimize Mana | [Python](./2015/python2015/aoc/day22.py) |
 | [Day 23](./2015/writeups/day23.md) | Simple Assembly Language, Collatz         | [Python](./2015/python2015/aoc/day23.py) |
+| [Day 24](./2015/writeups/day24.md) | Splitting numbers into equal groups       | [Python](./2015/python2015/aoc/day24.py) |
+| [Day 25](./2015/writeups/day25.md) | Mathy increasing sequence                 | [Python](./2015/python2015/aoc/day25.py) |
 
 ### Hardest Problems 2015
 
@@ -433,13 +437,52 @@ increased by doing this year in Elixir.
 
 - 22 - RPG Battle, Ongoing Spells, Minimize Mana
 
+### Personal Stats 2015
+
+```
+      --------Part 1--------   --------Part 2--------
+Day       Time   Rank  Score       Time   Rank  Score
+ 25       >24h   4044      0       >24h   2873      0
+ 24       >24h   3422      0       >24h   3366      0
+ 23       >24h   4123      0       >24h   4091      0
+ 22       >24h   3338      0       >24h   3235      0
+ 21       >24h   4570      0       >24h   4439      0
+ 20       >24h   5088      0       >24h   4732      0
+ 19       >24h   5576      0       >24h   4138      0
+ 18       >24h   5899      0       >24h   5803      0
+ 17       >24h   6266      0       >24h   6122      0
+ 16       >24h   6956      0       >24h   6635      0
+ 15       >24h   6516      0       >24h   6403      0
+ 14       >24h   8203      0       >24h   7531      0
+ 13       >24h   7501      0       >24h   7372      0
+ 12       >24h   9175      0       >24h   7735      0
+ 11       >24h   9010      0       >24h   8845      0
+ 10       >24h  10652      0       >24h  10153      0
+  9       >24h   9678      0       >24h   9423      0
+  8       >24h  11345      0       >24h  10603      0
+  7       >24h  11946      0       >24h  11420      0
+  6       >24h  17431      0       >24h  16430      0
+  5       >24h  22127      0       >24h  18417      0
+  4       >24h  22867      0       >24h  21658      0
+  3       >24h  27322      0       >24h  24613      0
+  2       >24h  33816      0       >24h  29589      0
+  1       >24h  53186      0       >24h  41194      0
+```
+
+### Overall Thoughts 2015
+
+With 2015 complete, I've joined the 250 stars club! (All AoC stars available
+as of Jan 2020). I'll be ready for AoC 2020, but I'll enjoy the break for
+now.
+
 ## Misc
 
 - [aocdl, a util for downloading input.txt](https://github.com/GreenLightning/advent-of-code-downloader)
 - [Synacor challenge, another challenge by the same creator](https://challenge.synacor.com/)
 - [Solution time scatterplots](http://www.maurits.vdschee.nl/scatterplot/)
+- [High quality writeup about 2019 Day 21, Jumping Carts](https://www.mattkeeter.com/projects/synthesis/)
 
 ```
 Created:       Mon 02 Dec 2019 05:12:40 PM CST
-Last Modified: Thu 30 Jan 2020 04:27:35 PM CST
+Last Modified: Fri 31 Jan 2020 12:06:52 PM CST
 ```

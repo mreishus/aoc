@@ -2,7 +2,7 @@
 
 ## Approach and Reflections
 
-Travelling salesman problem with a thankfully low number of cities/routes.
+Travelling salesman problem with, thankfully, a low number of cities/routes.
 I simply bruteforced all paths and found the shortest.
 
 ## Solutions
