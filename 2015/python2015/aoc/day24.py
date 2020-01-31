@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 """
-Advent Of Code 2015 Day 23
-https://adventofcode.com/2015/day/23
+Advent Of Code 2015 Day 24
+https://adventofcode.com/2015/day/24
 """
 
 from typing import List
@@ -32,16 +32,16 @@ def part1(nums: List[int], num_groups: int) -> int:
 
 
 class Day24:
-    """ AoC 2015 Day 23 """
+    """ AoC 2015 Day 24 """
 
     @staticmethod
     def part1(filename: str) -> int:
-        """ Given a filename, solve 2015 day 23 part 1 """
+        """ Given a filename, solve 2015 day 24 part 1 """
         nums = parse(filename)
         return part1(nums, 3)
 
     @staticmethod
     def part2(filename: str) -> int:
-        """ Given a filename, solve 2015 day 23 part 2 """
+        """ Given a filename, solve 2015 day 24 part 2 """
         nums = parse(filename)
         return part1(nums, 4)
