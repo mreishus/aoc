@@ -400,11 +400,11 @@ increased by doing this year in Elixir.
 
 ## 2015
 
-| Day                                | Comment                                   | Python                                   |
-| ---------------------------------- | ----------------------------------------- | ---------------------------------------- |
-| [Day 01](./2015/writeups/day01.md) | Character Iteration                       | [Python](./2015/python2015/aoc/day01.py) |
-| [Day 02](./2015/writeups/day02.md) | Simple Arithmetic                         | [Python](./2015/python2015/aoc/day02.py) |
-| [Day 03](./2015/writeups/day03.md) | Grid Navigation                           | [Python](./2015/python2015/aoc/day03.py) |
+| Day                                | Comment                                   | Python                                   | Elixir                                   |
+| ---------------------------------- | ----------------------------------------- | ---------------------------------------- | ---------------------------------------- |
+| [Day 01](./2015/writeups/day01.md) | Character Iteration                       | [Python](./2015/python2015/aoc/day01.py) | [Elixir](./2015/elixir2015/lib/day01.ex) |
+| [Day 02](./2015/writeups/day02.md) | Simple Arithmetic                         | [Python](./2015/python2015/aoc/day02.py) | [Elixir](./2015/elixir2015/lib/day02.ex) |
+| [Day 03](./2015/writeups/day03.md) | Grid Navigation                           | [Python](./2015/python2015/aoc/day03.py) | [Elixir](./2015/elixir2015/lib/day03.ex) |
 | [Day 04](./2015/writeups/day04.md) | MD5 Leading Zeros                         | [Python](./2015/python2015/aoc/day04.py) |
 | [Day 05](./2015/writeups/day05.md) | String Rules                              | [Python](./2015/python2015/aoc/day05.py) |
 | [Day 06](./2015/writeups/day06.md) | Subgrid manipulation                      | [Python](./2015/python2015/aoc/day06.py) |
@@ -484,5 +484,5 @@ now.
 
 ```
 Created:       Mon 02 Dec 2019 05:12:40 PM CST
-Last Modified: Fri 31 Jan 2020 12:06:52 PM CST
+Last Modified: Mon 20 Apr 2020 09:15:41 PM CDT
 ```
