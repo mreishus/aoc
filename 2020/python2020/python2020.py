@@ -10,9 +10,9 @@ def day1to5():
     """ Solves 2020 days 1 - 5. """
     ## Day 1
     print("2020 Day 01 Part 1:", end=" ")
-    print(Day01.part1("./inputs/01/input.txt"))
+    print(Day01.part1("../inputs/01/input.txt"))
     print("2020 Day 01 Part 2:", end=" ")
-    print(Day01.part2("./inputs/01/input.txt"))
+    print(Day01.part2("../inputs/01/input.txt"))
 
 
 def latest():
