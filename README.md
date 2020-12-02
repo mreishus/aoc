@@ -13,9 +13,9 @@
 
 ## 2020
 
-| Day                                | Comment | Python                               |
-| ---------------------------------- | ------- | ------------------------------------ |
-| [Day 01](./2020/writeups/day01.md) | 3SUM    | [Python](./2020/python2020/day01.py) |
+| Day                                | Comment | Python                                   |
+| ---------------------------------- | ------- | ---------------------------------------- |
+| [Day 01](./2020/writeups/day01.md) | 3SUM    | [Python](./2020/python2020/aoc/day01.py) |
 
 ## 2019
 
@@ -491,5 +491,5 @@ now.
 
 ```
 Created:       Mon 02 Dec 2019 05:12:40 PM CST
-Last Modified: Tue 01 Dec 2020 07:35:05 PM CST
+Last Modified: Tue 01 Dec 2020 07:37:23 PM CST
 ```
