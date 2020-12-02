@@ -2,6 +2,7 @@
 
 ## Stars Earned By Year
 
+- 2020 - 2 stars
 - 2019 - 50 stars
 - 2018 - 50 stars
 - 2017 - 50 stars
@@ -9,6 +10,12 @@
 - 2015 - 50 stars
 
 **250 Stars Club - Joined 2020-01-31**
+
+## 2020
+
+| Day                                | Comment | Python                               |
+| ---------------------------------- | ------- | ------------------------------------ |
+| [Day 01](./2020/writeups/day01.md) | 3SUM    | [Python](./2020/python2020/day01.py) |
 
 ## 2019
 
@@ -484,5 +491,5 @@ now.
 
 ```
 Created:       Mon 02 Dec 2019 05:12:40 PM CST
-Last Modified: Sun 26 Apr 2020 03:47:13 PM CDT
+Last Modified: Tue 01 Dec 2020 07:35:05 PM CST
 ```
