@@ -12,6 +12,7 @@ solutions work fine.
 ## Solutions
 
 - [Python](../python2020/aoc/day01.py)
+- [Elixir](../elixir2020/lib/day01.ex)
 
 ## Problem Description
 
