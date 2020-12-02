@@ -11,30 +11,34 @@ def parse(filename: str) -> List[str]:
         return [int(line.strip()) for line in file.readlines()]
 
 
+def find_target_multiply(data: List[int], i: int, j: int, target: int) -> Optional[int]:
+    """
+    Look for two numbers inside the data[i:j] array that sum up to target.
+    Return those two numbers multiplied together if found.
+    """
+    nums_seen = set(data[i:j])
+    for x in data[i:j]:
+        sub_target = target - x
+        if sub_target in nums_seen:
+            return x * sub_target
+    return None
+
+
 class Day01:
     """ AoC 2020 Day 01 """
-
-    @staticmethod
-    def find_target_multiply(data, i, j, target) -> Optional[int]:
-        nums_seen = set(data[i:j])
-        for x in data[i:j]:
-            sub_target = target - x
-            if sub_target in nums_seen:
-                return x * sub_target
-        return None
 
     @staticmethod
     def part1(filename: str) -> int:
         """ Given a filename, solve 2020 day 01 part 1 """
         data = parse(filename)
-        return Day01.find_target_multiply(data, 0, len(data), 2020)
+        return find_target_multiply(data, 0, len(data), 2020)
 
     @staticmethod
     def part2(filename: str) -> int:
         """ Given a filename, solve 2020 day 01 part 2 """
         data = parse(filename)
         for i, v in enumerate(data):
-            maybe_answer = Day01.find_target_multiply(data, i, len(data), 2020 - v)
+            maybe_answer = find_target_multiply(data, i, len(data), 2020 - v)
             if maybe_answer is not None:
                 return maybe_answer * v
         return None
