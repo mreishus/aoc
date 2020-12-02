@@ -4,6 +4,7 @@ Main program runner for Advent of Code 2020 in Python.
 This is a series of programming problems available at https://adventofcode.com/2020
 """
 from aoc.day01 import Day01
+from aoc.day02 import Day02
 
 
 def day1to5():
@@ -17,9 +18,13 @@ def day1to5():
 
 def latest():
     """ Scratchpad to work on. """
-    pass
+    ## Day 2
+    print("2020 Day 02 Part 1:", end=" ")
+    print(Day02.part1("../inputs/02/input.txt"))
+    print("2020 Day 02 Part 2:", end=" ")
+    print(Day02.part2("../inputs/02/input.txt"))
 
 
 if __name__ == "__main__":
-    day1to5()
+    # day1to5()
     latest()
