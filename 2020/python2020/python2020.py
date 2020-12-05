@@ -7,6 +7,7 @@ from aoc.day01 import Day01
 from aoc.day02 import Day02
 from aoc.day03 import Day03
 from aoc.day04 import Day04
+from aoc.day05 import Day05
 
 
 def day1to5():
@@ -26,24 +27,24 @@ def day1to5():
     print(Day03.part1("../inputs/03/input.txt"))
     print("2020 Day 03 Part 2:", end=" ")
     print(Day03.part2("../inputs/03/input.txt"))
-
-
-def latest():
-    """ Scratchpad to work on. """
-    ## Day 3
-    print("2020 Day 04 Part 1 Small:", end=" ")
-    print(Day04.part1("../inputs/04/input_small.txt"))
-    print("2020 Day 04 Part 2 Small:", end=" ")
-    print(Day04.part2("../inputs/04/input_small.txt"))
-    print("2020 Day 04 Part 2 Small Invalid:", end=" ")
-    print(Day04.part2("../inputs/04/input_small_invalid.txt"))
-    print("2020 Day 04 Part 2 Small Valid:", end=" ")
-    print(Day04.part2("../inputs/04/input_small_valid.txt"))
-    print("")
+    ## Day 4
     print("2020 Day 04 Part 1:", end=" ")
     print(Day04.part1("../inputs/04/input.txt"))
     print("2020 Day 04 Part 2:", end=" ")
     print(Day04.part2("../inputs/04/input.txt"))
+
+
+def latest():
+    """ Scratchpad to work on. """
+    ## Day 5
+    print("2020 Day 05 Part 1 (small1):", end=" ")
+    print(Day05.part1("../inputs/05/input_small_1.txt"))
+    print("2020 Day 05 Part 2 (small1):", end=" ")
+    print(Day05.part2("../inputs/05/input_small_1.txt"))
+    print("2020 Day 05 Part 1:", end=" ")
+    print(Day05.part1("../inputs/05/input.txt"))
+    print("2020 Day 05 Part 2:", end=" ")
+    print(Day05.part2("../inputs/05/input.txt"))
 
 
 if __name__ == "__main__":
