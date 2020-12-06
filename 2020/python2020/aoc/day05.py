@@ -72,8 +72,11 @@ class Day05:
             val = get_id(d)
             seen_vals.add(val)
 
+        print(f"abc {low_val} {high_val}")
+
         for i in range(low_val, high_val):
             if i not in seen_vals:
                 print(f"Missing: {i}")
+        print("abc")
 
         return len(data)

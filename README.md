@@ -13,12 +13,14 @@
 
 ## 2020
 
-| Day                                | Comment              | Python                                   | Elixir                                   |
-| ---------------------------------- | -------------------- | ---------------------------------------- | ---------------------------------------- |
-| [Day 01](./2020/writeups/day01.md) | 3SUM                 | [Python](./2020/python2020/aoc/day01.py) | [Elixir](./2020/elixir2020/lib/day01.ex) |
-| Day 02                             | Password Rule Check  | [Python](./2020/python2020/aoc/day02.py) |                                          |
-| Day 03                             | Slope, Grid, Mod     | [Python](./2020/python2020/aoc/day03.py) |                                          |
-| Day 04                             | Parsing, Rule Checks | [Python](./2020/python2020/aoc/day04.py) |                                          |
+| Day                                | Comment               | Python                                   | Elixir                                   |
+| ---------------------------------- | --------------------- | ---------------------------------------- | ---------------------------------------- |
+| [Day 01](./2020/writeups/day01.md) | 3SUM                  | [Python](./2020/python2020/aoc/day01.py) | [Elixir](./2020/elixir2020/lib/day01.ex) |
+| Day 02                             | Password Rule Check   | [Python](./2020/python2020/aoc/day02.py) |                                          |
+| Day 03                             | Slope, Grid, Mod      | [Python](./2020/python2020/aoc/day03.py) |                                          |
+| Day 04                             | Parsing, Rule Checks  | [Python](./2020/python2020/aoc/day04.py) |                                          |
+| Day 05                             | Binary Conversion     | [Python](./2020/python2020/aoc/day05.py) |                                          |
+| Day 06                             | Grouping and Counting | [Python](./2020/python2020/aoc/day06.py) |                                          |
 
 ## 2019
 
@@ -494,5 +496,5 @@ now.
 
 ```
 Created:       Mon 02 Dec 2019 05:12:40 PM CST
-Last Modified: Thu 03 Dec 2020 11:36:49 PM CST
+Last Modified: Sat 05 Dec 2020 11:25:48 PM CST
 ```
