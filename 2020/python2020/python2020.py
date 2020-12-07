@@ -9,6 +9,7 @@ from aoc.day03 import Day03
 from aoc.day04 import Day04
 from aoc.day05 import Day05
 from aoc.day06 import Day06
+from aoc.day07 import Day07
 
 
 def day1to5():
@@ -40,18 +41,30 @@ def day1to5():
     print(Day05.part2("../inputs/05/input.txt"))
 
 
-def latest():
-    """ Scratchpad to work on. """
-    print("2020 Day 06 Part 1 (small1):", end=" ")
-    print(Day06.part1("../inputs/06/input_small_1.txt"))
-    print("2020 Day 06 Part 2 (small1):", end=" ")
-    print(Day06.part2("../inputs/06/input_small_1.txt"))
+def day6to10():
+    ## Day 6
     print("2020 Day 06 Part 1:", end=" ")
     print(Day06.part1("../inputs/06/input.txt"))
     print("2020 Day 06 Part 2:", end=" ")
     print(Day06.part2("../inputs/06/input.txt"))
 
 
+def latest():
+    """ Scratchpad to work on. """
+    ## Should probably clean up and add unit tests
+    print("2020 Day 07 Part 1 (small1):", end=" ")
+    print(Day07.part1("../inputs/07/input_small_1.txt"))
+    print("2020 Day 07 Part 1:", end=" ")
+    print(Day07.part1("../inputs/07/input.txt"))
+    print("2020 Day 07 Part 2 (small1):", end=" ")
+    print(Day07.part2("../inputs/07/input_small_1.txt"))
+    print("2020 Day 07 Part 2 (small2):", end=" ")
+    print(Day07.part2("../inputs/07/input_small_2.txt"))
+    print("2020 Day 07 Part 2:", end=" ")
+    print(Day07.part2("../inputs/07/input.txt"))
+
+
 if __name__ == "__main__":
     # day1to5()
+    # day6to10()
     latest()

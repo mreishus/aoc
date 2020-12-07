@@ -22,14 +22,14 @@ class Day06:
 
     @staticmethod
     def part1(filename: str) -> int:
-        """ Given a filename, solve 2020 day 04 part 1 """
+        """ Given a filename, solve 2020 day 06 part 1 """
         groups = parse(filename)
 
         return sum(len(set(remove_whitespace(g))) for g in groups)
 
     @staticmethod
     def part2(filename: str) -> int:
-        """ Given a filename, solve 2020 day 04 part 2 """
+        """ Given a filename, solve 2020 day 06 part 2 """
         groups = parse(filename)
         answer = 0
         for group in groups:

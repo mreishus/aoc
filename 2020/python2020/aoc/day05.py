@@ -47,7 +47,7 @@ class Day05:
 
     @staticmethod
     def part1(filename: str) -> int:
-        """ Given a filename, solve 2020 day 04 part 1 """
+        """ Given a filename, solve 2020 day 05 part 1 """
         # pair = parse_line("FBFBBFFRLR")
         # row = get_row(pair)
         # col = get_column(pair)
@@ -60,7 +60,7 @@ class Day05:
 
     @staticmethod
     def part2(filename: str) -> int:
-        """ Given a filename, solve 2020 day 04 part 2 """
+        """ Given a filename, solve 2020 day 05 part 2 """
         data = parse(filename)
         highest_pair = max(data, key=get_id)
         lowest_pair = min(data, key=get_id)
