@@ -22,6 +22,7 @@
 | Day 05                             | Binary Conversion     | [Python](./2020/python2020/aoc/day05.py) |                                          |
 | Day 06                             | Grouping and Counting | [Python](./2020/python2020/aoc/day06.py) |                                          |
 | [Day 07](./2020/writeups/day07.md) | Recursive Bags        | [Python](./2020/python2020/aoc/day07.py) |                                          |
+| Day 08                             | Simple Computer       | [Python](./2020/python2020/aoc/day08.py) |                                          |
 
 ## 2019
 
@@ -497,5 +498,5 @@ now.
 
 ```
 Created:       Mon 02 Dec 2019 05:12:40 PM CST
-Last Modified: Sun 06 Dec 2020 11:55:36 PM CST
+Last Modified: Mon 07 Dec 2020 11:37:21 PM CST
 ```
