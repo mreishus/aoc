@@ -1,0 +1,3 @@
+%{
+  "array": {:git, "https://github.com/jfacorro/elixir-array.git", "112dd36810bec4c069ebd1488fd915f2a703503a", []},
+}
