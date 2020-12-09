@@ -53,29 +53,20 @@ def day6to10():
     print(Day07.part1("../inputs/07/input.txt"))
     print("2020 Day 07 Part 2:", end=" ")
     print(Day07.part2("../inputs/07/input.txt"))
-
-
-def latest():
-    """ Scratchpad to work on. """
-    ## Day 7
-    print("2020 Day 08 Part 1 (small 1):", end=" ")
-    print(Day08.part1("../inputs/08/input_small_1.txt"))
+    ## Day 8
     print("2020 Day 08 Part 1:", end=" ")
     print(Day08.part1("../inputs/08/input.txt"))
-
-    print("")
-    print("--")
-    print("")
-
-    print("2020 Day 08 Part 2 (small 1):", end=" ")
-    print(Day08.part2("../inputs/08/input_small_1.txt"))
-    print("2020 Day 08 Part 2 (small 2):", end=" ")
-    print(Day08.part2("../inputs/08/input_small_2.txt"))
     print("2020 Day 08 Part 2:", end=" ")
     print(Day08.part2("../inputs/08/input.txt"))
 
 
+def latest():
+    """ Scratchpad to work on. """
+    ## Day 8
+    pass
+
+
 if __name__ == "__main__":
-    # day1to5()
-    # day6to10()
+    day1to5()
+    day6to10()
     latest()
