@@ -23,6 +23,7 @@
 | Day 06                             | Grouping and Counting | [Python](./2020/python2020/aoc/day06.py) |                                             |
 | [Day 07](./2020/writeups/day07.md) | Recursive Bags        | [Python](./2020/python2020/aoc/day07.py) |                                             |
 | Day 08                             | Simple Computer       | [Python](./2020/python2020/aoc/day08.py) | [Elixir p1](./2020/elixir2020/lib/day08.ex) |
+| Day 09                             | Summing Ranges        | [Python](./2020/python2020/aoc/day09.py) |                                             |
 
 ## 2019
 
@@ -498,5 +499,5 @@ now.
 
 ```
 Created:       Mon 02 Dec 2019 05:12:40 PM CST
-Last Modified: Tue 08 Dec 2020 10:41:22 PM CST
+Last Modified: Tue 08 Dec 2020 11:23:43 PM CST
 ```

@@ -7,59 +7,40 @@ https://adventofcode.com/2020/day/9
 
 def parse(filename):
     with open(filename) as f:
-        return [parse_line(line.strip()) for line in f.readlines()]
+        return [int(line.strip()) for line in f.readlines()]
 
 
-def parse_line(line):
-    return int(line)
+def part1(nums, pre_size):
+    i = 0
+    k = pre_size
 
-
-class XMAS:
-    def __init__(self, nums, pre_size):
-        self.nums = nums
-        self.pre_size = pre_size
-        self.i = 0
-        self.j = pre_size - 1
-        self.next = pre_size
-
-    def reset(self):
-        self.i = 0
-        self.j = self.pre_size - 1
-        self.next = self.pre_size
-
-    def is_two_sum(self):
-        nums, i, j = self.nums, self.i, self.j
-        target = self.nums[self.next]
-        nums_seen = set(nums[i : j + 1])
-
-        for x in nums[i : j + 1]:
-            sub_target = target - x
-            if sub_target in nums_seen:
+    def is_two_sum():
+        target = nums[k]
+        seen = set(nums[i:k])
+        for x in nums[i:k]:
+            other_num = target - x
+            if other_num in seen:
                 return True
         return False
 
-    def p1(self):
-        while True:
-            if not self.is_two_sum():
-                return self.nums[self.next]
-            self.i += 1
-            self.j += 1
-            self.next += 1
-        return None
+    while k < len(nums):
+        if not is_two_sum():
+            return nums[k]
+        i += 1
+        k += 1
+    return None
 
-    def p2(self):
-        def weakness(i, j):
-            return min(self.nums[i : j + 1]) + max(self.nums[i : j + 1])
 
-        target = self.p1()
-        self.reset()
-        for i in range(0, len(self.nums)):
-            s = self.nums[i]
-            for j in range(i + 1, len(self.nums)):
-                s += self.nums[j]
-                if s == target:
-                    return weakness(i, j)
-        return None
+def part2(nums, pre_size):
+    target = part1(nums, pre_size)
+
+    for i in range(0, len(nums)):
+        s = nums[i]
+        for j in range(i + 1, len(nums)):
+            s += nums[j]
+            if s == target:
+                return min(nums[i : j + 1]) + max(nums[i : j + 1])
+    return None
 
 
 class Day09:
@@ -69,10 +50,10 @@ class Day09:
     def part1(filename: str, pre_size: int) -> int:
         """ Given a filename, solve 2020 day 09 part 1 """
         nums = parse(filename)
-        return XMAS(nums, pre_size).p1()
+        return part1(nums, pre_size)
 
     @staticmethod
     def part2(filename: str, pre_size: int) -> int:
         """ Given a filename, solve 2020 day 09 part 2 """
         nums = parse(filename)
-        return XMAS(nums, pre_size).p2()
+        return part2(nums, pre_size)
