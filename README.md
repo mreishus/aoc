@@ -20,7 +20,7 @@
 | Day 03                             | Slope, Grid, Mod      | [Python](./2020/python2020/aoc/day03.py) | [Elixir](./2020/elixir2020/lib/day03.ex)    |
 | Day 04                             | Parsing, Rule Checks  | [Python](./2020/python2020/aoc/day04.py) | [Elixir](./2020/elixir2020/lib/day04.ex)    |
 | Day 05                             | Binary Conversion     | [Python](./2020/python2020/aoc/day05.py) | [Elixir](./2020/elixir2020/lib/day05.ex)    |
-| Day 06                             | Grouping and Counting | [Python](./2020/python2020/aoc/day06.py) |                                             |
+| Day 06                             | Grouping and Counting | [Python](./2020/python2020/aoc/day06.py) | [Elixir](./2020/elixir2020/lib/day06.ex)    |
 | [Day 07](./2020/writeups/day07.md) | Recursive Bags        | [Python](./2020/python2020/aoc/day07.py) |                                             |
 | Day 08                             | Simple Computer       | [Python](./2020/python2020/aoc/day08.py) | [Elixir](./2020/elixir2020/lib/day08.ex)    |
 | Day 09                             | Summing Ranges        | [Python](./2020/python2020/aoc/day09.py) |                                             |
@@ -499,5 +499,5 @@ now.
 
 ```
 Created:       Mon 02 Dec 2019 05:12:40 PM CST
-Last Modified: Thu 10 Dec 2020 04:45:54 PM CST
+Last Modified: Thu 10 Dec 2020 05:08:45 PM CST
 ```
