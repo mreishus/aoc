@@ -5,7 +5,6 @@ defmodule Elixir2020.Day02 do
     |> Enum.map(&parse_rules/1)
   end
 
-
   def parse_rules(string) do
     [_, lower, upper, letter, password] = Regex.run(~r/^(\d+)-(\d+) (\w+): (\w+)$/, string)
     %{
