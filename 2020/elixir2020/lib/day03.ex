@@ -54,9 +54,7 @@ defmodule Elixir2020.Day03 do
     end
   end
 
-  def solve_slope(grid, {dx, dy}) do
-    do_solve_slope(grid, {dx, dy}, {0, 0}, 0)
-  end
+  def solve_slope(grid, {dx, dy}), do: do_solve_slope(grid, {dx, dy}, {0, 0}, 0)
 
   def do_solve_slope(grid, {dx, dy}, {x, y}, trees_hit) do
     case grid_at(grid, {x, y}) do
@@ -67,10 +65,8 @@ defmodule Elixir2020.Day03 do
   end
 
   def part1() do
-    slope = {3, 1}
-
     parse()
-    |> solve_slope(slope)
+    |> solve_slope({3, 1})
   end
 
   def part2() do
