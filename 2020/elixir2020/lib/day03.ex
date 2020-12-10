@@ -13,8 +13,8 @@ defmodule Elixir2020.Day03.GridWithMax do
 
     %GridWithMax{
       grid: grid,
-      max_x: max_x + 1,
-      max_y: max_y + 1
+      max_x: max_x,
+      max_y: max_y
     }
   end
 end
@@ -46,10 +46,10 @@ defmodule Elixir2020.Day03 do
   end
 
   def grid_at(grid, {x, y}) do
-    if y >= grid.max_y do
+    if y > grid.max_y do
       :below_field
     else
-      x = rem(x, grid.max_x)
+      x = rem(x, grid.max_x + 1)
       grid.grid |> Map.get({x, y})
     end
   end
