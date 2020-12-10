@@ -7,19 +7,22 @@ defmodule Elixir2020.Day02 do
 
   def parse_rules(string) do
     [_, lower, upper, letter, password] = Regex.run(~r/^(\d+)-(\d+) (\w+): (\w+)$/, string)
+
     %{
       lower: String.to_integer(lower),
       upper: String.to_integer(upper),
       letter: letter,
-      password: password,
+      password: password
     }
   end
 
   def test1(%{lower: lower, upper: upper, letter: letter, password: password}) do
-    count = password 
-            |> String.graphemes() 
-            |> Enum.filter(fn x -> x == letter end) 
-            |> Enum.count
+    count =
+      password
+      |> String.graphemes()
+      |> Enum.filter(fn x -> x == letter end)
+      |> Enum.count()
+
     lower <= count and count <= upper
   end
 

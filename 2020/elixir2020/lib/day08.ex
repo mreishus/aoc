@@ -76,7 +76,9 @@ defmodule Elixir2020.Day08.Computer do
   ## from occuring, then return the "acc" value after terminating.
   def find_corruption(%Computer{} = c) do
     case flippable?(c) do
-      false -> c |> step() |> find_corruption()
+      false ->
+        c |> step() |> find_corruption()
+
       true ->
         ## Branch and try flipped computer
         {state, acc} = c |> flip() |> execute()
