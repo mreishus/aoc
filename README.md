@@ -19,7 +19,7 @@
 | Day 02                             | Password Rule Check   | [Python](./2020/python2020/aoc/day02.py) | [Elixir](./2020/elixir2020/lib/day02.ex)    |
 | Day 03                             | Slope, Grid, Mod      | [Python](./2020/python2020/aoc/day03.py) | [Elixir](./2020/elixir2020/lib/day03.ex)    |
 | Day 04                             | Parsing, Rule Checks  | [Python](./2020/python2020/aoc/day04.py) | [Elixir](./2020/elixir2020/lib/day04.ex)    |
-| Day 05                             | Binary Conversion     | [Python](./2020/python2020/aoc/day05.py) |                                             |
+| Day 05                             | Binary Conversion     | [Python](./2020/python2020/aoc/day05.py) | [Elixir](./2020/elixir2020/lib/day05.ex)    |
 | Day 06                             | Grouping and Counting | [Python](./2020/python2020/aoc/day06.py) |                                             |
 | [Day 07](./2020/writeups/day07.md) | Recursive Bags        | [Python](./2020/python2020/aoc/day07.py) |                                             |
 | Day 08                             | Simple Computer       | [Python](./2020/python2020/aoc/day08.py) | [Elixir](./2020/elixir2020/lib/day08.ex)    |
@@ -499,5 +499,5 @@ now.
 
 ```
 Created:       Mon 02 Dec 2019 05:12:40 PM CST
-Last Modified: Thu 10 Dec 2020 04:25:58 PM CST
+Last Modified: Thu 10 Dec 2020 04:45:54 PM CST
 ```
