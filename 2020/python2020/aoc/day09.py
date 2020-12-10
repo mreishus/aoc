@@ -4,6 +4,7 @@ Advent Of Code 2020 Day 9
 https://adventofcode.com/2020/day/9
 """
 
+
 def parse(filename):
     with open(filename) as f:
         return [int(line.strip()) for line in f.readlines()]
@@ -36,14 +37,14 @@ def part2(nums, pre_size):
     i = 0
     j = 0
     s = nums[i]
-    while (i < len(nums) and j < len(nums)):
-        if (s < target):
+    while i < len(nums) and j < len(nums):
+        if s < target:
             j += 1
             s += nums[j]
-        elif (s > target):
+        elif s > target:
             s -= nums[i]
             i += 1
-        else: # s == target
+        else:  # s == target
             return min(nums[i : j + 1]) + max(nums[i : j + 1])
     return None
 
