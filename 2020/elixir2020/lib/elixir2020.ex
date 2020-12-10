@@ -1,5 +1,12 @@
+defmodule ExecutionTime do
+  def time_of(function, args) do
+    {uSecs, _val} = :timer.tc(function, args)
+    IO.puts "Time: #{uSecs / 1_000}ms"
+  end
+end
+
 defmodule Elixir2020 do
-  alias Elixir2020.{Day01, Day08}
+  alias Elixir2020.{Day01, Day02, Day08}
 
   def day1to5 do
     Day01.part1()
@@ -7,14 +14,22 @@ defmodule Elixir2020 do
 
     Day01.part2()
     |> IO.inspect(label: "2020 Day 01 Part 2")
+
+    Day02.part1()
+    |> IO.inspect(label: "2020 Day 02 Part 1")
+
+    Day02.part2()
+    |> IO.inspect(label: "2020 Day 02 Part 2")
   end
 
   def day5to10 do
     Day08.part1()
     |> IO.inspect(label: "2020 Day 08 Part 1")
+    ExecutionTime.time_of(fn -> Day08.part1() end, [])
 
     Day08.part2()
     |> IO.inspect(label: "2020 Day 08 Part 2")
+    ExecutionTime.time_of(fn -> Day08.part2() end, [])
   end
 
   def main do

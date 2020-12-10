@@ -9,7 +9,7 @@ defmodule Elixir2020.Day08.Computer do
     :acc
   ]
 
-  ## new/1: Given a program, create a new program.
+  ## new/1: Given a program, create a new computer.
   def new(program) when is_list(program) do
     pc_max = length(program) - 1
 
@@ -72,7 +72,7 @@ defmodule Elixir2020.Day08.Computer do
     %Computer{c | pc: pc + val}
   end
 
-  ## find_corrution/1: Look for which instruction needs to be flipped to stop infinite loops
+  ## find_corruption/1: Look for which instruction needs to be flipped to stop infinite loops
   ## from occuring, then return the "acc" value after terminating.
   def find_corruption(%Computer{} = c) do
     case flippable?(c) do
@@ -92,11 +92,11 @@ defmodule Elixir2020.Day08.Computer do
     end
   end
 
+  ## flippable?/1 Given a computer, is the next operation to be run flippable?
   def flippable?(%Computer{pc: pc, program: program}) do
     {op, _} = program |> Map.get(pc)
     flip_op(op) != nil
   end
-
 
   ## flip/1 Given a computer with the next instruction set to "jmp" or "nop",
   ## return that computer an updated program that flips that instruction (jmp becomes nop,
