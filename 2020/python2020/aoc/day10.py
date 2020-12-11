@@ -62,7 +62,7 @@ def part2(data):
 
 
 class Day10:
-    """ AoC 2020 Day 09 """
+    """ AoC 2020 Day 10 """
 
     @staticmethod
     def part1(filename: str) -> int:
