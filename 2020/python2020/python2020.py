@@ -76,13 +76,8 @@ def day6to10():
 def latest():
     """ Scratchpad to work on. """
     ## Day 11
-    # print("2020 Day 11 Part 1 (small):", end=" ")
-    # print(Day11.part1("../inputs/11/input_small_1.txt"))
     print("2020 Day 11 Part 1:", end=" ")
     print(Day11.part1("../inputs/11/input.txt"))
-    # print("---")
-    # print("2020 Day 11 Part 2:", end=" ")
-    # print(Day11.part2("../inputs/11/input_small_1.txt"))
     print("2020 Day 11 Part 2:", end=" ")
     print(Day11.part2("../inputs/11/input.txt"))
 

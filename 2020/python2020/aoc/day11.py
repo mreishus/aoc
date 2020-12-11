@@ -41,163 +41,77 @@ def step(grid):
     # If a seat is empty (L) and there are no occupied seats adjacent to it,
     # the seat becomes occupied.
     empty = grid == 0
-    no_neighbors = neighbors == 0
-    now_occupied = empty & no_neighbors
+    set_to_occupied = empty & (neighbors == 0)
 
     # If a seat is occupied (#) and four or more seats adjacent to it are also
     # occupied, the seat becomes empty.
     occupied = grid & 1
-    four_plus_n = neighbors >= 4
+    set_to_empty = occupied & (neighbors >= 4)
 
-    set_empty = occupied & four_plus_n
-
-    return (grid | now_occupied) & ~set_empty
+    return (grid | set_to_occupied) & ~set_to_empty
 
 
-def step2(grid):
-    # print("--step--")
-    neighbors = np.zeros(grid.shape, dtype=int)
+def step2_raycast(grid):
+    rays = {}
 
-    # for ix, iy in np.ndindex(a.shape):
-    #     print(a[ix, iy])
     rows = grid.shape[0]  # If rows = 10, then y = 0-9 are valid
     cols = grid.shape[1]  # If cols = 10, then x = 0-9 are valid
 
-    def valid_y(y):
-        return 0 <= y < rows
+    directions = [ (x, y) for x in range(-1, 2) for y in range (-1, 2) if not ( (x == 0) and (y == 0)) ]
 
-    def valid_x(x):
-        return 0 <= x < cols
+    def valid(pair):
+        x, y = pair
+        return 0 <= y < rows and 0 <= x < cols
 
     for y in range(0, rows):
         for x in range(0, cols):
-            # print(f"Considering {x}, {y}")
+
+            neighbors = []
+
+            dx, dy = x, y
+            for d in directions:
+                dx = x + d[0]
+                dy = y + d[1]
+                while valid((dx, dy)):
+                    if grid[dy, dx] != 8:
+                        neighbors.append((dx, dy))
+                        break
+                    dx += d[0]
+                    dy += d[1]
+
+            rays[ (x, y) ] = neighbors
+
+    return rays
+
+def step2(grid):
+    neighbors = np.zeros(grid.shape, dtype=int)
+
+    rows = grid.shape[0]  # If rows = 10, then y = 0-9 are valid
+    cols = grid.shape[1]  # If cols = 10, then x = 0-9 are valid
+
+    rays = step2_raycast(grid)
+
+    for y in range(0, rows):
+        for x in range(0, cols):
             ncount = 0
 
-            ## Right Scan
-            # print("Right Scan")
-            for dx in range(x + 1, cols):
-                look = grid[y, dx]
-                # print(f"{dx}, {y} = {look}")
-                if look == 1:  # Occupied
+            for (x1, y1) in rays[ (x, y) ]:
+                if grid[y1, x1] == 1:
                     ncount += 1
-                    break
-                elif look == 0:  # Empty
-                    break
-
-            ## Left Scan
-            # print("Left Scan")
-            for dx in range(x - 1, -1, -1):
-                look = grid[y, dx]
-                # print(f"{dx}, {y} = {look}")
-                if look == 1:  # Occupied
-                    ncount += 1
-                    break
-                elif look == 0:  # Empty
-                    break
-
-            ## Down scan
-            # print("Down Scan")
-            for dy in range(y + 1, rows):
-                look = grid[dy, x]
-                # print(f"{x} {dy} = {look}")
-                if look == 1:  # Occupied
-                    ncount += 1
-                    break
-                elif look == 0:  # Empty
-                    break
-
-            ## Up Scan
-            # print("Up Scan")
-            for dy in range(y - 1, -1, -1):
-                look = grid[dy, x]
-                # print(f"{x} {dy} =  {look}")
-                if look == 1:  # Occupied
-                    ncount += 1
-                    break
-                elif look == 0:  # Empty
-                    break
-
-            ## UpLeft Scan
-            dy = y - 1
-            dx = x - 1
-            while valid_x(dx) and valid_y(dy):
-                look = grid[dy, dx]
-                if look == 1:  # Occupied
-                    ncount += 1
-                    break
-                elif look == 0:  # Empty
-                    break
-                dy -= 1
-                dx -= 1
-
-            ## UpRight Scan
-            # print("UpRight")
-            dy = y - 1
-            dx = x + 1
-            while valid_x(dx) and valid_y(dy):
-                look = grid[dy, dx]
-                if look == 1:  # Occupied
-                    ncount += 1
-                    break
-                elif look == 0:  # Empty
-                    break
-                dy -= 1
-                dx += 1
-
-            ## DownLeft Scan
-            dy = y + 1
-            dx = x - 1
-            while valid_x(dx) and valid_y(dy):
-                look = grid[dy, dx]
-                if look == 1:  # Occupied
-                    ncount += 1
-                    break
-                elif look == 0:  # Empty
-                    break
-                dy += 1
-                dx -= 1
-
-            ## DownRight Scan
-            dy = y + 1
-            dx = x + 1
-            while valid_x(dx) and valid_y(dy):
-                look = grid[dy, dx]
-                if look == 1:  # Occupied
-                    ncount += 1
-                    break
-                elif look == 0:  # Empty
-                    break
-                dy += 1
-                dx += 1
 
             neighbors[y, x] = ncount
-
-            # print(y, end=" ")
-        # print(grid[y, x], end="")
-        # print("")
-
-    # print("--Neighbor recap (grid)--")
-    # print(grid)
-    # print("--Neighbor recap (neighbors)--")
-    # print(neighbors)
 
     # If a seat is empty (L) and there are no occupied seats adjacent to it,
     # the seat becomes occupied.
     empty = grid == 0
-    no_neighbors = neighbors == 0
-    now_occupied = empty & no_neighbors
+    set_to_occupied = empty & (neighbors == 0)
 
-    # If a seat is occupied (#) and four or more seats adjacent to it are also
+    # If a seat is occupied (#) and five or more seats adjacent to it are also
     # occupied, the seat becomes empty.
     occupied = grid & 1
-    four_plus_n = neighbors >= 5
+    set_to_empty = occupied & (neighbors >= 5)
 
-    set_empty = occupied & four_plus_n
-    # print("Set to be empty:")
-    # print(~set_empty)
-
-    return (grid | now_occupied) & ~set_empty
+    return (grid | set_to_occupied) & ~set_to_empty
 
 
 def part1(grid):
@@ -210,17 +124,9 @@ def part1(grid):
 
 
 def part2(grid):
-    # for i in range(2):
-    #     grid = step2(grid)
-    #     print(grid)
-
-    # grid = step2(grid)
-    # grid = step2(grid)
-
     while True:
         last_grid = grid
         grid = step2(grid)
-        # print(grid)
         if np.array_equal(last_grid, grid):
             break
     return np.count_nonzero(grid == 1)
