@@ -107,11 +107,9 @@ defmodule Elixir2020.Day07 do
   end
 
   def part1() do
-    contained_in =
-      parse()
-      |> Map.get(:contained_in)
-
-    has_gold(contained_in, "shiny gold")
+    parse()
+    |> Map.get(:contained_in)
+    |> has_gold("shiny gold")
     |> Enum.uniq()
     |> Enum.count()
   end
