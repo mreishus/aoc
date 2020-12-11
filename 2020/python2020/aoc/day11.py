@@ -10,8 +10,8 @@ https://adventofcode.com/2020/day/11
 
 """
 
-import functools
 import numpy as np
+from timeit import default_timer as timer
 
 
 def parse(filename: str):
@@ -99,14 +99,14 @@ def step2_raycast(grid):
     return rays
 
 
-def step2(grid, rays, changed):
-    if changed is None:
-        changed = np.ones(grid.shape, dtype=int)
+def step2(grid, rays, change_list):
+    if change_list is None:
+        change_list = np.argwhere(np.ones(grid.shape, dtype=int))
 
-    new_changed = np.zeros(grid.shape, dtype=int)
-    new_grid = np.copy(grid)
+    new_changed = []
+    neighbor_counts = {}
 
-    for (y, x) in np.argwhere(changed):
+    for (y, x) in change_list:
         ncount = 0
 
         for (x1, y1) in rays[(x, y)]:
@@ -116,18 +116,23 @@ def step2(grid, rays, changed):
                 if ncount >= 5:
                     break
 
+        neighbor_counts[(y, x)] = ncount
+
+    for (y, x) in change_list:
+        ncount = neighbor_counts[(y, x)]
+
         if ncount == 0 and grid[y, x] == 0:
             # If a seat is empty (L) and there are no occupied seats adjacent to it,
             # the seat becomes occupied.
-            new_grid[y, x] = 1
-            new_changed[y, x] = 1
+            grid[y, x] = 1
+            new_changed.append((y, x))
         elif ncount >= 5:
             # If a seat is occupied (#) and five or more seats adjacent to it are also
             # occupied, the seat becomes empty.
-            new_grid[y, x] = 0
-            new_changed[y, x] = 1
+            grid[y, x] = 0
+            new_changed.append((y, x))
 
-    return new_grid, new_changed
+    return grid, new_changed
 
 
 def part1(grid):
@@ -142,10 +147,10 @@ def part1(grid):
 def part2(grid):
     rays = step2_raycast(grid)
     changed = None
+
     while True:
-        last_grid = grid
         grid, changed = step2(grid, rays, changed)
-        if np.array_equal(last_grid, grid):
+        if len(changed) == 0:
             break
     return np.count_nonzero(grid == 1)
 

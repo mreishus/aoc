@@ -3,6 +3,7 @@
 Main program runner for Advent of Code 2020 in Python.
 This is a series of programming problems available at https://adventofcode.com/2020
 """
+from timeit import default_timer as timer
 from aoc.day01 import Day01
 from aoc.day02 import Day02
 from aoc.day03 import Day03
@@ -73,8 +74,7 @@ def day6to10():
     print(Day10.part2("../inputs/10/input.txt"))
 
 
-def latest():
-    """ Scratchpad to work on. """
+def day11to15():
     ## Day 11
     print("2020 Day 11 Part 1:", end=" ")
     print(Day11.part1("../inputs/11/input.txt"))
@@ -82,7 +82,13 @@ def latest():
     print(Day11.part2("../inputs/11/input.txt"))
 
 
+def latest():
+    """ Scratchpad to work on. """
+    pass
+
+
 if __name__ == "__main__":
     # day1to5()
     # day6to10()
+    # day11to15()
     latest()
