@@ -99,39 +99,35 @@ def step2_raycast(grid):
     return rays
 
 
-def step2(grid, rays):
-    neighbors = np.zeros(grid.shape, dtype=int)
+def step2(grid, rays, changed):
+    if changed is None:
+        changed = np.ones(grid.shape, dtype=int)
 
-    rows = grid.shape[0]
-    cols = grid.shape[1]
+    new_changed = np.zeros(grid.shape, dtype=int)
+    new_grid = np.copy(grid)
 
-    for y in range(0, rows):
-        for x in range(0, cols):
-            # Don't calculate neighbors for floor
-            if grid[y, x] == 8:
-                continue
-            ncount = 0
+    for (y, x) in np.argwhere(changed):
+        ncount = 0
 
-            for (x1, y1) in rays[(x, y)]:
-                if grid[y1, x1] == 1:
-                    ncount += 1
-                    # Don't need to keep counting neighbors if already 5
-                    if ncount >= 5:
-                        break
+        for (x1, y1) in rays[(x, y)]:
+            if grid[y1, x1] == 1:
+                ncount += 1
+                # Don't need to keep counting neighbors if already 5
+                if ncount >= 5:
+                    break
 
-            neighbors[y, x] = ncount
+        if ncount == 0 and grid[y, x] == 0:
+            # If a seat is empty (L) and there are no occupied seats adjacent to it,
+            # the seat becomes occupied.
+            new_grid[y, x] = 1
+            new_changed[y, x] = 1
+        elif ncount >= 5:
+            # If a seat is occupied (#) and five or more seats adjacent to it are also
+            # occupied, the seat becomes empty.
+            new_grid[y, x] = 0
+            new_changed[y, x] = 1
 
-    # If a seat is empty (L) and there are no occupied seats adjacent to it,
-    # the seat becomes occupied.
-    empty = grid == 0
-    set_to_occupied = empty & (neighbors == 0)
-
-    # If a seat is occupied (#) and five or more seats adjacent to it are also
-    # occupied, the seat becomes empty.
-    occupied = grid & 1
-    set_to_empty = occupied & (neighbors >= 5)
-
-    return (grid | set_to_occupied) & ~set_to_empty
+    return new_grid, new_changed
 
 
 def part1(grid):
@@ -145,9 +141,10 @@ def part1(grid):
 
 def part2(grid):
     rays = step2_raycast(grid)
+    changed = None
     while True:
         last_grid = grid
-        grid = step2(grid, rays)
+        grid, changed = step2(grid, rays, changed)
         if np.array_equal(last_grid, grid):
             break
     return np.count_nonzero(grid == 1)
