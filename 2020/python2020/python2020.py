@@ -17,64 +17,42 @@ from aoc.day10 import Day10
 from aoc.day11 import Day11
 
 
-def day1to5():
-    """ Solves 2020 days 1 - 5. """
-    ## Day 1
-    print("2020 Day 01 Part 1:", end=" ")
-    print(Day01.part1("../inputs/01/input.txt"))
-    print("2020 Day 01 Part 2:", end=" ")
-    print(Day01.part2("../inputs/01/input.txt"))
-    ## Day 2
-    print("2020 Day 02 Part 1:", end=" ")
-    print(Day02.part1("../inputs/02/input.txt"))
-    print("2020 Day 02 Part 2:", end=" ")
-    print(Day02.part2("../inputs/02/input.txt"))
-    ## Day 3
-    print("2020 Day 03 Part 1:", end=" ")
-    print(Day03.part1("../inputs/03/input.txt"))
-    print("2020 Day 03 Part 2:", end=" ")
-    print(Day03.part2("../inputs/03/input.txt"))
-    ## Day 4
-    print("2020 Day 04 Part 1:", end=" ")
-    print(Day04.part1("../inputs/04/input.txt"))
-    print("2020 Day 04 Part 2:", end=" ")
-    print(Day04.part2("../inputs/04/input.txt"))
-    ## Day 5
-    print("2020 Day 05 Part 1:", end=" ")
-    print(Day05.part1("../inputs/05/input.txt"))
-    print("2020 Day 05 Part 2:", end=" ")
-    print(Day05.part2("../inputs/05/input.txt"))
+def alldays():
+    solvers = [
+        (Day01.part1, Day01.part2),
+        (Day02.part1, Day02.part2),
+        (Day03.part1, Day03.part2),
+        (Day04.part1, Day04.part2),
+        (Day05.part1, Day05.part2),
+        (Day06.part1, Day06.part2),
+        (Day07.part1, Day07.part2),
+        (Day08.part1, Day08.part2),
+        (
+            lambda filename: Day09.part1(filename, 25),
+            lambda filename: Day09.part2(filename, 25),
+        ),
+        (Day10.part1, Day10.part2),
+        (Day11.part1, Day11.part2),
+    ]
+    for (i, (p1, p2)) in enumerate(solvers, 1):
+        path = f"../inputs/{i:02}/input.txt"
+
+        p1_start = timer()
+        p1_answer = p1(path)
+        p1_end = timer()
+        p1_time = (p1_end - p1_start) * 1000
+
+        p2_start = timer()
+        p2_answer = p2(path)
+        p2_end = timer()
+        p2_time = (p2_end - p2_start) * 1000
+
+        print(f"2020 Day {i:02} Part 1: {p1_answer:15} [{p1_time:6.1f}ms]")
+        print(f"2020 Day {i:02} Part 2: {p2_answer:15} [{p2_time:6.1f}ms]")
 
 
-def day6to10():
-    ## Day 6
-    print("2020 Day 06 Part 1:", end=" ")
-    print(Day06.part1("../inputs/06/input.txt"))
-    print("2020 Day 06 Part 2:", end=" ")
-    print(Day06.part2("../inputs/06/input.txt"))
-    ## Day 7
-    print("2020 Day 07 Part 1:", end=" ")
-    print(Day07.part1("../inputs/07/input.txt"))
-    print("2020 Day 07 Part 2:", end=" ")
-    print(Day07.part2("../inputs/07/input.txt"))
-    ## Day 8
-    print("2020 Day 08 Part 1:", end=" ")
-    print(Day08.part1("../inputs/08/input.txt"))
-    print("2020 Day 08 Part 2:", end=" ")
-    print(Day08.part2("../inputs/08/input.txt"))
-    ## Day 9
-    print("2020 Day 09 Part 1:", end=" ")
-    print(Day09.part1("../inputs/09/input.txt", 25))
-    print("2020 Day 09 Part 2:", end=" ")
-    print(Day09.part2("../inputs/09/input.txt", 25))
-    ## Day 10
-    print("2020 Day 10 Part 1:", end=" ")
-    print(Day10.part1("../inputs/10/input.txt"))
-    print("2020 Day 10 Part 2:", end=" ")
-    print(Day10.part2("../inputs/10/input.txt"))
-
-
-def day11to15():
+def latest():
+    """ Scratchpad to work on. """
     ## Day 11
     print("2020 Day 11 Part 1:", end=" ")
     print(Day11.part1("../inputs/11/input.txt"))
@@ -82,13 +60,6 @@ def day11to15():
     print(Day11.part2("../inputs/11/input.txt"))
 
 
-def latest():
-    """ Scratchpad to work on. """
-    pass
-
-
 if __name__ == "__main__":
-    # day1to5()
-    # day6to10()
-    # day11to15()
+    # alldays()
     latest()
