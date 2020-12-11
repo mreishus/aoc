@@ -5,9 +5,10 @@ defmodule ExecutionTime do
   end
 end
 
+# ExecutionTime.time_of(fn -> Day08.part1() end, [])
 defmodule Elixir2020 do
   alias Elixir2020.{Day01, Day02, Day03, Day04, Day05}
-  alias Elixir2020.{Day06, Day08}
+  alias Elixir2020.{Day06, Day07, Day08}
 
   def day1to5 do
     Day01.part1()
@@ -48,15 +49,17 @@ defmodule Elixir2020 do
     Day06.part2()
     |> IO.inspect(label: "2020 Day 06 Part 2")
 
+    Day07.part1()
+    |> IO.inspect(label: "2020 Day 07 Part 1")
+
+    Day07.part2()
+    |> IO.inspect(label: "2020 Day 07 Part 1")
+
     Day08.part1()
     |> IO.inspect(label: "2020 Day 08 Part 1")
 
-    ExecutionTime.time_of(fn -> Day08.part1() end, [])
-
     Day08.part2()
     |> IO.inspect(label: "2020 Day 08 Part 2")
-
-    ExecutionTime.time_of(fn -> Day08.part2() end, [])
   end
 
   def main do
