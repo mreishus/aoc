@@ -52,12 +52,27 @@ def step(grid):
 
 
 def step2_raycast(grid):
+    """
+    Given a numpy grid, return a map, mapping each coordinate to the
+    first seat it can "see" in each direction.  Example:
+    {
+        ...,
+        (89, 98):  [(88, 97), (88, 98), (89, 97), (90, 97), (90, 98)],
+        (90, 98):  [(89, 97), (89, 98), (90, 97), (91, 97), (91, 98)],
+        (91, 98):  [(90, 97), (90, 98), (91, 97)],
+    }
+    """
     rays = {}
 
     rows = grid.shape[0]  # If rows = 10, then y = 0-9 are valid
     cols = grid.shape[1]  # If cols = 10, then x = 0-9 are valid
 
-    directions = [ (x, y) for x in range(-1, 2) for y in range (-1, 2) if not ( (x == 0) and (y == 0)) ]
+    directions = [
+        (x, y)
+        for x in range(-1, 2)
+        for y in range(-1, 2)
+        if not ((x == 0) and (y == 0))
+    ]
 
     def valid(pair):
         x, y = pair
@@ -79,25 +94,30 @@ def step2_raycast(grid):
                     dx += d[0]
                     dy += d[1]
 
-            rays[ (x, y) ] = neighbors
+            rays[(x, y)] = neighbors
 
     return rays
 
-def step2(grid):
+
+def step2(grid, rays):
     neighbors = np.zeros(grid.shape, dtype=int)
 
-    rows = grid.shape[0]  # If rows = 10, then y = 0-9 are valid
-    cols = grid.shape[1]  # If cols = 10, then x = 0-9 are valid
-
-    rays = step2_raycast(grid)
+    rows = grid.shape[0]
+    cols = grid.shape[1]
 
     for y in range(0, rows):
         for x in range(0, cols):
+            # Don't calculate neighbors for floor
+            if grid[y, x] == 8:
+                continue
             ncount = 0
 
-            for (x1, y1) in rays[ (x, y) ]:
+            for (x1, y1) in rays[(x, y)]:
                 if grid[y1, x1] == 1:
                     ncount += 1
+                    # Don't need to keep counting neighbors if already 5
+                    if ncount >= 5:
+                        break
 
             neighbors[y, x] = ncount
 
@@ -124,9 +144,10 @@ def part1(grid):
 
 
 def part2(grid):
+    rays = step2_raycast(grid)
     while True:
         last_grid = grid
-        grid = step2(grid)
+        grid = step2(grid, rays)
         if np.array_equal(last_grid, grid):
             break
     return np.count_nonzero(grid == 1)
