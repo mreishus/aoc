@@ -26,6 +26,7 @@
 | Day 09                             | Summing Ranges        | [Python](./2020/python2020/aoc/day09.py) |                                          |
 | Day 10                             | Dynamic Programming   | [Python](./2020/python2020/aoc/day10.py) |                                          |
 | Day 11                             | Cellular Automata     | [Python](./2020/python2020/aoc/day11.py) |                                          |
+| Day 12                             | Logo with 2 actors    | [Python](./2020/python2020/aoc/day12.py) |                                          |
 
 ## 2019
 
@@ -501,5 +502,5 @@ now.
 
 ```
 Created:       Mon 02 Dec 2019 05:12:40 PM CST
-Last Modified: Fri 11 Dec 2020 05:04:06 PM CST
+Last Modified: Fri 11 Dec 2020 11:28:54 PM CST
 ```
