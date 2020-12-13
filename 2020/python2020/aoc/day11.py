@@ -160,12 +160,12 @@ class Day11:
 
     @staticmethod
     def part1(filename: str) -> int:
-        """ Given a filename, solve 2020 day 09 part 1 """
+        """ Given a filename, solve 2020 day 11 part 1 """
         grid = parse(filename)
         return part1(grid)
 
     @staticmethod
     def part2(filename: str) -> int:
-        """ Given a filename, solve 2020 day 09 part 2 """
+        """ Given a filename, solve 2020 day 11 part 2 """
         grid = parse(filename)
         return part2(grid)

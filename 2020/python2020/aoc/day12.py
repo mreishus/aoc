@@ -88,12 +88,12 @@ class Day12:
 
     @staticmethod
     def part1(filename: str) -> int:
-        """ Given a filename, solve 2020 day 09 part 1 """
+        """ Given a filename, solve 2020 day 12 part 1 """
         data = parse(filename)
         return p1(data)
 
     @staticmethod
     def part2(filename: str) -> int:
-        """ Given a filename, solve 2020 day 09 part 2 """
+        """ Given a filename, solve 2020 day 12 part 2 """
         data = parse(filename)
         return p2(data)
