@@ -64,10 +64,10 @@ def latest():
     print("2020 Day 14 Part 1:", end=" ")
     print(Day14.part1("../inputs/14/input.txt"))
     # print("---")
-    # print("2020 Day 14 Part 2 (small1):", end=" ")
-    # print(Day14.part2("../inputs/14/input_small_1.txt"))
-    # print("2020 Day 14 Part 2:", end=" ")
-    # print(Day14.part2("../inputs/14/input.txt"))
+    print("2020 Day 14 Part 2 (small2):", end=" ")
+    print(Day14.part2("../inputs/14/input_small_2.txt"))
+    print("2020 Day 14 Part 2:", end=" ")
+    print(Day14.part2("../inputs/14/input.txt"))
 
 
 if __name__ == "__main__":

@@ -6,12 +6,11 @@ https://adventofcode.com/2020/day/14
 
 import re
 from collections import defaultdict
+from itertools import combinations
 
 
 def parse(filename):
     with open(filename) as f:
-        # programs = []
-        # program = None
         program = []
         for line in f.readlines():
             if re.match(r"mask = ", line):
@@ -68,6 +67,54 @@ class Mask:
         return (val_in | self.fill_mask) & self.clear_mask
 
 
+class Mask2:
+    def __init__(self):
+        self.do_clear_mask()
+
+    def do_clear_mask(self):
+        self.fill_mask = 0  # usually 0s, contains 1 to overwrite with 1
+        self.unstables = []
+
+    def update_from_string(self, mask_str):
+        self.do_clear_mask()
+
+        fill_add = 0
+        for char in mask_str:
+            fill_add *= 2
+            if char == "1":
+                fill_add += 1
+        self.fill_mask |= fill_add
+
+        for i, char in enumerate(mask_str):
+            if char == "X":
+                self.unstables.append(35 - i)
+        # print(self.unstables)
+
+    def apply_over_value(self, val_in):
+        val = val_in | self.fill_mask
+        for n in range(0, len(self.unstables) + 1):
+            combos = combinations(self.unstables, n)
+
+            # print("--")
+            # print(n, combos)
+            for this_combo in combos:
+                unstable_fills = 0  # All 0s, contains 1 to overwrite with |
+                unstable_clears = (2 ** 37) - 1
+                # ^ Usually 1s, contains 0 to overwrite with &
+                for this_unstable in self.unstables:
+                    # print(f" {this_unstable} {this_unstable in this_combo}")
+                    if this_unstable in this_combo:
+                        # Flip ON
+                        unstable_fills |= 2 ** this_unstable
+                    else:
+                        # Flip OFF
+                        all_ones = 2 ** 37 - 1
+                        clear_add = all_ones ^ (2 ** this_unstable)
+                        unstable_clears &= clear_add
+                yield (val | unstable_fills) & unstable_clears
+            # print("Done")
+
+
 def parse_line(line):
     (left, right) = line[0:1], line[1:]
     right = int(right)
@@ -82,15 +129,19 @@ def p1(data):
             m.update_from_string(right)
         else:
             mem[left] = m.apply_over_value(right)
-    # (You guessed 520626422042.)
-    # (You guessed 18925954113791.)
-    # 18925954113791
-    # 18925954113791
     return sum(mem.values())
 
 
 def p2(data):
-    return -2
+    m = Mask2()
+    mem = defaultdict(int)
+    for (left, right) in data:
+        if left == "mask":
+            m.update_from_string(right)
+        else:
+            for z in m.apply_over_value(left):
+                mem[z] = right
+    return sum(mem.values())
 
 
 class Day14:
@@ -107,3 +158,14 @@ class Day14:
         """ Given a filename, solve 2020 day 14 part 2 """
         data = parse(filename)
         return p2(data)
+        # m = Mask2()
+        # m.update_from_string("000000000000000000000000000000X1001X")
+        # for z in m.apply_over_value(42):
+        #     print(z)
+        # print("----")
+        # m.update_from_string("00000000000000000000000000000000X0XX")
+        # for z in m.apply_over_value(26):
+        #     print(z)
+        # return -1
+        # data = parse(filename)
+        # return p2(data)

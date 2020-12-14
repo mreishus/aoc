@@ -72,6 +72,17 @@ class TestDay14(unittest.TestCase):
     # 18925954113691
     # 18925954113691
 
+    # Can turn this into a test
+    # m = Mask2()
+    # m.update_from_string("000000000000000000000000000000X1001X")
+    # for z in m.apply_over_value(42):
+    #     print(z)
+    # print("----")
+    # m.update_from_string("00000000000000000000000000000000X0XX")
+    # for z in m.apply_over_value(26):
+    #     print(z)
+    # return -1
+
     def test_part1(self):
         """Test part1"""
         pass
