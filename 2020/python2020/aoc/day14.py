@@ -8,6 +8,7 @@ import re
 from collections import defaultdict
 from itertools import combinations
 
+all_ones = (1 << 37) - 1
 
 def parse(filename):
     with open(filename) as f:
@@ -28,7 +29,7 @@ class Mask:
 
     def do_clear_mask(self):
         self.fill_mask = 0  # Usually 0s, contains 1 to overwrite with |
-        self.clear_mask = (2 ** 37) - 1  # Usually 1s, contains 0 to overwrite with &
+        self.clear_mask = all_ones # Usually 1s, contains 0 to overwrite with &
 
     def update_from_string(self, mask_str):
         self.do_clear_mask()
@@ -55,7 +56,6 @@ class Mask:
                 clear_add += 1
         # Clear_add has 1s in spots we want to clear.  Flip to have
         # all 1s, but 0s in the space we want to clear
-        all_ones = 2 ** 37 - 1
         clear_add = all_ones ^ clear_add
         ## Now use & to wipe out the clear mask
         self.clear_mask &= clear_add
@@ -99,20 +99,18 @@ class Mask2:
             # print(n, combos)
             for this_combo in combos:
                 unstable_fills = 0  # All 0s, contains 1 to overwrite with |
-                unstable_clears = (2 ** 37) - 1
+                unstable_clears = all_ones
                 # ^ Usually 1s, contains 0 to overwrite with &
                 for this_unstable in self.unstables:
                     # print(f" {this_unstable} {this_unstable in this_combo}")
                     if this_unstable in this_combo:
                         # Flip ON
-                        unstable_fills |= 2 ** this_unstable
+                        unstable_fills |= 1 << this_unstable
                     else:
                         # Flip OFF
-                        all_ones = 2 ** 37 - 1
-                        clear_add = all_ones ^ (2 ** this_unstable)
+                        clear_add = all_ones ^ (1 << this_unstable)
                         unstable_clears &= clear_add
                 yield (val | unstable_fills) & unstable_clears
-            # print("Done")
 
 
 def parse_line(line):
