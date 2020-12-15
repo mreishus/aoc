@@ -26,7 +26,7 @@ def p2(data):
 def helper(data, stop):
     print(f"-- {data} |  {stop}")
     i = 0
-    said = defaultdict(deque)
+    said = defaultdict(list)
     last = None
 
     while i < len(data):
@@ -46,8 +46,6 @@ def helper(data, stop):
         last = to_say
         # print(f"Saying {to_say})")
 
-        if len(said[to_say]) > 2:
-            said[to_say].popleft()
         i += 1
         if i % 250000 == 0:
             print(round(i / 30000000 * 100))
