@@ -26,23 +26,29 @@ def p2(data):
 def helper(data, stop):
     print(f"-- {data} |  {stop}")
     i = 0
-    said = defaultdict(list)
+    said = {}
+    said_p = {}
     last = None
+
+    def remember(val, i):
+        if val in said:
+            said_p[val] = said[val]
+        said[val] = i
 
     while i < len(data):
         val = data[i]
-        said[val].append(i)
+        remember(val, i)
         last = val
         i += 1
 
     while i < stop:
         to_say = None
-        if len(said[last]) > 1:
-            to_say = said[last][-1] - said[last][-2]
+        if last in said and last in said_p:
+            to_say = said[last] - said_p[last]
         else:
             to_say = 0
 
-        said[to_say].append(i)
+        remember(to_say, i)
         last = to_say
         # print(f"Saying {to_say})")
 
