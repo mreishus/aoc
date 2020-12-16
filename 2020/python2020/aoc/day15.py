@@ -4,9 +4,7 @@ Advent Of Code 2020 Day 15
 https://adventofcode.com/2020/day/15
 """
 
-import re
-from collections import defaultdict, deque
-from itertools import combinations
+from collections import defaultdict
 
 
 def parse(filename):
@@ -24,7 +22,7 @@ def p2(data):
 
 
 def helper(data, stop):
-    print(f"-- {data} |  {stop}")
+    # print(f"-- {data} |  {stop}")
     i = 0
     said = {}
     said_p = {}
@@ -53,8 +51,8 @@ def helper(data, stop):
         # print(f"Saying {to_say})")
 
         i += 1
-        if i % 250000 == 0:
-            print(round(i / 30000000 * 100))
+        # if i % 250000 == 0:
+        #     print(round(i / 30000000 * 100))
     return last
 
 
