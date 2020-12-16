@@ -4,21 +4,10 @@ Advent Of Code 2020 Day 15
 https://adventofcode.com/2020/day/15
 """
 
-from collections import defaultdict
-
-
 def parse(filename):
     with open(filename) as f:
         first_line = f.readline()
         return [int(x) for x in first_line.split(",")]
-
-
-def p1(data):
-    return helper(data, 2020)
-
-
-def p2(data):
-    return helper(data, 30000000)
 
 
 def helper(data, stop):
@@ -40,15 +29,12 @@ def helper(data, stop):
         i += 1
 
     while i < stop:
-        to_say = None
-        if last in said and last in said_p:
-            to_say = said[last] - said_p[last]
+        if last in said_p:
+            last = said[last] - said_p[last]
         else:
-            to_say = 0
+            last = 0
 
-        remember(to_say, i)
-        last = to_say
-        # print(f"Saying {to_say})")
+        remember(last, i)
 
         i += 1
         # if i % 250000 == 0:
@@ -63,10 +49,10 @@ class Day15:
     def part1(filename: str) -> int:
         """ Given a filename, solve 2020 day 15 part 1 """
         data = parse(filename)
-        return p1(data)
+        return helper(data, 2020)
 
     @staticmethod
     def part2(filename: str) -> int:
         """ Given a filename, solve 2020 day 15 part 2 """
         data = parse(filename)
-        return p2(data)
+        return helper(data, 30000000)
