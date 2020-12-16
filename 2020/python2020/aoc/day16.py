@@ -89,8 +89,8 @@ def p2(data):
     nearby_tickets = list(filter(is_valid_ticket, nearby_tickets))
 
     ## Find Rules
-    tickets_t = np.array(nearby_tickets).T.tolist()
-    rules_assigned = {}
+    tickets_t = np.array(nearby_tickets).T.tolist()  # transpose
+    rules_assigned = {}  # rule -> column number of data
     while len(rules_assigned) < len(rules):
         for col_i, values in enumerate(tickets_t):
             # print(f"Examining {col_i} {values}")
