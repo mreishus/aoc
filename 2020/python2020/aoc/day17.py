@@ -51,9 +51,7 @@ class Grid:
             for z in range(self.z_min, self.z_max + 1):
                 for x in range(self.x_min, self.x_max + 1):
                     for y in range(self.y_min, self.y_max + 1):
-                        neighbors = sum(
-                            self.grid[n] for n in self.gen_neighbors(x, y, z, w)
-                        )
+                        neighbors = self.neighbor_count(x, y, z, w)
                         if self.grid[x, y, z, w] == 1:
                             new_val = 0
                             if neighbors in (2, 3):
@@ -65,6 +63,16 @@ class Grid:
                         new_grid[x, y, z, w] = new_val
 
         self.grid = new_grid
+
+    def neighbor_count(self, x, y, z, w):
+        count = 0
+        for n in self.gen_neighbors(x, y, z, w):
+            if self.grid[n] == 1:
+                count += 1
+                # Optimization: Don't care about counts beyond 4
+                if count >= 4:
+                    return count
+        return count
 
     def gen_neighbors(self, x, y, z, w):
         w_range = [0]
