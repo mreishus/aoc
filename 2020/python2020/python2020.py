@@ -47,8 +47,6 @@ def alldays():
         (Day17.part1, Day17.part2),
     ]
     for (i, (p1, p2)) in enumerate(solvers, 1):
-        if i in (15, 11):
-            continue
         path = f"../inputs/{i:02}/input.txt"
 
         p1_start = timer()

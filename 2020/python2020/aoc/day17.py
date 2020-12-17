@@ -35,6 +35,7 @@ class Grid:
 
     def step(self):
         new_grid = copy(self.grid)
+        neighbors = defaultdict(int)
 
         # Only consider active squares and those adjacent to active squares
         to_consider = set()
@@ -45,30 +46,21 @@ class Grid:
             to_consider.add(k)
             for n in self.gen_neighbors(x, y, z, w):
                 to_consider.add(n)
+                neighbors[n] += 1
 
         for (x, y, z, w) in to_consider:
-            neighbors = self.neighbor_count(x, y, z, w)
+            ncount = neighbors[x, y, z, w]
             if self.grid[x, y, z, w] == 1:
                 new_val = 0
-                if neighbors in (2, 3):
+                if ncount in (2, 3):
                     new_val = 1
             else:
                 new_val = 0
-                if neighbors == 3:
+                if ncount == 3:
                     new_val = 1
             new_grid[x, y, z, w] = new_val
 
         self.grid = new_grid
-
-    def neighbor_count(self, x, y, z, w):
-        count = 0
-        for n in self.gen_neighbors(x, y, z, w):
-            if self.grid[n] == 1:
-                count += 1
-                # Optimization: Don't care about counts beyond 4
-                if count >= 4:
-                    return count
-        return count
 
     def gen_neighbors(self, x, y, z, w):
         w_range = [0]
