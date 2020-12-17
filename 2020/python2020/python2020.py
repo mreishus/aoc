@@ -44,8 +44,11 @@ def alldays():
         (Day14.part1, Day14.part2),
         (Day15.part1, Day15.part2),
         (Day16.part1, Day16.part2),
+        (Day17.part1, Day17.part2),
     ]
     for (i, (p1, p2)) in enumerate(solvers, 1):
+        if i in (15, 11):
+            continue
         path = f"../inputs/{i:02}/input.txt"
 
         p1_start = timer()
@@ -77,5 +80,5 @@ def latest():
 
 
 if __name__ == "__main__":
-    # alldays()
-    latest()
+    alldays()
+    # latest()

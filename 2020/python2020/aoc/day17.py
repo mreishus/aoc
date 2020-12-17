@@ -11,14 +11,6 @@ from copy import copy
 class Grid:
     def __init__(self, filename):
         self.grid = None
-        self.z_min = 0
-        self.z_max = 0
-        self.y_min = 0
-        self.y_max = 0
-        self.x_min = 0
-        self.x_max = 0
-        self.w_min = 0
-        self.w_max = 0
         self.is_4d = False
         self.parse(filename)
 
@@ -27,7 +19,6 @@ class Grid:
 
     def parse(self, filename):
         grid = defaultdict(int)
-        loc = complex(0, 0)
         x = 0
         y = 0
         z = 0
@@ -38,29 +29,34 @@ class Grid:
                 for char in line.strip():
                     grid[x, y, z, w] = 1 if char == "#" else 0
                     x += 1
-                    self.x_max = max(self.x_max, x)
                 y += 1
                 x = 0
-                self.y_max = y
         self.grid = grid
 
     def step(self):
-        self.expand_grid()
         new_grid = copy(self.grid)
-        for w in range(self.w_min, self.w_max + 1):
-            for z in range(self.z_min, self.z_max + 1):
-                for x in range(self.x_min, self.x_max + 1):
-                    for y in range(self.y_min, self.y_max + 1):
-                        neighbors = self.neighbor_count(x, y, z, w)
-                        if self.grid[x, y, z, w] == 1:
-                            new_val = 0
-                            if neighbors in (2, 3):
-                                new_val = 1
-                        else:
-                            new_val = 0
-                            if neighbors == 3:
-                                new_val = 1
-                        new_grid[x, y, z, w] = new_val
+
+        # Only consider active squares and those adjacent to active squares
+        to_consider = set()
+        for k, v in self.grid.items():
+            if v == 0:
+                continue
+            (x, y, z, w) = k
+            to_consider.add(k)
+            for n in self.gen_neighbors(x, y, z, w):
+                to_consider.add(n)
+
+        for (x, y, z, w) in to_consider:
+            neighbors = self.neighbor_count(x, y, z, w)
+            if self.grid[x, y, z, w] == 1:
+                new_val = 0
+                if neighbors in (2, 3):
+                    new_val = 1
+            else:
+                new_val = 0
+                if neighbors == 3:
+                    new_val = 1
+            new_grid[x, y, z, w] = new_val
 
         self.grid = new_grid
 
@@ -86,25 +82,6 @@ class Grid:
                         if ax == x and ay == y and az == z and aw == w:
                             continue
                         yield ax, ay, az, aw
-
-    def expand_grid(self):
-        self.z_min -= 1
-        self.z_max += 1
-        self.y_min -= 1
-        self.y_max += 1
-        self.x_min -= 1
-        self.x_max += 1
-        if self.is_4d:
-            self.w_min -= 1
-            self.w_max += 1
-
-    def display(self, z):
-        w = 0
-        for y in range(5):
-            for x in range(5):
-                char = self.grid[x, y, z, w]
-                print(char, end="")
-            print("")
 
 
 class Day17:
