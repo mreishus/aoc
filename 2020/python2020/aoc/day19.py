@@ -67,7 +67,6 @@ def p1_rules(data):
             k_changed = False
             ki_changed_count = 0
             for i, possibility in enumerate(v):
-                # print(i, possibility)
                 if all(x in end_rules for x in possibility):
                     k_changed = True
                     ki_changed_count += 1
