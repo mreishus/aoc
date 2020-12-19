@@ -48,6 +48,18 @@ def list_all_string(l):
 
 
 def p1(data):
+    rules, end_rules, strings = p1_rules(data)
+
+    ok_rules = set(rules[0])
+    count = 0
+    for s in strings:
+        # print(s)
+        if s in ok_rules:
+            count += 1
+    return count
+
+
+def p1_rules(data):
     rules, end_rules, strings = data
     # print("-begin-")
     # print(rules)
@@ -57,6 +69,7 @@ def p1(data):
     while 0 not in end_rules:
         a += 1
         print(f"AAAAAAAA {a}")
+        # print(end_rules)
         # print(end_rules)
         # print(rules)
         for k, v in rules.items():
@@ -81,20 +94,58 @@ def p1(data):
                     end_rules.add(k)
                     # Flatten (1 level?)
                     rules[k] = list(chain(*rules[k]))
-
-    ok_rules = set(rules[0])
-    count = 0
-    for s in strings:
-        # print(s)
-        if s in ok_rules:
-            count += 1
-    return count
+    return rules, end_rules, strings
 
 
 def p2(data):
     rules, end_rules, strings = data
-    print(rules[8])
-    return -2
+    rules, end_rules, strings = p1_rules(data)
+
+    # rules[8] = [[42], [42, 8]]
+    # Or, rules[8] = (42)+
+
+    # rules[11] = [[42, 31], [42, 11, 31]]
+    # Or, Rules 11 = 42{X}31{X} if the Xs are the same amount
+
+    # Rule 0 = Rule 8, then 11
+    # Actually that means.. repeat 42 as many times as you want,
+    # then repeat 31 0 to infinity times?
+
+    re_42part = "(" + "|".join(rules[42]) + ")+"
+    re_31part = "(" + "|".join(rules[31]) + ")+$"
+
+    my_re_s = re_42part + re_31part
+    # print(my_re_s)
+    my_re = re.compile(my_re_s)
+
+    # 445 too high
+    # 439 too high, unlucky
+    count = 0
+    for s in strings:
+        if my_re.match(s):
+            # print(s)
+            count += 1
+    return count
+
+    # print("42")
+    # print(rules[42])
+    # print("31")
+    # print(rules[31])
+
+    # Matt:
+    # These are too hard, let's manually
+    # expand them up to 3 times?
+
+    # rules[8] = []
+    # for i in range(1, 2):
+    #     rules[8].append([42] * i)
+
+    # rules[11] = []
+    # for i in range(1, 2):
+    #     rules[11].append([42] * i + [31] * i)
+    # print(rules[11])
+
+    # return p1((rules, end_rules, strings))
 
 
 class Day19:

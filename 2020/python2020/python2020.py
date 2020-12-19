@@ -71,7 +71,7 @@ def latest():
     ## Day 19
     # print("2020 Day 19 Part 1 (small1):", end=" ")
     # print(Day19.part1("../inputs/19/input_small_1.txt"))
-    # print("2020 Day 19 Part 1 (small1):", end=" ")
+    # print("2020 Day 19 Part 1 (small2):", end=" ")
     # print(Day19.part1("../inputs/19/input_small_2.txt"))
     # print("2020 Day 19 Part 1 (small1):", end=" ")
     # print(Day19.part1("../inputs/19/input_small_3.txt"))
@@ -80,6 +80,8 @@ def latest():
     # print("---")
     # print("2020 Day 19 Part 2 (small1):", end=" ")
     # print(Day19.part2("../inputs/19/input_small_1.txt"))
+    # print("2020 Day 19 Part 2 (small2):", end=" ")
+    # print(Day19.part2("../inputs/19/input_small_2.txt"))
     # print("2020 Day 19 Part 2 (small1):", end=" ")
     # print(Day19.part2("../inputs/19/input_small_3.txt"))
     print("2020 Day 19 Part 2:", end=" ")
