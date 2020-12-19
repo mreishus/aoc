@@ -15,7 +15,6 @@ def parse(filename):
         lines = f.read().strip()
         rules, strings = lines.split("\n\n")
         strings = strings.strip().split("\n")
-        # print(f"strings={strings}")
         rules, end_rules = parse_rules(rules)
         return rules, end_rules, strings
 
@@ -48,12 +47,11 @@ def list_all_string(l):
 
 
 def p1(data):
-    rules, end_rules, strings = p1_rules(data)
+    rules, _end_rules, strings = p1_rules(data)
 
     ok_rules = set(rules[0])
     count = 0
     for s in strings:
-        # print(s)
         if s in ok_rules:
             count += 1
     return count
@@ -61,22 +59,11 @@ def p1(data):
 
 def p1_rules(data):
     rules, end_rules, strings = data
-    # print("-begin-")
-    # print(rules)
-    # print("-loop-")
 
-    a = 0
     while 0 not in end_rules:
-        a += 1
-        print(f"AAAAAAAA {a}")
-        # print(end_rules)
-        # print(end_rules)
-        # print(rules)
         for k, v in rules.items():
             if k in end_rules:
                 continue
-            # print("--")
-            # print(f"--{k}--")
             k_changed = False
             ki_changed_count = 0
             for i, possibility in enumerate(v):
@@ -85,9 +72,7 @@ def p1_rules(data):
                     k_changed = True
                     ki_changed_count += 1
                     replacements = list(map(lambda n: rules[n], possibility))
-                    # print(f"replacements {replacements}")
                     z = [reduce(operator.add, vals) for vals in product(*replacements)]
-                    # print(f"======Z {len(z)}======= {z}")
                     rules[k][i] = z
             if k_changed:
                 if all(list_all_string(l) for l in v):
@@ -108,44 +93,24 @@ def p2(data):
     # Or, Rules 11 = 42{X}31{X} if the Xs are the same amount
 
     # Rule 0 = Rule 8, then 11
-    # Actually that means.. repeat 42 as many times as you want,
-    # then repeat 31 0 to infinity times?
+    # Actually that means.. repeat 42 several times, then repeat 31 several times.
+    # However, the number of 42s must be at least 1 more than the number of 31s.
 
-    re_42part = "(" + "|".join(rules[42]) + ")+"
-    re_31part = "(" + "|".join(rules[31]) + ")+$"
+    re_42 = "(" + "|".join(rules[42]) + ")"
+    re_31 = "(" + "|".join(rules[31]) + ")"
 
-    my_re_s = re_42part + re_31part
-    # print(my_re_s)
-    my_re = re.compile(my_re_s)
+    res = []
+    for i in range(1, 10):
+        for j in range(i + 1, 10):
+            part_8 = "^(" + re_42 + "){" + str(j) + "}"
+            part_11 = "(" + re_31 + "){" + str(i) + "}$"
+            res.append(re.compile(part_8 + part_11))
 
-    # 445 too high
-    # 439 too high, unlucky
     count = 0
     for s in strings:
-        if my_re.match(s):
-            # print(s)
+        if any(this_re.match(s) for this_re in res):
             count += 1
     return count
-
-    # print("42")
-    # print(rules[42])
-    # print("31")
-    # print(rules[31])
-
-    # Matt:
-    # These are too hard, let's manually
-    # expand them up to 3 times?
-
-    # rules[8] = []
-    # for i in range(1, 2):
-    #     rules[8].append([42] * i)
-
-    # rules[11] = []
-    # for i in range(1, 2):
-    #     rules[11].append([42] * i + [31] * i)
-    # print(rules[11])
-
-    # return p1((rules, end_rules, strings))
 
 
 class Day19:
