@@ -4,13 +4,16 @@ Test Day15.
 """
 
 import unittest
-from aoc.day15 import Day15, p1
+from aoc.day15 import Day15, helper
 
 
 class TestDay15(unittest.TestCase):
     """Test Day15."""
 
     def test_p1_examples(self):
+        def p1(array):
+            return helper(array, 2020)
+
         self.assertEqual(p1([1, 3, 2]), 1)
         self.assertEqual(p1([2, 1, 3]), 10)
         self.assertEqual(p1([1, 2, 3]), 27)
