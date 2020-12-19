@@ -2,7 +2,7 @@
 
 ## Stars Earned By Year
 
-- 2020 - 32 stars
+- 2020 - 36 stars
 - 2019 - 50 stars
 - 2018 - 50 stars
 - 2017 - 50 stars
@@ -31,6 +31,8 @@
 | Day 14                             | Unstable Bit Masks           | [Python](./2020/python2020/aoc/day14.py) |                                          |
 | Day 15                             | Van Eck sequence             | [Python](./2020/python2020/aoc/day15.py) |                                          |
 | Day 16                             | Deduce correct fields        | [Python](./2020/python2020/aoc/day16.py) |                                          |
+| Day 17                             | 4d Game of Life              | [Python](./2020/python2020/aoc/day17.py) |                                          |
+| Day 18                             | Parsing Math Equations       | [Python](./2020/python2020/aoc/day18.py) |                                          |
 
 ## 2019
 
@@ -506,5 +508,5 @@ now.
 
 ```
 Created:       Mon 02 Dec 2019 05:12:40 PM CST
-Last Modified: Wed 16 Dec 2020 12:04:47 AM CST
+Last Modified: Fri 18 Dec 2020 07:15:20 PM CST
 ```
