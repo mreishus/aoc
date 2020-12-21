@@ -24,6 +24,7 @@ from aoc.day17 import Day17
 from aoc.day18 import Day18
 from aoc.day19 import Day19
 from aoc.day20 import Day20
+from aoc.day21 import Day21
 
 
 def alldays():
@@ -73,26 +74,26 @@ def alldays():
 
 def latest():
     """ Scratchpad to work on. """
-    ## Day 20
-    # print("2020 Day 20 Part 1 (small1):", end=" ")
-    # print(Day20.part1("../inputs/20/input_small_1.txt"))
-    # print("2020 Day 20 Part 1 (small2):", end=" ")
-    # print(Day20.part1("../inputs/20/input_small_2.txt"))
-    # print("2020 Day 20 Part 1 (small1):", end=" ")
-    # print(Day20.part1("../inputs/20/input_small_3.txt"))
-    print("2020 Day 20 Part 1:", end=" ")
-    print(Day20.part1("../inputs/20/input.txt"))
+    ## Day 21
+    print("2020 Day 21 Part 1 (small1):", end=" ")
+    print(Day21.part1("../inputs/21/input_small_1.txt"))
+    # print("2020 Day 21 Part 1 (small2):", end=" ")
+    # print(Day21.part1("../inputs/21/input_small_2.txt"))
+    # print("2020 Day 21 Part 1 (small1):", end=" ")
+    # print(Day21.part1("../inputs/21/input_small_3.txt"))
+    # print("2020 Day 21 Part 1:", end=" ")
+    # print(Day21.part1("../inputs/21/input.txt"))
     # print("---")
-    # print("2020 Day 20 Part 2 (small1):", end=" ")
-    # print(Day20.part2("../inputs/20/input_small_1.txt"))
-    # print("2020 Day 20 Part 2 (small2):", end=" ")
-    # print(Day20.part2("../inputs/20/input_small_2.txt"))
-    # print("2020 Day 20 Part 2 (small1):", end=" ")
-    # print(Day20.part2("../inputs/20/input_small_3.txt"))
-    print("2020 Day 20 Part 2:", end=" ")
-    print(Day20.part2("../inputs/20/input.txt"))
+    print("2020 Day 21 Part 2 (small1):", end=" ")
+    print(Day21.part2("../inputs/21/input_small_1.txt"))
+    # print("2020 Day 21 Part 2 (small2):", end=" ")
+    # print(Day21.part2("../inputs/21/input_small_2.txt"))
+    # print("2020 Day 21 Part 2 (small1):", end=" ")
+    # print(Day21.part2("../inputs/21/input_small_3.txt"))
+    print("2020 Day 21 Part 2:", end=" ")
+    print(Day21.part2("../inputs/21/input.txt"))
 
 
 if __name__ == "__main__":
-    alldays()
-    # latest()
+    # alldays()
+    latest()
