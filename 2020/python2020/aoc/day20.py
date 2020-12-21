@@ -94,15 +94,28 @@ class Tiles:
     edge_lookup: Dict[
         bytes, List[int]
     ]  # Given an edge (1x10 array.tobytes()), which tile IDs does it belong to?
-    puzzle: Optional[Tile]  # A tile containing the assembled puzzle
+    grid: NDArray  # Grid of tileId locations in the completed puzzle
+    orients: NDArray  # Grid of tile orientations in the completed puzzle
+    puzzle: Optional[Tile]  # A tile containing the assembled puzzle, all pixels
 
     def __init__(self, tiles: Dict[int, Tile]):
         self.tiles = tiles  # dictionary of int -> np array
         self.ids = list(tiles.keys())
+        self.clear_placements_grid()
+        self.puzzle = None
+
         self.edges4 = {}
         self.edges8 = {}
         self.edge_lookup = defaultdict(list)
         self.compute_edges()
+
+    def side_len(self):
+        return int(math.sqrt(len(self.tiles)))
+
+    def clear_placements_grid(self):
+        side_len = self.side_len()
+        self.grid = np.zeros([side_len, side_len], dtype=int)
+        self.orients = np.zeros([side_len, side_len], dtype=int)
 
     def compute_edges(self):
         """ Fill the self.edges4, self.edges8, self.edge_lookup dictionaries. """
@@ -164,13 +177,9 @@ class Tiles:
             raise Exception("Didn't find the right number of matches")
         return matches[0]
 
-    def side_len(self):
-        return int(math.sqrt(len(self.tiles)))
-
     def place_tiles(self):
+        self.clear_placements_grid()
         side_len = self.side_len()
-        self.grid = np.zeros([side_len, side_len], dtype=int)
-        self.orients = np.zeros([side_len, side_len], dtype=int)
 
         ## Special Case: Fill top left corner
         top_left_id = self.get_corners()[0]
@@ -334,7 +343,7 @@ def p2(data: Dict[int, Tile]) -> int:
     """ How many # are not part of a sea monster? """
     t = Tiles(data)
     t.stitch_puzzle()
-    num_dragons, water_roughness = t.find_dragons()
+    _num_dragons, water_roughness = t.find_dragons()
     return water_roughness
 
 
