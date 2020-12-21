@@ -21,9 +21,7 @@ class Tile:
 
     tile: NDArray
     tile_orig: NDArray
-    orientation: int = (
-        0  # How many 90 degree rotations. Add 4 if LR flipped. 0-7 possible values.
-    )
+    orientation: int = 0  # How many 90 degree rotations (0-3). Add 4 if LR flipped. 0-7 possible values.
 
     def __init__(self, tile: NDArray) -> None:
         self.tile = tile
@@ -73,6 +71,7 @@ class Tile:
         self.set_orientation((self.orientation + 1) % 8)
 
     def destroy_edges(self) -> None:
+        """ Irreversibly destroy the edges of the tile. """
         (y, x) = self.tile_orig.shape
         self.tile_orig = self.tile_orig[1 : y - 1, 1 : x - 1]
 
@@ -237,7 +236,7 @@ class Tiles:
         ## self.grid (matrix of tileIds) and self.orients (matrix of orientations)
         ## are now populated with the puzzle
 
-    def stitch_puzzle(self):
+    def stitch_puzzle(self) -> None:
         """Sets self.puzzle to a Tile containing the stitched together puzzle,
         after placing tiles and destroying their edges."""
         self.place_tiles()
@@ -252,8 +251,6 @@ class Tiles:
                 tile.set_orientation(self.orients[y, x])
                 tile.destroy_edges()
 
-                # print(tile.tile)
-                # print(self.grid[y, x], self.orients[y, x], x, y)
                 x_off = 8 * x
                 y_off = 8 * y
                 puzzle[0 + y_off : 8 + y_off, 0 + x_off : 8 + x_off] = (
@@ -263,17 +260,9 @@ class Tiles:
 
         self.puzzle = puzzle
 
-        # Reorient puzzle so it contains dragons
-        dragon_count, water_roughness = self.find_dragons()
-        for i in range(1, 8):
-            if dragon_count > 0:
-                break
-            self.puzzle.set_orientation(i)
-            dragon_count, water_roughness = self.find_dragons()
-
-        return water_roughness
-
-    def find_dragons(self):
+    def find_dragons(self) -> Tuple[int, int]:
+        """Looks for dragons in the stitched together puzzle in its current
+        orientation. Returns count of dragons found and water roughness."""
         if self.puzzle is None:
             raise Exception("Find_Dragons: Need to stitch puzzle first")
 
@@ -302,6 +291,24 @@ class Tiles:
 
         water_roughness = np.count_nonzero(self.puzzle.tile == 1)
         return dragon_count, water_roughness
+
+    def part2(self) -> int:
+        """Stitches together the puzzle,
+        rotates+flips it so dragons can be found,
+        calculates and returns the water_roughness."""
+        self.stitch_puzzle()
+        if self.puzzle is None:
+            raise Exception("Where is puzzle?")
+
+        # Reorient puzzle so it contains dragons
+        dragon_count, water_roughness = self.find_dragons()
+        for i in range(1, 8):
+            if dragon_count > 0:
+                break
+            self.puzzle.set_orientation(i)
+            dragon_count, water_roughness = self.find_dragons()
+
+        return water_roughness
 
 
 def parse(filename: str) -> Dict[int, Tile]:
@@ -349,7 +356,7 @@ def p1(data: Dict[int, Tile]) -> int:
 def p2(data: Dict[int, Tile]) -> int:
     """ How many # are not part of a sea monster? """
     t = Tiles(data)
-    water_roughness = t.stitch_puzzle()
+    water_roughness = t.part2()
     return water_roughness
 
 
