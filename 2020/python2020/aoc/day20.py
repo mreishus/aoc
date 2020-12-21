@@ -128,16 +128,9 @@ class Tiles:
 
         count = 0
         for edge in self.edges4[id1]:
-            edge_matched = False
-            for k in self.edges4.keys():
-                if edge_matched or k == id1:
-                    continue
-
-                edges = self.edges4[k]
-                edges_f = [np.flip(e) for e in edges]
-                if any(np.array_equal(e, edge) for e in edges + edges_f):
-                    count += 1
-                    edge_matched = True
+            matches = self.edge_lookup[edge.tobytes()]
+            matches = [m for m in matches if m != id1]
+            count += len(matches)
         return count
 
     def top_matches(self, tile_id: int) -> List[int]:
@@ -275,18 +268,16 @@ class Tiles:
                 [0, 3, 0, 0, 3, 0, 0, 3, 0, 0, 3, 0, 0, 3, 0, 0, 3, 0, 0, 0],
             ]
         )
-        dragon_1_count = np.count_nonzero(dragon)
+        dragon_3_count = np.count_nonzero(dragon)
         (dragon_y_max, dragon_x_max) = dragon.shape
         (y_max, x_max) = self.puzzle.tile.shape
-        # print(f"{dragon_x_max}, {dragon_y_max}")
-        # print(f"{x_max}, {y_max}")
 
         dragon_count = 0
         for y in range(y_max - dragon_y_max + 1):
             for x in range(x_max - dragon_x_max + 1):
                 # Look for dragon with top left corner at y, x
                 sub_grid = self.puzzle[y : y + dragon_y_max, x : x + dragon_x_max]
-                dragon_here = dragon_1_count == np.count_nonzero(dragon & sub_grid)
+                dragon_here = dragon_3_count == np.count_nonzero(dragon & sub_grid)
 
                 if dragon_here:
                     ## Mark the dragon with "3"s in the puzzle
