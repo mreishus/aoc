@@ -9,10 +9,10 @@ from functools import reduce
 from operator import mul
 import re
 import math
-import numpy as np
+from typing import List, Dict, Tuple, Optional
 
-from typing import List, Set, Dict, Tuple, Optional, Any
 from nptyping import NDArray
+import numpy as np
 
 
 class Tile:
@@ -270,11 +270,12 @@ class Tiles:
 
         dragon = np.array(
             [
-                [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0],
-                [1, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 1, 1, 1],
-                [0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 0],
+                [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 0],
+                [3, 0, 0, 0, 0, 3, 3, 0, 0, 0, 0, 3, 3, 0, 0, 0, 0, 3, 3, 3],
+                [0, 3, 0, 0, 3, 0, 0, 3, 0, 0, 3, 0, 0, 3, 0, 0, 3, 0, 0, 0],
             ]
         )
+        dragon_1_count = np.count_nonzero(dragon)
         (dragon_y_max, dragon_x_max) = dragon.shape
         (y_max, x_max) = self.puzzle.tile.shape
         # print(f"{dragon_x_max}, {dragon_y_max}")
@@ -284,31 +285,14 @@ class Tiles:
         for y in range(y_max - dragon_y_max + 1):
             for x in range(x_max - dragon_x_max + 1):
                 # Look for dragon with top left corner at y, x
-                dragon_possible = True
+                sub_grid = self.puzzle[y : y + dragon_y_max, x : x + dragon_x_max]
+                dragon_here = dragon_1_count == np.count_nonzero(dragon & sub_grid)
 
-                for dy in range(dragon_y_max):
-                    if not dragon_possible:
-                        break
-                    for dx in range(dragon_x_max):
-                        if not dragon_possible:
-                            break
-
-                        dragon_val = dragon[dy, dx]
-                        grid_val = self.puzzle[y + dy, x + dx]
-
-                        if dragon_val == 1 and grid_val == 0:
-                            dragon_possible = False
-                if dragon_possible:
-                    # print(f"Found dragon starting at {x, y}")
-                    ## Mark the dragon with "2"s in the puzzle
-                    for dy in range(dragon_y_max):
-                        for dx in range(dragon_x_max):
-                            dragon_val = dragon[dy, dx]
-                            if dragon_val == 1:
-                                self.puzzle[y + dy, x + dx] = 2
+                if dragon_here:
+                    ## Mark the dragon with "3"s in the puzzle
+                    sub_grid |= dragon
                     dragon_count += 1
 
-        # print(self.puzzle.tile)
         water_roughness = np.count_nonzero(self.puzzle.tile == 1)
         return dragon_count, water_roughness
 
