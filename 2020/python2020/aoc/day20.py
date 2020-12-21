@@ -261,13 +261,17 @@ class Tiles:
                 )
                 puzzle[0 + y_off : 8 + y_off, 0 + x_off : 8 + x_off] = tile.tile
 
-        # Reorient puzzle so it contains dragons
-        puzzle.set_orientation(0)
-        if side_len == 12:
-            puzzle.set_orientation(6)  # Found manually
-
-        # print(puzzle.tile)
         self.puzzle = puzzle
+
+        # Reorient puzzle so it contains dragons
+        dragon_count, water_roughness = self.find_dragons()
+        for i in range(1, 8):
+            if dragon_count > 0:
+                break
+            self.puzzle.set_orientation(i)
+            dragon_count, water_roughness = self.find_dragons()
+
+        return water_roughness
 
     def find_dragons(self):
         if self.puzzle is None:
@@ -345,8 +349,7 @@ def p1(data: Dict[int, Tile]) -> int:
 def p2(data: Dict[int, Tile]) -> int:
     """ How many # are not part of a sea monster? """
     t = Tiles(data)
-    t.stitch_puzzle()
-    _num_dragons, water_roughness = t.find_dragons()
+    water_roughness = t.stitch_puzzle()
     return water_roughness
 
 
