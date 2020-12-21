@@ -110,6 +110,9 @@ class Tiles:
         self.compute_edges()
 
     def side_len(self):
+        """If we arranged all tiles we have in one square, how long is a side?
+        For the small example, it's 3. 3x3 = 9 tiles.
+        For the real problem, it's 12. 12x12 = 144 tiles."""
         return int(math.sqrt(len(self.tiles)))
 
     def clear_placements_grid(self):
