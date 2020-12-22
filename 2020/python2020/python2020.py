@@ -25,6 +25,7 @@ from aoc.day18 import Day18
 from aoc.day19 import Day19
 from aoc.day20 import Day20
 from aoc.day21 import Day21
+from aoc.day22 import Day22
 
 
 def alldays():
@@ -52,6 +53,7 @@ def alldays():
         (Day18.part1, Day18.part2),
         (Day19.part1, Day19.part2),
         (Day20.part1, Day20.part2),
+        (Day21.part1, Day21.part2),
     ]
     for (i, (p1, p2)) in enumerate(solvers, 1):
         if i < 20:
@@ -74,24 +76,24 @@ def alldays():
 
 def latest():
     """ Scratchpad to work on. """
-    ## Day 21
-    print("2020 Day 21 Part 1 (small1):", end=" ")
-    print(Day21.part1("../inputs/21/input_small_1.txt"))
-    # print("2020 Day 21 Part 1 (small2):", end=" ")
-    # print(Day21.part1("../inputs/21/input_small_2.txt"))
-    # print("2020 Day 21 Part 1 (small1):", end=" ")
-    # print(Day21.part1("../inputs/21/input_small_3.txt"))
-    # print("2020 Day 21 Part 1:", end=" ")
-    # print(Day21.part1("../inputs/21/input.txt"))
+    ## Day 22
+    # print("2020 Day 22 Part 1 (small1):", end=" ")
+    # print(Day22.part1("../inputs/22/input_small_1.txt"))
+    # print("2020 Day 22 Part 1 (small2):", end=" ")
+    # print(Day22.part1("../inputs/22/input_small_2.txt"))
+    # print("2020 Day 22 Part 1 (small1):", end=" ")
+    # print(Day22.part1("../inputs/22/input_small_3.txt"))
+    # print("2020 Day 22 Part 1:", end=" ")
+    # print(Day22.part1("../inputs/22/input.txt"))
     # print("---")
-    print("2020 Day 21 Part 2 (small1):", end=" ")
-    print(Day21.part2("../inputs/21/input_small_1.txt"))
-    # print("2020 Day 21 Part 2 (small2):", end=" ")
-    # print(Day21.part2("../inputs/21/input_small_2.txt"))
-    # print("2020 Day 21 Part 2 (small1):", end=" ")
-    # print(Day21.part2("../inputs/21/input_small_3.txt"))
-    print("2020 Day 21 Part 2:", end=" ")
-    print(Day21.part2("../inputs/21/input.txt"))
+    print("2020 Day 22 Part 2 (small1):", end=" ")
+    print(Day22.part2("../inputs/22/input_small_1.txt"))
+    # print("2020 Day 22 Part 2 (small2):", end=" ")
+    # print(Day22.part2("../inputs/22/input_small_2.txt"))
+    # print("2020 Day 22 Part 2 (small1):", end=" ")
+    # print(Day22.part2("../inputs/22/input_small_3.txt"))
+    print("2020 Day 22 Part 2:", end=" ")
+    print(Day22.part2("../inputs/22/input.txt"))
 
 
 if __name__ == "__main__":
