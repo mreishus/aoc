@@ -55,10 +55,10 @@ def alldays():
         (Day19.part1, Day19.part2),
         (Day20.part1, Day20.part2),
         (Day21.part1, Day21.part2),
+        (Day22.part1, Day22.part2),
+        (Day23.part1, Day23.part2),
     ]
     for (i, (p1, p2)) in enumerate(solvers, 1):
-        if i < 20:
-            continue
         path = f"../inputs/{i:02}/input.txt"
 
         p1_start = timer()
@@ -98,5 +98,5 @@ def latest():
 
 
 if __name__ == "__main__":
-    # alldays()
-    latest()
+    alldays()
+    # latest()

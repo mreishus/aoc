@@ -6,9 +6,6 @@ https://adventofcode.com/2020/day/21
 
 from collections import defaultdict
 import re
-from itertools import product, chain
-from functools import reduce
-import operator
 from typing import Tuple, List
 
 
@@ -25,15 +22,6 @@ def parse_line(line) -> Tuple[List[str], List[str]]:
     return items, contains
 
 
-# def parse(filename):
-#     with open(filename) as f:
-#         lines = f.read().strip()
-#         rules, strings = lines.split("\n\n")
-#         strings = strings.strip().split("\n")
-#         rules, end_rules = parse_rules(rules)
-#         return rules, end_rules, strings
-
-
 def helpers(data):
     toxic_to_id = defaultdict(list)  # dairy => 0, 1
     toxic_to_candidates = {}  # fish => ['sqjhc', 'mxmxvkd'],
@@ -44,7 +32,6 @@ def helpers(data):
     for i, (items, contains) in enumerate(data):
         for toxic in contains:
             toxic_to_id[toxic].append(i)
-    print(toxic_to_id)
 
     ## Build toxic_to_candidates
     for toxic, idxes in toxic_to_id.items():
@@ -55,7 +42,6 @@ def helpers(data):
                 toxic_to_candidates[toxic] = [
                     d for d in data[i][0] if d in toxic_to_candidates[toxic]
                 ]
-    print(toxic_to_candidates)
 
     ## Build all_times
     for i, (items, contains) in enumerate(data):
