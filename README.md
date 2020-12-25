@@ -2,14 +2,15 @@
 
 ## Stars Earned By Year
 
-- 2020 - 36 stars
+- 2020 - 50 stars
 - 2019 - 50 stars
 - 2018 - 50 stars
 - 2017 - 50 stars
 - 2016 - 50 stars
 - 2015 - 50 stars
 
-**250 Stars Club - Joined 2020-01-31**
+* **250 Stars Club - Joined 2020-01-31**
+* **300 Stars Club - Joined 2020-12-25**
 
 ## 2020
 
@@ -33,6 +34,64 @@
 | Day 16                             | Deduce correct fields        | [Python](./2020/python2020/aoc/day16.py) |                                          |
 | Day 17                             | 4d Game of Life              | [Python](./2020/python2020/aoc/day17.py) |                                          |
 | Day 18                             | Parsing Math Equations       | [Python](./2020/python2020/aoc/day18.py) |                                          |
+| Day 19                             | Grammar Rules                | [Python](./2020/python2020/aoc/day19.py) |                                          |
+| Day 20                             | Jigsaw Puzzle                | [Python](./2020/python2020/aoc/day20.py) |                                          |
+| Day 21                             | Ingredient Deduction         | [Python](./2020/python2020/aoc/day21.py) |                                          |
+| Day 22                             | Recursive Card Game          | [Python](./2020/python2020/aoc/day22.py) |                                          |
+| Day 23                             | Large Circular Linked List   | [Python](./2020/python2020/aoc/day23.py) |                                          |
+| Day 24                             | Hexagon Game of Life         | [Python](./2020/python2020/aoc/day24.py) |                                          |
+| Day 25                             | Diffie-Hellman               | [Python](./2020/python2020/aoc/day25.py) |                                          |
+
+### Hardest Problems 2020
+
+- 19 - Grammar Rules
+- 20 - Jigsaw Puzzle
+- 23 - Large Circular Linked List
+
+### Favorite Problems 2020
+
+- 20 - Jigsaw Puzzle
+
+### Personal Stats 2020
+
+```
+      --------Part 1--------   --------Part 2--------
+Day       Time   Rank  Score       Time   Rank  Score
+ 25   00:12:13    538      0   00:12:18    430      0
+ 24   00:16:03    725      0   00:33:29    744      0
+ 23   00:31:06   1084      0   00:42:20    123      0
+ 22   00:09:53   1063      0   00:47:12   1173      0
+ 21   00:14:55    235      0   00:26:05    438      0
+ 20   00:37:15    769      0   16:56:12   5223      0
+ 19   00:52:56   1522      0   02:12:04   1839      0
+ 18   19:59:59  18016      0   20:05:30  16137      0
+ 17   00:26:21    952      0   00:32:27    906      0
+ 16   00:24:11   2685      0   00:42:49    901      0
+ 15   00:13:17    949      0   00:22:14   1076      0
+ 14   00:48:41   4432      0   01:15:23   3140      0
+ 13   00:12:15   2473      0   00:33:39    603      0
+ 12   00:08:52    584      0   00:18:36    568      0
+ 11   00:23:20   1508      0   01:03:53   3103      0
+ 10   00:06:26    721      0   00:26:32   1167      0
+  9   00:12:14   2907      0   00:20:35   2376      0
+  8   00:08:01   1502      0   00:15:18    926      0
+  7   00:23:36   1591      0   00:44:23   2092      0
+  6   00:05:37   1403      0   00:12:05   1681      0
+  5   00:09:30   1101      0   00:11:45    748      0
+  4   00:12:24   2122      0   00:29:39   1234      0
+  3   00:15:47   3901      0   00:17:54   2655      0
+  2   00:12:22   2847      0   00:16:17   2313      0
+  1   00:09:02   1554      0   00:15:58   2241      0
+```
+
+### Overall Thoughts 2020
+
+This year was a little bit easier than the previous years. I believe the
+creator was trying to give us a break, but, I enjoy the difficult problems.
+Bring on the challenge in 2021.
+
+However, I'm still thankful for the event, it still continues to be a favorite
+part of the holiday season for me.
 
 ## 2019
 
@@ -508,5 +567,5 @@ now.
 
 ```
 Created:       Mon 02 Dec 2019 05:12:40 PM CST
-Last Modified: Fri 18 Dec 2020 07:15:20 PM CST
+Last Modified: Fri 25 Dec 2020 12:48:28 PM CST
 ```
