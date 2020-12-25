@@ -4,7 +4,7 @@ Test Day14.
 """
 
 import unittest
-from aoc.day14 import Day14, p1, p2, Mask
+from aoc.day14 import Day14, Mask
 
 
 class TestDay14(unittest.TestCase):
@@ -41,59 +41,23 @@ class TestDay14(unittest.TestCase):
         self.assertEqual(m.apply_over_value(3), 1)
         self.assertEqual(m.apply_over_value(1), 1)
 
-    def test_complicated_masks(self):
+    def test_complicated_mask(self):
         m = Mask()
         m.update_from_string("010X1100101X00X01001X11010X111100X01")
         # Mask = 010X1100101X00X01001X11010X111100X01
         #    0 = 000000000000000000000000000000000000
         #  out = 010011001010000010010110100111100001
         self.assertEqual(m.apply_over_value(0), 20569483745)
-        m.update_from_string("X101XX001XX1001010X101X1101011100101")
-
-        # Mask1 = 010X1100101X00X01001X11010X111100X01
-        # Mask2 = X101XX001XX1001010X101X1101011100101
-        # Mask2 = 010111001011001010010111101011100101
-
-        m.update_from_string("X11X110X1011X11X0001011000000X110000")
-        # mask = X11X110X1011X11X0001011000000X110000
-
-    # mask = 010X1100101X00X01001X11010X111100X01
-    # mem[23014] = 9778
-    # mem[42882] = 140716
-    # mem[65461] = 458355100
-    # mem[60151] = 31172
-    # mem[47143] = 7055
-    # mask = X101XX001XX1001010X101X1101011100101
-    # mem[26134] = 4394
-    # mem[18808] = 352500
-    # mem[18556] = 87307674
-    # mask = X11X110X1011X11X0001011000000X110000
-
-    # 18925954113691
-    # 18925954113691
-
-    # Can turn this into a test
-    # m = Mask2()
-    # m.update_from_string("000000000000000000000000000000X1001X")
-    # for z in m.apply_over_value(42):
-    #     print(z)
-    # print("----")
-    # m.update_from_string("00000000000000000000000000000000X0XX")
-    # for z in m.apply_over_value(26):
-    #     print(z)
-    # return -1
 
     def test_part1(self):
         """Test part1"""
-        pass
-        # self.assertEqual(Day14.part1("../inputs/14/input_small_1.txt"), 25)
-        # self.assertEqual(Day14.part1("../inputs/14/input.txt"), 562)
+        self.assertEqual(Day14.part1("../inputs/14/input_small_1.txt"), 165)
+        self.assertEqual(Day14.part1("../inputs/14/input.txt"), 15514035145260)
 
     def test_part2(self):
         """Test part2"""
-        pass
-        # self.assertEqual(Day14.part2("../inputs/14/input_small_1.txt"), 286)
-        # self.assertEqual(Day14.part2("../inputs/14/input.txt"), 101860)
+        self.assertEqual(Day14.part2("../inputs/14/input_small_2.txt"), 208)
+        self.assertEqual(Day14.part2("../inputs/14/input.txt"), 3926790061594)
 
 
 if __name__ == "__main__":

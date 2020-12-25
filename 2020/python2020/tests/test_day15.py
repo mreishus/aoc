@@ -23,11 +23,11 @@ class TestDay15(unittest.TestCase):
 
     def test_part1(self):
         """Test part1"""
-        pass
+        self.assertEqual(Day15.part1("../inputs/15/input.txt"), 496)
 
     def test_part2(self):
         """Test part2"""
-        pass
+        self.assertEqual(Day15.part2("../inputs/15/input.txt"), 883)
 
 
 if __name__ == "__main__":

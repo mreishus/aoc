@@ -75,8 +75,10 @@ def alldays():
         p2_end = timer()
         p2_time = (p2_end - p2_start) * 1000
 
-        print(f"2020 Day {i:02} Part 1: {p1_answer:15} [{p1_time:6.1f}ms]")
-        print(f"2020 Day {i:02} Part 2: {p2_answer:15} [{p2_time:6.1f}ms]")
+        print(f"2020 Day {i:02} Part 1: {p1_answer:15} [{p1_time:7.1f}ms]")
+        print(f"2020 Day {i:02} Part 2: {p2_answer:15} [{p2_time:7.1f}ms]")
+        if i % 5 == 0:
+            print("")
 
 
 def latest():
