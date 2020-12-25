@@ -60,6 +60,7 @@ def alldays():
         (Day22.part1, Day22.part2),
         (Day23.part1, Day23.part2),
         (Day24.part1, Day24.part2),
+        (Day25.part1, lambda x: 0),
     ]
     for (i, (p1, p2)) in enumerate(solvers, 1):
         path = f"../inputs/{i:02}/input.txt"
@@ -81,25 +82,10 @@ def alldays():
 def latest():
     """ Scratchpad to work on. """
     ## Day 25
-    # print("2020 Day 25 Part 1 (small1):", end=" ")
-    # print(Day25.part1("../inputs/25/input_small_1.txt"))
-    # print("2020 Day 25 Part 1 (small2):", end=" ")
-    # print(Day25.part1("../inputs/25/input_small_2.txt"))
-    # print("2020 Day 25 Part 1 (small1):", end=" ")
-    # print(Day25.part1("../inputs/25/input_small_3.txt"))
     print("2020 Day 25 Part 1:", end=" ")
     print(Day25.part1("../inputs/25/input.txt"))
-    # print("---")
-    # print("2020 Day 25 Part 2 (small1):", end=" ")
-    # print(Day25.part2("../inputs/25/input_small_1.txt"))
-    # print("2020 Day 25 Part 2 (small2):", end=" ")
-    # print(Day25.part2("../inputs/25/input_small_2.txt"))
-    # print("2020 Day 25 Part 2 (small1):", end=" ")
-    # print(Day25.part2("../inputs/25/input_small_3.txt"))
-    # print("2020 Day 25 Part 2:", end=" ")
-    # print(Day25.part2("../inputs/25/input.txt"))
 
 
 if __name__ == "__main__":
-    # alldays()
-    latest()
+    alldays()
+    # latest()
