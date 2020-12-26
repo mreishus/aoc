@@ -22,8 +22,8 @@ end
 defmodule Elixir2020.Day03 do
   alias Elixir2020.Day03.GridWithMax
 
-  def parse() do
-    File.stream!("../inputs/03/input.txt")
+  def parse(filename) do
+    File.stream!(filename)
     |> Enum.map(&String.trim/1)
     |> parse_lines()
   end
@@ -64,13 +64,13 @@ defmodule Elixir2020.Day03 do
     end
   end
 
-  def part1() do
-    parse()
+  def part1(filename) do
+    parse(filename)
     |> solve_slope({3, 1})
   end
 
-  def part2() do
-    grid = parse()
+  def part2(filename) do
+    grid = parse(filename)
 
     [
       {1, 1},

@@ -6,8 +6,8 @@ defmodule Elixir2020.Day05 do
   #   {"FFBBFBF", "LLL"},
   #   ...
   # ]
-  def parse() do
-    File.stream!("../inputs/05/input.txt")
+  def parse(filename) do
+    File.stream!(filename)
     |> Enum.map(&String.trim/1)
     |> Enum.map(fn s -> String.split_at(s, 7) end)
   end
@@ -39,15 +39,15 @@ defmodule Elixir2020.Day05 do
     end
   end
 
-  def part1() do
-    parse()
+  def part1(filename) do
+    parse(filename)
     |> Enum.max_by(&get_id/1)
     |> get_id()
   end
 
-  def part2() do
+  def part2(filename) do
     all_ids =
-      parse()
+      parse(filename)
       |> Enum.map(&get_id/1)
       |> MapSet.new()
 

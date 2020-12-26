@@ -1,6 +1,6 @@
 defmodule Elixir2020.Day02 do
-  def parse() do
-    File.stream!("../inputs/02/input.txt")
+  def parse(filename) do
+    File.stream!(filename)
     |> Enum.map(&String.trim/1)
     |> Enum.map(&parse_rules/1)
   end
@@ -32,14 +32,16 @@ defmodule Elixir2020.Day02 do
     lower_match != upper_match
   end
 
-  def part1() do
-    parse()
+  def part1(filename) do
+    filename
+    |> parse()
     |> Enum.filter(&test1/1)
     |> Enum.count()
   end
 
-  def part2() do
-    parse()
+  def part2(filename) do
+    filename
+    |> parse()
     |> Enum.filter(&test2/1)
     |> Enum.count()
   end

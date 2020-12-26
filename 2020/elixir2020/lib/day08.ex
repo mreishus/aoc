@@ -118,8 +118,8 @@ end
 defmodule Elixir2020.Day08 do
   alias Elixir2020.Day08.Computer
 
-  def parse() do
-    File.stream!("../inputs/08/input.txt")
+  def parse(filename) do
+    File.stream!(filename)
     |> Stream.map(&String.trim/1)
     |> Enum.map(fn x ->
       [op, val] = String.split(x)
@@ -127,14 +127,14 @@ defmodule Elixir2020.Day08 do
     end)
   end
 
-  def part1() do
-    parse()
+  def part1(filename) do
+    parse(filename)
     |> Computer.new()
     |> Computer.execute()
   end
 
-  def part2() do
-    parse()
+  def part2(filename) do
+    parse(filename)
     |> Computer.new()
     |> Computer.find_corruption()
   end

@@ -1,5 +1,5 @@
 defmodule Elixir2020.Day01 do
-  def parse() do
+  def parse(filename) do
     File.stream!("../inputs/01/input.txt")
     |> Stream.map(&String.trim/1)
     |> Enum.map(&String.to_integer/1)
@@ -50,13 +50,15 @@ defmodule Elixir2020.Day01 do
     end
   end
 
-  def part1() do
-    parse()
+  def part1(filename) do
+    filename
+    |> parse()
     |> two_sum(2020)
   end
 
-  def part2() do
-    parse()
+  def part2(filename) do
+    filename
+    |> parse()
     |> three_sum(2020)
   end
 end

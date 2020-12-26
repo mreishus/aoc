@@ -8,9 +8,9 @@ defmodule Elixir2020.Day07 do
   # {"dull teal", [{5, "drab fuchsia"}, {4, "dim black"}]},
   # {"drab aqua", [{3, "dark red"}]},
   # ]
-  def parse() do
+  def parse(filename) do
     list =
-      File.stream!("../inputs/07/input.txt")
+      File.stream!(filename)
       |> Enum.map(&String.trim/1)
       |> Enum.map(&parse_line/1)
 
@@ -106,16 +106,16 @@ defmodule Elixir2020.Day07 do
     end)
   end
 
-  def part1() do
-    parse()
+  def part1(filename) do
+    parse(filename)
     |> Map.get(:contained_in)
     |> has_gold("shiny gold")
     |> Enum.uniq()
     |> Enum.count()
   end
 
-  def part2() do
-    parse()
+  def part2(filename) do
+    parse(filename)
     |> Map.get(:contains)
     |> count("shiny gold")
   end

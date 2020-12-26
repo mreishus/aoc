@@ -1,6 +1,6 @@
 defmodule Elixir2020.Day04 do
-  def parse() do
-    File.read!("../inputs/04/input.txt")
+  def parse(filename) do
+    File.read!(filename)
     |> String.trim()
     |> String.split("\n\n")
     |> Enum.map(&parse_passport/1)
@@ -61,14 +61,16 @@ defmodule Elixir2020.Day04 do
     end
   end
 
-  def part1() do
-    parse()
+  def part1(filename) do
+    filename
+    |> parse()
     |> Enum.filter(&has_required_fields/1)
     |> Enum.count()
   end
 
-  def part2() do
-    parse()
+  def part2(filename) do
+    filename
+    |> parse()
     |> Enum.filter(&has_required_fields/1)
     |> Enum.filter(&valid?/1)
     |> Enum.count()

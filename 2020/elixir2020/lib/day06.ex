@@ -1,6 +1,6 @@
 defmodule Elixir2020.Day06 do
-  def parse() do
-    File.read!("../inputs/06/input.txt")
+  def parse(filename) do
+    File.read!(filename)
     |> String.trim()
     |> String.split("\n\n")
     |> Enum.map(fn lines ->
@@ -11,8 +11,8 @@ defmodule Elixir2020.Day06 do
     end)
   end
 
-  def part1() do
-    parse()
+  def part1(filename) do
+    parse(filename)
     |> Enum.map(fn sets ->
       sets
       |> Enum.reduce(&MapSet.union/2)
@@ -21,8 +21,8 @@ defmodule Elixir2020.Day06 do
     |> Enum.sum()
   end
 
-  def part2() do
-    parse()
+  def part2(filename) do
+    parse(filename)
     |> Enum.map(fn sets ->
       sets
       |> Enum.reduce(&MapSet.intersection/2)
