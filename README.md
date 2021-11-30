@@ -2,6 +2,7 @@
 
 ## Stars Earned By Year
 
+- 2021 - ?
 - 2020 - 50 stars
 - 2019 - 50 stars
 - 2018 - 50 stars
@@ -11,6 +12,12 @@
 
 * **250 Stars Club - Joined 2020-01-31**
 * **300 Stars Club - Joined 2020-12-25**
+
+## 2021
+
+| Day    | Comment | Python                                   |
+| ------ | ------- | ---------------------------------------- |
+| Day 01 | ????    | [Python](./2021/python2021/aoc/day01.py) |
 
 ## 2020
 
@@ -567,5 +574,5 @@ now.
 
 ```
 Created:       Mon 02 Dec 2019 05:12:40 PM CST
-Last Modified: Fri 25 Dec 2020 12:48:28 PM CST
+Last Modified: Mon 29 Nov 2021 09:18:34 PM CST
 ```

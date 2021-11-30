@@ -1,8 +1,8 @@
-# Advent of Code 2020 in Python
+# Advent of Code 2021 in Python
 
 ## Requirements
 
-- You must be in the `python2020` directory for paths to resolve correctly.
+- You must be in the `python2021` directory for paths to resolve correctly.
 - You may need some extra python packages installed, like `numpy`. Update:
   I've added a conda YAML environment specification for reproducibility.
 
