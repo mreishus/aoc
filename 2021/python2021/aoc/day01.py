@@ -3,7 +3,7 @@
 Advent Of Code 2021 Day 1
 https://adventofcode.com/2021/day/1
 """
-from typing import List, Optional
+from typing import List
 
 
 def parse(filename: str) -> List[int]:
@@ -18,10 +18,27 @@ class Day01:
     def part1(filename: str) -> int:
         """ Given a filename, solve 2021 day 01 part 1 """
         data = parse(filename)
-        return sum(data)
+        last = -99
+        count = 0
+        for x in data:
+            if x > last:
+                count += 1
+            last = x
+        return count - 1
 
     @staticmethod
     def part2(filename: str) -> int:
         """ Given a filename, solve 2021 day 01 part 2 """
         data = parse(filename)
-        return sum(data) + 1
+        last = -99
+        count = 0
+        i = 0
+        j = 1
+        while i < len(data):
+            j = i + 3
+            x = sum(data[i:j])
+            if x > last:
+                count += 1
+            last = x
+            i += 1
+        return count - 1
