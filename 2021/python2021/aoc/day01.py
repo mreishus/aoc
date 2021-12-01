@@ -11,6 +11,10 @@ def parse(filename: str) -> List[int]:
         return [int(line.strip()) for line in file.readlines()]
 
 
+def increase_count(data: List[int], window: int) -> int:
+    return sum(b > a for (a, b) in zip(data, data[window:]))
+
+
 class Day01:
     """ AoC 2021 Day 01 """
 
@@ -18,27 +22,10 @@ class Day01:
     def part1(filename: str) -> int:
         """ Given a filename, solve 2021 day 01 part 1 """
         data = parse(filename)
-        last = -99
-        count = 0
-        for x in data:
-            if x > last:
-                count += 1
-            last = x
-        return count - 1
+        return increase_count(data, 1)
 
     @staticmethod
     def part2(filename: str) -> int:
         """ Given a filename, solve 2021 day 01 part 2 """
         data = parse(filename)
-        last = -99
-        count = 0
-        i = 0
-        j = 1
-        while i < len(data):
-            j = i + 3
-            x = sum(data[i:j])
-            if x > last:
-                count += 1
-            last = x
-            i += 1
-        return count - 1
+        return increase_count(data, 3)
