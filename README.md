@@ -15,9 +15,10 @@
 
 ## 2021
 
-| Day    | Comment | Python                                   |
-| ------ | ------- | ---------------------------------------- |
-| Day 01 | ????    | [Python](./2021/python2021/aoc/day01.py) |
+| Day    | Comment               | Python                                   |
+| ------ | --------------------- | ---------------------------------------- |
+| Day 01 | Sliding range windows | [Python](./2021/python2021/aoc/day01.py) |
+| Day 02 | ????                  | [Python](./2021/python2021/aoc/day02.py) |
 
 ## 2020
 
@@ -574,5 +575,5 @@ now.
 
 ```
 Created:       Mon 02 Dec 2019 05:12:40 PM CST
-Last Modified: Mon 29 Nov 2021 09:18:34 PM CST
+Last Modified: Wed 01 Dec 2021 10:44:22 PM CST
 ```

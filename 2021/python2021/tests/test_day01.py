@@ -12,13 +12,13 @@ class TestDay01(unittest.TestCase):
 
     def test_part1(self):
         """Test part1"""
-        self.assertEqual(Day01.part1("../inputs/01/input_small.txt"), 6)
-        # self.assertEqual(Day01.part1("../inputs/01/input.txt"), 121396)
+        self.assertEqual(Day01.part1("../inputs/01/input_small.txt"), 7)
+        self.assertEqual(Day01.part1("../inputs/01/input.txt"), 1298)
 
     def test_part2(self):
         """Test part2"""
-        self.assertEqual(Day01.part2("../inputs/01/input_small.txt"), 7)
-        # self.assertEqual(Day01.part2("../inputs/01/input.txt"), 73616634)
+        self.assertEqual(Day01.part2("../inputs/01/input_small.txt"), 5)
+        self.assertEqual(Day01.part2("../inputs/01/input.txt"), 1248)
 
 
 if __name__ == "__main__":
