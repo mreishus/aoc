@@ -35,13 +35,13 @@ def alldays():
 def latest():
     """ Scratchpad to work on. """
     print("2020 Day 02 Part 1 (small):", end=" ")
-    print(Day01.part1("../inputs/02/input_small.txt"))
+    print(Day02.part1("../inputs/02/input_small.txt"))
     print("2020 Day 02 Part 1:", end=" ")
-    print(Day01.part1("../inputs/02/input.txt"))
+    print(Day02.part1("../inputs/02/input.txt"))
     print("2020 Day 02 Part 2 (small):", end=" ")
-    print(Day01.part2("../inputs/02/input_small.txt"))
+    print(Day02.part2("../inputs/02/input_small.txt"))
     print("2020 Day 02 Part 2:", end=" ")
-    print(Day01.part2("../inputs/02/input.txt"))
+    print(Day02.part2("../inputs/02/input.txt"))
 
 
 if __name__ == "__main__":
