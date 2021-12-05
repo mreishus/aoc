@@ -15,10 +15,12 @@
 
 ## 2021
 
-| Day    | Comment               | Python                                   |
-| ------ | --------------------- | ---------------------------------------- |
-| Day 01 | Sliding range windows | [Python](./2021/python2021/aoc/day01.py) |
-| Day 02 | ????                  | [Python](./2021/python2021/aoc/day02.py) |
+| Day    | Comment                       | Python                                   | Needs Cleanup |
+| ------ | ----------------------------- | ---------------------------------------- | ------------- |
+| Day 01 | Sliding range windows         | [Python](./2021/python2021/aoc/day01.py) |               |
+| Day 02 | Position tracking             | [Python](./2021/python2021/aoc/day02.py) |               |
+| Day 03 | Binary counting and filtering | [Python](./2021/python2021/aoc/day03.py) | yes           |
+| Day 04 | Bingo cards                   | [Python](./2021/python2021/aoc/day04.py) | yes           |
 
 ## 2020
 
@@ -575,5 +577,5 @@ now.
 
 ```
 Created:       Mon 02 Dec 2019 05:12:40 PM CST
-Last Modified: Wed 01 Dec 2021 10:44:22 PM CST
+Last Modified: Sat 04 Dec 2021 10:22:16 PM CST
 ```
