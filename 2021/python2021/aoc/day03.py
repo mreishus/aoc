@@ -33,11 +33,11 @@ def bit_criteria_selection(data, most_common=True):
 
 
 class Day03:
-    """ AoC 2021 Day 03 """
+    """AoC 2021 Day 03"""
 
     @staticmethod
     def part1(filename: str) -> int:
-        """ Given a filename, solve 2021 day 03 part 1 """
+        """Given a filename, solve 2021 day 03 part 1"""
         data = parse(filename)
 
         common = ""
@@ -59,10 +59,12 @@ class Day03:
 
     @staticmethod
     def part2(filename: str) -> int:
-        """ Given a filename, solve 2021 day 03 part 2 """
+        """Given a filename, solve 2021 day 03 part 2"""
         data = parse(filename)
 
         o2 = bit_criteria_selection(data, True)
+        print(o2)
         co2 = bit_criteria_selection(data, False)
+        print(co2)
 
         return co2 * o2
