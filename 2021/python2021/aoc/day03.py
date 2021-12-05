@@ -11,6 +11,27 @@ def parse(filename: str):
         return [(line.strip()) for line in file.readlines()]
 
 
+def bit_criteria_selection(data, most_common=True):
+    candidates = set(range(len(data)))
+
+    target = None
+    for i, _ in enumerate(data[0]):
+        seen = defaultdict(int)
+        for cand in candidates:
+            seen[data[cand][i]] += 1
+
+        if seen["0"] > seen["1"]:
+            target = "0" if most_common else "1"
+        else:
+            target = "1" if most_common else "0"
+
+        to_remove = [cand for cand in candidates if data[cand][i] != target]
+        candidates -= set(to_remove)
+        if len(candidates) == 1:
+            return int(data[list(candidates)[0]], 2)
+    raise ValueError
+
+
 class Day03:
     """ AoC 2021 Day 03 """
 
@@ -19,10 +40,9 @@ class Day03:
         """ Given a filename, solve 2021 day 03 part 1 """
         data = parse(filename)
 
-        a = data[0]
         common = ""
         leastc = ""
-        for i, z in enumerate(a):
+        for i, _ in enumerate(data[0]):
             seen = defaultdict(int)
             for item in data:
                 seen[item[i]] += 1
@@ -41,55 +61,8 @@ class Day03:
     def part2(filename: str) -> int:
         """ Given a filename, solve 2021 day 03 part 2 """
         data = parse(filename)
-        o2 = Day03.part1(filename)
 
-        a = data[0]
-        candidates = set(range(len(data)))
+        o2 = bit_criteria_selection(data, True)
+        co2 = bit_criteria_selection(data, False)
 
-        lessc = None
-        lesscfull = ""
-        for i, z in enumerate(a):
-            seen = defaultdict(int)
-            for cand in candidates:
-                seen[data[cand][i]] += 1
-
-            if seen["0"] > seen["1"]:
-                lessc = "1"
-            else:
-                lessc = "0"
-
-            to_remove = []
-            for cand in candidates:
-                if data[cand][i] != lessc:
-                    to_remove.append(cand)
-            candidates -= set(to_remove)
-            if len(candidates) == 1:
-                lesscfull = data[list(candidates)[0]]
-                break
-
-        co2 = int(lesscfull, 2)
-
-        lessc = None
-        lesscfull = ""
-        candidates = set(range(len(data)))
-        for i, z in enumerate(a):
-            seen = defaultdict(int)
-            for cand in candidates:
-                seen[data[cand][i]] += 1
-
-            if seen["0"] > seen["1"]:
-                lessc = "0"
-            else:
-                lessc = "1"
-
-            to_remove = []
-            for cand in candidates:
-                if data[cand][i] != lessc:
-                    to_remove.append(cand)
-            candidates -= set(to_remove)
-            if len(candidates) == 1:
-                lesscfull = data[list(candidates)[0]]
-                break
-
-        o2 = int(lesscfull, 2)
         return co2 * o2
