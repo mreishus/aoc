@@ -4,7 +4,9 @@ Advent Of Code 2021 Day 05
 https://adventofcode.com/2021/day/5
 """
 import re
+from typing import Generator, List
 from collections import defaultdict
+from itertools import repeat
 
 
 def parse(filename: str):
@@ -15,12 +17,12 @@ def parse(filename: str):
 PARSER = re.compile(r"(\d+),(\d+) -> (\d+),(\d+)")
 
 
-def parse_line(line):
+def parse_line(line: str) -> tuple[int, int, int, int]:
     (a, b, c, d) = map(int, re.search(PARSER, line).groups())
     return (a, b, c, d)
 
 
-def steps(a, b):
+def steps(a: int, b: int) -> range:
     """
     steps(5, 9) = 5, 6, 7, 8, 9
     steps(9, 5) = 9, 8, 7, 6, 5
@@ -33,19 +35,20 @@ def steps(a, b):
     raise ValueError
 
 
-def get_line_coords(x1, y1, x2, y2, use_45):
+def get_line_coords(
+    x1: int, y1: int, x2: int, y2: int, use_45: bool
+) -> Generator[tuple[int, int], None, None]:
     if x1 == x2:
-        for y in steps(y1, y2):
-            yield (x1, y)
+        yield from zip(repeat(x1), steps(y1, y2))
     elif y1 == y2:
-        for x in steps(x1, x2):
-            yield (x, y1)
+        yield from zip(steps(x1, x2), repeat(y1))
     elif use_45:
-        for (x, y) in zip(steps(x1, x2), steps(y1, y2)):
-            yield (x, y)
+        yield from zip(steps(x1, x2), steps(y1, y2))
 
 
-def calculate_overlaps(data, use_diagonal):
+def calculate_overlaps(
+    data: List[tuple[int, int, int, int]], use_diagonal: bool
+) -> int:
     grid = defaultdict(int)
     seen_double = set()
 

@@ -4,14 +4,15 @@ Advent Of Code 2021 Day 03
 https://adventofcode.com/2021/day/3
 """
 from collections import defaultdict
+from typing import List
 
 
-def parse(filename: str):
+def parse(filename: str) -> List[str]:
     with open(filename) as file:
         return [(line.strip()) for line in file.readlines()]
 
 
-def bit_criteria_selection(data, most_common=True):
+def bit_criteria_selection(data: List[str], most_common=True) -> int:
     candidates = set(range(len(data)))
 
     target = None
@@ -63,8 +64,6 @@ class Day03:
         data = parse(filename)
 
         o2 = bit_criteria_selection(data, True)
-        print(o2)
         co2 = bit_criteria_selection(data, False)
-        print(co2)
 
         return co2 * o2
