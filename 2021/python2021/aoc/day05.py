@@ -6,17 +6,18 @@ https://adventofcode.com/2021/day/5
 import re
 from collections import defaultdict
 
-PARSER = re.compile("(\d+),(\d+) -> (\d+),(\d+)")
-
 
 def parse(filename: str):
     with open(filename) as file:
         return [parse_line(line.strip()) for line in file.readlines()]
 
 
+PARSER = re.compile(r"(\d+),(\d+) -> (\d+),(\d+)")
+
+
 def parse_line(line):
-    (a, b, c, d) = re.search(PARSER, line).groups()
-    return (int(a), int(b), int(c), int(d))
+    (a, b, c, d) = map(int, re.search(PARSER, line).groups())
+    return (a, b, c, d)
 
 
 def steps(a, b):
