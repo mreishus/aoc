@@ -39,25 +39,28 @@ class Board:
         seen_double = set()
 
         for (x1, y1, x2, y2) in data:
-            print(f"Consider {x1} {y1} -> {x2} {y2}")
+            # print(f"Consider {x1} {y1} -> {x2} {y2}")
             if x1 == x2:
                 for y in getrange(y1, y2):
-                    print(f"Mark {x1} {y}")
+                    # print(f"Mark {x1} {y}")
                     grid[x1, y] += 1
                     if grid[x1, y] > 1:
-                        print("It's double")
+                        # print("It's double")
                         seen_double.add((x1, y))
             elif y1 == y2:
                 for x in getrange(x1, x2):
-                    print(f"Mark {x} {y1}")
+                    # print(f"Mark {x} {y1}")
                     grid[x, y1] += 1
                     if grid[x, y1] > 1:
-                        print("It's double")
+                        # print("It's double")
                         seen_double.add((x, y1))
             else:
-                print("Definite skip")
-                # Skipping non horizontal line
-                continue
+                # print(f"Diag: {x1} {y1} -> {x2} {y2}")
+                for (x, y) in zip(getrange(x1, x2), getrange(y1, y2)):
+                    # print(f"{x} {y}")
+                    grid[x, y] += 1
+                    if grid[x, y] > 1:
+                        seen_double.add((x, y))
 
         self.double_count = len(seen_double)
 

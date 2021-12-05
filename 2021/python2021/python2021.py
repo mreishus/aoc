@@ -54,6 +54,7 @@ def latest():
     # print("")
     # print("--")
     # print("")
+
     print("2020 Day 05 Part 1:", end=" ")
     print(Day05.part1("../inputs/05/input.txt"))
     print("2020 Day 05 Part 2:", end=" ")
