@@ -7,7 +7,7 @@ from typing import List
 import re
 from collections import defaultdict
 
-PARSER = re.compile(r"thing (\d+),(\d+), stuff")
+PARSER = re.compile("(\d+),(\d+) -> (\d+),(\d+)")
 
 
 def ints(s: str) -> List[int]:
@@ -17,20 +17,49 @@ def ints(s: str) -> List[int]:
 def parse(filename: str):
     with open(filename) as file:
         return [parse_line(line.strip()) for line in file.readlines()]
-        # lines = file.read().strip()
-        # first, *blocks = lines.split("\n\n")
-        # return (first, blocks)
 
 
 def parse_line(line):
-    return line
-    # (d, amount) = line.split(" ")
-    # return (d, int(amount))
+    (a, b, c, d) = re.search(PARSER, line).groups()
+    return (int(a), int(b), int(c), int(d))
 
 
-def parse_line2(line):
-    (x, y) = re.search(PARSER, line).groups()
-    return (x, y)
+def getrange(a, b):
+    if b > a:
+        return list(range(a, b + 1))
+    elif b < a:
+        return list(range(a, b - 1, -1))
+    exit("Fail assert")
+    return []
+
+
+class Board:
+    def __init__(self, data):
+        grid = defaultdict(int)
+        seen_double = set()
+
+        for (x1, y1, x2, y2) in data:
+            print(f"Consider {x1} {y1} -> {x2} {y2}")
+            if x1 == x2:
+                for y in getrange(y1, y2):
+                    print(f"Mark {x1} {y}")
+                    grid[x1, y] += 1
+                    if grid[x1, y] > 1:
+                        print("It's double")
+                        seen_double.add((x1, y))
+            elif y1 == y2:
+                for x in getrange(x1, x2):
+                    print(f"Mark {x} {y1}")
+                    grid[x, y1] += 1
+                    if grid[x, y1] > 1:
+                        print("It's double")
+                        seen_double.add((x, y1))
+            else:
+                print("Definite skip")
+                # Skipping non horizontal line
+                continue
+
+        self.double_count = len(seen_double)
 
 
 class Day05:
@@ -42,7 +71,9 @@ class Day05:
         data = parse(filename)
         if len(data) < 20:
             print(data)
-        return None
+        b = Board(data)
+        return b.double_count
+        return -1
 
     @staticmethod
     def part2(filename: str) -> int:
@@ -50,4 +81,4 @@ class Day05:
         data = parse(filename)
         if len(data) < 20:
             print(data)
-        return None
+        return -1
