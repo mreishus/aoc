@@ -18,7 +18,7 @@
 | Day    | Comment                       | Python                                   | Elixir                                   |
 | ------ | ----------------------------- | ---------------------------------------- | ---------------------------------------- |
 | Day 01 | Sliding range windows         | [Python](./2021/python2021/aoc/day01.py) | [Elixir](./2021/elixir2021/lib/day01.ex) |
-| Day 02 | Position tracking             | [Python](./2021/python2021/aoc/day02.py) |
+| Day 02 | Position tracking             | [Python](./2021/python2021/aoc/day02.py) | [Elixir](./2021/elixir2021/lib/day02.ex) |
 | Day 03 | Binary counting and filtering | [Python](./2021/python2021/aoc/day03.py) |
 | Day 04 | Bingo cards                   | [Python](./2021/python2021/aoc/day04.py) |
 | Day 05 | Line intersections            | [Python](./2021/python2021/aoc/day05.py) |
@@ -578,5 +578,5 @@ now.
 
 ```
 Created:       Mon 02 Dec 2019 05:12:40 PM CST
-Last Modified: Sun 05 Dec 2021 12:25:59 PM CST
+Last Modified: Sun 05 Dec 2021 12:45:46 PM CST
 ```
