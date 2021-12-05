@@ -84,9 +84,7 @@ class Day04:
         """ Given a filename, solve 2021 day 04 part 1 """
         (first, boards_raw) = parse(filename)
 
-        boards = []
-        for board_raw in boards_raw:
-            boards.append(Board(board_raw))
+        boards = [Board(board_raw) for board_raw in boards_raw]
 
         nums = ints(first)
         for num in nums:
@@ -94,16 +92,14 @@ class Day04:
                 winner = board.mark(num)
                 if winner:
                     return num * board.unmarked_sum()
-        return None
+        raise ValueError
 
     @staticmethod
     def part2(filename: str) -> int:
         """ Given a filename, solve 2021 day 04 part 2 """
         (first, boards_raw) = parse(filename)
 
-        boards = []
-        for board_raw in boards_raw:
-            boards.append(Board(board_raw))
+        boards = [Board(board_raw) for board_raw in boards_raw]
 
         nums = ints(first)
         winner_boards = {}
@@ -116,4 +112,4 @@ class Day04:
                     if (len(winner_boards) + 1) == len(boards):
                         return num * board.unmarked_sum()
                     winner_boards[i] = True
-        return None
+        raise ValueError
