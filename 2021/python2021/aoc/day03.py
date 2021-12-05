@@ -18,8 +18,6 @@ class Day03:
     def part1(filename: str) -> int:
         """ Given a filename, solve 2021 day 03 part 1 """
         data = parse(filename)
-        if len(data) < 15:
-            print(data)
 
         a = data[0]
         common = ""
@@ -35,7 +33,6 @@ class Day03:
             else:
                 common += "1"
                 leastc += "0"
-        # print(common)
         gamma = int(common, 2)
         epi = int(leastc, 2)
         return gamma * epi
@@ -48,7 +45,6 @@ class Day03:
 
         a = data[0]
         candidates = set(range(len(data)))
-        # print(candidates)
 
         lessc = None
         lesscfull = ""
@@ -70,11 +66,7 @@ class Day03:
             if len(candidates) == 1:
                 lesscfull = data[list(candidates)[0]]
                 break
-            # print(candidates)
-            # print("--")
 
-        # if len(data) < 15:
-        #     print(data)
         co2 = int(lesscfull, 2)
 
         lessc = None
@@ -89,7 +81,6 @@ class Day03:
                 lessc = "0"
             else:
                 lessc = "1"
-            print(f" Place {i} Winner {lessc} ")
 
             to_remove = []
             for cand in candidates:
@@ -99,15 +90,6 @@ class Day03:
             if len(candidates) == 1:
                 lesscfull = data[list(candidates)[0]]
                 break
-            print(candidates)
-            for cand in candidates:
-                print(data[cand])
-            print("--")
 
-        # if len(data) < 15:
-        #     print(data)
         o2 = int(lesscfull, 2)
-        print(f"------> {co2} <----")
-        print(f"------> {o2} <----")
-        # (You guessed 3394305.)
         return co2 * o2
