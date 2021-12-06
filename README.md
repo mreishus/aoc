@@ -22,6 +22,7 @@
 | Day 03 | Binary counting and filtering | [Python](./2021/python2021/aoc/day03.py) | [Elixir](./2021/elixir2021/lib/day03.ex) |
 | Day 04 | Bingo cards                   | [Python](./2021/python2021/aoc/day04.py) |
 | Day 05 | Line intersections            | [Python](./2021/python2021/aoc/day05.py) |
+| Day 06 | Exponential fish growth       | [Python](./2021/python2021/aoc/day06.py) |
 
 ## 2020
 
@@ -578,5 +579,5 @@ now.
 
 ```
 Created:       Mon 02 Dec 2019 05:12:40 PM CST
-Last Modified: Sun 05 Dec 2021 02:42:23 PM CST
+Last Modified: Mon 06 Dec 2021 12:11:35 AM CST
 ```
