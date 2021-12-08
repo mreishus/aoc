@@ -4,6 +4,7 @@ Advent Of Code 2021 Day 07
 https://adventofcode.com/2021/day/7
 """
 import numpy as np
+import math
 
 
 def parse(filename: str):
@@ -19,7 +20,14 @@ class Day07:
         """ Given a filename, solve 2021 day 07 part 1 """
         data = parse(filename)
         data = np.array(data)
-        return min(sum(np.absolute(data - i)) for i in range(len(data)))
+
+        def get_cost(a, i):
+            return np.absolute(a - i)
+
+        # return min(sum(get_cost(data, i)) for i in range(len(data)))
+        median = np.median(data)
+        j, k = math.floor(median), math.ceil(median)
+        return min(sum(get_cost(data, i)) for i in [j, k])
 
     @staticmethod
     def part2(filename: str):
@@ -28,6 +36,9 @@ class Day07:
 
         def get_cost(a, i):
             b = np.absolute(a - i)
-            return sum(b * (b + 1) / 2)
+            return int(sum(b * (b + 1) / 2))
 
-        return min(get_cost(data, i) for i in range(len(data)))
+        # return min(get_cost(data, i) for i in range(len(data)))
+        mean = np.mean(data)
+        j, k = math.floor(mean), math.ceil(mean)
+        return min(get_cost(data, i) for i in [j, k])
