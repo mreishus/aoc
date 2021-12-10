@@ -25,6 +25,7 @@ def alldays():
         (Day06.part1, Day06.part2),
         (Day07.part1, Day07.part2),
         (Day08.part1, Day08.part2),
+        (Day09.part1, Day09.part2),
     ]
     for (i, (p1, p2)) in enumerate(solvers, 1):
         path = f"../inputs/{i:02}/input.txt"
@@ -46,7 +47,7 @@ def alldays():
 
 
 def latest():
-    """ Scratchpad to work on. """
+    """Scratchpad to work on."""
     print("2020 Day 09 Part 1 (small):", end=" ")
     print(Day09.part1("../inputs/09/input_small.txt"))
     print("2020 Day 09 Part 2 (small):", end=" ")
