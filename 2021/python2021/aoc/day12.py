@@ -3,7 +3,7 @@
 Advent Of Code 2021 Day 12
 https://adventofcode.com/2021/day/12
 """
-from collections import defaultdict, deque
+from collections import defaultdict
 from typing import List
 from dataclasses import dataclass
 
@@ -53,23 +53,18 @@ def next_states_p2(path: Path, routes):
 
 def bfs_all(routes, next_state_x):
     begin_path = Path(["start"], False)
-    q = deque([begin_path])
-    seen = set()
+    q = [begin_path]
     path_count = 0
 
     while len(q) > 0:
-        path = q.popleft()
-
-        path_hash = "-".join(path.p)
-        if path_hash in seen:
-            continue
-        seen.add(path_hash)
+        path = q.pop()
 
         if path.p[-1] == "end":
             path_count += 1
             continue
 
         for next_path in next_state_x(path, routes):
+            path_hash = "-".join(next_path.p)
             q.append(next_path)
 
     return path_count
