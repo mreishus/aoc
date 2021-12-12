@@ -32,11 +32,9 @@ def next_states_p1(path: Path, routes):
     loc = path.p[-1]
     if loc == "end":
         return []
-    return [
-        Path(path.p + [r], path.is_small_dbl)
-        for r in routes[loc]
-        if is_big(r) or r not in path.p
-    ]
+    for r in routes[loc]:
+        if is_big(r) or r not in path.p:
+            yield Path(path.p + [r], path.is_small_dbl)
 
 
 def next_states_p2(path: Path, routes):
@@ -71,16 +69,18 @@ def bfs_all(routes, next_state_x):
 
     while len(q) > 0:
         path = q.popleft()
+
         path_hash = hashp(path.p)
         if path_hash in seen:
             continue
         seen.add(path_hash)
 
-        for next_path in next_state_x(path, routes):
-            q.append(next_path)
-
         if path.p[-1] == "end":
             path_count += 1
+            continue
+
+        for next_path in next_state_x(path, routes):
+            q.append(next_path)
 
     return path_count
 
