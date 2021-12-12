@@ -4,6 +4,7 @@ Advent Of Code 2021 Day 12
 https://adventofcode.com/2021/day/12
 """
 from collections import defaultdict, Counter, deque
+from typing import List
 
 
 def parse(filename: str):
@@ -20,29 +21,32 @@ def is_big(room):
     return room.isupper()
 
 
-def next_states_p1(path, routes):
-    loc = path[-1]
+class Path:
+    def __init__(self, path_list: List[str], is_small_double: bool):
+        self.p = path_list
+        self.is_small_double = is_small_double
+
+
+def next_states_p1(path: Path, routes):
+    loc = path.p[-1]
     if loc == "end":
         return []
-    return [r for r in routes[loc] if is_big(r) or r not in path]
+    return [r for r in routes[loc] if is_big(r) or r not in path.p]
 
 
-def next_states_p2(path, routes):
-    loc = path[-1]
+def next_states_p2(path: Path, routes):
+    loc = path.p[-1]
     if loc == "end":
         return []
-
-    path_small = (r for r in path if not is_big(r))
-    is_small_double = 2 in Counter(path_small).values()
 
     for r in routes[loc]:
         if r == "start":
             continue
         if is_big(r):
             yield r
-        elif is_small_double and r not in path:
+        elif path.is_small_double and r not in path.p:
             yield r
-        elif not is_small_double and path.count(r) < 2:
+        elif not path.is_small_double and path.p.count(r) < 2:
             yield r
 
 
@@ -51,21 +55,26 @@ def hashp(path):
 
 
 def bfs_all(routes, next_state_x):
-    q = deque([["start"]])
+    begin_path = Path(["start"], False)
+    q = deque([begin_path])
     seen = set()
     path_count = 0
 
     while len(q) > 0:
         path = q.popleft()
-        path_hash = hashp(path)
+        path_hash = hashp(path.p)
         if path_hash in seen:
             continue
         seen.add(path_hash)
 
         for next_room in next_state_x(path, routes):
-            q.append(path + [next_room])
+            next_p = path.p + [next_room]
+            is_small_double = path.is_small_double
+            if not is_small_double and not is_big(next_room) and next_room in path.p:
+                is_small_double = True
+            q.append(Path(next_p, is_small_double))
 
-        if path[-1] == "end":
+        if path.p[-1] == "end":
             path_count += 1
 
     return path_count
