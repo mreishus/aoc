@@ -5,6 +5,7 @@ https://adventofcode.com/2021/day/12
 """
 from collections import defaultdict, Counter, deque
 from typing import List
+from dataclasses import dataclass
 
 
 def parse(filename: str):
@@ -21,17 +22,21 @@ def is_big(room):
     return room.isupper()
 
 
+@dataclass
 class Path:
-    def __init__(self, path_list: List[str], is_small_double: bool):
-        self.p = path_list
-        self.is_small_double = is_small_double
+    p: List[str]
+    is_small_dbl: bool
 
 
 def next_states_p1(path: Path, routes):
     loc = path.p[-1]
     if loc == "end":
         return []
-    return [r for r in routes[loc] if is_big(r) or r not in path.p]
+    return [
+        Path(path.p + [r], path.is_small_dbl)
+        for r in routes[loc]
+        if is_big(r) or r not in path.p
+    ]
 
 
 def next_states_p2(path: Path, routes):
@@ -43,11 +48,15 @@ def next_states_p2(path: Path, routes):
         if r == "start":
             continue
         if is_big(r):
-            yield r
-        elif path.is_small_double and r not in path.p:
-            yield r
-        elif not path.is_small_double and path.p.count(r) < 2:
-            yield r
+            yield Path(path.p + [r], path.is_small_dbl)
+        elif path.is_small_dbl and r not in path.p:
+            yield Path(path.p + [r], path.is_small_dbl)
+        elif not path.is_small_dbl:
+            room_c = path.p.count(r)
+            if room_c == 0:
+                yield Path(path.p + [r], path.is_small_dbl)
+            elif room_c == 1:
+                yield Path(path.p + [r], True)
 
 
 def hashp(path):
@@ -67,12 +76,8 @@ def bfs_all(routes, next_state_x):
             continue
         seen.add(path_hash)
 
-        for next_room in next_state_x(path, routes):
-            next_p = path.p + [next_room]
-            is_small_double = path.is_small_double
-            if not is_small_double and not is_big(next_room) and next_room in path.p:
-                is_small_double = True
-            q.append(Path(next_p, is_small_double))
+        for next_path in next_state_x(path, routes):
+            q.append(next_path)
 
         if path.p[-1] == "end":
             path_count += 1
