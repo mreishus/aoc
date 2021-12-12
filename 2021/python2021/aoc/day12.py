@@ -3,7 +3,7 @@
 Advent Of Code 2021 Day 12
 https://adventofcode.com/2021/day/12
 """
-from collections import defaultdict, Counter, deque
+from collections import defaultdict, deque
 from typing import List
 from dataclasses import dataclass
 
@@ -22,7 +22,7 @@ def is_big(room):
     return room.isupper()
 
 
-@dataclass
+@dataclass()
 class Path:
     p: List[str]
     is_small_dbl: bool
@@ -45,20 +45,10 @@ def next_states_p2(path: Path, routes):
     for r in routes[loc]:
         if r == "start":
             continue
-        if is_big(r):
-            yield Path(path.p + [r], path.is_small_dbl)
-        elif path.is_small_dbl and r not in path.p:
+        if is_big(r) or (path.is_small_dbl and r not in path.p):
             yield Path(path.p + [r], path.is_small_dbl)
         elif not path.is_small_dbl:
-            room_c = path.p.count(r)
-            if room_c == 0:
-                yield Path(path.p + [r], path.is_small_dbl)
-            elif room_c == 1:
-                yield Path(path.p + [r], True)
-
-
-def hashp(path):
-    return "-".join(path)
+            yield Path(path.p + [r], r in path.p)
 
 
 def bfs_all(routes, next_state_x):
@@ -70,7 +60,7 @@ def bfs_all(routes, next_state_x):
     while len(q) > 0:
         path = q.popleft()
 
-        path_hash = hashp(path.p)
+        path_hash = "-".join(path.p)
         if path_hash in seen:
             continue
         seen.add(path_hash)
