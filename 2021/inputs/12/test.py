@@ -1,0 +1,72 @@
+#!/usr/bin/env python3
+from collections import defaultdict
+from typing import List
+from dataclasses import dataclass
+
+
+def parse(filename: str):
+    routes = defaultdict(list)
+    with open(filename) as file:
+        for line in file.readlines():
+            (left, right) = line.strip().split("-")
+            routes[left].append(right)
+            routes[right].append(left)
+    return routes
+
+
+def is_big(room):
+    return room.isupper()
+
+
+@dataclass()
+class Path:
+    p: List[str]
+    is_small_dbl: bool
+
+
+def next_states_p1(path: Path, routes):
+    loc = path.p[-1]
+    if loc == "end":
+        return []
+    for r in routes[loc]:
+        if is_big(r) or r not in path.p:
+            yield Path(path.p + [r], path.is_small_dbl)
+
+
+def next_states_p2(path: Path, routes):
+    loc = path.p[-1]
+    if loc == "end":
+        return []
+
+    for r in routes[loc]:
+        if r == "start":
+            continue
+        if is_big(r) or (path.is_small_dbl and r not in path.p):
+            yield Path(path.p + [r], path.is_small_dbl)
+        elif not path.is_small_dbl:
+            yield Path(path.p + [r], r in path.p)
+
+
+def dfs_all(routes, next_state_x):
+    begin_path = Path(["start"], False)
+    q = [begin_path]
+    path_count = 0
+
+    while len(q) > 0:
+        path = q.pop()
+
+        if path.p[-1] == "end":
+            path_count += 1
+            continue
+
+        for next_path in next_state_x(path, routes):
+            path_hash = "-".join(next_path.p)
+            q.append(next_path)
+
+    return path_count
+
+
+if __name__ == "__main__":
+    routes = parse("./input.txt")
+    print(dfs_all(routes, next_states_p1))
+    print(dfs_all(routes, next_states_p2))
