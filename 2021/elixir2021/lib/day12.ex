@@ -12,35 +12,28 @@ defmodule Elixir2021.Day12 do
 
   def big?(input), do: input == String.upcase(input)
 
-  def search([], _routes, count, _getter), do: count
+  def search([], count, _config), do: count
 
-  def search(open_set, routes, count, getter) do
+  def search(open_set, count, %{routes: routes, get_next: get_next} = config) do
     complete_count =
       Enum.count(open_set, fn path ->
         List.last(path) == "end"
       end)
 
-    # Enum.filter(open_set, fn path ->
-    #   List.last(path) == "end"
-    # end)
-    # |> IO.inspect(label: "done")
-
-    Enum.flat_map(open_set, fn state -> getter.(state, routes) end)
-    |> search(routes, count + complete_count, getter)
+    Enum.flat_map(open_set, fn state -> get_next.(state, routes) end)
+    |> search(count + complete_count, config)
   end
 
   def next_states1(state, routes) do
     here = List.last(state)
 
-    case here do
-      "end" ->
-        []
-
-      _ ->
-        Map.get(routes, here)
-        |> Enum.filter(fn room -> room != "start" end)
-        |> Enum.filter(fn room -> big?(room) || !Enum.member?(state, room) end)
-        |> Enum.map(fn room -> state ++ [room] end)
+    if here == "end" do
+      []
+    else
+      Map.get(routes, here)
+      |> Enum.filter(fn room -> room != "start" end)
+      |> Enum.filter(fn room -> big?(room) || !Enum.member?(state, room) end)
+      |> Enum.map(fn room -> state ++ [room] end)
     end
   end
 
@@ -54,15 +47,13 @@ defmodule Elixir2021.Day12 do
       |> Map.values()
       |> Enum.any?(fn x -> x > 1 end)
 
-    case here do
-      "end" ->
-        []
-
-      _ ->
-        Map.get(routes, here)
-        |> Enum.filter(fn room -> room != "start" end)
-        |> Enum.filter(fn room -> big?(room) || small_room_allowed(state, room, has_double) end)
-        |> Enum.map(fn room -> state ++ [room] end)
+    if here == "end" do
+      []
+    else
+      Map.get(routes, here)
+      |> Enum.filter(fn room -> room != "start" end)
+      |> Enum.filter(fn room -> big?(room) || small_room_allowed(state, room, has_double) end)
+      |> Enum.map(fn room -> state ++ [room] end)
     end
   end
 
@@ -76,11 +67,11 @@ defmodule Elixir2021.Day12 do
 
   def part1(filename) do
     routes = parse(filename)
-    search([["start"]], routes, 0, &next_states1/2)
+    search([["start"]], 0, %{routes: routes, get_next: &next_states1/2})
   end
 
   def part2(filename) do
     routes = parse(filename)
-    search([["start"]], routes, 0, &next_states2/2)
+    search([["start"]], 0, %{routes: routes, get_next: &next_states2/2})
   end
 end

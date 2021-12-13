@@ -38,7 +38,7 @@ defmodule Elixir2021 do
   end
 
   def main do
-    day1to5()
+    # day1to5()
     randomdays()
   end
 end
