@@ -11,10 +11,10 @@ defmodule Elixir2021.Day12.State do
 
   def add_room(state = %State{}, room) do
     if state.doubled_small? do
-      %State{path: state.path ++ [room], doubled_small?: true}
+      %State{path: [room | state.path], doubled_small?: true}
     else
       has_double = not Day12.big?(room) and Enum.member?(state.path, room)
-      %State{path: state.path ++ [room], doubled_small?: has_double}
+      %State{path: [room | state.path], doubled_small?: has_double}
     end
   end
 end
@@ -40,7 +40,7 @@ defmodule Elixir2021.Day12 do
   def search(open_set, count, routes) do
     complete_count =
       Enum.count(open_set, fn state ->
-        List.last(state.path) == "end"
+        List.first(state.path) == "end"
       end)
 
     Enum.flat_map(open_set, fn state -> next_states(state, routes) end)
@@ -48,7 +48,7 @@ defmodule Elixir2021.Day12 do
   end
 
   def next_states(state, routes) do
-    here = List.last(state.path)
+    here = List.first(state.path)
 
     if here == "end" do
       []
