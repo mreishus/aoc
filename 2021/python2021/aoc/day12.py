@@ -51,7 +51,7 @@ def next_states_p2(path: Path, routes):
             yield Path(path.p + [r], r in path.p)
 
 
-def bfs_all(routes, next_state_x):
+def dfs_all(routes, next_state_x):
     begin_path = Path(["start"], False)
     q = [begin_path]
     path_count = 0
@@ -77,10 +77,10 @@ class Day12:
     def part1(filename: str) -> int:
         """ Given a filename, solve 2021 day 12 part 1 """
         routes = parse(filename)
-        return bfs_all(routes, next_states_p1)
+        return dfs_all(routes, next_states_p1)
 
     @staticmethod
     def part2(filename: str) -> int:
         """ Given a filename, solve 2021 day 12 part 2 """
         routes = parse(filename)
-        return bfs_all(routes, next_states_p2)
+        return dfs_all(routes, next_states_p2)
