@@ -5,7 +5,7 @@ https://adventofcode.com/2021/day/8
 """
 import re
 from collections import defaultdict
-from aoc.heapdict import heapdict
+from queue import PriorityQueue
 
 
 def parse(filename: str):
@@ -109,13 +109,13 @@ class Day15:
 
         dist_to = defaultdict(lambda: 999_999_999)
         edge_to = {}
-        queue = heapdict()
+        queue = PriorityQueue()
 
         loc = (0, 0)
         dist_to[loc] = 0
-        queue[loc] = 0
-        while len(queue) > 0:
-            (loc, length) = queue.popitem()
+        queue.put((0, loc))
+        while not queue.empty():
+            (length, loc) = queue.get()
 
             # Stop searching if solution
             if loc == goal:
@@ -126,7 +126,7 @@ class Day15:
                 if dist_to[new_loc] > dist_to[loc] + length:
                     dist_to[new_loc] = dist_to[loc] + length
                     edge_to[new_loc] = loc
-                    queue[new_loc] = dist_to[new_loc]
+                    queue.put((dist_to[new_loc], new_loc))
 
         for k, v in dist_to.items():
             if k == goal:
@@ -149,13 +149,16 @@ class Day15:
 
         dist_to = defaultdict(lambda: 999_999_999)
         edge_to = {}
-        queue = heapdict()
+        queue = PriorityQueue()
 
         loc = (0, 0)
         dist_to[loc] = 0
-        queue[loc] = 0
-        while len(queue) > 0:
-            (loc, length) = queue.popitem()
+        queue.put((0, loc))
+        done = set()
+        while not queue.empty():
+            (length, loc) = queue.get()
+            # if loc in done:
+            #     continue
 
             # Stop searching if solution
             if loc == goal:
@@ -166,7 +169,13 @@ class Day15:
                 if dist_to[new_loc] > dist_to[loc] + length:
                     dist_to[new_loc] = dist_to[loc] + length
                     edge_to[new_loc] = loc
-                    queue[new_loc] = dist_to[new_loc]
+                    # Technically, we should check to see if new_loc
+                    # is already in the Q with a higher distance and remove
+                    # it?
+                    # I tried adding a 'done' set to stop from processing nodes
+                    # twice but it didn't seem to improve anything.
+                    queue.put((dist_to[new_loc], new_loc))
+            # done.add(loc)
 
         # print("==Done==")
         for k, v in dist_to.items():
