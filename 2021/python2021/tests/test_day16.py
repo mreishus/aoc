@@ -12,9 +12,11 @@ class TestDay16(unittest.TestCase):
 
     def test_part1(self):
         """Test part1"""
-        self.assertEqual("hello", "hello")
-        # self.assertEqual(Day16.part1("../inputs/16/input_small.txt"), 1588)
-        # self.assertEqual(Day16.part1("../inputs/16/input.txt"), 3058)
+        self.assertEqual(Day16.part1_hexstring("8A004A801A8002F478"), 16)
+        self.assertEqual(Day16.part1_hexstring("620080001611562C8802118E34"), 12)
+        self.assertEqual(Day16.part1_hexstring("C0015000016115A2E0802F182340"), 23)
+        self.assertEqual(Day16.part1_hexstring("A0016C880162017C3686B18A3D4780"), 31)
+        self.assertEqual(Day16.part1("../inputs/16/input.txt"), 929)
 
     def test_part2(self):
         """Test part2"""
