@@ -57,31 +57,26 @@ def p2(all_bits):
         i += 1
         sub_nums = []
         if first[0] == 0:
-            # the next 15 bits are a number that represents the total
-            # length in bits
+            # the next 15 bits are a number that represents the total length in bits
             sub_packet_length = to_int(take(15, bit_stream))
             i += 15
-            sub_packet_data = take(sub_packet_length, bit_stream)
-            i += sub_packet_length
             j = 0
             while j < sub_packet_length:
-                this_nums, this_j, this_vsum = p2(sub_packet_data)
+                this_nums, this_j, this_vsum = p2(bit_stream)
                 sub_nums += this_nums
-                sub_packet_data = sub_packet_data[this_j:]
                 vsum += this_vsum
                 j += this_j
+            i += sub_packet_length
         elif first[0] == 1:
             # the next 11 bits are a number that represents the number of
             # sub-packets immediately contained by this packet.
             sub_packet_num = to_int(take(11, bit_stream))
             i += 11
-            sub_packet_data = list(bit_stream)
             for _ in range(sub_packet_num):
-                this_num, this_j, this_vsum = p2(sub_packet_data)
+                this_num, this_j, this_vsum = p2(bit_stream)
                 sub_nums += this_num
                 i += this_j
                 vsum += this_vsum
-                sub_packet_data = sub_packet_data[this_j:]
 
         # Collapse numbers
         value = None
