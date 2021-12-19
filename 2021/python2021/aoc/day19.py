@@ -30,11 +30,12 @@ class Orientation:
     fx: bool = False
     fy: bool = False
     fz: bool = False
-    swap: int = 0  # 0 1 or 2 | I might only need 0 or 1
+    swap: int = 0  # 0 or 1
     roll: int = 0
 
 
 def all_orientations():
+    """ Returns 48 orientations instead of 24 """
     for swap in range(2):
         for roll in range(3):
             for fx in [False, True]:
@@ -49,8 +50,6 @@ class Scanner:
         self.len = len(coords)
         self.coords = np.array(coords, dtype=np.int32)
         self.coords_swap = self.build_coords_swap()
-        # self.coords_swap2 = self.build_coords_swap2()
-        # self.node_i = 0
 
         self.solved = False
         self.offset = np.array([0, 0, 0], dtype=np.int32)
@@ -66,26 +65,7 @@ class Scanner:
         tmp[:, [1, 0]] = tmp[:, [0, 1]]
         return tmp
 
-    def build_coords_swap2(self):
-        tmp = np.copy(self.coords)
-        tmp[:, [2, 0]] = tmp[:, [0, 2]]
-        return tmp
-
-    def add_entries(self, new_entries):
-        # print("-coords-")
-        # print(self.coords)
-        # print("--new entries--")
-        # print(new_entries)
-        # print("--after--")
-        # self.coords = np.concatenate((self.coords, new_entries))
-        to_add = new_entries + self.coords[self.node_i]
-        self.coords = np.concatenate((self.coords, to_add))
-        self.coords = np.unique(self.coords, axis=0)
-        # print(self.coords)
-        self.coords_swap = self.build_coords_swap()
-
     def real_view_relative(self, source_i):
-        # return self.coords
         c = self.real_view()
         return c - c[source_i]
 
@@ -108,22 +88,10 @@ class Scanner:
         coords = self.coords
         if o.swap == 1:
             coords = self.coords_swap
-        # elif o.swap == 2:
-        #     coords = self.coords_swap2
         return np.roll(coords * tx * ty * tz, o.roll, (1, 1))
 
 
 def find_overlap(A, B):
-    # 7.35
-    # tmp = np.prod(np.swapaxes(A[:, :, None], 1, 2) == B, axis=2)
-    # return np.count_nonzero(np.sum(np.cumsum(tmp, axis=0) * tmp == 1, axis=1))
-    # # input-small2: 4.52 seconds
-    # return np.count_nonzero((A[:, None] == B).all(-1).any(1))
-
-    # input-small2: 7.68 seconds
-    # return len([x for x in set(tuple(x) for x in A) & set(tuple(x) for x in B)])
-
-    # # input-small2: 2.83 seconds
     s = set()
     for row in A:
         s.add(row.tobytes())
@@ -132,37 +100,6 @@ def find_overlap(A, B):
         if row.tobytes() in s:
             count += 1
     return count
-
-    # # input-small2: 7.38 seconds
-    # # print(f"{A.dtype} {B.dtype}")
-    # if not A.dtype == B.dtype:
-    #     raise TypeError("A and B must have the same dtype")
-    # if not A.shape[1:] == B.shape[1:]:
-    #     raise ValueError(
-    #         "the shapes of A and B must be identical apart from " "the row dimension"
-    #     )
-
-    # # reshape A and B to 2D arrays. force a copy if neccessary in order to
-    # # ensure that they are C-contiguous.
-    # # A = np.ascontiguousarray(A.reshape(A.shape[0], -1))
-    # # B = np.ascontiguousarray(B.reshape(B.shape[0], -1))
-
-    # # void type that views each row in A and B as a single item
-    # t = np.dtype((np.void, A.dtype.itemsize * A.shape[1]))
-
-    # # use in1d to find rows in A that are also in B
-    # return np.count_nonzero(np.in1d(A.view(t), B.view(t)))
-
-    # --
-
-    # input-small2: 9 seconds
-    # nrows, ncols = A.shape
-    # dtype = {
-    #     "names": ["f{}".format(i) for i in range(ncols)],
-    #     "formats": ncols * [A.dtype],
-    # }
-    # C = np.intersect1d(A.view(dtype), B.view(dtype))
-    # return len(C)
 
 
 def match(scan1, scan2):
@@ -176,16 +113,6 @@ def match(scan1, scan2):
                 match_max = match_count
                 if match_count >= 12:
                     return source_i, target_i, orient, match_count
-                    # found = True
-                    # break
-                    # scan1.add_entries(target)
-                    # print("---source--")
-                    # print(source)
-                    # print("--target--")
-                    # print(target)
-                    # print(target)
-                    # print("--primary view after merging--")
-                    # print(scan1.real_view_relative())
         if found:
             break
     return None, None, Orientation(), match_max
@@ -200,8 +127,8 @@ class Day19:
         scan = parse(filename)
         scan[0].solved = True
         size = len(scan)
-        # overlap_count = match(scan[0], scan[1])
 
+        ## Orientation Checker:
         # z = Scanner(0, [[1, 2, 3]])
         # col = []
         # s = set()
@@ -214,27 +141,6 @@ class Day19:
         # print(len(s))
         # exit()
 
-        # # print(list(z.all_views()))
-        # exit()
-
-        # print("")
-        # scan[0].fx = True
-        # print(scan[0].get_coords())
-        # print("")
-        # scan[0].fx = True
-        # z = scan[0].get_coords(Orientation())
-        # y = z
-        # print(z)
-        # z[:, [2, 0]] = z[:, [0, 2]]
-        # z[:, [1, 0]] = z[:, [0, 1]]
-        # print(y)
-        # print(z)
-        # scan[1].coords += np.array([68, -1246, -430])
-        # scan[1].coords_swap = scan[1].build_coords_swap()
-        # print("ooo")
-        # i = 0
-        # for j in range(1, 5):
-        #     print(f"Match[ {i} , {j} ] = {match(scan[i], scan[j])}")
         print()
         solved = set([0])
         no_match = set()
@@ -249,7 +155,6 @@ class Day19:
                         print(f"SOLVING {i} ---> {j}")
                         print(f"Match[ {i} , {j} ] = {match_count}")
                         print(f"source_i={source_i} target_i={target_i} orient{orient}")
-                        # offset1 = scan[i].coords[source_i]
                         offset1 = scan[i].real_view()[source_i]
                         offset2 = scan[j].get_coords(orient)[target_i]
                         j_location = offset1 - offset2
@@ -275,49 +180,6 @@ class Day19:
                 dist = np.sum(np.abs(diff))
                 max_dist = max(max_dist, dist)
         print(f"Part2 Answer={max_dist}")
-
-        #         self.coords = np.concatenate((self.coords, to_add))
-        #         self.coords = np.unique(self.coords, axis=0)
-
-        # All are solved
-
-        # for i in range(size):
-        #     for j in range(i, size):
-        #         if i == j:
-        #             continue
-        #         print(f"Checking {i} {j}")
-        #         source_i, target_i, orient, match_count = match(scan[i], scan[j])
-        #         if match_count >= 12:
-        #             print(f"Match[ {i} , {j} ] = {match_count}")
-        #             print(f"source_i={source_i} target_i={target_i} orient{orient}")
-        #             offset1 = scan[i].coords[source_i]
-        #             offset2 = scan[j].get_coords(orient)[target_i]
-        #             j_location = offset1 - offset2
-        #             print(j_location)
-        #             scan[j].solve(j_location, orient)
-        # print(scan[j].real_view())
-
-        # print(scan[i].coords)
-        # print(offset1)
-        # # offset2 = scan[j].get_coords(orient)[target_i]
-        # print(offset2)
-        # print(offset1 + offset2)
-        # print(offset2 - offset1)
-        # print(scan[j].get_coords(orient))
-        # print(np.shape(scan[i].coords), end=" ")
-        # print(np.shape(scan[j].coords))
-        # print("")
-        # for i in range(5):
-        #     for j in range(5):
-        #         if i == j:
-        #             continue
-        #         print(f"Match[ {i} , {j} ] = {match(scan[i], scan[j])}")
-        # for i in range(5):
-        #     for j in range(5):
-        #         if i == j:
-        #             continue
-        #         print(f"Match[ {i} , {j} ] = {match(scan[i], scan[j])}")
-        # print(scan[0].coords)
         return -1
 
     @staticmethod
