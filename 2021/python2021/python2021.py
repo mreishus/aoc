@@ -4,6 +4,7 @@ Main program runner for Advent of Code 2021 in Python.
 This is a series of programming problems available at https://adventofcode.com/2021
 """
 from timeit import default_timer as timer
+import cProfile
 from aoc.day01 import Day01
 from aoc.day02 import Day02
 from aoc.day03 import Day03
@@ -72,10 +73,10 @@ def latest():
     # print(Day19.part1("../inputs/19/input_small.txt"))
     print("2021 Day 19 Part 1 (small):", end=" ")
     print(Day19.part1("../inputs/19/input_small2.txt"))
-    return
+    # return
 
-    print("2021 Day 19 Part 2 (small):", end=" ")
-    print(Day19.part2("../inputs/19/input_small2.txt"))
+    # print("2021 Day 19 Part 2 (small):", end=" ")
+    # print(Day19.part2("../inputs/19/input_small2.txt"))
     print("")
     print("--")
     print("")
@@ -96,3 +97,4 @@ def latest():
 if __name__ == "__main__":
     # alldays()
     latest()
+    # cProfile.run('print(Day19.part1("../inputs/19/input_small2.txt"))')
