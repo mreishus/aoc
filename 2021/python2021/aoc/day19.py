@@ -77,7 +77,11 @@ class Scanner:
     def all_views(self):
         for o in all_orientations():
             coords = self.get_coords(o)
-            for node_i in range(self.len):
+            # I need to try a couple of different nodes, but not all of them
+            # range(1): Incorrect results
+            # range(self.len): Correct but misses take a lot of time to calculate
+            # Optimal is somewhere in between
+            for node_i in range(self.len // 6):
                 yield (o, node_i, coords - coords[node_i])
 
     def get_coords(self, o: Orientation):
@@ -96,9 +100,14 @@ def find_overlap(A, B):
     for row in A:
         s.add(row.tobytes())
     count = 0
+    missed = 0
     for row in B:
         if row.tobytes() in s:
             count += 1
+        else:
+            missed += 1
+        if missed > 15:
+            return count
     return count
 
 
