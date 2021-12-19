@@ -266,6 +266,16 @@ class Day19:
         all_coords_uniq = np.unique(all_coords, axis=0)
         print(f"Part1 Answer={len(all_coords_uniq)}")
 
+        max_dist = 0
+        for i in range(size):
+            for j in range(i, size):
+                if i == j:
+                    next
+                diff = scan[i].offset - scan[j].offset
+                dist = np.sum(np.abs(diff))
+                max_dist = max(max_dist, dist)
+        print(f"Part2 Answer={max_dist}")
+
         #         self.coords = np.concatenate((self.coords, to_add))
         #         self.coords = np.unique(self.coords, axis=0)
 
