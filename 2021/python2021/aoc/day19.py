@@ -134,12 +134,12 @@ class Day19:
     @staticmethod
     @lru_cache(maxsize=None)
     def partX(filename: str):
-        scan = parse(filename)
-        scan[0].solved = True
-        size = len(scan)
+        scanners = parse(filename)
+        scanners[0].solved = True
+        size = len(scanners)
 
         ## Orientation Checker:
-        # z = Scanner(0, [[1, 2, 3]])
+        # z = scannersner(0, [[1, 2, 3]])
         # col = []
         # s = set()
         # for a, b in z.all_views():
@@ -159,42 +159,44 @@ class Day19:
                     if j in solved or (i, j) in no_match:
                         continue
                     # print(f"Checking {i} {j}")
-                    source_i, target_i, orient, match_count = match(scan[i], scan[j])
+                    source_i, target_i, orient, match_count = match(
+                        scanners[i], scanners[j]
+                    )
                     if match_count >= 12:
                         # print(f"SOLVING {i} ---> {j}")
                         # print(f"Match[ {i} , {j} ] = {match_count}")
                         # print(f"source_i={source_i} target_i={target_i} orient{orient}")
-                        offset1 = scan[i].real_view()[source_i]
-                        offset2 = scan[j].get_coords(orient)[target_i]
+                        offset1 = scanners[i].real_view()[source_i]
+                        offset2 = scanners[j].get_coords(orient)[target_i]
                         j_location = offset1 - offset2
                         # print(j_location)
-                        scan[j].solve(j_location, orient)
+                        scanners[j].solve(j_location, orient)
                         solved.add(j)
                     else:
                         no_match.add((i, j))
 
-        return size, solved, scan
+        return size, solved, scanners
 
     @staticmethod
     def part1(filename: str) -> int:
-        size, solved, scan = Day19.partX(filename)
+        size, solved, scanners = Day19.partX(filename)
         first = solved.pop()
-        all_coords = scan[first].real_view()
+        all_coords = scanners[first].real_view()
         for i in solved:
-            all_coords = np.concatenate((all_coords, scan[i].real_view()))
+            all_coords = np.concatenate((all_coords, scanners[i].real_view()))
         all_coords_uniq = np.unique(all_coords, axis=0)
         return len(all_coords_uniq)
 
     @staticmethod
     def part2(filename: str) -> int:
         """ Given a filename, solve 2021 day 19 part 2 """
-        size, solved, scan = Day19.partX(filename)
+        size, solved, scanners = Day19.partX(filename)
         max_dist = 0
         for i in range(size):
             for j in range(i, size):
                 if i == j:
                     next
-                diff = scan[i].offset - scan[j].offset
+                diff = scanners[i].offset - scanners[j].offset
                 dist = np.sum(np.abs(diff))
                 max_dist = max(max_dist, dist)
         return max_dist
