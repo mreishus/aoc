@@ -6,6 +6,7 @@ https://adventofcode.com/2021/day/8
 from typing import List
 import re
 from dataclasses import dataclass
+from functools import lru_cache
 import numpy as np
 
 
@@ -131,8 +132,8 @@ class Day19:
     """ AoC 2021 Day 19 """
 
     @staticmethod
-    def part1(filename: str) -> int:
-        """ Given a filename, solve 2021 day 19 part 1 """
+    @lru_cache(maxsize=None)
+    def partX(filename: str):
         scan = parse(filename)
         scan[0].solved = True
         size = len(scan)
@@ -150,7 +151,6 @@ class Day19:
         # print(len(s))
         # exit()
 
-        print()
         solved = set([0])
         no_match = set()
         while len(solved) < size:
@@ -158,28 +158,37 @@ class Day19:
                 for j in range(size):
                     if j in solved or (i, j) in no_match:
                         continue
-                    print(f"Checking {i} {j}")
+                    # print(f"Checking {i} {j}")
                     source_i, target_i, orient, match_count = match(scan[i], scan[j])
                     if match_count >= 12:
-                        print(f"SOLVING {i} ---> {j}")
-                        print(f"Match[ {i} , {j} ] = {match_count}")
-                        print(f"source_i={source_i} target_i={target_i} orient{orient}")
+                        # print(f"SOLVING {i} ---> {j}")
+                        # print(f"Match[ {i} , {j} ] = {match_count}")
+                        # print(f"source_i={source_i} target_i={target_i} orient{orient}")
                         offset1 = scan[i].real_view()[source_i]
                         offset2 = scan[j].get_coords(orient)[target_i]
                         j_location = offset1 - offset2
-                        print(j_location)
+                        # print(j_location)
                         scan[j].solve(j_location, orient)
                         solved.add(j)
                     else:
                         no_match.add((i, j))
 
+        return size, solved, scan
+
+    @staticmethod
+    def part1(filename: str) -> int:
+        size, solved, scan = Day19.partX(filename)
         first = solved.pop()
         all_coords = scan[first].real_view()
         for i in solved:
             all_coords = np.concatenate((all_coords, scan[i].real_view()))
         all_coords_uniq = np.unique(all_coords, axis=0)
-        print(f"Part1 Answer={len(all_coords_uniq)}")
+        return len(all_coords_uniq)
 
+    @staticmethod
+    def part2(filename: str) -> int:
+        """ Given a filename, solve 2021 day 19 part 2 """
+        size, solved, scan = Day19.partX(filename)
         max_dist = 0
         for i in range(size):
             for j in range(i, size):
@@ -188,13 +197,4 @@ class Day19:
                 diff = scan[i].offset - scan[j].offset
                 dist = np.sum(np.abs(diff))
                 max_dist = max(max_dist, dist)
-        print(f"Part2 Answer={max_dist}")
-        return -1
-
-    @staticmethod
-    def part2(filename: str) -> int:
-        """ Given a filename, solve 2021 day 19 part 2 """
-        data = parse(filename)
-        if len(data) < 20:
-            print(data)
-        return -1
+        return max_dist
