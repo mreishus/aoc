@@ -3,8 +3,6 @@
 Advent Of Code 2021 Day 18
 https://adventofcode.com/2021/day/18
 """
-from typing import List
-import re
 from math import floor, ceil
 
 
@@ -48,23 +46,12 @@ def build_tree(line):
                 elif line[i] == "," and level == 0:
                     left_end = i - 1
                     right_start = i + 1
+                    break
             return Pair(parse(left_start, left_end), parse(right_start, right_end))
         elif a == b and line[a].isdigit():
             return int(line[a])
 
     return parse(a, b)
-
-
-def leftmost(root):
-    if root is None or isinstance(root, int):
-        return root
-    return leftmost(root.left)
-
-
-def rightmost(root):
-    if root is None or isinstance(root, int):
-        return root
-    return rightmost(root.right)
 
 
 def explode(root):
