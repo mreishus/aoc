@@ -88,8 +88,8 @@ def latest():
     # print("--")
     # print("")
 
-    # print("2021 Day 19 Part 1:", end=" ")
-    # print(Day19.part1("../inputs/19/input.txt"))
+    print("2021 Day 19 Part 1:", end=" ")
+    print(Day19.part1("../inputs/19/input.txt"))
     # print("2021 Day 19 Part 2:", end=" ")
     # print(Day19.part2("../inputs/19/input.txt"))
 

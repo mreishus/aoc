@@ -236,32 +236,67 @@ class Day19:
         # for j in range(1, 5):
         #     print(f"Match[ {i} , {j} ] = {match(scan[i], scan[j])}")
         print()
-        for i in range(size):
-            for j in range(i, size):
-                if i == j:
-                    continue
-                print(f"Checking {i} {j}")
-                source_i, target_i, orient, match_count = match(scan[i], scan[j])
-                if match_count >= 12:
-                    print(f"Match[ {i} , {j} ] = {match_count}")
-                    print(f"source_i={source_i} target_i={target_i} orient{orient}")
-                    offset1 = scan[i].coords[source_i]
-                    offset2 = scan[j].get_coords(orient)[target_i]
-                    j_location = offset1 - offset2
-                    print(j_location)
-                    scan[j].solve(j_location, orient)
-                    # print(scan[j].real_view())
+        solved = set([0])
+        no_match = set()
+        while len(solved) < size:
+            for i in solved.copy():
+                for j in range(size):
+                    if j in solved or (i, j) in no_match:
+                        continue
+                    print(f"Checking {i} {j}")
+                    source_i, target_i, orient, match_count = match(scan[i], scan[j])
+                    if match_count >= 12:
+                        print(f"SOLVING {i} ---> {j}")
+                        print(f"Match[ {i} , {j} ] = {match_count}")
+                        print(f"source_i={source_i} target_i={target_i} orient{orient}")
+                        # offset1 = scan[i].coords[source_i]
+                        offset1 = scan[i].real_view()[source_i]
+                        offset2 = scan[j].get_coords(orient)[target_i]
+                        j_location = offset1 - offset2
+                        print(j_location)
+                        scan[j].solve(j_location, orient)
+                        solved.add(j)
+                    else:
+                        no_match.add((i, j))
 
-                    # print(scan[i].coords)
-                    # print(offset1)
-                    # # offset2 = scan[j].get_coords(orient)[target_i]
-                    # print(offset2)
-                    # print(offset1 + offset2)
-                    # print(offset2 - offset1)
-                    # print(scan[j].get_coords(orient))
-                    # print(np.shape(scan[i].coords), end=" ")
-                    # print(np.shape(scan[j].coords))
-                    # print("")
+        first = solved.pop()
+        all_coords = scan[first].real_view()
+        for i in solved:
+            all_coords = np.concatenate((all_coords, scan[i].real_view()))
+        all_coords_uniq = np.unique(all_coords, axis=0)
+        print(f"Part1 Answer={len(all_coords_uniq)}")
+
+        #         self.coords = np.concatenate((self.coords, to_add))
+        #         self.coords = np.unique(self.coords, axis=0)
+
+        # All are solved
+
+        # for i in range(size):
+        #     for j in range(i, size):
+        #         if i == j:
+        #             continue
+        #         print(f"Checking {i} {j}")
+        #         source_i, target_i, orient, match_count = match(scan[i], scan[j])
+        #         if match_count >= 12:
+        #             print(f"Match[ {i} , {j} ] = {match_count}")
+        #             print(f"source_i={source_i} target_i={target_i} orient{orient}")
+        #             offset1 = scan[i].coords[source_i]
+        #             offset2 = scan[j].get_coords(orient)[target_i]
+        #             j_location = offset1 - offset2
+        #             print(j_location)
+        #             scan[j].solve(j_location, orient)
+        # print(scan[j].real_view())
+
+        # print(scan[i].coords)
+        # print(offset1)
+        # # offset2 = scan[j].get_coords(orient)[target_i]
+        # print(offset2)
+        # print(offset1 + offset2)
+        # print(offset2 - offset1)
+        # print(scan[j].get_coords(orient))
+        # print(np.shape(scan[i].coords), end=" ")
+        # print(np.shape(scan[j].coords))
+        # print("")
         # for i in range(5):
         #     for j in range(5):
         #         if i == j:
