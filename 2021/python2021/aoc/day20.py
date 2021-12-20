@@ -52,7 +52,7 @@ class Day20:
         """ Given a filename, solve 2021 day 20 part 1 """
         b1, b2 = parse(filename)
         b2 = np.array(b2, dtype=np.int16)
-        b2 = np.pad(b2, (100, 100), "constant", constant_values=(0, 0))
+        b2 = np.pad(b2, (4, 4), "constant", constant_values=(0, 0))
         b2 = enhance(b1, b2)
         b2 = enhance(b1, b2)
         return np.count_nonzero(b2)
@@ -64,10 +64,9 @@ class Day20:
         b1, b2 = parse(filename)
         b2 = np.array(b2, dtype=np.int16)
 
-        # There's probably a faster solution here where I do something other
-        # than add enough padding at the beginning to slowly get whittled away
-        # after 50 iterations. Each iteration reduces the size by 2x2
-        b2 = np.pad(b2, (100, 100), "constant", constant_values=(0, 0))
+        b2 = np.pad(b2, (3, 3), "constant", constant_values=(0, 0))
         for _ in range(50):
             b2 = enhance(b1, b2)
+            pad = b2[0][0]
+            b2 = np.pad(b2, (2, 2), "constant", constant_values=(pad, pad))
         return np.count_nonzero(b2)
