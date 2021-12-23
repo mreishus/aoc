@@ -6,33 +6,34 @@ https://adventofcode.com/2021/day/23
 from collections import namedtuple, defaultdict
 import math
 
-from aoc.heapdict import heapdict
+# from aoc.heapdict import heapdict
+from heapdict import heapdict
 
-# from heapdict import heapdict
-from copy import deepcopy
+# from copy import deepcopy
 
 State = namedtuple("State", ("podlocs"))
 Edge = namedtuple("Edge", ("state", "length"))
 
 
-class hashabledict(dict):
-    def __key(self):
-        return tuple((k, self[k]) for k in sorted(self))
-
-    def __hash__(self):
-        return hash(self.__key())
-
-    def __eq__(self, other):
-        return self.__key() == other.__key()
-
-
 class Maze:
     def __init__(self, filename):
         self.grid = {}
-        self.podlocs = {}
+        self.podlocs = [
+            (0, 0),
+            (0, 0),
+            (0, 0),
+            (0, 0),
+            (0, 0),
+            (0, 0),
+            (0, 0),
+            (0, 0),
+        ]
         self.must_move = [(3, 1), (5, 1), (7, 1), (9, 1)]
-        self.pods = ["A", "B", "C", "D", "A2", "B2", "C2", "D2"]
+        self.pods = ["A", "A2", "B", "B2", "C", "C2", "D", "D2"]
         self.parse(filename)
+
+    def podi(self, pod):
+        return self.pods.index(pod)
 
     def parse(self, filename):
         grid = defaultdict(lambda: " ")
@@ -41,9 +42,9 @@ class Maze:
             for line in f:
                 for char in line.strip("\n"):
                     if char in ["A", "B", "C", "D"]:
-                        if char in self.podlocs:
+                        if self.podlocs[self.podi(char)] != (0, 0):
                             char = char + "2"
-                        self.podlocs[char] = (x, y)
+                        self.podlocs[self.podi(char)] = (x, y)
                         grid[x, y] = "."
                     else:
                         grid[x, y] = char
@@ -58,7 +59,7 @@ class Maze:
         edge_to = {}
         queue = heapdict()
 
-        state = State(hashabledict(deepcopy(self.podlocs)))
+        state = State(tuple(self.podlocs))
         dist_to[state] = 0
         queue[state] = 0
 
@@ -90,32 +91,28 @@ class Maze:
 
     def possible_edges(self, state):
         podlocs = state.podlocs
-        allpods = podlocs.values()
 
         # self.display()
 
         # Check if someone must move
-        free_to_move = self.pods
-        for pod in self.pods:
-            if podlocs[pod] in self.must_move:
-                free_to_move = [pod]
-                break
+        free_to_move = list(range(len(podlocs)))
+        for i in range(len(podlocs)):
+            if podlocs[i] in self.must_move:
+                free_to_move = [i]
 
         edges = []
-
         for pod in free_to_move:
             loc = podlocs[pod]
             # print(f"{pod} {loc}")
             for x, y in get_neighbors(loc):
                 if self.grid[x, y] == "#":
                     continue
-                if (x, y) in podlocs.values():
+                if (x, y) in podlocs:
                     continue
 
-                newlocs = deepcopy(podlocs)
+                newlocs = list(podlocs)
                 newlocs[pod] = (x, y)
-                # print(f"--> {pod} moving to {x} {y}")
-                new_state = State(newlocs)
+                new_state = State(tuple(newlocs))
                 energy = get_energy(pod)
                 edges.append(Edge(new_state, energy))
 
@@ -123,13 +120,21 @@ class Maze:
 
 
 def get_energy(pod):
-    if pod == "A" or pod == "A2":
+    a = 0
+    a2 = 1
+    b = 2
+    b2 = 3
+    c = 4
+    c2 = 5
+    d = 6
+    d2 = 7
+    if pod == a or pod == a2:
         return 1
-    if pod == "B" or pod == "B2":
+    if pod == b or pod == b2:
         return 1
-    if pod == "C" or pod == "C2":
+    if pod == c or pod == c2:
         return 1
-    if pod == "D" or pod == "D2":
+    if pod == d or pod == d2:
         return 1
     raise ValueError
 
@@ -143,21 +148,27 @@ def get_neighbors(loc):
 
 
 def is_winner(state: State):
-    a = (state.podlocs["A"] == (3, 2) and state.podlocs["A2"] == (3, 3)) or (
-        state.podlocs["A"] == (3, 3) and state.podlocs["A2"] == (3, 2)
+    a = 0
+    a2 = 1
+    b = 2
+    b2 = 3
+    c = 4
+    c2 = 5
+    d = 6
+    d2 = 7
+    is_a = (state.podlocs[a] == (3, 2) and state.podlocs[a2] == (3, 3)) or (
+        state.podlocs[a] == (3, 3) and state.podlocs[a2] == (3, 2)
     )
-    b = (state.podlocs["B"] == (5, 2) and state.podlocs["B2"] == (5, 3)) or (
-        state.podlocs["B"] == (5, 3) and state.podlocs["B2"] == (5, 2)
+    is_b = (state.podlocs[b] == (5, 2) and state.podlocs[b2] == (5, 3)) or (
+        state.podlocs[b] == (5, 3) and state.podlocs[b2] == (5, 2)
     )
-    c = (state.podlocs["C"] == (7, 2) and state.podlocs["C2"] == (7, 3)) or (
-        state.podlocs["C"] == (7, 3) and state.podlocs["C2"] == (7, 2)
+    is_c = (state.podlocs[c] == (7, 2) and state.podlocs[c2] == (7, 3)) or (
+        state.podlocs[c] == (7, 3) and state.podlocs[c2] == (7, 2)
     )
-    d = (state.podlocs["D"] == (9, 2) and state.podlocs["D2"] == (9, 3)) or (
-        state.podlocs["D"] == (9, 3) and state.podlocs["D2"] == (9, 2)
+    is_d = (state.podlocs[d] == (9, 2) and state.podlocs[d2] == (9, 3)) or (
+        state.podlocs[d] == (9, 3) and state.podlocs[d2] == (9, 2)
     )
-    # print(state.podlocs)
-    # print(a, b, c, d)
-    return a and b and c and d
+    return is_a and is_b and is_c and is_d
 
 
 class Day23:
@@ -179,4 +190,4 @@ class Day23:
 
 
 if __name__ == "__main__":
-    print(Day23.part1("/home/p22/h21/dev/aoc/2021/inputs/23/input_small2.txt"))
+    print(Day23.part1("/home/p22/h21/dev/aoc/2021/inputs/23/input_small.txt"))
