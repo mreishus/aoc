@@ -6,8 +6,9 @@ https://adventofcode.com/2021/day/23
 from collections import namedtuple, defaultdict
 import math
 
-# from aoc.heapdict import heapdict
-from heapdict import heapdict
+from aoc.heapdict import heapdict
+
+# from heapdict import heapdict
 
 # from copy import deepcopy
 
@@ -190,4 +191,4 @@ class Day23:
 
 
 if __name__ == "__main__":
-    print(Day23.part1("/home/p22/h21/dev/aoc/2021/inputs/23/input_small.txt"))
+    print(Day23.part1("/home/p22/h21/dev/aoc/2021/inputs/23/input_small3.txt"))
