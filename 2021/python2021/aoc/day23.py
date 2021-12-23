@@ -87,6 +87,11 @@ class Maze:
                 x = 0
         self.grid = grid
 
+        for i in [0, 2, 4, 6]:
+            j = i + 1
+            if self.podlocs[i] > self.podlocs[j]:
+                self.podlocs[i], self.podlocs[j] = self.podlocs[j], self.podlocs[i]
+
     def solve(self):
         print("solve?")
         dist_to = defaultdict(lambda: math.inf)
@@ -95,19 +100,24 @@ class Maze:
         state = State(tuple(self.podlocs))
         dist_to[state] = 0
         add_task(state, 0)
+        seen = set()
 
         while len(pq) > 0:
             (state, length) = pop_task()
             # print(f"Considering state: {state}")
             if is_winner(state):
                 break
+            seen.add(state)
 
             steps = self.possible_edges(state)
             for new_state, length in steps:
                 if dist_to[new_state] > dist_to[state] + length:
                     dist_to[new_state] = dist_to[state] + length
                     edge_to[new_state] = state
-                    add_task(new_state, dist_to[new_state])
+                    if new_state not in seen:
+                        # estimate = 0
+                        estimate = self.heuristic_to_goal(new_state)
+                        add_task(new_state, dist_to[new_state] + estimate)
 
         print("==Done==")
         for k, v in dist_to.items():
@@ -121,6 +131,16 @@ class Maze:
     #         for x in range(13):
     #             print(self.grid[x, y], end="")
     #         print("")
+    def heuristic_to_goal(self, state):
+        podlocs = state.podlocs
+        ideal = ((3, 2), (3, 3), (5, 2), (5, 3), (7, 2), (7, 3), (9, 2), (9, 3))
+        cost = 0
+        for i in range(len(ideal)):
+            (x1, y1) = podlocs[i]
+            (x2, y2) = ideal[i]
+            dist = abs(x2 - x1) + abs(y2 - y1)
+            cost += dist * get_energy(i)
+        return cost
 
     def possible_edges(self, state):
         podlocs = state.podlocs
@@ -142,6 +162,37 @@ class Maze:
                     continue
                 if (x, y) in podlocs:
                     continue
+
+                if loc[1] == 1 and y == 2:
+                    # Case: Moving down to room
+                    # Only move into my rooms
+                    if pod in [0, 1]:
+                        if x != 3:
+                            continue
+                        other = podlocs[2:]
+                        if (x, y + 1) in other:
+                            continue
+                    elif pod in [2, 3]:
+                        if x != 5:
+                            continue
+                        other = podlocs[0:2] + podlocs[4:]
+                        if (x, y + 1) in other:
+                            continue
+                    elif pod in [4, 5]:
+                        if x != 7:
+                            continue
+                        other = podlocs[0:4] + podlocs[6:]
+                        if (x, y + 1) in other:
+                            continue
+                    elif pod in [6, 7]:
+                        if x != 9:
+                            continue
+                        other = podlocs[6:7]
+                        if (x, y + 1) in other:
+                            continue
+
+                    # ideal = ((3, 2), (3, 3), (5, 2), (5, 3), (7, 2), (7, 3), (9, 2), (9, 3))
+                    # print("Moving down to room")
 
                 newlocs = list(podlocs)
                 newlocs[pod] = (x, y)
@@ -171,11 +222,11 @@ def get_energy(pod):
     if pod == a or pod == a2:
         return 1
     if pod == b or pod == b2:
-        return 1
+        return 10
     if pod == c or pod == c2:
-        return 1
+        return 100
     if pod == d or pod == d2:
-        return 1
+        return 1000
     raise ValueError
 
 
@@ -221,6 +272,8 @@ class Day23:
         print(m.grid)
         print(m.podlocs)
         m.solve()
+        # Too High:
+        # (You guessed 16091.)
         return -1
 
     @staticmethod
@@ -230,4 +283,4 @@ class Day23:
 
 
 if __name__ == "__main__":
-    print(Day23.part1("/home/p22/h21/dev/aoc/2021/inputs/23/input_small3.txt"))
+    print(Day23.part1("/home/p22/h21/dev/aoc/2021/inputs/23/input.txt"))
