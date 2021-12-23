@@ -53,7 +53,8 @@ def alldays():
         (Day20.part1, Day20.part2),
         (Day21.part1, Day21.part2),
         (Day22.part1, Day22.part2),
-        (Day23.part1, Day23.part2),
+        # (Day23.part1, Day23.part2), # Bit of a mess that needs cleaning up, p1/p2 are diff files that I've been running with pypy
+        # Also need to bring p2 optimizations to p1, or find a way to generalize 4bots vs 2bots
     ]
     for (i, (p1, p2)) in enumerate(solvers, 1):
         path = f"../inputs/{i:02}/input.txt"
