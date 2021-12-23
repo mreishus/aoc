@@ -1,7 +1,8 @@
 #!/usr/bin/env python
 """
-Advent Of Code 2021 Day 23
+Advent Of Code 2021 Day 23 (Part 2)
 https://adventofcode.com/2021/day/23
+Takes ~30 seconds to run with pypy. Haven't tried with regular python yet
 """
 from collections import namedtuple, defaultdict, deque
 import math
@@ -146,7 +147,6 @@ class Maze:
         self.simple_maze = SimpleMaze(self.grid)
 
     def maze_distance(self, coord1, coord2):
-        # return self.simple_maze.path_distance((3, 4), (5, 2))
         return self.simple_maze.path_distance(coord1, coord2)
 
     def podi(self, pod):
@@ -350,8 +350,6 @@ class Maze:
             (x1, y1) = coord1
             (x2, y2) = coord2
             return self.maze_distance(coord1, coord2)
-            # return abs(x2 - x1) + abs(y2 - y1)
-            # return abs(x2 - x1) + abs(y2 - y1)
 
         chunk_num = 0
         for actual_pair, ideal_pair in zip(chunks(podlocs, 4), chunks(ideal, 4)):
@@ -362,14 +360,6 @@ class Maze:
                 for i, j in enumerate(js):
                     dist += get_dist(actual_pair[i], ideal_pair[j])
                 all_dists.append(dist)
-            # print(actual_pair)
-            # print(ideal_pair)
-            # exit()
-            # [(ax1, ay1), (ax2, ay2)] = actual_pair
-            # [(ix1, iy1), (ix2, iy2)] = ideal_pair
-
-            # normal_dist = get_dist(ax1, ay1, ix1, iy1) + get_dist(ax2, ay2, ix2, iy2)
-            # swap_dist = get_dist(ax1, ay1, ix2, iy2) + get_dist(ax2, ay2, ix1, iy1)
 
             dist = min(all_dists)
             cost += dist * get_energy(chunk_num * 4)
@@ -552,20 +542,15 @@ def is_winner(state: State):
     return True
 
 
-class Day23:
+class Day23b:
     """ AoC 2021 Day 23 """
 
     @staticmethod
-    def part1(filename: str) -> int:
+    def part2(filename: str) -> int:
         """ Given a filename, solve 2021 day 23 part 1 """
         m = Maze(filename)
         return m.solve()
 
-    @staticmethod
-    def part2(filename: str) -> int:
-        """ Given a filename, solve 2021 day 23 part 2 """
-        return -1
-
 
 if __name__ == "__main__":
-    print(Day23.part1("../inputs/23/input_b.txt"))
+    print(Day23b.part2("../inputs/23/input_b.txt"))
