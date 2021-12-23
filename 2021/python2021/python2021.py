@@ -74,17 +74,16 @@ def alldays():
 
 def latest():
     """Scratchpad to work on."""
-    print("2022 Day 22 Part 1 (small):", end=" ")
-    print(Day22.part1("../inputs/22/input_small2.txt"))
+    # print("2022 Day 22 Part 1 (small):", end=" ")
+    # print(Day22.part1("../inputs/22/input_small2.txt"))
+    # print("2022 Day 22 Part 1b (small):", end=" ")
+    # print(Day22.part1b("../inputs/22/input_small2.txt"))
     print("2022 Day 22 Part 1b (small):", end=" ")
     print(Day22.part1b("../inputs/22/input_small3.txt"))
     # print("2022 Day 22 Part 2 (small):", end=" ")
     # print(Day22.part2("../inputs/22/input_small.txt"))
     # print("2022 Day 22 Part 2 (small):", end=" ")
     # print(Day22.part2("../inputs/22/input_small3.txt"))
-    print("")
-    print("--")
-    print("")
     # print("2022 Day 20 Part 1 (small2):", end=" ")
     # print(Day22.part1("../inputs/22/input_small2.txt"))
     # print("2022 Day 20 Part 2 (small2):", end=" ")
