@@ -96,7 +96,7 @@ class Maze:
                 self.podlocs[i], self.podlocs[j] = self.podlocs[j], self.podlocs[i]
 
     def solve(self):
-        dist_to = defaultdict(lambda: math.inf)
+        dist_to = defaultdict(lambda: 999_999_999_999)
         edge_to = {}
 
         state = State(tuple(self.podlocs), tuple(), frozenset(), frozenset())
@@ -177,7 +177,7 @@ class Maze:
                 else:
                     print(self.grid[x, y], end="")
             print("")
-        estimate = self.heuristic_to_goal_force(state)
+        estimate = self.heuristic_to_goal(state)
         print(f"Estimate energy remaining: {estimate}")
         if state in actual_remaining_costs:
             print(f"Actual energy remaining: {actual_remaining_costs[state]}")
@@ -192,11 +192,7 @@ class Maze:
         ideal = [(3, 2), (3, 3), (5, 2), (5, 3), (7, 2), (7, 3), (9, 2), (9, 3)]
 
         chunk_num = 0
-        display = False
         for actual_pair, ideal_pair in zip(chunks(podlocs, 2), chunks(ideal, 2)):
-            [(ax1, ay1), (ax2, ay2)] = actual_pair
-            [(ix1, iy1), (ix2, iy2)] = ideal_pair
-
             ## Moved twice but not in "My Room": Unsolvable
             for pair in actual_pair:
                 if (
@@ -228,15 +224,13 @@ class Maze:
                     and him != ideal_pair[0]
                     and him != ideal_pair[1]
                 ):
-                    # print(f"me={me} him={him}")
-                    # self.display(state, {})
                     return True
 
             chunk_num += 1
 
         return False
 
-    def heuristic_to_goal_force(self, state):
+    def heuristic_to_goal(self, state):
         podlocs = list(state.podlocs)
         ideal = [(3, 2), (3, 3), (5, 2), (5, 3), (7, 2), (7, 3), (9, 2), (9, 3)]
         cost = 0
@@ -256,19 +250,6 @@ class Maze:
             cost += dist * get_energy(chunk_num * 2)
 
             chunk_num += 1
-        return cost
-
-    def heuristic_to_goal(self, state):
-        return self.heuristic_to_goal_force(state)
-        return 0
-        podlocs = state.podlocs
-        ideal = ((3, 2), (3, 3), (5, 2), (5, 3), (7, 2), (7, 3), (9, 2), (9, 3))
-        cost = 0
-        for i in range(len(ideal)):
-            (x1, y1) = podlocs[i]
-            (x2, y2) = ideal[i]
-            dist = abs(x2 - x1) + abs(y2 - y1)
-            cost += dist * get_energy(i)
         return cost
 
     def possible_edges(self, state):
@@ -319,9 +300,6 @@ class Maze:
                         other = podlocs[6:7]
                         if (x, y + 1) in other:
                             continue
-
-                # ideal = ((3, 2), (3, 3), (5, 2), (5, 3), (7, 2), (7, 3), (9, 2), (9, 3))
-                # print("Moving down to room")
 
                 newlocs = list(podlocs)
                 new_moved_once = list(moved_once)
@@ -449,7 +427,4 @@ class Day23:
 
 
 if __name__ == "__main__":
-    # print(Day23.part1("/home/p22/h21/dev/aoc/2021/inputs/23/input_7008.txt"))
-    # print(Day23.part1("/home/p22/h21/dev/aoc/2021/inputs/23/input_12081.txt"))
-    print(Day23.part1("/home/p22/h21/dev/aoc/2021/inputs/23/input.txt"))
-    # print(Day23.part1("/home/p22/h21/dev/aoc/2021/inputs/23/input.txt"))
+    print(Day23.part1("../inputs/23/input.txt"))
