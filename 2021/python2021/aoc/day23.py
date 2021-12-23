@@ -3,7 +3,7 @@
 Advent Of Code 2021 Day 23
 https://adventofcode.com/2021/day/23
 """
-from collections import namedtuple, defaultdict
+from collections import namedtuple, defaultdict, deque
 import math
 import itertools
 from heapq import heappush, heappop
@@ -52,6 +52,36 @@ class PriorityQueue:
         return len(self.pq) == 0
 
 
+class SimpleMaze:
+    def __init__(self, grid):
+        self.grid = grid
+        self.cache = {}
+
+    def path_distance(self, coord1, coord2):
+        if (coord1, coord2) in self.cache:
+            return self.cache[(coord1, coord2)]
+
+        q = deque([(coord1, 0)])
+        seen = set()
+
+        while len(q) > 0:
+            loc, steps = q.popleft()
+
+            if loc == coord2:
+                self.cache[(coord1, coord2)] = steps
+                self.cache[(coord2, coord1)] = steps
+                return steps
+            seen.add(loc)
+
+            for next_loc in get_neighbors(loc):
+                if self.grid[next_loc] == "#":
+                    continue
+                if next_loc in seen:
+                    continue
+                q.append((next_loc, steps + 1))
+        return -1
+
+
 class Maze:
     def __init__(self, filename):
         self.grid = {}
@@ -68,6 +98,10 @@ class Maze:
         self.must_move = [(3, 1), (5, 1), (7, 1), (9, 1)]
         self.pods = ["A", "A2", "B", "B2", "C", "C2", "D", "D2"]
         self.parse(filename)
+        self.simple_maze = SimpleMaze(self.grid)
+
+    def maze_distance(self, coord1, coord2):
+        return self.simple_maze.path_distance(coord1, coord2)
 
     def podi(self, pod):
         return self.pods.index(pod)
@@ -235,16 +269,20 @@ class Maze:
         ideal = [(3, 2), (3, 3), (5, 2), (5, 3), (7, 2), (7, 3), (9, 2), (9, 3)]
         cost = 0
 
-        def get_dist(x1, y1, x2, y2):
-            return abs(x2 - x1) + abs(y2 - y1)
+        def get_dist(coord1, coord2):
+            return self.maze_distance(coord1, coord2)
 
         chunk_num = 0
         for actual_pair, ideal_pair in zip(chunks(podlocs, 2), chunks(ideal, 2)):
             [(ax1, ay1), (ax2, ay2)] = actual_pair
             [(ix1, iy1), (ix2, iy2)] = ideal_pair
 
-            normal_dist = get_dist(ax1, ay1, ix1, iy1) + get_dist(ax2, ay2, ix2, iy2)
-            swap_dist = get_dist(ax1, ay1, ix2, iy2) + get_dist(ax2, ay2, ix1, iy1)
+            normal_dist = get_dist((ax1, ay1), (ix1, iy1)) + get_dist(
+                (ax2, ay2), (ix2, iy2)
+            )
+            swap_dist = get_dist((ax1, ay1), (ix2, iy2)) + get_dist(
+                (ax2, ay2), (ix1, iy1)
+            )
 
             dist = min(normal_dist, swap_dist)
             cost += dist * get_energy(chunk_num * 2)
@@ -337,7 +375,11 @@ class Maze:
                         new_moved_once.remove(moving)
                         new_moved_twice.append(moving)
                     else:
-                        new_moved_once.append(moving)
+                        if moving[1] > 1:
+                            # Stopping moving in a room: Auto-promote to moved twice
+                            new_moved_twice.append(moving)
+                        else:
+                            new_moved_once.append(moving)
                 newmoving = (x, y)
 
                 # Try to make robot pairs fungible

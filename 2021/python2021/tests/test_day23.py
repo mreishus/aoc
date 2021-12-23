@@ -12,6 +12,7 @@ class TestDay23(unittest.TestCase):
 
     def test_part1(self):
         """Test part1"""
+        self.assertEqual(Day23.part1("../inputs/23/input.txt"), 16059)
         self.assertEqual(Day23.part1("../inputs/23/input_12521.txt"), 12521)
         self.assertEqual(Day23.part1("../inputs/23/input_12481.txt"), 12481)
         self.assertEqual(Day23.part1("../inputs/23/input_12081.txt"), 12081)
