@@ -8,13 +8,7 @@ import math
 import itertools
 from heapq import heappush, heappop
 
-# from aoc.heapdict import heapdict
-
-# from heapdict import heapdict
-
-# from copy import deepcopy
-
-State = namedtuple("State", ("podlocs"))
+State = namedtuple("State", ("podlocs", "moving", "moved_once", "moved_twice"))
 Edge = namedtuple("Edge", ("state", "length"))
 
 
@@ -105,7 +99,7 @@ class Maze:
         dist_to = defaultdict(lambda: math.inf)
         edge_to = {}
 
-        state = State(tuple(self.podlocs))
+        state = State(tuple(self.podlocs), tuple(), frozenset(), frozenset())
         pq = PriorityQueue()
         dist_to[state] = 0
         pq.add_task(state, 0)
@@ -113,16 +107,31 @@ class Maze:
 
         while not pq.empty():
             (state, length) = pq.pop_task()
+            if len(pq.pq) % 1000 == 0:
+                print(len(pq.pq))
+            # if len(pq.pq) > 40000:
+            #     i = 0
+            #     for cost, counter, state in pq.pq:
+            #         if state == "<removed-task>":
+            #             continue
+            #         print(state, cost, counter)
+            #         print(f"i={i} unsolv={self.is_state_unsolvable(state)}")
+            #         self.display(state, {})
+            #         i += 1
+            #     exit()
+
             # print(f"Considering state: {state}")
             if is_winner(state):
                 break
 
-            if state in seen:
-                continue
-            seen.add(state)
+            # if state in seen:
+            #     continue
+            # seen.add(state)
 
+            # print("---> Looking for new states")
             steps = self.possible_edges(state)
             for new_state, length in steps:
+                # print(new_state)
                 if dist_to[new_state] > dist_to[state] + length:
                     dist_to[new_state] = dist_to[state] + length
                     edge_to[new_state] = state
@@ -170,8 +179,62 @@ class Maze:
             print("")
         estimate = self.heuristic_to_goal_force(state)
         print(f"Estimate energy remaining: {estimate}")
-        print(f"Actual energy remaining: {actual_remaining_costs[state]}")
+        if state in actual_remaining_costs:
+            print(f"Actual energy remaining: {actual_remaining_costs[state]}")
+        print(f"Moving: {state.moving}")
+        print(f"Moved once: {state.moved_once}")
+        print(f"Moved twice: {state.moved_twice}")
+        # print(f"Is unsolvable: {self.is_state_unsolvable(state)}")
         print("")
+
+    def is_state_unsolvable(self, state):
+        podlocs = state.podlocs
+        ideal = [(3, 2), (3, 3), (5, 2), (5, 3), (7, 2), (7, 3), (9, 2), (9, 3)]
+
+        chunk_num = 0
+        display = False
+        for actual_pair, ideal_pair in zip(chunks(podlocs, 2), chunks(ideal, 2)):
+            [(ax1, ay1), (ax2, ay2)] = actual_pair
+            [(ix1, iy1), (ix2, iy2)] = ideal_pair
+
+            ## Moved twice but not in "My Room": Unsolvable
+            for pair in actual_pair:
+                if (
+                    pair in state.moved_twice
+                    and pair != state.moving
+                    and pair != ideal_pair[0]
+                    and pair != ideal_pair[1]
+                ):
+                    return True
+
+            ## Moved once, but in "someone else's room": Unsolvable
+            for pair in actual_pair:
+                if (
+                    pair[1] > 1
+                    and pair in state.moved_once
+                    and pair != state.moving
+                    and pair != ideal_pair[0]
+                    and pair != ideal_pair[1]
+                ):
+                    return True
+
+            ## Moved one or twice, in top slot of "my room", but bottom slot of my room is not occupied
+            for i0, i1 in [(0, 1), (1, 0)]:
+                me, him = actual_pair[i0], actual_pair[i1]
+                if (
+                    (me in state.moved_once or me in state.moved_twice)
+                    and me != state.moving
+                    and me[1] == 2
+                    and him != ideal_pair[0]
+                    and him != ideal_pair[1]
+                ):
+                    # print(f"me={me} him={him}")
+                    # self.display(state, {})
+                    return True
+
+            chunk_num += 1
+
+        return False
 
     def heuristic_to_goal_force(self, state):
         podlocs = list(state.podlocs)
@@ -185,16 +248,14 @@ class Maze:
         for actual_pair, ideal_pair in zip(chunks(podlocs, 2), chunks(ideal, 2)):
             [(ax1, ay1), (ax2, ay2)] = actual_pair
             [(ix1, iy1), (ix2, iy2)] = ideal_pair
+
             normal_dist = get_dist(ax1, ay1, ix1, iy1) + get_dist(ax2, ay2, ix2, iy2)
             swap_dist = get_dist(ax1, ay1, ix2, iy2) + get_dist(ax2, ay2, ix1, iy1)
+
             dist = min(normal_dist, swap_dist)
             cost += dist * get_energy(chunk_num * 2)
+
             chunk_num += 1
-        # for i in range(len(ideal)):
-        #     (x1, y1) = podlocs[i]
-        #     (x2, y2) = ideal[i]
-        #     dist = abs(x2 - x1) + abs(y2 - y1)
-        #     cost += dist * get_energy(i)
         return cost
 
     def heuristic_to_goal(self, state):
@@ -211,9 +272,7 @@ class Maze:
         return cost
 
     def possible_edges(self, state):
-        podlocs = state.podlocs
-
-        # self.display()
+        (podlocs, moving, moved_once, moved_twice) = state
 
         # Check if someone must move
         free_to_move = list(range(len(podlocs)))
@@ -225,6 +284,8 @@ class Maze:
         for pod in free_to_move:
             loc = podlocs[pod]
             # print(f"{pod} {loc}")
+            if loc in moved_twice and moving != loc:
+                continue
             for x, y in get_neighbors(loc):
                 if self.grid[x, y] == "#":
                     continue
@@ -259,11 +320,47 @@ class Maze:
                         if (x, y + 1) in other:
                             continue
 
-                    # ideal = ((3, 2), (3, 3), (5, 2), (5, 3), (7, 2), (7, 3), (9, 2), (9, 3))
-                    # print("Moving down to room")
+                # ideal = ((3, 2), (3, 3), (5, 2), (5, 3), (7, 2), (7, 3), (9, 2), (9, 3))
+                # print("Moving down to room")
 
                 newlocs = list(podlocs)
+                new_moved_once = list(moved_once)
+                new_moved_twice = list(moved_twice)
+
+                (old_x, old_y) = newlocs[pod]
                 newlocs[pod] = (x, y)
+
+                # POD moving from old_x,old_y -> x,y
+
+                if loc in new_moved_once:
+                    new_moved_once.remove(loc)
+                    new_moved_once.append((x, y))
+                elif loc in new_moved_twice:
+                    new_moved_twice.remove(loc)
+                    new_moved_twice.append((x, y))
+                # print(
+                #     f"{pod} Is moving from {old_x},{old_y} to {x},{y}. Current moving={moving}"
+                # )
+
+                track_extra_rules = True  # Slower but gets correct p1 answer
+                # track_extra_rules = False # Faster but gets incorrect p1 answer
+
+                if track_extra_rules and len(moving) and moving != loc:
+                    # moving = Last thing that was moving
+                    # old_x, old_y = New mover's original location
+                    # x, y = New mover's new location
+
+                    # print(
+                    #     f"Something else started moving. moving={moving} myprev={(old_x, old_y)}"
+                    # )
+
+                    # Moving is now STOPPING.
+                    if moving in new_moved_once:
+                        new_moved_once.remove(moving)
+                        new_moved_twice.append(moving)
+                    else:
+                        new_moved_once.append(moving)
+                newmoving = (x, y)
 
                 # Try to make robot pairs fungible
                 for i in [0, 2, 4, 6]:
@@ -271,9 +368,15 @@ class Maze:
                     if newlocs[i] > newlocs[j]:
                         newlocs[i], newlocs[j] = newlocs[j], newlocs[i]
 
-                new_state = State(tuple(newlocs))
+                new_state = State(
+                    tuple(newlocs),
+                    newmoving,
+                    frozenset(new_moved_once),
+                    frozenset(new_moved_twice),
+                )
                 energy = get_energy(pod)
-                edges.append(Edge(new_state, energy))
+                if not self.is_state_unsolvable(new_state):
+                    edges.append(Edge(new_state, energy))
 
         return edges
 
@@ -338,8 +441,6 @@ class Day23:
         """ Given a filename, solve 2021 day 23 part 1 """
         m = Maze(filename)
         return m.solve()
-        # Too Low:  (You guessed 16051.)
-        # Too High: (You guessed 16091.)
 
     @staticmethod
     def part2(filename: str) -> int:
@@ -348,4 +449,7 @@ class Day23:
 
 
 if __name__ == "__main__":
+    # print(Day23.part1("/home/p22/h21/dev/aoc/2021/inputs/23/input_7008.txt"))
+    # print(Day23.part1("/home/p22/h21/dev/aoc/2021/inputs/23/input_12081.txt"))
     print(Day23.part1("/home/p22/h21/dev/aoc/2021/inputs/23/input.txt"))
+    # print(Day23.part1("/home/p22/h21/dev/aoc/2021/inputs/23/input.txt"))
