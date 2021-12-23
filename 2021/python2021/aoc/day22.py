@@ -168,6 +168,10 @@ class Day22:
         return -1
 
     @staticmethod
+    def part2(filename: str) -> int:
+        return "dunno lol"
+
+    @staticmethod
     def part1b(filename: str) -> int:
         """ Given a filename, solve 2021 day 22 part 1 """
         data = parse(filename)
