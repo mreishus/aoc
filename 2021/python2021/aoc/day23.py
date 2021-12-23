@@ -5,8 +5,10 @@ https://adventofcode.com/2021/day/23
 """
 from collections import namedtuple, defaultdict
 import math
+import itertools
+from heapq import heappush, heappop
 
-from aoc.heapdict import heapdict
+# from aoc.heapdict import heapdict
 
 # from heapdict import heapdict
 
@@ -14,6 +16,37 @@ from aoc.heapdict import heapdict
 
 State = namedtuple("State", ("podlocs"))
 Edge = namedtuple("Edge", ("state", "length"))
+
+pq = []  # list of entries arranged in a heap
+entry_finder = {}  # mapping of tasks to entries
+REMOVED = "<removed-task>"  # placeholder for a removed task
+counter = itertools.count()  # unique sequence count
+
+
+def add_task(task, priority=0):
+    "Add a new task or update the priority of an existing task"
+    if task in entry_finder:
+        remove_task(task)
+    count = next(counter)
+    entry = [priority, count, task]
+    entry_finder[task] = entry
+    heappush(pq, entry)
+
+
+def remove_task(task):
+    "Mark an existing task as REMOVED.  Raise KeyError if not found."
+    entry = entry_finder.pop(task)
+    entry[-1] = REMOVED
+
+
+def pop_task():
+    "Remove and return the lowest priority task. Raise KeyError if empty."
+    while pq:
+        priority, count, task = heappop(pq)
+        if task is not REMOVED:
+            del entry_finder[task]
+            return task, priority
+    raise KeyError("pop from an empty priority queue")
 
 
 class Maze:
@@ -58,14 +91,13 @@ class Maze:
         print("solve?")
         dist_to = defaultdict(lambda: math.inf)
         edge_to = {}
-        queue = heapdict()
 
         state = State(tuple(self.podlocs))
         dist_to[state] = 0
-        queue[state] = 0
+        add_task(state, 0)
 
-        while len(queue) > 0:
-            (state, length) = queue.popitem()
+        while len(pq) > 0:
+            (state, length) = pop_task()
             # print(f"Considering state: {state}")
             if is_winner(state):
                 break
@@ -75,7 +107,7 @@ class Maze:
                 if dist_to[new_state] > dist_to[state] + length:
                     dist_to[new_state] = dist_to[state] + length
                     edge_to[new_state] = state
-                    queue[new_state] = dist_to[new_state]
+                    add_task(new_state, dist_to[new_state])
 
         print("==Done==")
         for k, v in dist_to.items():
@@ -113,6 +145,13 @@ class Maze:
 
                 newlocs = list(podlocs)
                 newlocs[pod] = (x, y)
+
+                # Try to make robot pairs fungible
+                for i in [0, 2, 4, 6]:
+                    j = i + 1
+                    if newlocs[i] > newlocs[j]:
+                        newlocs[i], newlocs[j] = newlocs[j], newlocs[i]
+
                 new_state = State(tuple(newlocs))
                 energy = get_energy(pod)
                 edges.append(Edge(new_state, energy))
