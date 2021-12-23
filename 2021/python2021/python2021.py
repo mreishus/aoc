@@ -78,8 +78,12 @@ def latest():
     # print(Day22.part1("../inputs/22/input_small2.txt"))
     # print("2022 Day 22 Part 1b (small):", end=" ")
     # print(Day22.part1b("../inputs/22/input_small2.txt"))
+
+    # print("2022 Day 22 Part 1b (small):", end=" ")
+    # print(Day22.part1b("../inputs/22/input_small3.txt"))
     print("2022 Day 22 Part 1b (small):", end=" ")
-    print(Day22.part1b("../inputs/22/input_small3.txt"))
+    print(Day22.part1b("../inputs/22/input.txt"))
+
     # print("2022 Day 22 Part 2 (small):", end=" ")
     # print(Day22.part2("../inputs/22/input_small.txt"))
     # print("2022 Day 22 Part 2 (small):", end=" ")

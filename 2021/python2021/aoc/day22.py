@@ -77,8 +77,66 @@ class Range:
             z_over = True
         return x_over and y_over and z_over
 
+    def has_subset(self, other):
+        x_subset = False
+        y_subset = False
+        z_subset = False
+        if self.x1 <= other.x1 and other.x2 <= self.x2:
+            x_subset = True
+        if self.y1 <= other.y1 and other.y2 <= self.y2:
+            y_subset = True
+        if self.z1 <= other.z1 and other.z2 <= self.z2:
+            z_subset = True
+        return x_subset and y_subset and z_subset
+
+    def has_inverse(self, other):
+        return (
+            self.x1 == other.x1
+            and self.x2 == other.x2
+            and self.y1 == other.y1
+            and self.y2 == other.y2
+            and self.z1 == other.z1
+            and self.z2 == other.z2
+            and self.operation != other.operation
+        )
+
+    def overlap_area(self, other):
+        x_overlap = max(0, min(self.x2 + 1, other.x2 + 1) - max(self.x1, other.x1))
+        y_overlap = max(0, min(self.y2 + 1, other.y2 + 1) - max(self.y1, other.y1))
+        z_overlap = max(0, min(self.z2 + 1, other.z2 + 1) - max(self.z1, other.z1))
+        return x_overlap * y_overlap * z_overlap
+
+    def clamp(self, other):
+        if not self.is_overlap(other):
+            raise ValueError
+        x1 = max(self.x1, other.x1)
+        x2 = min(self.x2, other.x2)
+        y1 = max(self.y1, other.y1)
+        y2 = min(self.y2, other.y2)
+        z1 = max(self.z1, other.z1)
+        z2 = min(self.z2, other.z2)
+        return Range(x1, x2, y1, y2, z1, z2, self.operation)
+
     def __repr__(self):
-        return f"[{self.x1}..{self.x2}, {self.y1}..{self.y2}, {self.z1}..{self.z2}]"
+        return f"[{self.x1}..{self.x2}, {self.y1}..{self.y2}, {self.z1}..{self.z2}]={self.operation}"
+
+    def __hash__(self):
+        return hash(
+            (self.x1, self.x2, self.y1, self.y2, self.z1, self.z2, self.operation)
+        )
+
+    def __eq__(self, other):
+        if not isinstance(other, type(self)):
+            return False
+        return (
+            self.x1 == other.x1
+            and self.x2 == other.x2
+            and self.y1 == other.y1
+            and self.y2 == other.y2
+            and self.z1 == other.z1
+            and self.z2 == other.z2
+            and self.operation == other.operation
+        )
 
 
 class Day22:
@@ -147,84 +205,163 @@ class Day22:
 
     @staticmethod
     def solve_bucket_subrange(bucket, look) -> int:
-
         # -50 50 --> 0 100 | Size = 100 | Offset = 100
         # 50 150 --> 0 50  | Size = 100 | Offset = -100
-
-        size_x = look.x2 - look.x1 + 1
-        size_y = look.y2 - look.y1 + 1
-        size_z = look.z2 - look.z1 + 1
-        x_offset = -1 * look.x1
-        y_offset = -1 * look.y1
-        z_offset = -1 * look.z1
-        # print(f"   {size_x},{size_y},{size_z} | {x_offset},{y_offset},{z_offset}")
 
         A = None
 
         def make_array():
-            print("Making array..")
+            # print("Making array..")
+            size_x = look.x2 - look.x1 + 1
+            size_y = look.y2 - look.y1 + 1
+            size_z = look.z2 - look.z1 + 1
             return np.zeros((size_x, size_y, size_z), dtype=bool)
 
-        def translate(x):
-            return x + 50  # -50 -> 0, 0 -> 50, 50 -> 100
-
-        def clamp_min(k):
-            return max(translate(-50), translate(k))
-
-        def clamp_max(k):
-            return min(translate(50), translate(k))
-
-        overlap_count = 0
-        overlap_ranges = []
+        # overlap_ranges = set()
+        # for r in bucket:
+        #     if look.is_overlap(r):
+        #         overlap_ranges.add(r.clamp(look))
+        new_buckets = []
+        last = None
+        seen_first_fill = False
+        xseen = set()
+        yseen = set()
+        zseen = set()
         for r in bucket:
-            if look.is_overlap(r):
-                overlap_count += 1
-                overlap_ranges.append(r)
+            if not r.is_overlap(look):
+                continue
 
-        if overlap_count == 1:
+            # Skip "Delete" commands on empty space
+            if not r.operation and not seen_first_fill:
+                continue
+            if r.operation:
+                seen_first_fill = True
+
+            r = r.clamp(look)
+
+            if r == last:
+                continue
+
+            # Check to see if I'm a subset of last command
+            if (
+                last is not None
+                and last.has_subset(r)
+                and last.operation == r.operation
+            ):
+                continue
+
+            # Check if I'm inverse of last command
+            if last is not None and r.has_inverse(last):
+                _throwaway = new_buckets.pop()
+                seen_first_fill = any(x.operation for x in new_buckets)
+                if not seen_first_fill and not r.operation:
+                    last = None
+                    if len(new_buckets):
+                        last = new_buckets[-1]
+                    continue
+
+            new_buckets.append(r)
+            last = r
+
+        for r in new_buckets:
+            xseen.add((r.x1, r.x2))
+            yseen.add((r.y1, r.y2))
+            zseen.add((r.z1, r.z2))
+
+        multi = 1
+        if len(xseen) == 1:
+            (x1, x2) = xseen.pop()
+            for r in new_buckets:
+                r.x1 = x1
+                r.x2 = x1
+            look.x1 = x1
+            look.x2 = x1
+            multi *= abs(x2 - x1 + 1)
+        if len(yseen) == 1:
+            (y1, y2) = yseen.pop()
+            for r in new_buckets:
+                r.y1 = y1
+                r.y2 = y1
+            look.y1 = y1
+            look.y2 = y1
+            multi *= abs(y2 - y1 + 1)
+        if len(zseen) == 1:
+            (z1, z2) = zseen.pop()
+            for r in new_buckets:
+                r.z1 = z1
+                r.z2 = z1
+            look.z1 = z1
+            look.z2 = z1
+            multi *= abs(z2 - z1 + 1)
+
+        if len(new_buckets) == 0:
+            return 0
+        elif len(new_buckets) == 1:
             # Special case of intersecting one range with loop
-            r = overlap_ranges[0]
+            r = new_buckets[0]
             if not r.operation:
                 return 0
-            print("==special case===")
-            x_overlap = max(0, min(look.x2 + 1, r.x2 + 1) - max(look.x1, r.x1))
-            y_overlap = max(0, min(look.y2 + 1, r.y2 + 1) - max(look.y1, r.y1))
-            z_overlap = max(0, min(look.z2 + 1, r.z2 + 1) - max(look.z1, r.z1))
-            print(f"{look} {r}")
-            print(f"{x_overlap} {y_overlap} {z_overlap}")
-            print(f"Calculated special case {x_overlap * y_overlap * z_overlap}")
-            return x_overlap * y_overlap * z_overlap
+            return multi * r.overlap_area(look)
+        elif len(new_buckets) == 2:
+            r1, r2 = new_buckets[0], new_buckets[1]
+            if r1.operation and r2.operation:
+                return multi * (
+                    look.overlap_area(r1) + look.overlap_area(r2) - r1.overlap_area(r2)
+                )
+            elif r1.operation and not r2.operation:
+                return multi * (look.overlap_area(r1) - r2.overlap_area(r1))
+            elif not r1.operation and r2.operation:
+                return multi * r2.overlap_area(look)
+            elif not r1.operation and not r2.operation:
+                return 0
+        elif len(new_buckets) == 3:
+            r1, r2, r3 = new_buckets[0], new_buckets[1], new_buckets[2]
+            if r1.operation and r2.operation and not r3.operation:
+                # T T F
+                return multi * (
+                    look.overlap_area(r1)
+                    + look.overlap_area(r2)
+                    - r1.overlap_area(r2)
+                    - r3.overlap_area(r1)
+                    - r3.overlap_area(r2)
+                    + r3.overlap_area(r1.clamp(r2))
+                )
+            elif r1.operation and not r2.operation and not r3.operation:
+                return multi * (
+                    look.overlap_area(r1)
+                    - r2.overlap_area(r1)
+                    - r3.overlap_area(r1)
+                    + r2.clamp(r1).overlap_area(r3)
+                )
 
-            # print("")
-            # print("===Special case==")
-            # print(look)
-            # print(overlap_ranges[0], overlap_ranges[0].operation)
-            # print("===============")
-            # print("")
-        elif overlap_count == 2:
-            print("2 overlapping ranges..")
-            if overlap_ranges[0].is_overlap(overlap_ranges[1]):
-                print("They overlap..")
-            else:
-                print("!!!!!!!!! They dot not!!! ")
+        x_offset = -1 * look.x1
+        y_offset = -1 * look.y1
+        z_offset = -1 * look.z1
 
         # print("")
         # print(f"LOOK: {look}")
-        for r in bucket:
+        # for r in bucket:
+        # for r in bucket:
+        if all(r.operation for r in new_buckets):
+            new_buckets = set(new_buckets)
+        for r in new_buckets:
             if not look.is_overlap(r):
                 continue
             if A is None:
+                print("Making array..", look)
                 A = make_array()
-            print(f"overlap_count: {overlap_count}")
+                print("..done.")
+            # print(f"overlap_count: {overlap_count}")
             # print("")
             # print(f"Does bucket overlap with look? {look.is_overlap(r)}")
+            # print(f"-->{r}")
             # print(f"X1 before offset {r.x1}, after look clamp {max(r.x1, look.x1)}")
             # print(f"X2 before offset {r.x2}, after look clamp {min(r.x2, look.x2)}")
             # print(f"Look {look}")
             x1 = x_offset + max(r.x1, look.x1)
             x2 = x_offset + min(r.x2, look.x2)
             # Clamping isn't working right
-            # print(f"Bucket: {r} X OFFSET={x_offset}. x range-{x1}-{x2}")
+            print(f"Bucket: {r} X OFFSET={x_offset}. x range-{x1}-{x2}")
             y1 = y_offset + max(r.y1, look.y1)
             y2 = y_offset + min(r.y2, look.y2)
             z1 = z_offset + max(r.z1, look.z1)
@@ -241,11 +378,11 @@ class Day22:
             #         print(x_full, y_full, z_full)
 
             A[x1 : x2 + 1, y1 : y2 + 1, z1 : z2 + 1] = r.operation
-            print("      subtotal", np.count_nonzero(A))
+            # print("      subtotal", np.count_nonzero(A))
         # print("counting")
-        print("          -->  ", look, np.count_nonzero(A))
-        print("")
-        return np.count_nonzero(A)
+        # print("          -->  ", look, np.count_nonzero(A))
+        # print("")
+        return multi * np.count_nonzero(A)
 
     @staticmethod
     def solve_bucket(bucket) -> int:
@@ -267,20 +404,24 @@ class Day22:
         # print(f"Looking to solve this bucket:")
         # print(f"{min_x} {max_x} | {min_y} {max_y} | {min_z} {max_z}")
 
+        step_size = 2600
         # Optional restrict to 50,50,50
-        min_x = -50
-        max_x = 50
-        min_y = -50
-        max_y = 50
-        min_z = -50
-        max_z = 50
+        # min_x = -50
+        # max_x = 50
+        # min_y = -50
+        # max_y = 50
+        # min_z = -50
+        # max_z = 50
+        # step_size = 7
 
         # print("Try to step X:")
-        step_size = 4
         total = 0
+        print(f"Covering x: {min_x} -> {max_x+1}")
         for x1 in range(min_x, max_x + 1, step_size):
+            print(x1, end=" ")
             x2 = x1 + step_size - 1
             x2 = min(x2, max_x)
+            print(f"Covering y: {min_y} -> {max_y+1}. Total={total}")
             for y1 in range(min_y, max_y + 1, step_size):
                 y2 = y1 + step_size - 1
                 y2 = min(y2, max_y)
@@ -288,8 +429,6 @@ class Day22:
                     z2 = z1 + step_size - 1
                     z2 = min(z2, max_z)
                     look_range = Range(x1, x2, y1, y2, z1, z2, False)
-                    # print(look_range, bucket, total)
-                    # print(look_range, total)
                     total += Day22.solve_bucket_subrange(bucket, look_range)
 
         return total
@@ -378,3 +517,7 @@ class Day22:
             print("--")
             A[x1 : x2 + 1, y1 : y2 + 1, z1 : z2 + 1] = op
         print(np.count_nonzero(A))
+
+
+if __name__ == "__main__":
+    print("hi")
