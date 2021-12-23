@@ -17,36 +17,45 @@ from heapq import heappush, heappop
 State = namedtuple("State", ("podlocs"))
 Edge = namedtuple("Edge", ("state", "length"))
 
-pq = []  # list of entries arranged in a heap
-entry_finder = {}  # mapping of tasks to entries
-REMOVED = "<removed-task>"  # placeholder for a removed task
-counter = itertools.count()  # unique sequence count
+
+def chunks(lst, n):
+    """Yield successive n-sized chunks from lst."""
+    for i in range(0, len(lst), n):
+        yield lst[i : i + n]
 
 
-def add_task(task, priority=0):
-    "Add a new task or update the priority of an existing task"
-    if task in entry_finder:
-        remove_task(task)
-    count = next(counter)
-    entry = [priority, count, task]
-    entry_finder[task] = entry
-    heappush(pq, entry)
+class PriorityQueue:
+    def __init__(self):
+        self.pq = []  # list of entries arranged in a heap
+        self.entry_finder = {}  # mapping of tasks to entries
+        self.REMOVED = "<removed-task>"  # placeholder for a removed task
+        self.counter = itertools.count()  # unique sequence count
 
+    def add_task(self, task, priority=0):
+        "Add a new task or update the priority of an existing task"
+        if task in self.entry_finder:
+            self.remove_task(task)
+        count = next(self.counter)
+        entry = [priority, count, task]
+        self.entry_finder[task] = entry
+        heappush(self.pq, entry)
 
-def remove_task(task):
-    "Mark an existing task as REMOVED.  Raise KeyError if not found."
-    entry = entry_finder.pop(task)
-    entry[-1] = REMOVED
+    def remove_task(self, task):
+        "Mark an existing task as REMOVED.  Raise KeyError if not found."
+        entry = self.entry_finder.pop(task)
+        entry[-1] = self.REMOVED
 
+    def pop_task(self):
+        "Remove and return the lowest priority task. Raise KeyError if empty."
+        while self.pq:
+            priority, count, task = heappop(self.pq)
+            if task is not self.REMOVED:
+                del self.entry_finder[task]
+                return task, priority
+        raise KeyError("pop from an empty priority queue")
 
-def pop_task():
-    "Remove and return the lowest priority task. Raise KeyError if empty."
-    while pq:
-        priority, count, task = heappop(pq)
-        if task is not REMOVED:
-            del entry_finder[task]
-            return task, priority
-    raise KeyError("pop from an empty priority queue")
+    def empty(self):
+        return len(self.pq) == 0
 
 
 class Maze:
@@ -93,20 +102,23 @@ class Maze:
                 self.podlocs[i], self.podlocs[j] = self.podlocs[j], self.podlocs[i]
 
     def solve(self):
-        print("solve?")
         dist_to = defaultdict(lambda: math.inf)
         edge_to = {}
 
         state = State(tuple(self.podlocs))
+        pq = PriorityQueue()
         dist_to[state] = 0
-        add_task(state, 0)
+        pq.add_task(state, 0)
         seen = set()
 
-        while len(pq) > 0:
-            (state, length) = pop_task()
+        while not pq.empty():
+            (state, length) = pq.pop_task()
             # print(f"Considering state: {state}")
             if is_winner(state):
                 break
+
+            if state in seen:
+                continue
             seen.add(state)
 
             steps = self.possible_edges(state)
@@ -114,24 +126,80 @@ class Maze:
                 if dist_to[new_state] > dist_to[state] + length:
                     dist_to[new_state] = dist_to[state] + length
                     edge_to[new_state] = state
-                    if new_state not in seen:
-                        # estimate = 0
-                        estimate = self.heuristic_to_goal(new_state)
-                        add_task(new_state, dist_to[new_state] + estimate)
+                    # estimate = 0
+                    estimate = self.heuristic_to_goal(new_state)
+                    pq.add_task(new_state, dist_to[new_state] + estimate)
 
-        print("==Done==")
+        # print("==Done==")
         for k, v in dist_to.items():
             if is_winner(k):
+                # return v
                 print("Found winner:")
                 print(f"{v} {k}")
-                return v
+                win_cost = v
+                actual_remaining_costs = {k: 0}
+                all_states = [k]
+                while k in edge_to:
+                    all_states.append(k)
+                    # print(edge_to[k])
+                    k = edge_to[k]
+                    actual_remaining_costs[k] = -1 * (dist_to[k] - win_cost)
 
-    # def display(self):
-    #     for y in range(5):
-    #         for x in range(13):
-    #             print(self.grid[x, y], end="")
-    #         print("")
+                self.animate(list(reversed(all_states)), actual_remaining_costs)
+                return v
+        return -1
+
+    def animate(self, all_states, actual_remaining_costs):
+        for state in all_states:
+            self.display(state, actual_remaining_costs)
+
+    def display(self, state, actual_remaining_costs):
+        podlocs = state.podlocs
+        for y in range(5):
+            for x in range(13):
+                if (x, y) in [podlocs[0], podlocs[1]]:
+                    print("A", end="")
+                elif (x, y) in [podlocs[2], podlocs[3]]:
+                    print("B", end="")
+                elif (x, y) in [podlocs[4], podlocs[5]]:
+                    print("C", end="")
+                elif (x, y) in [podlocs[6], podlocs[7]]:
+                    print("D", end="")
+                else:
+                    print(self.grid[x, y], end="")
+            print("")
+        estimate = self.heuristic_to_goal_force(state)
+        print(f"Estimate energy remaining: {estimate}")
+        print(f"Actual energy remaining: {actual_remaining_costs[state]}")
+        print("")
+
+    def heuristic_to_goal_force(self, state):
+        podlocs = list(state.podlocs)
+        ideal = [(3, 2), (3, 3), (5, 2), (5, 3), (7, 2), (7, 3), (9, 2), (9, 3)]
+        cost = 0
+
+        def get_dist(x1, y1, x2, y2):
+            return abs(x2 - x1) + abs(y2 - y1)
+
+        chunk_num = 0
+        for actual_pair, ideal_pair in zip(chunks(podlocs, 2), chunks(ideal, 2)):
+            [(ax1, ay1), (ax2, ay2)] = actual_pair
+            [(ix1, iy1), (ix2, iy2)] = ideal_pair
+            normal_dist = get_dist(ax1, ay1, ix1, iy1) + get_dist(ax2, ay2, ix2, iy2)
+            swap_dist = get_dist(ax1, ay1, ix2, iy2) + get_dist(ax2, ay2, ix1, iy1)
+            dist = min(normal_dist, swap_dist)
+            cost += dist * get_energy(chunk_num * 2)
+            chunk_num += 1
+        # for i in range(len(ideal)):
+        #     (x1, y1) = podlocs[i]
+        #     (x2, y2) = ideal[i]
+        #     dist = abs(x2 - x1) + abs(y2 - y1)
+        #     cost += dist * get_energy(i)
+        return cost
+
     def heuristic_to_goal(self, state):
+        return self.heuristic_to_goal_force(state)
+        return 0
         podlocs = state.podlocs
         ideal = ((3, 2), (3, 3), (5, 2), (5, 3), (7, 2), (7, 3), (9, 2), (9, 3))
         cost = 0
@@ -269,12 +337,9 @@ class Day23:
     def part1(filename: str) -> int:
         """ Given a filename, solve 2021 day 23 part 1 """
         m = Maze(filename)
-        print(m.grid)
-        print(m.podlocs)
-        m.solve()
-        # Too High:
-        # (You guessed 16091.)
-        return -1
+        return m.solve()
+        # Too Low:  (You guessed 16051.)
+        # Too High: (You guessed 16091.)
 
     @staticmethod
     def part2(filename: str) -> int:
