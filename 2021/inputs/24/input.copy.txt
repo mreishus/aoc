@@ -1,0 +1,379 @@
+## BLOCK 1  | x  12, y  4  [z1]
+   z1 = d1 + 4
+## BLOCK 2  | x  15, y 11  [z1, z2]
+   z2 = d2 + 11
+## BLOCK 3  | x  11, y  7  [z1, z2, z3]
+   z3 = d3 + 7
+## BLOCK 4  | x -14, y  2  DIV  | [z1, z2] (z3)
+   Want to pass IF:
+        d4 = z3 - 14
+        d4 = d3 + 7 - 14
+        d4 = d3 - 7       ********
+## BLOCK 5  | x  12  y 11      [z1, z2, z5]
+   z5 = d5 + 11
+## BLOCK 6  | x -10  y 13  DIV [z1, z2] (z5)
+   Want to pass IF:
+        d6 = z5 - 10
+        d6 = d5 + 11 - 10
+        d6 = d5 + 1        ********
+## BLOCK 7  | x  11  y  9      [z1, z2, z7]
+   z7 = d7 + 9
+## BLOCK 8  | x  13  y 12      [z1, z2, z7, z8]
+   z8 = d8 + 12
+## BLOCK 9  | x  -7  y  6  DIV [z1, z2, z7] (z8)
+   Want to pass IF:
+        d9 = z8 - 7
+        d9 = d8 + 12 - 7
+        d9 = d8 + 5        *******
+## BLOCK 10 | x  10  y  2      [z1, z2, z7, z10]
+    z10 = d10 + 2
+## BLOCK 11 | x  -2  y 11  DIV [z1, z2, z7] (z10)
+    Want to pass IF:
+        d11 = z10 - 2
+        d11 = d10 + 2 - 2
+        d11 = d10          ********
+## BLOCK 12 | x  -1  y 12  DIV [z1, z2] (z7)
+    Want to pass IF:
+        d12 = z7 - 1
+        d12 = d7 + 9 - 1
+        d12 = d7 + 8      *********
+## BLOCK 13 | x  -4  y  3 DIV  [z1] (z2)
+    Want to pass IF
+        d13 = z2 - 4
+        d13 = d2 + 11 - 4
+        d13 = d2 + 7       **********
+## BLOCK 14 | x -12  y  3 DIV (z1)
+    Want to pass IF
+        d14 = z1 - 12
+        d14 = d1 + 4 - 12
+        d14 = d1 - 8      *************
+
+
+        d4 = d3 - 7       ********
+        d6 = d5 + 1        ********
+        d9 = d8 + 5        *******
+        d11 = d10          ********
+        d12 = d7 + 8      *********
+        d13 = d2 + 7       **********
+        d14 = d1 - 8      *************
+
+7 positives
+ --> Since the X value is always above 9, we can never hit the "IF" condition of
+     not doing z *= 26.
+ --> So we are always doing z = (z * 26) + (Next Input Digit + Y)
+7 negatives
+ --> To balance the z *= 26s, we want to make the negatives not do *= 26,
+     so we want their IF conditions to match (where they never do on the positives).
+
+    Take:
+    z //= 26
+    if d4 == (z % 26) - 14:   (0 -> x)
+
+    Examine the pattern of integer division then mod:
+    >>> x = 1234
+    >>> (x // 10) % 10
+    3
+    We are "truncating" a digit then looking at the last digit.
+    We are adding "digits" to our "Z", except they're base 26.
+
+
+
+
+inp w
+mul x 0
+add x z
+mod x 26
+div z 1
+add x 12
+eql x w
+eql x 0
+mul y 0
+add y 25
+mul y x
+add y 1
+mul z y
+mul y 0
+add y w
+add y 4
+mul y x
+(1) add z y
+
+z = d1 + 4
+
+inp w
+mul x 0    |
+add x z    |
+mod x 26   |
+div z 1    | ??
+add x 15   | x = (z % 26) + 15
+eql x w
+eql x 0
+mul y 0
+add y 25
+mul y x
+add y 1
+mul z y
+mul y 0
+add y w
+add y 11
+mul y x
+(2) add z y
+
+x = (z % 26) + 15
+if d2 == (z % 26) + 15:  (0 -> x)
+  z *= 1
+  y = 0
+else:                    (1 -> x)
+  z *= 26
+  y = d2 + 11
+z += y (usually z += d2 + 11)
+
+OR
+
+z = (z * 26) + d2 + 11
+
+inp w
+mul x 0
+add x z
+mod x 26
+div z 1
+add x 11
+eql x w
+eql x 0
+mul y 0
+add y 25
+mul y x
+add y 1
+mul z y
+mul y 0
+add y w
+add y 7
+mul y x
+(3) add z y
+x = (z % 26) + 11
+if d3 == (z % 26) + 11:  (0 -> x)
+  z *= 1
+  y = 0
+else:                    (1 -> x)
+  z *= 26
+  y = d3 + 7
+z += y (usually z += d3 + 7)
+
+inp w
+mul x 0
+add x z
+mod x 26
+div z 26
+add x -14
+eql x w
+eql x 0
+mul y 0
+add y 25
+mul y x
+add y 1
+mul z y
+mul y 0
+add y w
+add y 2
+mul y x
+(4) add z y
+x = (z % 26) - 14
+z //= 26
+if d4 == (z % 26) - 14:   (0 -> x)
+  z *= 1
+  y = 0
+else:                     (1 -> x)
+  z *= 26
+  y = d4 + 2
+z += y ( usually z += d4 + 2)
+
+
+inp w
+mul x 0
+add x z
+mod x 26
+div z 1
+add x 12
+eql x w
+eql x 0
+mul y 0
+add y 25
+mul y x
+add y 1
+mul z y
+mul y 0
+add y w
+add y 11
+mul y x
+(5) add z y
+
+inp w
+mul x 0
+add x z
+mod x 26
+div z 26
+add x -10
+eql x w
+eql x 0
+mul y 0
+add y 25
+mul y x
+add y 1
+mul z y
+mul y 0
+add y w
+add y 13
+mul y x
+(6) add z y
+
+inp w
+mul x 0
+add x z
+mod x 26
+div z 1
+add x 11
+eql x w
+eql x 0
+mul y 0
+add y 25
+mul y x
+add y 1
+mul z y
+mul y 0
+add y w
+add y 9
+mul y x
+(7) add z y
+
+inp w
+mul x 0
+add x z
+mod x 26
+div z 1
+add x 13
+eql x w
+eql x 0
+mul y 0
+add y 25
+mul y x
+add y 1
+mul z y
+mul y 0
+add y w
+add y 12
+mul y x
+(8) add z y
+
+inp w
+mul x 0
+add x z
+mod x 26
+div z 26
+add x -7
+eql x w
+eql x 0
+mul y 0
+add y 25
+mul y x
+add y 1
+mul z y
+mul y 0
+add y w
+add y 6
+mul y x
+(9) add z y
+
+inp w
+mul x 0
+add x z
+mod x 26
+div z 1
+add x 10
+eql x w
+eql x 0
+mul y 0
+add y 25
+mul y x
+add y 1
+mul z y
+mul y 0
+add y w
+add y 2
+mul y x
+(10) add z y
+
+inp w
+mul x 0
+add x z
+mod x 26
+div z 26
+add x -2
+eql x w
+eql x 0
+mul y 0
+add y 25
+mul y x
+add y 1
+mul z y
+mul y 0
+add y w
+add y 11
+mul y x
+(11) add z y
+
+inp w
+mul x 0
+add x z
+mod x 26
+div z 26
+add x -1
+eql x w
+eql x 0
+mul y 0
+add y 25
+mul y x
+add y 1
+mul z y
+mul y 0
+add y w
+add y 12
+mul y x
+(12) add z y
+
+inp w
+mul x 0
+add x z
+mod x 26
+div z 26
+add x -4
+eql x w
+eql x 0
+mul y 0
+add y 25
+mul y x
+add y 1
+mul z y
+mul y 0
+add y w
+add y 3
+mul y x
+(13) add z y
+
+inp w
+mul x 0
+add x z
+mod x 26
+div z 26
+add x -12
+eql x w
+eql x 0
+mul y 0
+add y 25
+mul y x
+add y 1
+mul z y
+mul y 0
+add y w
+add y 13
+mul y x
+(14) add z y
