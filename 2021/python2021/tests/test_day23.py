@@ -5,6 +5,7 @@ Test Day23.
 
 import unittest
 from aoc.day23 import Day23
+from aoc.day23b import Day23b
 
 
 class TestDay23(unittest.TestCase):
@@ -23,8 +24,7 @@ class TestDay23(unittest.TestCase):
 
     def test_part2(self):
         """Test part2"""
-        self.assertEqual("hello", "hello")
-        # self.assertEqual(Day23.part2("../inputs/23/input.txt"), 4775)
+        self.assertEqual(Day23b.part2("../inputs/23/input_b.txt"), 43117)
 
 
 if __name__ == "__main__":
