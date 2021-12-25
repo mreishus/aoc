@@ -29,6 +29,7 @@ from aoc.day22 import Day22
 from aoc.day23 import Day23
 from aoc.day23b import Day23b
 from aoc.day24 import Day24
+from aoc.day25 import Day25
 
 
 def alldays():
@@ -98,10 +99,10 @@ def latest():
     # print("2021 Day 20 Part 2 (small2):", end=" ")
     # print(Day24.part2("../inputs/24/input_small2.txt"))
 
-    print("2021 Day 22 Part 1:", end=" ")
-    print(Day22.part1("../inputs/22/input.txt"))
-    print("2021 Day 22 Part 2:", end=" ")
-    print(Day22.part2("../inputs/22/input.txt"))
+    print("2021 Day 25 Part 1 (small):", end=" ")
+    print(Day25.part1("../inputs/25/input_small2.txt"))
+    print("2021 Day 25 Part 1:", end=" ")
+    print(Day25.part1("../inputs/25/input.txt"))
 
 
 if __name__ == "__main__":
