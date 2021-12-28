@@ -16,16 +16,14 @@ def increase_count(data: List[int], window: int) -> int:
 
 
 class Day01:
-    """ AoC 2021 Day 01 """
+    """AoC 2021 Day 01"""
 
     @staticmethod
     def part1(filename: str) -> int:
-        """ Given a filename, solve 2021 day 01 part 1 """
         data = parse(filename)
         return increase_count(data, 1)
 
     @staticmethod
     def part2(filename: str) -> int:
-        """ Given a filename, solve 2021 day 01 part 2 """
         data = parse(filename)
         return increase_count(data, 3)

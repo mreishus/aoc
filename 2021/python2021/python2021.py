@@ -56,10 +56,12 @@ def alldays():
         (Day20.part1, Day20.part2),
         (Day21.part1, Day21.part2),
         (Day22.part1, Day22.part2),
-        # (Day23.part1, Day23b.part2), # Bit of a mess that needs cleaning up, p1/p2 are diff files that I've been running with pypy
-        # Also need to bring p2 optimizations to p1, or find a way to generalize 4bots vs 2bots
-        # Day23b.part2 needs a special input input_b.txt, or it needs to modify input.txt to become input_b.txt
+        (
+            Day23.part1,
+            Day23b.part2,
+        ),
         (Day24.part1, Day24.part2),
+        (Day25.part1, lambda x: 0),
     ]
     for (i, (p1, p2)) in enumerate(solvers, 1):
         path = f"../inputs/{i:02}/input.txt"
@@ -70,6 +72,11 @@ def alldays():
         p1_time = (p1_end - p1_start) * 1000
 
         p2_start = timer()
+
+        # Special case for p2 Day23 - input_b.txt instead of making the program modify the input
+        if i == 23:
+            path = f"../inputs/{i:02}/input_b.txt"
+
         p2_answer = p2(path)
         p2_end = timer()
         p2_time = (p2_end - p2_start) * 1000
@@ -82,23 +89,6 @@ def alldays():
 
 def latest():
     """Scratchpad to work on."""
-    # print("2021 Day 24 Part 1 (small):", end=" ")
-    # print(Day24.part1("../inputs/24/input_small.txt"))
-    # print("2021 Day 24 Part 2 (small):", end=" ")
-    # print(Day24.part2("../inputs/24/input_small.txt"))
-
-    # print("2021 Day 24 Part 1b (small):", end=" ")
-    # print(Day24.part1b("../inputs/24/input_small3.txt"))
-    # print("2021 Day 24 Part 1b (small):", end=" ")
-    # print(Day24.part1b("../inputs/24/input.txt"))
-
-    # print("2021 Day 24 Part 2 (small):", end=" ")
-    # print(Day24.part2("../inputs/24/input_small3.txt"))
-    # print("2021 Day 20 Part 1 (small2):", end=" ")
-    # print(Day24.part1("../inputs/24/input_small2.txt"))
-    # print("2021 Day 20 Part 2 (small2):", end=" ")
-    # print(Day24.part2("../inputs/24/input_small2.txt"))
-
     print("2021 Day 25 Part 1 (small):", end=" ")
     print(Day25.part1("../inputs/25/input_small2.txt"))
     print("2021 Day 25 Part 1:", end=" ")
@@ -106,5 +96,5 @@ def latest():
 
 
 if __name__ == "__main__":
-    # alldays()
-    latest()
+    alldays()
+    # latest()

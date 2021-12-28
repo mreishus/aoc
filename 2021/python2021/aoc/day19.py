@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 """
 Advent Of Code 2021 Day 19
-https://adventofcode.com/2021/day/8
+https://adventofcode.com/2021/day/19
 """
 from typing import List
 import re
@@ -36,7 +36,7 @@ class Orientation:
 
 
 def all_orientations():
-    """ Returns 48 orientations instead of 24 """
+    """Returns 48 orientations instead of 24"""
     for swap in range(2):
         for roll in range(3):
             for fx in [False, True]:
@@ -129,7 +129,7 @@ def match(scan1, scan2):
 
 
 class Day19:
-    """ AoC 2021 Day 19 """
+    """AoC 2021 Day 19"""
 
     @staticmethod
     @lru_cache(maxsize=None)
@@ -189,7 +189,7 @@ class Day19:
 
     @staticmethod
     def part2(filename: str) -> int:
-        """ Given a filename, solve 2021 day 19 part 2 """
+        """Given a filename, solve 2021 day 19 part 2"""
         size, solved, scanners = Day19.partX(filename)
         max_dist = 0
         for i in range(size):

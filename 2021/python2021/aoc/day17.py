@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 """
 Advent Of Code 2021 Day 17
-https://adventofcode.com/2021/day/8
+https://adventofcode.com/2021/day/17
 """
 from typing import List
 import re
@@ -57,7 +57,7 @@ def whatever(bound, xv, yv):
 
 
 class Day17:
-    """ AoC 2021 Day 17 """
+    """AoC 2021 Day 17"""
 
     @staticmethod
     @lru_cache(maxsize=None)

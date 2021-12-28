@@ -1,9 +1,8 @@
 #!/usr/bin/env python
 """
 Advent Of Code 2021 Day 15
-https://adventofcode.com/2021/day/8
+https://adventofcode.com/2021/day/15
 """
-import re
 from collections import defaultdict
 from queue import PriorityQueue
 
@@ -97,11 +96,11 @@ def possible_edges2(loc, grid, xs, ys):
 
 
 class Day15:
-    """ AoC 2021 Day 15 """
+    """AoC 2021 Day 15"""
 
     @staticmethod
     def part1(filename: str) -> int:
-        """ Given a filename, solve 2021 day 15 part 1 """
+        """Given a filename, solve 2021 day 15 part 1"""
         grid, xs, ys = parse(filename)
 
         loc = (0, 0)
@@ -135,7 +134,7 @@ class Day15:
 
     @staticmethod
     def part2(filename: str) -> int:
-        """ Given a filename, solve 2021 day 15 part 2 """
+        """Given a filename, solve 2021 day 15 part 2"""
         grid, xs, ys = parse(filename)
 
         loc = (0, 0)

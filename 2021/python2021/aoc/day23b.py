@@ -194,7 +194,7 @@ class Maze:
             (state, length) = pq.pop_task()
             if len(pq.pq) % 1000 == 0:
                 max_q_len = max(max_q_len, len(pq.pq))
-                print(len(pq.pq))
+                # print(len(pq.pq))
             if False and len(pq.pq) > 8000:
                 i = 0
                 for cost, counter, state in pq.pq:
@@ -229,20 +229,20 @@ class Maze:
         # print("==Done==")
         for k, v in dist_to.items():
             if is_winner(k):
-                # return v
-                win_cost = v
-                actual_remaining_costs = {k: 0}
-                all_states = [k]
-                while k in edge_to:
-                    all_states.append(k)
-                    # print(edge_to[k])
-                    k = edge_to[k]
-                    actual_remaining_costs[k] = -1 * (dist_to[k] - win_cost)
+                # # return v
+                # win_cost = v
+                # actual_remaining_costs = {k: 0}
+                # all_states = [k]
+                # while k in edge_to:
+                #     all_states.append(k)
+                #     # print(edge_to[k])
+                #     k = edge_to[k]
+                #     actual_remaining_costs[k] = -1 * (dist_to[k] - win_cost)
 
-                self.animate(list(reversed(all_states)), actual_remaining_costs)
-                print(f"Max Q length: {max_q_len}")
-                print("Found winner:")
-                print(f"{v} {k}")
+                # self.animate(list(reversed(all_states)), actual_remaining_costs)
+                # # print(f"Max Q length: {max_q_len}")
+                # # print("Found winner:")
+                # # print(f"{v} {k}")
                 return v
         return -1
 
@@ -517,25 +517,45 @@ def get_neighbors(loc):
 def is_winner(state: State):
     # return sorted(state.podlocs) == ideal
     As = sorted(
-        [state.podlocs[0], state.podlocs[1], state.podlocs[2], state.podlocs[3],]
+        [
+            state.podlocs[0],
+            state.podlocs[1],
+            state.podlocs[2],
+            state.podlocs[3],
+        ]
     )
     if As != [(3, 2), (3, 3), (3, 4), (3, 5)]:
         return False
 
     Bs = sorted(
-        [state.podlocs[4], state.podlocs[5], state.podlocs[6], state.podlocs[7],]
+        [
+            state.podlocs[4],
+            state.podlocs[5],
+            state.podlocs[6],
+            state.podlocs[7],
+        ]
     )
     if Bs != [(5, 2), (5, 3), (5, 4), (5, 5)]:
         return False
 
     Cs = sorted(
-        [state.podlocs[8], state.podlocs[9], state.podlocs[10], state.podlocs[11],]
+        [
+            state.podlocs[8],
+            state.podlocs[9],
+            state.podlocs[10],
+            state.podlocs[11],
+        ]
     )
     if Cs != [(7, 2), (7, 3), (7, 4), (7, 5)]:
         return False
 
     Ds = sorted(
-        [state.podlocs[12], state.podlocs[13], state.podlocs[14], state.podlocs[15],]
+        [
+            state.podlocs[12],
+            state.podlocs[13],
+            state.podlocs[14],
+            state.podlocs[15],
+        ]
     )
     if Ds != [(9, 2), (9, 3), (9, 4), (9, 5)]:
         return False
@@ -543,11 +563,11 @@ def is_winner(state: State):
 
 
 class Day23b:
-    """ AoC 2021 Day 23 """
+    """AoC 2021 Day 23"""
 
     @staticmethod
     def part2(filename: str) -> int:
-        """ Given a filename, solve 2021 day 23 part 1 """
+        """Given a filename, solve 2021 day 23 part 1"""
         m = Maze(filename)
         return m.solve()
 

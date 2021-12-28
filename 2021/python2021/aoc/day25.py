@@ -3,7 +3,6 @@
 Advent Of Code 2021 Day 25
 https://adventofcode.com/2021/day/25
 """
-from typing import List
 from collections import defaultdict
 
 
@@ -74,11 +73,11 @@ def step(grid, xsize, ysize):
 
 
 class Day25:
-    """ AoC 2021 Day 25 """
+    """AoC 2021 Day 25"""
 
     @staticmethod
     def part1(filename: str) -> int:
-        """ Given a filename, solve 2021 day 25 part 1 """
+        """Given a filename, solve 2021 day 25 part 1"""
         grid, xs, ys = parse(filename)
         i = 0
         while True:

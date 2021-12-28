@@ -77,11 +77,11 @@ class Board:
 
 
 class Day04:
-    """ AoC 2021 Day 04 """
+    """AoC 2021 Day 04"""
 
     @staticmethod
     def part1(filename: str) -> int:
-        """ Given a filename, solve 2021 day 04 part 1 """
+        """Given a filename, solve 2021 day 04 part 1"""
         (first, boards_raw) = parse(filename)
 
         boards = [Board(board_raw) for board_raw in boards_raw]
@@ -96,7 +96,7 @@ class Day04:
 
     @staticmethod
     def part2(filename: str) -> int:
-        """ Given a filename, solve 2021 day 04 part 2 """
+        """Given a filename, solve 2021 day 04 part 2"""
         (first, boards_raw) = parse(filename)
 
         boards = [Board(board_raw) for board_raw in boards_raw]

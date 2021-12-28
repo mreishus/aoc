@@ -4,7 +4,6 @@ Advent Of Code 2021 Day 23
 https://adventofcode.com/2021/day/23
 """
 from collections import namedtuple, defaultdict, deque
-import math
 import itertools
 from heapq import heappush, heappop
 
@@ -142,7 +141,8 @@ class Maze:
         while not pq.empty():
             (state, length) = pq.pop_task()
             if len(pq.pq) % 1000 == 0:
-                print(len(pq.pq))
+                # print(len(pq.pq))
+                pass
             # if len(pq.pq) > 40000:
             #     i = 0
             #     for cost, counter, state in pq.pq:
@@ -177,18 +177,18 @@ class Maze:
         for k, v in dist_to.items():
             if is_winner(k):
                 # return v
-                print("Found winner:")
-                print(f"{v} {k}")
-                win_cost = v
-                actual_remaining_costs = {k: 0}
-                all_states = [k]
-                while k in edge_to:
-                    all_states.append(k)
-                    # print(edge_to[k])
-                    k = edge_to[k]
-                    actual_remaining_costs[k] = -1 * (dist_to[k] - win_cost)
+                # print("Found winner:")
+                # print(f"{v} {k}")
+                # win_cost = v
+                # actual_remaining_costs = {k: 0}
+                # all_states = [k]
+                # while k in edge_to:
+                #     all_states.append(k)
+                #     # print(edge_to[k])
+                #     k = edge_to[k]
+                #     actual_remaining_costs[k] = -1 * (dist_to[k] - win_cost)
 
-                self.animate(list(reversed(all_states)), actual_remaining_costs)
+                # self.animate(list(reversed(all_states)), actual_remaining_costs)
                 return v
         return -1
 
@@ -454,17 +454,17 @@ def is_winner(state: State):
 
 
 class Day23:
-    """ AoC 2021 Day 23 """
+    """AoC 2021 Day 23"""
 
     @staticmethod
     def part1(filename: str) -> int:
-        """ Given a filename, solve 2021 day 23 part 1 """
+        """Given a filename, solve 2021 day 23 part 1"""
         m = Maze(filename)
         return m.solve()
 
     @staticmethod
     def part2(filename: str) -> int:
-        """ Given a filename, solve 2021 day 23 part 2 """
+        """Given a filename, solve 2021 day 23 part 2"""
         return -1
 
 

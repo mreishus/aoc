@@ -17,11 +17,8 @@ def parse_line(line):
 
 
 class Day02:
-    """ AoC 2021 Day 02 """
-
     @staticmethod
     def part1(filename: str) -> int:
-        """ Given a filename, solve 2021 day 02 part 1 """
         data = parse(filename)
 
         loc = complex(0, 0)
@@ -37,7 +34,6 @@ class Day02:
 
     @staticmethod
     def part2(filename: str) -> int:
-        """ Given a filename, solve 2021 day 02 part 2 """
         data = parse(filename)
 
         loc = complex(0, 0)

@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 """
 Advent Of Code 2021 Day 14
-https://adventofcode.com/2021/day/8
+https://adventofcode.com/2021/day/14
 """
 from typing import Tuple, Dict
 from collections import defaultdict
@@ -56,7 +56,7 @@ def expand(pairs, rules):
 
 
 class Day14:
-    """ AoC 2021 Day 14 """
+    """AoC 2021 Day 14"""
 
     @staticmethod
     def partX(filename: str, steps: int) -> int:
@@ -70,10 +70,10 @@ class Day14:
 
     @staticmethod
     def part1(filename: str) -> int:
-        """ Given a filename, solve 2021 day 14 part 1 """
+        """Given a filename, solve 2021 day 14 part 1"""
         return Day14.partX(filename, 10)
 
     @staticmethod
     def part2(filename: str) -> int:
-        """ Given a filename, solve 2021 day 14 part 2 """
+        """Given a filename, solve 2021 day 14 part 2"""
         return Day14.partX(filename, 40)

@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 """
 Advent Of Code 2021 Day 13
-https://adventofcode.com/2021/day/8
+https://adventofcode.com/2021/day/13
 """
 import re
 import numpy as np
@@ -59,11 +59,11 @@ def fold(grid, var, amt):
 
 
 class Day13:
-    """ AoC 2021 Day 13 """
+    """AoC 2021 Day 13"""
 
     @staticmethod
     def part1(filename: str) -> int:
-        """ Given a filename, solve 2021 day 13 part 1 """
+        """Given a filename, solve 2021 day 13 part 1"""
         # (You guessed 722.)
         coords, instructs = parse(filename)
 
@@ -72,7 +72,6 @@ class Day13:
         for x, y in coords:
             max_x = max(x, max_x)
             max_y = max(y, max_y)
-        print(f"{max_x} {max_y}")
         if max_x == 1305:
             max_x = 1310
         if max_y == 893:
@@ -81,8 +80,6 @@ class Day13:
         grid = np.zeros((max_y + 1, max_x + 1), dtype=int)
         for x, y in coords:
             grid[y][x] = 1
-        # print("")
-        # print(grid)
         for var, amt in instructs:
             grid = fold(grid, var, amt)
             break
@@ -90,7 +87,7 @@ class Day13:
 
     @staticmethod
     def part2(filename: str) -> int:
-        """ Given a filename, solve 2021 day 13 part 2 """
+        """Given a filename, solve 2021 day 13 part 2"""
         coords, instructs = parse(filename)
 
         max_x = 0
@@ -98,7 +95,6 @@ class Day13:
         for x, y in coords:
             max_x = max(x, max_x)
             max_y = max(y, max_y)
-        print(f"{max_x} {max_y}")
         if max_x == 1305:
             max_x = 1310
         if max_y == 893:
@@ -109,5 +105,6 @@ class Day13:
             grid[y][x] = 1
         for var, amt in instructs:
             grid = fold(grid, var, amt)
+        np.set_printoptions(linewidth=150)
         print(grid)
         return "Look at grid :)"

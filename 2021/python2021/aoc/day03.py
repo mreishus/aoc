@@ -34,11 +34,8 @@ def bit_criteria_selection(data: List[str], most_common=True) -> int:
 
 
 class Day03:
-    """AoC 2021 Day 03"""
-
     @staticmethod
     def part1(filename: str) -> int:
-        """Given a filename, solve 2021 day 03 part 1"""
         data = parse(filename)
 
         common = ""
@@ -60,7 +57,6 @@ class Day03:
 
     @staticmethod
     def part2(filename: str) -> int:
-        """Given a filename, solve 2021 day 03 part 2"""
         data = parse(filename)
 
         o2 = bit_criteria_selection(data, True)

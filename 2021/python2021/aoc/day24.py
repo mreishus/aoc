@@ -3,8 +3,6 @@
 Advent Of Code 2021 Day 24
 https://adventofcode.com/2021/day/24
 """
-from typing import List
-import re
 import random
 
 PRINT_LOG = False
@@ -84,11 +82,11 @@ class Computer:
 
 
 class Day24:
-    """ AoC 2021 Day 24 """
+    """AoC 2021 Day 24"""
 
     @staticmethod
     def part1(filename: str) -> int:
-        """ Given a filename, solve 2021 day 24 part 1 """
+        """Given a filename, solve 2021 day 24 part 1"""
         data = parse(filename)
         inputs = []
 
@@ -119,7 +117,7 @@ class Day24:
         PRINT_LOG = False
         print("")
         check_model(digits)
-        exit("check2")
+        return -1
 
         # ---> [6, 7, 2, 7, 4, 1, 8, 1, 6, 2, 7, 7, 7, 5] <---
         for i in range(50000):
@@ -134,12 +132,12 @@ class Day24:
 
     @staticmethod
     def part2(filename: str) -> int:
-        """ Given a filename, solve 2021 day 24 part 2 """
+        """Given a filename, solve 2021 day 24 part 2"""
         data = parse(filename)
         if len(data) < 20:
             print(data)
         return -1
 
 
-if __name__ == "__main__":
-    print(Day24.part1("../inputs/24/input.txt"))
+# if __name__ == "__main__":
+#     print(Day24.part1("../inputs/24/input.txt"))

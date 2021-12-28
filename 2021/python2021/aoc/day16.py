@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 """
 Advent Of Code 2021 Day 16
-https://adventofcode.com/2021/day/8
+https://adventofcode.com/2021/day/16
 """
 from itertools import islice
 import math
@@ -100,7 +100,7 @@ def p2(all_bits):
 
 
 class Day16:
-    """ AoC 2021 Day 16 """
+    """AoC 2021 Day 16"""
 
     @staticmethod
     def part1(filename: str) -> int:

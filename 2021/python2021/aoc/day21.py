@@ -23,11 +23,11 @@ def wrap(num):
 
 
 class Day21:
-    """ AoC 2021 Day 21 """
+    """AoC 2021 Day 21"""
 
     @staticmethod
     def part1(filename: str) -> int:
-        """ Given a filename, solve 2021 day 21 part 1 """
+        """Given a filename, solve 2021 day 21 part 1"""
         data = [9, 3]
         d = Die()
 
@@ -40,13 +40,12 @@ class Day21:
             if scores[i] >= 1000:
                 break
             i = (i + 1) % 2
-        print(scores)
         j = (i + 1) % 2
         return scores[j] * d.rolls
 
     @staticmethod
     def part2(filename: str) -> int:
-        """ Given a filename, solve 2021 day 21 part 2 """
+        """Given a filename, solve 2021 day 21 part 2"""
         roll1 = [3, 4, 5, 4, 5, 6, 5, 6, 7]
         roll2 = [x + 1 for x in roll1]
         roll3 = [x + 2 for x in roll1]
