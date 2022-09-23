@@ -8,7 +8,7 @@ end
 
 defmodule Elixir2021 do
   alias Elixir2021.{Day01, Day02, Day03, Day04, Day05}
-  alias Elixir2021.{Day06, Day12}
+  alias Elixir2021.{Day06, Day07, Day12}
 
   def day1to5 do
     Day01.part1("../inputs/01/input.txt")
@@ -51,12 +51,11 @@ defmodule Elixir2021 do
   end
 
   def wip() do
+    Day07.part1("../inputs/07/input.txt")
+    |> IO.inspect(label: "2021 Day 07 Part 1")
 
-    # Day06.part1("../inputs/06/input.txt")
-    # |> IO.inspect(label: "2021 Day 06 Part 1")
-
-    # Day06.part2("../inputs/06/input.txt")
-    # |> IO.inspect(label: "2021 Day 06 Part 2")
+    Day07.part2("../inputs/07/input.txt")
+    |> IO.inspect(label: "2021 Day 07 Part 2")
   end
 
   def day11to15() do
@@ -79,9 +78,9 @@ defmodule Elixir2021 do
   end
 
   def main do
-    warning()
-    day1to5()
-    day6to10()
+    # warning()
+    # day1to5()
+    # day6to10()
     # day11to15()
     wip()
   end
