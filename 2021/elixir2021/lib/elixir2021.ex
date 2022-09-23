@@ -7,7 +7,8 @@ defmodule ExecutionTime do
 end
 
 defmodule Elixir2021 do
-  alias Elixir2021.{Day01, Day02, Day03, Day04, Day05, Day12}
+  alias Elixir2021.{Day01, Day02, Day03, Day04, Day05}
+  alias Elixir2021.{Day06, Day12}
 
   def day1to5 do
     Day01.part1("../inputs/01/input.txt")
@@ -41,7 +42,21 @@ defmodule Elixir2021 do
     |> IO.inspect(label: "2021 Day 05 Part 2")
   end
 
+  def day6to10 do
+    Day06.part1("../inputs/06/input.txt")
+    |> IO.inspect(label: "2021 Day 06 Part 1")
+
+    Day06.part2("../inputs/06/input.txt")
+    |> IO.inspect(label: "2021 Day 06 Part 2")
+  end
+
   def wip() do
+
+    # Day06.part1("../inputs/06/input.txt")
+    # |> IO.inspect(label: "2021 Day 06 Part 1")
+
+    # Day06.part2("../inputs/06/input.txt")
+    # |> IO.inspect(label: "2021 Day 06 Part 2")
   end
 
   def day11to15() do
@@ -52,8 +67,21 @@ defmodule Elixir2021 do
     |> IO.inspect(label: "2021 Day 12 Part 2")
   end
 
+  def warning() do
+    "" |> IO.puts()
+    "---" |> IO.puts()
+    "Day 6 uses a Matrix library, which requires BLAS." |> IO.puts()
+    "See https://github.com/versilov/matrex" |> IO.puts()
+    "I couldn't get this to work, so you can use a slower workaround." |> IO.puts()
+    "mix deps.clean --all ; mix deps.get ; MATREX_BLAS=noblas mix compile" |> IO.puts()
+    "---" |> IO.puts()
+    "" |> IO.puts()
+  end
+
   def main do
+    warning()
     day1to5()
+    day6to10()
     # day11to15()
     wip()
   end
