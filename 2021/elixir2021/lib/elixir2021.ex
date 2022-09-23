@@ -7,7 +7,7 @@ defmodule ExecutionTime do
 end
 
 defmodule Elixir2021 do
-  alias Elixir2021.{Day01, Day02, Day03, Day12}
+  alias Elixir2021.{Day01, Day02, Day03, Day04, Day12}
 
   def day1to5 do
     Day01.part1("../inputs/01/input.txt")
@@ -27,9 +27,18 @@ defmodule Elixir2021 do
 
     Day03.part2("../inputs/03/input.txt")
     |> IO.inspect(label: "2021 Day 03 Part 2")
+
+    Day04.part1("../inputs/04/input.txt")
+    |> IO.inspect(label: "2021 Day 04 Part 1")
+
+    Day04.part2("../inputs/04/input.txt")
+    |> IO.inspect(label: "2021 Day 04 Part 2")
   end
 
-  def randomdays() do
+  def wip() do
+  end
+
+  def day11to15() do
     Day12.part1("../inputs/12/input.txt")
     |> IO.inspect(label: "2021 Day 12 Part 1")
 
@@ -38,7 +47,8 @@ defmodule Elixir2021 do
   end
 
   def main do
-    # day1to5()
-    randomdays()
+    day1to5()
+    day11to15()
+    wip()
   end
 end
