@@ -7,12 +7,14 @@ https://adventofcode.com/2022
 from timeit import default_timer as timer
 from aoc.day01 import Day01
 from aoc.day02 import Day02
+from aoc.day03 import Day03
 
 
 def alldays():
     solvers = [
         (Day01.part1, Day01.part2),
         (Day02.part1, Day02.part2),
+        (Day03.part1, Day03.part2),
     ]
     for (i, (p1, p2)) in enumerate(solvers, 1):
         path = f"../inputs/{i:02}/input.txt"
@@ -36,17 +38,17 @@ def alldays():
 
 def latest():
     """Scratchpad to work on."""
-    # print("2022 Day 02 Part 1 (small):", end=" ")
-    # print(Day02.part1("../inputs/02/input_small.txt"))
+    print("2022 Day 03 Part 1 (small):", end=" ")
+    print(Day03.part1("../inputs/03/input_small.txt"))
 
-    print("2022 Day 02 Part 1:", end=" ")
-    print(Day02.part1("../inputs/02/input.txt"))
+    print("2022 Day 03 Part 1:", end=" ")
+    print(Day03.part1("../inputs/03/input.txt"))
 
-    # print("2022 Day 02 Part 2 (small):", end=" ")
-    # print(Day02.part2("../inputs/02/input_small.txt"))
+    print("2022 Day 03 Part 2 (small):", end=" ")
+    print(Day03.part2("../inputs/03/input_small.txt"))
 
-    print("2022 Day 02 Part 2:", end=" ")
-    print(Day02.part2("../inputs/02/input.txt"))
+    print("2022 Day 03 Part 2:", end=" ")
+    print(Day03.part2("../inputs/03/input.txt"))
 
 
 if __name__ == "__main__":
