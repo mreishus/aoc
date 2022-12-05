@@ -25,6 +25,7 @@
 | Day 02 | Rock Paper Scissors  | [Python](./2022/python2022/aoc/day02.py) |
 | Day 03 | Overlapping strings  | [Python](./2022/python2022/aoc/day03.py) |
 | Day 04 | Overlapping ranges   | [Python](./2022/python2022/aoc/day04.py) |
+| Day 05 | Stack Ops, Parsing   | [Python](./2022/python2022/aoc/day05.py) |
 
 ## 2021
 
@@ -592,5 +593,5 @@ now.
 
 ```
 Created:       Mon 02 Dec 2019 05:12:40 PM CST
-Last Modified: Sun 04 Dec 2022 06:27:54 PM CST
+Last Modified: Sun 04 Dec 2022 11:43:57 PM CST
 ```
