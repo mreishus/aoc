@@ -2,7 +2,8 @@
 
 ## Stars Earned By Year
 
-- 2021 - ?
+- 2022 - WIP
+- 2021 - 50 stars
 - 2020 - 50 stars
 - 2019 - 50 stars
 - 2018 - 50 stars
@@ -10,8 +11,20 @@
 - 2016 - 50 stars
 - 2015 - 50 stars
 
+<!--
 * **250 Stars Club - Joined 2020-01-31**
 * **300 Stars Club - Joined 2020-12-25**
+* **350 Stars Club - Joined 2021-12-25**
+-->
+
+## 2022
+
+| Day    | Comment              | Python                                   |
+| ------ | -------------------- | ---------------------------------------- |
+| Day 01 | Summing lists, max N | [Python](./2022/python2022/aoc/day01.py) |
+| Day 02 | Rock Paper Scissors  | [Python](./2022/python2022/aoc/day02.py) |
+| Day 03 | Overlapping strings  | [Python](./2022/python2022/aoc/day03.py) |
+| Day 04 | Overlapping ranges   | [Python](./2022/python2022/aoc/day04.py) |
 
 ## 2021
 
@@ -579,5 +592,5 @@ now.
 
 ```
 Created:       Mon 02 Dec 2019 05:12:40 PM CST
-Last Modified: Mon 06 Dec 2021 12:11:35 AM CST
+Last Modified: Sun 04 Dec 2022 06:27:54 PM CST
 ```
