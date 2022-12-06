@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 """
 Advent Of Code 2022 Day 04
-https://adventofcode.com/2022/day/3
+https://adventofcode.com/2022/day/4
 """
 
 
