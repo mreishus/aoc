@@ -3,7 +3,6 @@
 Advent Of Code 2022 Day 09
 https://adventofcode.com/2022/day/9
 """
-from collections import defaultdict
 
 
 def parse(filename):
@@ -16,10 +15,10 @@ def parse_line(line):
     return [direc, int(num)]
 
 
-class Grid:
+class Rope:
     def __init__(self, num):
         self.k = []  # Knot locations, head is k[0] and tail is k[-1]
-        self.grid = defaultdict(int)  # Grid of visited cells by tail
+        self.seen = set()
         for _ in range(num):
             self.k.append((0, 0))
 
@@ -45,7 +44,7 @@ class Grid:
             self.k[i] = (self.k[i][0] + mx, self.k[i][1] + my)
 
         # print(f"Marking {self.k[-1]} as visited. Head is {self.k[0]}")
-        self.grid[self.k[-1]] = 1
+        self.seen.add(self.k[-1])
 
     def compute_tail_move(self, i):
         hx, hy = self.k[i - 1]
@@ -70,11 +69,7 @@ class Grid:
         return mx, my
 
     def get_tail_visited(self):
-        count = 0
-        for x in self.grid.keys():
-            if self.grid[x] == 1:
-                count += 1
-        return count
+        return len(self.seen)
 
 
 class Day09:
@@ -83,13 +78,13 @@ class Day09:
     @staticmethod
     def part1(filename: str) -> int:
         directions = parse(filename)
-        g = Grid(2)
+        g = Rope(2)
         g.do_moves(directions)
         return g.get_tail_visited()
 
     @staticmethod
     def part2(filename: str) -> int:
         directions = parse(filename)
-        g = Grid(10)
+        g = Rope(10)
         g.do_moves(directions)
         return g.get_tail_visited()
