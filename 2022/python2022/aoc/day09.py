@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 """
 Advent Of Code 2022 Day 09
-https://adventofcode.com/2022/day/3
+https://adventofcode.com/2022/day/9
 """
 from collections import defaultdict
 
@@ -17,13 +17,11 @@ def parse_line(line):
 
 
 class Grid:
-    def __init__(self):
-        self.grid = defaultdict(int)
-        self.hx = 0
-        self.hy = 0
-        self.tx = 0
-        self.ty = 0
-        self.grid[(0, 0)] = 1
+    def __init__(self, num):
+        self.k = []  # Knot locations, head is k[0] and tail is k[-1]
+        self.grid = defaultdict(int)  # Grid of visited cells by tail
+        for _ in range(num):
+            self.k.append((0, 0))
 
     def do_moves(self, directions):
         lookup = {
@@ -38,33 +36,38 @@ class Grid:
                 self.move(dx, dy)
 
     def move(self, dx, dy):
-        # print("")
-        # print(f"Before move: ({self.hx}, {self.hy}) - ({self.tx}, {self.ty})")
-        self.hx += dx
-        self.hy += dy
-        # print(f"Half move: ({self.hx}, {self.hy}) - ({self.tx}, {self.ty})")
-        self.move_tail()
-        # print(f"After move:  ({self.hx}, {self.hy}) - ({self.tx}, {self.ty})")
+        # Move head
+        self.k[0] = (self.k[0][0] + dx, self.k[0][1] + dy)
 
-    def move_tail(self):
-        dx = self.hx - self.tx
-        dy = self.hy - self.ty
+        for i in range(1, len(self.k)):
+            # Move knot i
+            mx, my = self.compute_tail_move(i)
+            self.k[i] = (self.k[i][0] + mx, self.k[i][1] + my)
+
+        # print(f"Marking {self.k[-1]} as visited. Head is {self.k[0]}")
+        self.grid[self.k[-1]] = 1
+
+    def compute_tail_move(self, i):
+        hx, hy = self.k[i - 1]
+        tx, ty = self.k[i]
+        dx = hx - tx
+        dy = hy - ty
 
         touching = abs(dx) <= 1 and abs(dy) <= 1
         if touching:
-            return
+            return 0, 0
 
+        mx, my = 0, 0
         if dx > 0:
-            self.tx += 1
+            mx += 1
         elif dx < 0:
-            self.tx -= 1
+            mx -= 1
 
         if dy > 0:
-            self.ty += 1
+            my += 1
         elif dy < 0:
-            self.ty -= 1
-
-        self.grid[(self.tx, self.ty)] = 1
+            my -= 1
+        return mx, my
 
     def get_tail_visited(self):
         count = 0
@@ -80,13 +83,13 @@ class Day09:
     @staticmethod
     def part1(filename: str) -> int:
         directions = parse(filename)
-        g = Grid()
+        g = Grid(2)
         g.do_moves(directions)
         return g.get_tail_visited()
 
     @staticmethod
     def part2(filename: str) -> int:
-        data = parse(filename)
-        if len(data) <= 20:
-            print(data)
-        return -2
+        directions = parse(filename)
+        g = Grid(10)
+        g.do_moves(directions)
+        return g.get_tail_visited()
