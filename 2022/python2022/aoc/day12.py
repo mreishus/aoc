@@ -3,15 +3,11 @@
 Advent Of Code 2022 Day 12
 https://adventofcode.com/2022/day/12
 """
-from dataclasses import dataclass
 from collections import deque
 from functools import cache
+from typing import NamedTuple
 
-
-@dataclass()
-class State:
-    loc: tuple[int, int]
-    steps: int
+State = NamedTuple("State", [("loc", tuple[int, int]), ("steps", int)])
 
 
 class Grid:
@@ -86,6 +82,9 @@ class Grid:
             self.get_raw_neighbors.cache_clear()
             ### There's a 10x speedup if I learn how they can be removed
 
+            ## Possible performance gain:
+            ## Tell BFS the min number of steps we've already found,
+            ## it can cancel its search if it goes over that number.
             z = self.bfs()
             if z is not None:
                 cand.append(z)
