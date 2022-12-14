@@ -4,7 +4,6 @@ Advent Of Code 2022 Day 14
 https://adventofcode.com/2022/day/14
 """
 from collections import defaultdict
-import time
 
 
 def parse(filename):
@@ -60,20 +59,20 @@ class Grid:
     def get_grid(self, x, y, p2):
         if not p2:
             return self.grid[x, y]
-        if y >= self.maxy_after_load + 2:
+        if y == self.maxy_after_load + 2:
             return "#"
         return self.grid[x, y]
 
     def new_sand(self, p2):
         (x, y) = self.spigot
+        if self.grid[500, 0] == "O":
+            return False
 
         while True:
             moved = False
-            if self.grid[500, 0] == "O":
-                return False
 
             for (x1, y1) in self.possible_sand_moves(x, y):
-                if y1 > self.maxy_after_load + 5:
+                if y1 > self.maxy_after_load + 4:
                     return False
 
                 char = self.get_grid(x1, y1, p2)
