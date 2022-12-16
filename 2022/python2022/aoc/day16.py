@@ -21,14 +21,18 @@ class Valve:
     flow_rate: int
 
 
-# @dataclass()
-# class State:
-#     loc: str
-#     open_valves: set[str]
-#     pressure_released: int
-#     minutes: int
 State = NamedTuple(
     "State",
+    [
+        ("loc", str),
+        ("open_valves", frozenset),
+        ("pressure_released", int),
+        ("minutes", int),
+        ("last_loc", str),
+    ],
+)
+StateNoLastLoc = NamedTuple(
+    "StateNoLastLoc",
     [
         ("loc", str),
         ("open_valves", frozenset),
@@ -44,6 +48,10 @@ StateNoPres = NamedTuple(
         ("minutes", int),
     ],
 )
+
+
+def get_state_no_last_loc(s):
+    return StateNoLastLoc(s.loc, s.open_valves, s.pressure_released, s.minutes)
 
 
 def get_state_no_press(s):
@@ -71,7 +79,7 @@ def parse(filename):
 
 
 def init_state():
-    return State("AA", frozenset(), 0, 0)
+    return State("AA", frozenset(), 0, 0, "")
 
 
 def get_neighbors(s, valves, vmap):
@@ -79,6 +87,7 @@ def get_neighbors(s, valves, vmap):
         return []
 
     r = []
+    last_loc = s.loc
 
     pressure_delta = 0
     for ov in s.open_valves:
@@ -87,11 +96,15 @@ def get_neighbors(s, valves, vmap):
 
     ## Moving to another valve
     for dest in vmap[s.loc]:
-        r.append(State(dest, s.open_valves, new_pressure, s.minutes + 1))
+        if dest == s.last_loc:
+            continue
+        r.append(State(dest, s.open_valves, new_pressure, s.minutes + 1, last_loc))
 
     ## Opening a valve
     if s.loc not in s.open_valves:
-        r.append(State(s.loc, s.open_valves | {s.loc}, new_pressure, s.minutes + 1))
+        r.append(
+            State(s.loc, s.open_valves | {s.loc}, new_pressure, s.minutes + 1, last_loc)
+        )
 
     return r
 
@@ -109,9 +122,10 @@ def p1(valves, vmap):
         # s = q.pop()  # DFS
 
         ## Skip if we've seen this state before
-        if s in seen:
+        snll = get_state_no_last_loc(s)
+        if snll in seen:
             continue
-        seen.add(s)
+        seen.add(snll)
 
         ## Skip if we've seen this state before, but with more pressure
         snp = get_state_no_press(s)
