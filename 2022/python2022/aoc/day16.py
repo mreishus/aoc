@@ -56,6 +56,7 @@ def get_state_no_last_loc(s):
 
 def get_state_no_press(s):
     # return StateNoPres(s.loc, s.open_valves, s.minutes)
+    # return StateNoPres(s.loc, frozenset(), s.minutes)
     return StateNoPres("XYZ", s.open_valves, s.minutes)
 
 
@@ -101,7 +102,7 @@ def get_neighbors(s, valves, vmap):
         r.append(State(dest, s.open_valves, new_pressure, s.minutes + 1, last_loc))
 
     ## Opening a valve
-    if s.loc not in s.open_valves:
+    if s.loc not in s.open_valves and valves[s.loc].flow_rate > 0:
         r.append(
             State(s.loc, s.open_valves | {s.loc}, new_pressure, s.minutes + 1, last_loc)
         )
@@ -142,7 +143,9 @@ def p1(valves, vmap):
                 f"Seen {i} states | {len(q)} in queue | {len(seen)} seen | s.minutes={s.minutes} | current max {maxp}"
             )
 
+        # print(s)
         for n in get_neighbors(s, valves, vmap):
+            # print("--> ", n)
             q.append(n)
 
         if s.minutes >= MAX_MINUTES:
@@ -167,3 +170,9 @@ class Day16:
         if len(data) <= 20:
             print(data)
         return -2
+
+
+# That's not the right answer; your answer is too low. If you're stuck, make
+# sure you're using the full input data; there are also some general tips on
+# the about page, or you can ask for hints on the subreddit. Please wait one
+# minute before trying again. (You guessed 1798.) [Return to Day 16]
