@@ -147,25 +147,11 @@ def get_neighbors_ele(s, valves, vmap):
             continue
         ele_acts.append(["move", dest_ele])
 
-        # r.append(
-        #     State(
-        #         f"{dest_me},{dest_ele}",
-        #         s.open_valves,
-        #         new_pressure,
-        #         s.minutes + 1,
-        #         s.loc,
-        #     )
-        # )
-
     ## Opening a valve
     if loc_me not in s.open_valves and valves[loc_me].flow_rate > 0:
         my_acts.append(["open", loc_me])
     if loc_ele not in s.open_valves and valves[loc_ele].flow_rate > 0:
         ele_acts.append(["open", loc_ele])
-
-        # r.append(
-        #     State(s.loc, s.open_valves | {s.loc}, new_pressure, s.minutes + 1, last_loc)
-        # )
 
     for my_act in my_acts:
         for ele_act in ele_acts:
@@ -183,6 +169,8 @@ def get_neighbors_ele(s, valves, vmap):
             if ele_act[0] == "move":
                 new_loc_ele = ele_act[1]
 
+            if new_loc_me == new_loc_ele:
+                continue
             r.append(
                 State(
                     f"{new_loc_me},{new_loc_ele}",
@@ -284,7 +272,13 @@ def p2(valves, vmap):
         if s.minutes >= MAX_MINUTES:
             final_states.append(s)
 
+        if len(q) > 1000000:
+            q = deque(
+                sorted(q, key=lambda s: s.pressure_released, reverse=True)[:500000]
+            )
+
     m = max(final_states, key=lambda s: s.pressure_released)
+    print("Final state count:", i)
     print(m)
     return m.pressure_released
 
@@ -304,4 +298,5 @@ class Day16:
         valves, vmap = parse(filename)
         global MAX_MINUTES
         MAX_MINUTES = 26
+        # MAX_MINUTES = 6
         return p2(valves, vmap)

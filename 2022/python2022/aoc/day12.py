@@ -21,7 +21,7 @@ class Grid:
     def parse(self, filename: str):
         with open(filename) as file:
             for y, line in enumerate(file):
-                for x, char in enumerate( line.strip() ):
+                for x, char in enumerate(line.strip()):
                     self.grid[x, y] = self.fix_elevation(char)
                     if char == "S":
                         self.start = x, y
@@ -30,8 +30,8 @@ class Grid:
                         self.end = x, y
                     elif char == "a":
                         self.aas.append((x, y))
-                    self.max_x = max(self.max_x, x+1) # eh :(, could be fixed
-                self.max_y = max(self.max_y, y+1) # same
+                    self.max_x = max(self.max_x, x + 1)  # eh :(, could be fixed
+                self.max_y = max(self.max_y, y + 1)  # same
 
     def fix_elevation(self, letter):
         if letter == "S":
@@ -62,7 +62,7 @@ class Grid:
                 yield xx, yy
 
     def get_neighbors_p2(self, loc):
-        """ for running backwards """
+        """for running backwards"""
         x, y = loc
         height = ord(self.grid[x, y])
         for (xx, yy) in self.get_raw_neighbors(x, y):
@@ -70,7 +70,7 @@ class Grid:
             if height <= (this_height + 1):
                 yield xx, yy
 
-    def bfs(self) -> (int | None):
+    def bfs(self):  # -> (int | None):
         if self.start is None or self.end is None:
             return None
 
@@ -93,8 +93,8 @@ class Grid:
 
         return None
 
-    def bfs_p2(self) -> (int | None):
-        """ bfs backwards from end point to first 'a' encountered """
+    def bfs_p2(self):  # -> (int | None):
+        """bfs backwards from end point to first 'a' encountered"""
         if self.end is None:
             return None
 
@@ -122,13 +122,13 @@ class Day12:
     """AoC 2022 Day 12"""
 
     @staticmethod
-    def part1(filename: str) -> (int | None):
+    def part1(filename: str):  # -> (int | None):
         g = Grid()
         g.parse(filename)
         return g.bfs()
 
     @staticmethod
-    def part2(filename: str) -> (int | None):
+    def part2(filename: str):  # -> (int | None):
         g = Grid()
         g.parse(filename)
         return g.bfs_p2()
