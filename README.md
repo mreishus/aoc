@@ -28,6 +28,14 @@
 | Day 05 | Stack Ops, Parsing   | [Python](./2022/python2022/aoc/day05.py) |
 | Day 06 | Sliding Window       | [Python](./2022/python2022/aoc/day06.py) |
 | Day 07 | Filesystem Size Calc | [Python](./2022/python2022/aoc/day07.py) |
+| Day 13 | Sorting Nested Lists | [Python](./2022/python2022/aoc/day13.py) |
+| Day 14 | Flowing Sand         | [Python](./2022/python2022/aoc/day14.py) |
+| Day 15 | Sensors and Beacons  | [Python](./2022/python2022/aoc/day15.py) |
+| Day 16 | Opening Pipes Maze   | [Python](./2022/python2022/aoc/day16.py) |
+
+### Hardest Problems 2022
+
+- 16: Opening Pipes Maze
 
 ## 2021
 
@@ -595,5 +603,5 @@ now.
 
 ```
 Created:       Mon 02 Dec 2019 05:12:40 PM CST
-Last Modified: Tue 06 Dec 2022 11:53:07 PM CST
+Last Modified: Fri 16 Dec 2022 10:46:06 PM CST
 ```
