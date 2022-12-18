@@ -17,7 +17,6 @@ class TestDay17(unittest.TestCase):
 
     def test_part2(self):
         """Test part2"""
-        pass
         self.assertEqual(Day17.part2("../inputs/17/input_small.txt"), 1514285714288)
         self.assertEqual(Day17.part2("../inputs/17/input.txt"), 1560919540245)
 
