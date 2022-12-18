@@ -4,10 +4,9 @@ Advent Of Code 2022 Day 17
 https://adventofcode.com/2022/day/17
 """
 from typing import List
-import heapq
-import re
 import numpy as np
 import math
+from collections import defaultdict
 
 
 def parse(filename: str):
@@ -47,11 +46,10 @@ def shape_i():
 
 
 def p1(data, iterations=2022):
-    height = 10
-    bottom = 10  # highest rock in the room (or ground if there isn't one)
+    height = 64
+    bottom = 64  # highest rock in the room (or ground if there isn't one)
 
     field = np.zeros((height, 7), dtype=bool)
-    # width = field.shape[1]
     width = 7
 
     # print("")
@@ -62,9 +60,13 @@ def p1(data, iterations=2022):
     data_i = 0
     # print("Number of blocks: ", 5)
     # print("Input length: ", len(data))
-    for _ in range(iterations):
+
+    cache = defaultdict(list)
+    cache2 = defaultdict(list)
+    iteration = 0
+    row_adj = 0
+    while iteration < iterations:
         room_left = bottom
-        # print("")
         if room_left < 7:
             # print(f"======= room left {bottom}, expanding ======")
             bottom += height
@@ -73,9 +75,25 @@ def p1(data, iterations=2022):
             new_field[field.shape[0] :, 0:] = field
             field = new_field
 
-        p = get_shape(piece_i)
-        piece_i += 1
-        overlay = np.zeros((height, 7), dtype=bool)
+        top24rows = field[bottom : bottom + 24]
+        shape_i = iteration % 5
+        direction = data[data_i % len(data)]
+        key = (top24rows.tobytes(), shape_i, direction)
+        if key in cache and len(cache2[key]) >= 2:
+            skip_iterations = cache[key][1] - cache[key][0]
+            add_rows = cache2[key][1] - cache2[key][0]
+
+            for multiple in [7, 6, 5, 4, 3, 2, 1]:
+                factor = 10**multiple
+                if iteration + (skip_iterations * factor) < iterations:
+                    iteration += skip_iterations * factor
+                    row_adj += add_rows * factor
+                    break
+        else:
+            cache[key].append(iteration)
+            cache2[key].append(height - bottom)
+
+        p = get_shape(iteration)
 
         # Each rock appears so that its left edge is two units away from the
         # left wall and its bottom edge is three units above the highest rock
@@ -103,26 +121,10 @@ def p1(data, iterations=2022):
                         xd = -1
             else:
                 raise Exception("Unknown direction: " + direction)
-            overlay[py : py + py_sz, px : px + px_sz] = np.zeros(
-                (py_sz, px_sz), dtype=bool
-            )
             px += xd
-            overlay[py : py + py_sz, px : px + px_sz] = p
 
             # Falling one unit down
-            overlay[py : py + py_sz, px : px + px_sz] = np.zeros(
-                (py_sz, px_sz), dtype=bool
-            )
-            # print("Fall 1")
             py += 1
-            # print("New")
-            # display(field)
-            # print("--")
-            # display(overlay)
-            # print(p)
-            # print(f"px {px}, py {py} | px_sz {px_sz}, py_sz {py_sz}")
-            # print(f"bottom {bottom}, height {height}, peice {piece_i}")
-            # print(overlay[py : py + py_sz, px : px + px_sz])
 
             # Check if it is stopped
             if py + py_sz > height:
@@ -132,24 +134,15 @@ def p1(data, iterations=2022):
                 # print("Stop 2")
                 stopped = True
 
-            # if not stopped:
-            #     overlay[py : py + py_sz, px : px + px_sz] = p
-
             if stopped:
-                # overlay[py : py + py_sz, px : px + px_sz] = np.zeros(
-                #     (py_sz, px_sz), dtype=bool
-                # )
                 py -= 1
                 field[py : py + py_sz, px : px + px_sz] |= p
-                # overlay[py : py + py_sz, px : px + px_sz] = p
-                # field |= overlay
                 bottom = min(bottom, py)
             # print("")
-            # display(field | overlay)
+            # display(field)
+        iteration += 1
 
-    # display(field | overlay)
-    # print(f"The tower of blocks is {height-bottom} blocks high.")
-    return height - bottom
+    return (height - bottom) + row_adj
 
 
 def display(a):
@@ -167,28 +160,9 @@ class Day17:
     @staticmethod
     def part1(filename: str) -> int:
         data = parse(filename)
-
         return p1(data, 2022)
 
     @staticmethod
     def part2(filename: str) -> int:
         data = parse(filename)
-
-        print("")
-        print("Number of shapes: 5")
-        print(f"Input length   : {len(data)}")
-        period = lcm(5, len(data))
-        print(f"Period         : {period}")
-
-        last_j = 0
-        diffs = []
-        for i in range(1, 20):
-            i = i * period
-            j = p1(data, i)
-            diffs.append(j - last_j)
-            print(f"i {i}, j {j}, diff {j-last_j}")  # , avg {avg_diff}")
-            last_j = j
-
-        # if len(data) <= 20:
-        #     print(data)
-        return -2
+        return p1(data, 10**12)

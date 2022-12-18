@@ -69,16 +69,16 @@ def latest():
     # print("2022 Day 17 Part 1 (small):", end=" ")
     # print(Day17.part1("../inputs/17/input_small.txt"))
 
-    print("2022 Day 17 Part 1:", end=" ")
-    print(Day17.part1("../inputs/17/input.txt"))
+    # print("2022 Day 17 Part 1:", end=" ")
+    # print(Day17.part1("../inputs/17/input.txt"))
 
     # exit()
 
     # print("2022 Day 17 Part 2 (small):", end=" ")
     # print(Day17.part2("../inputs/17/input_small.txt"))
 
-    # print("2022 Day 17 Part 2:", end=" ")
-    # print(Day17.part2("../inputs/17/input.txt"))
+    print("2022 Day 17 Part 2:", end=" ")
+    print(Day17.part2("../inputs/17/input.txt"))
 
 
 if __name__ == "__main__":
