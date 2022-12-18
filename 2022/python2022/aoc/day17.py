@@ -7,6 +7,7 @@ from typing import List
 import heapq
 import re
 import numpy as np
+import math
 
 
 def parse(filename: str):
@@ -45,7 +46,7 @@ def shape_i():
     return np.array([[1], [1], [1], [1]], dtype=bool)
 
 
-def p1(data):
+def p1(data, iterations=2022):
     height = 10
     bottom = 10  # highest rock in the room (or ground if there isn't one)
 
@@ -59,7 +60,9 @@ def p1(data):
 
     piece_i = 0
     data_i = 0
-    for _ in range(2022):
+    # print("Number of blocks: ", 5)
+    # print("Input length: ", len(data))
+    for _ in range(iterations):
         room_left = bottom
         # print("")
         if room_left < 7:
@@ -129,28 +132,33 @@ def p1(data):
                 # print("Stop 2")
                 stopped = True
 
-            if not stopped:
-                overlay[py : py + py_sz, px : px + px_sz] = p
+            # if not stopped:
+            #     overlay[py : py + py_sz, px : px + px_sz] = p
 
             if stopped:
                 # overlay[py : py + py_sz, px : px + px_sz] = np.zeros(
                 #     (py_sz, px_sz), dtype=bool
                 # )
                 py -= 1
-                overlay[py : py + py_sz, px : px + px_sz] = p
-                field |= overlay
+                field[py : py + py_sz, px : px + px_sz] |= p
+                # overlay[py : py + py_sz, px : px + px_sz] = p
+                # field |= overlay
                 bottom = min(bottom, py)
             # print("")
             # display(field | overlay)
 
-    display(field | overlay)
-    print(f"The tower of blocks is {height-bottom} blocks high.")
+    # display(field | overlay)
+    # print(f"The tower of blocks is {height-bottom} blocks high.")
     return height - bottom
 
 
 def display(a):
     for row in a:
         print("".join(["#" if x else "." for x in row]))
+
+
+def lcm(a, b):
+    return abs(a * b) // math.gcd(a, b)
 
 
 class Day17:
@@ -160,31 +168,27 @@ class Day17:
     def part1(filename: str) -> int:
         data = parse(filename)
 
-        p1(data)
-        # z = shape_line()
-        # print(np.matrix(z))
-
-        # z = shape_plus()
-        # print(np.matrix(z))
-
-        # z = shape_square()
-        # print(np.matrix(z))
-
-        # z = shape_l()
-        # print(np.matrix(z))
-
-        # z = shape_i()
-        # print(np.matrix(z))
-        return -1
-
-        print(data)
-        if len(data) <= 20:
-            print(data)
-        return -1
+        return p1(data, 2022)
 
     @staticmethod
     def part2(filename: str) -> int:
         data = parse(filename)
-        if len(data) <= 20:
-            print(data)
+
+        print("")
+        print("Number of shapes: 5")
+        print(f"Input length   : {len(data)}")
+        period = lcm(5, len(data))
+        print(f"Period         : {period}")
+
+        last_j = 0
+        diffs = []
+        for i in range(1, 20):
+            i = i * period
+            j = p1(data, i)
+            diffs.append(j - last_j)
+            print(f"i {i}, j {j}, diff {j-last_j}")  # , avg {avg_diff}")
+            last_j = j
+
+        # if len(data) <= 20:
+        #     print(data)
         return -2
