@@ -67,67 +67,42 @@ def get_neighbors(state, rules):
     for i in range(4):
         ore_deltas[i] += state.bots[i]
 
-    def something(this_state, i, already_bought):
-        """Decide how many new bots of type i to buy"""
+    can_affords = [False, False, False, False]
+    for i in range(4):
         costs = rules[i]  # [ore, clay, obsidian, geode]
-        affords = [None, None, None, None]
+        afford_component = [None, None, None, None]
         for j in range(4):
             if costs[j] == 0:
                 continue
-            affords[j] = this_state.ores[j] // costs[j]
-        can_afford = min([x for x in affords if x is not None])
+            afford_component[j] = state.ores[j] // costs[j]
+        can_affords[i] = min([x for x in afford_component if x is not None])
 
-        new_states = []
-        check_buys = [0]
-        if can_afford > 0 and not already_bought:
-            check_buys = [0, 1]
-        # for buy_qty in range(can_afford + 1):
-        # ^^ Old idea, try every possible purchase combination
-        # vv Min max idea, either buy 0 or max for each type of bot
-        # for buy_qty in [0, can_afford]:
-        # vv Newest idea, buy only 0 or 1 since there's only 1 factory lol
-        for buy_qty in check_buys:
-            new_ores = list(this_state.ores)
-            new_bots = list(this_state.bots)
-            for j in range(4):
-                new_ores[j] -= buy_qty * costs[j]
-            new_bots[i] += buy_qty
+    new_states = []
 
-            minutes_delta = 0
-            if i == 3:
-                minutes_delta = 1
+    # What if I don't buy anything
+    new_state = State(
+        ores=tuple([state.ores[i] + ore_deltas[i] for i in range(4)]),
+        bots=state.bots,
+        minutes=state.minutes + 1,
+    )
+    new_states.append(new_state)
 
-            new_state = State(
-                ores=tuple(new_ores),
-                bots=tuple(new_bots),
-                minutes=state.minutes + minutes_delta,
-            )
-            if i < 3:
-                these_new_states = something(
-                    new_state, i + 1, already_bought or buy_qty > 0
-                )
-                new_states.extend(these_new_states)
-            else:
-                new_states.append(new_state)
-        return new_states
-
-    ## Process all buying decisions
-    new_states = something(state, 0, False)
-
-    ## Increment ores
-    for i in range(len(new_states)):
-        ns = new_states[i]
-        new_states[i] = State(
-            ores=tuple([ns.ores[j] + ore_deltas[j] for j in range(4)]),
-            bots=ns.bots,
-            minutes=ns.minutes,
+    # Try to buy each one
+    for i in reversed(range(4)):
+        if not can_affords[i]:
+            continue
+        new_ores = list(state.ores)
+        new_bots = list(state.bots)
+        for j in range(4):
+            new_ores[j] -= rules[i][j]
+            new_ores[j] += ore_deltas[j]
+        new_bots[i] += 1
+        new_state = State(
+            ores=tuple(new_ores),
+            bots=tuple(new_bots),
+            minutes=state.minutes + 1,
         )
-
-    # print("new_states: ")
-    # for i, ns in enumerate(new_states):
-    #     print(ns)
-    # print("---")
-
+        new_states.append(new_state)
     return new_states
 
 
