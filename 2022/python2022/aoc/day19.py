@@ -80,7 +80,7 @@ def get_neighbors(state, rules):
     for i in range(4):
         ore_deltas[i] += state.bots[i]
 
-    def something(this_state, i):
+    def something(this_state, i, already_bought):
         """Decide how many new bots of type i to buy"""
         costs = rules[i]  # [ore, clay, obsidian, geode]
         affords = [None, None, None, None]
@@ -95,10 +95,14 @@ def get_neighbors(state, rules):
         # )
 
         new_states = []
+        check_buys = [0]
+        if can_afford > 0 and not already_bought:
+            check_buys = [0, 1]
         # for buy_qty in range(can_afford + 1):
         # ^^ Old idea, try every possible purchase combination
         # vv Min max idea, either buy 0 or max for each type of bot
-        for buy_qty in [0, can_afford]:
+        # for buy_qty in [0, can_afford]:
+        for buy_qty in check_buys:
             new_ores = list(this_state.ores)
             new_bots = list(this_state.bots)
             for j in range(4):
@@ -115,14 +119,16 @@ def get_neighbors(state, rules):
                 minutes=state.minutes + minutes_delta,
             )
             if i < 3:
-                these_new_states = something(new_state, i + 1)
+                these_new_states = something(
+                    new_state, i + 1, already_bought or buy_qty > 0
+                )
                 new_states.extend(these_new_states)
             else:
                 new_states.append(new_state)
         return new_states
 
     ## Process all buying decisions
-    new_states = something(state, 0)
+    new_states = something(state, 0, False)
 
     ## Increment ores
     for i in range(len(new_states)):
@@ -148,12 +154,15 @@ def test_blueprint(bp):
     q = deque([init])
     q_by_bots_and_minutes = defaultdict(set)
     q_by_bots_and_minutes[(init.bots, init.minutes)].add(init)
+    geodes_by_minutes = defaultdict(int)
 
     seen = set()
     final_states = []
     rules = bp.rules
 
     i = 0
+
+    parent_of = {}
 
     while q:
         s = q.popleft()
@@ -169,8 +178,15 @@ def test_blueprint(bp):
             if strictly_greater(other_state.ores, s.ores):
                 found_better = True
                 break
+
+        if s.ores[GEODE] < geodes_by_minutes[s.minutes]:
+            # print("Found better state")
+            found_better = True
+
         if found_better:
             continue
+
+        geodes_by_minutes[s.minutes] = max(geodes_by_minutes[s.minutes], s.ores[GEODE])
 
         i += 1
         if i % 100000 == 0:
@@ -214,12 +230,20 @@ def test_blueprint(bp):
                 continue
 
             q.append(n)
+            parent_of[n] = s
             q_by_bots_and_minutes[(n.bots, n.minutes)].add(n)
 
     # m = max(final_states, key=lambda s: s.ores[CLAY])
     # print("We can get ", m.ores[CLAY], " clay in ", m.minutes, " minutes")
     m = max(final_states, key=lambda s: s.ores[GEODE])
     print("We can get ", m.ores[GEODE], " geodes in ", m.minutes, " minutes")
+
+    # print("How we got there: ")
+    # z = m
+    # while z in parent_of:
+    #     print(z)
+    #     z = parent_of[z]
+
     return m.ores[GEODE]
 
 
@@ -242,6 +266,7 @@ class Day19:
         data = parse(filename)
 
         total_quality = 0
+        # data = [data[1]]
         for i, bp in enumerate(data, 1):
             geodes = test_blueprint(bp)
             quality = i * geodes
