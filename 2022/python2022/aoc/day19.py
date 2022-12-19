@@ -80,17 +80,27 @@ def get_neighbors(state, rules):
     new_states = []
 
     # What if I don't buy anything
-    new_state = State(
-        ores=tuple([state.ores[i] + ore_deltas[i] for i in range(4)]),
-        bots=state.bots,
-        minutes=state.minutes + 1,
-    )
-    new_states.append(new_state)
+    if not (can_affords[3]):
+        new_state = State(
+            ores=tuple([state.ores[i] + ore_deltas[i] for i in range(4)]),
+            bots=state.bots,
+            minutes=state.minutes + 1,
+        )
+        new_states.append(new_state)
 
     # Try to buy each one
     for i in reversed(range(4)):
         if not can_affords[i]:
             continue
+
+        ## If the highest cost for clay is 10, and I have 10 clay bots,
+        ## I don't need any more clay bots
+        if i < 3:
+            current_bots = state.bots[i]
+            max_cost_for_resource_i = max([x[i] for x in rules.values()])
+            if current_bots >= max_cost_for_resource_i:
+                continue
+
         new_ores = list(state.ores)
         new_bots = list(state.bots)
         for j in range(4):
@@ -103,6 +113,9 @@ def get_neighbors(state, rules):
             minutes=state.minutes + 1,
         )
         new_states.append(new_state)
+        # Optimization: If we can afford a geode, don't bother with others
+        if i == 3:
+            break
     return new_states
 
 
@@ -191,7 +204,7 @@ def test_blueprint(rules, max_minutes):
 
 def strictly_greater(a, b):
     """Returns True if a > b"""
-    if a[GEODE] > b[GEODE] + 1:
+    if a[GEODE] > b[GEODE]:
         return True
 
     for i in range(len(a)):
