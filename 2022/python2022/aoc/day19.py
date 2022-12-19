@@ -49,7 +49,6 @@ def parse(filename):
 
 
 def parse_line(line):
-    print(line)
     rules = {}
     matches = re.findall(PARSER, line)
     for match in matches:
@@ -62,7 +61,6 @@ def parse_line(line):
             val[LOOKUP[match[5]]] = int(match[4])
         rules[LOOKUP[match[0]]] = val
 
-    print(rules)
     return Blueprint(rules)
 
 
@@ -102,6 +100,7 @@ def get_neighbors(state, rules):
         # ^^ Old idea, try every possible purchase combination
         # vv Min max idea, either buy 0 or max for each type of bot
         # for buy_qty in [0, can_afford]:
+        # vv Newest idea, buy only 0 or 1 since there's only 1 factory lol
         for buy_qty in check_buys:
             new_ores = list(this_state.ores)
             new_bots = list(this_state.bots)
@@ -147,9 +146,7 @@ def get_neighbors(state, rules):
     return new_states
 
 
-def test_blueprint(bp):
-    max_minutes = 24
-
+def test_blueprint(bp, max_minutes):
     init = init_state(bp)
     q = deque([init])
     q_by_bots_and_minutes = defaultdict(set)
@@ -179,7 +176,7 @@ def test_blueprint(bp):
                 found_better = True
                 break
 
-        if s.ores[GEODE] < geodes_by_minutes[s.minutes]:
+        if (s.ores[GEODE] + 1) < geodes_by_minutes[s.minutes]:
             # print("Found better state")
             found_better = True
 
@@ -249,7 +246,7 @@ def test_blueprint(bp):
 
 def strictly_greater(a, b):
     """Returns True if a > b"""
-    if a[GEODE] > b[GEODE]:
+    if a[GEODE] > b[GEODE] + 1:
         return True
 
     for i in range(len(a)):
@@ -268,7 +265,7 @@ class Day19:
         total_quality = 0
         # data = [data[1]]
         for i, bp in enumerate(data, 1):
-            geodes = test_blueprint(bp)
+            geodes = test_blueprint(bp, 24)
             quality = i * geodes
             total_quality += quality
         return total_quality
@@ -276,6 +273,22 @@ class Day19:
     @staticmethod
     def part2(filename: str) -> int:
         data = parse(filename)
-        if len(data) <= 20:
-            print(data)
+        product = 1
+        print("---")
+        print(data[0].rules)
+        print(data[1].rules)
+        product *= test_blueprint(data[0], 32)
+        product *= test_blueprint(data[1], 32)
+        if len(data) > 2:
+            print(data[2].rules)
+            product *= test_blueprint(data[2], 32)
+        return product
+        # geodes = test_blueprint(data[0], 32) # 56
+        # geodes = test_blueprint(data[1], 32)
         return -2
+
+
+# That's not the right answer; your answer is too low. If you're stuck, make
+# sure you're using the full input data; there are also some general tips on
+# the about page, or you can ask for hints on the subreddit. Please wait one
+# minute before trying again. (You guessed 6624.) [Return to Day 19]

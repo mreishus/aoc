@@ -7,7 +7,6 @@ https://adventofcode.com/2022/day/18
 TODO: Rewrite to only do one BFS/flood fill
 """
 import re
-import numpy as np
 from functools import cache
 
 
