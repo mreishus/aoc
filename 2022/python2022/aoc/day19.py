@@ -3,9 +3,7 @@
 Advent Of Code 2022 Day 19
 https://adventofcode.com/2022/day/19
 """
-from typing import List
 import re
-from dataclasses import dataclass
 from typing import NamedTuple
 from collections import deque, defaultdict
 
@@ -23,11 +21,6 @@ LOOKUP = {
 }
 
 
-class Blueprint:
-    def __init__(self, rules):
-        self.rules = rules
-
-
 State = NamedTuple(
     "State",
     [
@@ -36,11 +29,6 @@ State = NamedTuple(
         ("minutes", int),
     ],
 )
-
-
-def freeze_dict(d):
-    # return tuple((k, d[k]) for k in sorted(d.keys()))
-    return tuple((k, tuple(d[k])) for k in sorted(d.keys()))
 
 
 def parse(filename):
@@ -61,10 +49,11 @@ def parse_line(line):
             val[LOOKUP[match[5]]] = int(match[4])
         rules[LOOKUP[match[0]]] = val
 
-    return Blueprint(rules)
+    ## rules looks like: {0: [4, 0, 0, 0], 1: [4, 0, 0, 0], 2: [4, 15, 0, 0], 3: [3, 0, 8, 0]}
+    return rules
 
 
-def init_state(bp):
+def init_state():
     return State(
         ores=(0, 0, 0, 0),
         bots=(1, 0, 0, 0),
@@ -85,12 +74,8 @@ def get_neighbors(state, rules):
         for j in range(4):
             if costs[j] == 0:
                 continue
-            else:
-                affords[j] = this_state.ores[j] // costs[j]
+            affords[j] = this_state.ores[j] // costs[j]
         can_afford = min([x for x in affords if x is not None])
-        # print(
-        #     f"--> Can afford {can_afford} of {i}. [ores: {this_state.ores}] [costs: {costs}] [affords: {affords}]"
-        # )
 
         new_states = []
         check_buys = [0]
@@ -146,8 +131,8 @@ def get_neighbors(state, rules):
     return new_states
 
 
-def test_blueprint(bp, max_minutes):
-    init = init_state(bp)
+def test_blueprint(rules, max_minutes):
+    init = init_state()
     q = deque([init])
     q_by_bots_and_minutes = defaultdict(set)
     q_by_bots_and_minutes[(init.bots, init.minutes)].add(init)
@@ -155,7 +140,6 @@ def test_blueprint(bp, max_minutes):
 
     seen = set()
     final_states = []
-    rules = bp.rules
 
     i = 0
 
@@ -177,7 +161,6 @@ def test_blueprint(bp, max_minutes):
                 break
 
         if (s.ores[GEODE] + 1) < geodes_by_minutes[s.minutes]:
-            # print("Found better state")
             found_better = True
 
         if found_better:
@@ -210,28 +193,15 @@ def test_blueprint(bp, max_minutes):
             found_better = False
             for other_state in examine:
                 if strictly_greater(other_state.ores, n.ores):
-                    # print(" SBSBSBSB ", other_state)
                     found_better = True
                     break
             if found_better:
-                # print()
-                # print("------")
-                # print("Not adding because we found a better state")
-                # print("This one wasn't added: ")
-                # print(n)
-                # print("We were looking at these:")
-                # for other_state in examine:
-                #     print(other_state)
-                # print("------")
-                # print()
                 continue
 
             q.append(n)
             parent_of[n] = s
             q_by_bots_and_minutes[(n.bots, n.minutes)].add(n)
 
-    # m = max(final_states, key=lambda s: s.ores[CLAY])
-    # print("We can get ", m.ores[CLAY], " clay in ", m.minutes, " minutes")
     m = max(final_states, key=lambda s: s.ores[GEODE])
     print("We can get ", m.ores[GEODE], " geodes in ", m.minutes, " minutes")
 
@@ -263,7 +233,6 @@ class Day19:
         data = parse(filename)
 
         total_quality = 0
-        # data = [data[1]]
         for i, bp in enumerate(data, 1):
             geodes = test_blueprint(bp, 24)
             quality = i * geodes
@@ -274,21 +243,8 @@ class Day19:
     def part2(filename: str) -> int:
         data = parse(filename)
         product = 1
-        print("---")
-        print(data[0].rules)
-        print(data[1].rules)
         product *= test_blueprint(data[0], 32)
         product *= test_blueprint(data[1], 32)
         if len(data) > 2:
-            print(data[2].rules)
             product *= test_blueprint(data[2], 32)
         return product
-        # geodes = test_blueprint(data[0], 32) # 56
-        # geodes = test_blueprint(data[1], 32)
-        return -2
-
-
-# That's not the right answer; your answer is too low. If you're stuck, make
-# sure you're using the full input data; there are also some general tips on
-# the about page, or you can ask for hints on the subreddit. Please wait one
-# minute before trying again. (You guessed 6624.) [Return to Day 19]
