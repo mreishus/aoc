@@ -19,23 +19,33 @@
 
 ## 2022
 
-| Day    | Comment              | Python                                   |
-| ------ | -------------------- | ---------------------------------------- |
-| Day 01 | Summing lists, max N | [Python](./2022/python2022/aoc/day01.py) |
-| Day 02 | Rock Paper Scissors  | [Python](./2022/python2022/aoc/day02.py) |
-| Day 03 | Overlapping strings  | [Python](./2022/python2022/aoc/day03.py) |
-| Day 04 | Overlapping ranges   | [Python](./2022/python2022/aoc/day04.py) |
-| Day 05 | Stack Ops, Parsing   | [Python](./2022/python2022/aoc/day05.py) |
-| Day 06 | Sliding Window       | [Python](./2022/python2022/aoc/day06.py) |
-| Day 07 | Filesystem Size Calc | [Python](./2022/python2022/aoc/day07.py) |
-| Day 13 | Sorting Nested Lists | [Python](./2022/python2022/aoc/day13.py) |
-| Day 14 | Flowing Sand         | [Python](./2022/python2022/aoc/day14.py) |
-| Day 15 | Sensors and Beacons  | [Python](./2022/python2022/aoc/day15.py) |
-| Day 16 | Opening Pipes Maze   | [Python](./2022/python2022/aoc/day16.py) |
+| Day    | Comment                  | Python                                   |
+| ------ | ------------------------ | ---------------------------------------- |
+| Day 01 | Summing lists, max N     | [Python](./2022/python2022/aoc/day01.py) |
+| Day 02 | Rock Paper Scissors      | [Python](./2022/python2022/aoc/day02.py) |
+| Day 03 | Overlapping strings      | [Python](./2022/python2022/aoc/day03.py) |
+| Day 04 | Overlapping ranges       | [Python](./2022/python2022/aoc/day04.py) |
+| Day 05 | Stack Ops, Parsing       | [Python](./2022/python2022/aoc/day05.py) |
+| Day 06 | Sliding Window           | [Python](./2022/python2022/aoc/day06.py) |
+| Day 07 | Filesystem Size Calc     | [Python](./2022/python2022/aoc/day07.py) |
+| Day 08 | Line of Sight Trees      | [Python](./2022/python2022/aoc/day08.py) |
+| Day 09 | Rope, or Snake Game      | [Python](./2022/python2022/aoc/day09.py) |
+| Day 10 | ASM and CRT Scanning     | [Python](./2022/python2022/aoc/day10.py) |
+| Day 11 | Dealing w/ Large Numbers | [Python](./2022/python2022/aoc/day11.py) |
+| Day 12 | Maze with Height         | [Python](./2022/python2022/aoc/day12.py) |
+| Day 13 | Sorting Nested Lists     | [Python](./2022/python2022/aoc/day13.py) |
+| Day 14 | Flowing Sand             | [Python](./2022/python2022/aoc/day14.py) |
+| Day 15 | Sensors and Beacons      | [Python](./2022/python2022/aoc/day15.py) |
+| Day 16 | Opening Pipes Maze       | [Python](./2022/python2022/aoc/day16.py) |
+| Day 17 | Tetris                   | [Python](./2022/python2022/aoc/day17.py) |
+| Day 18 | 3D Voxels Surface        | [Python](./2022/python2022/aoc/day18.py) |
+| Day 19 | Optimize Build Order     | [Python](./2022/python2022/aoc/day19.py) |
 
 ### Hardest Problems 2022
 
 - 16: Opening Pipes Maze
+- 17: Tetris
+- 19: Optimize Build Order
 
 ## 2021
 
@@ -603,5 +613,5 @@ now.
 
 ```
 Created:       Mon 02 Dec 2019 05:12:40 PM CST
-Last Modified: Fri 16 Dec 2022 10:46:06 PM CST
+Last Modified: Mon 19 Dec 2022 07:33:22 PM CST
 ```
