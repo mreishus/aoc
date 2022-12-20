@@ -7,8 +7,6 @@ from typing import List
 import re
 from random import randint
 
-PARSER = re.compile(r"thing (\d+),(\d+), stuff")
-
 
 def parse(filename: str) -> List[int]:
     with open(filename) as file:
@@ -54,12 +52,15 @@ def build_dll(data):
     return head, ilookup, zero
 
 
-def p1(data):
+def p1(data, mix_amount):
     dll, ilookup, zero = build_dll(data)
     i = 0
     pointer = dll
 
-    dll = mix(dll, ilookup)
+    for mix_i in range(mix_amount):
+        print("Begin mix", mix_i)
+        dll = mix(dll, ilookup)
+        print("Finished mix", mix_i)
 
     ## Debugger
     # pointer = dll
@@ -77,7 +78,10 @@ def p1(data):
             pointer = pointer.next
         specials.append(pointer.value)
 
+    print(specials)
+
     # (You guessed 18121.)
+    # (You guessed 8494.)
     return sum(specials)
 
 
@@ -116,8 +120,17 @@ def p1(data):
 #    c.next = mnn
 
 
+def newMod(a, b):
+    res = a % b
+    return res if not res else res - b if a < 0 else res
+
+
 def mix(dll, ilookup):
+    print("")
+    debug_view(dll)
     for i in sorted(ilookup.keys()):
+        debug = False
+
         current = ilookup[i]
         value = current.value
 
@@ -125,12 +138,105 @@ def mix(dll, ilookup):
         old_next = current.next
         my_new_prev = current
         my_new_next = current
+
+        my_new_prev2 = current
+        my_new_next2 = current
+
+        if debug:
+            print("BEFORE: ", current.prev, "---- ", current, " ----", current.next)
+
+        altValue = 0
+        sign = 1 if value > 0 else -1
+
+        def add(value):
+            nonlocal altValue, sign, ilookup
+            slashed = newMod(value, len(ilookup))
+            cycles = abs(value) // len(ilookup)
+
+            altValue += slashed
+            if cycles < len(ilookup):
+                altValue += cycles * sign
+            else:
+                add(cycles * sign)
+
+        add(current.value)
+        cycles = None
+        leftovers = None
+
+        # add(current.value)
+
+        # while True:
+        #     slashed = newMod(current.value, len(ilookup))
+        #     cycles = abs(current.value) // len(ilookup)
+
+        #     if current.value >= 0:
+        #         altValue += slashed
+        #     else:
+        #         altValue -= slashed
+
+        ##############################
+        # cycles = abs(current.value) // len(ilookup)
+        # altValue = newMod(current.value, len(ilookup))
+
+        # leftovers = 0
+        # leftovers = abs(cycles) // len(ilookup)
+        # cycles = newMod(cycles, len(ilookup))
+
+        # if altValue >= 0:
+        #     altValue += cycles + leftovers
+        # elif altValue < 0:
+        #     altValue -= cycles + leftovers
+        ##########################
+
+        # altValue = newMod((altValue + cycles), len(ilookup))
+        # if value != current.value:
+        #     print(value, current.value)
+
+        # if debug:
+        #     print(f"Current: {current}, {value}")
+        #     print(f"Old Prev: {old_prev}, old next: {old_next}")
+        #     print(f"My new prev: {my_new_prev}, my new next: {my_new_next}")
+
+        # print(f"Processing {current.value} ", end=" ")
+        # debug_view2(dll)
         if value > 0:
-            for _ in range(value):
-                my_new_prev = my_new_prev.next
+            #### AAAAAAAAAAAA
+            # if my_new_prev == current:
+            #     my_new_prev = my_new_prev.next
+            # if my_new_prev == current:
+            # my_new_prev = my_new_prev.next
+
+            # for _ in range(altValue):
+            #     my_new_prev2 = my_new_prev2.next
+            #     if my_new_prev2 == current:
+            #         my_new_prev2 = my_new_prev2.next
 
             old_prev.next = old_next
             old_next.prev = old_prev
+
+            for _ in range(altValue):
+                my_new_prev = my_new_prev.next
+            # useNew = True
+            # if useNew:
+            #     for _ in range(current.value):
+            #         my_new_prev2 = my_new_prev2.next
+            #     for _ in range(altValue):
+            #         my_new_prev = my_new_prev.next
+            # else:
+            #     for _ in range(current.value):
+            #         my_new_prev = my_new_prev.next
+            #     for _ in range(altValue):
+            #         my_new_prev2 = my_new_prev2.next
+
+            # if my_new_prev == my_new_prev2:
+            #     pass
+            #     # print(
+            #     #     f"OK {my_new_prev} == {my_new_prev2} | {current.value} | alt {altValue} | cycles {cycles} | leftovers {leftovers}"
+            #     # )
+            # else:
+            #     print(
+            #         f"BAD {my_new_prev} != {my_new_prev2} | {current.value} | alt {altValue} | cycles {cycles} | leftovers {leftovers}"
+            #     )
 
             tmp = my_new_prev.next
             my_new_prev.next = current
@@ -138,11 +244,32 @@ def mix(dll, ilookup):
             tmp.prev = current
             current.prev = my_new_prev
         elif value < 0:
-            for _ in range(abs(value)):
-                my_new_next = my_new_next.prev
+
+            #### AAAAAAAAAAAA
+            # if my_new_next == current:
+            #     my_new_next = my_new_next.prev
+            # if my_new_next == current:
+            # my_new_next = my_new_next.prev
 
             old_prev.next = old_next
             old_next.prev = old_prev
+
+            for _ in range(abs(altValue)):
+                my_new_next = my_new_next.prev
+
+            # for _ in range(abs(current.value)):
+            #     my_new_next = my_new_next.prev
+            # for _ in range(abs(altValue)):
+            #     my_new_next2 = my_new_next2.prev
+
+            # if my_new_next == my_new_next2:
+            #     print(
+            #         f"OK {my_new_prev} == {my_new_prev2} | {current.value} | {altValue} | {cycles} | {leftovers}"
+            #     )
+            # else:
+            #     print(
+            #         f"BAD {my_new_prev} != {my_new_prev2} | {current.value} | {altValue} | {cycles} | {leftovers}"
+            #     )
 
             tmp = my_new_next.prev
             my_new_next.prev = current
@@ -151,10 +278,95 @@ def mix(dll, ilookup):
             current.next = my_new_next
         else:
             continue
-        # if i == 3:
+
+        if debug:
+            print("AFTER: ", current.prev, "---- ", current, " ----", current.next)
+
+        # print(i)
+        # debug_view(dll)
+        # if i == 500:
         #     break
 
+    debug_view2(dll)
     return dll
+
+
+def debug_view2(dll):
+    return
+    """
+    1, 2, -3, 3, -2, 0, 4,  | 4, 0, -2, 3, -3, 2, 1,
+    1, -3, 3, -2, 0, 4, 2,  | 2, 4, 0, -2, 3, -3, 1,
+    1, -3, 2, 3, -2, 0, 4,  | 4, 0, -2, 3, 2, -3, 1,
+    1, 2, 3, -2, -3, 0, 4,  | 4, 0, -3, -2, 3, 2, 1,
+    1, 2, -2, -3, 0, 3, 4,  | 4, 3, 0, -3, -2, 2, 1,
+    1, 2, -3, 0, 3, 4, -2,  | -2, 4, 3, 0, -3, 2, 1,
+    1, 2, -3, 4, 0, 3, -2,  | -2, 3, 0, 4, -3, 2, 1,
+    """
+    forward = []
+    backward = []
+
+    pointer = dll
+    while pointer is not None:
+        print(pointer.value, end=", ")
+        forward.append(pointer.value)
+
+        pointer = pointer.next
+        if pointer == dll:
+            break
+    print(" | ", end="")
+
+    pointer = dll.prev
+    while pointer is not None:
+        print(pointer.value, end=", ")
+        backward.append(pointer.value)
+
+        pointer = pointer.prev
+        if pointer == dll.prev:
+            break
+
+    if forward != backward[::-1]:
+        print("ERROR")
+        exit()
+    print(len(forward), len(backward))
+
+
+def debug_view(dll):
+    """
+    1, 2, -3, 3, -2, 0, 4,  | 4, 0, -2, 3, -3, 2, 1,
+    1, -3, 3, -2, 0, 4, 2,  | 2, 4, 0, -2, 3, -3, 1,
+    1, -3, 2, 3, -2, 0, 4,  | 4, 0, -2, 3, 2, -3, 1,
+    1, 2, 3, -2, -3, 0, 4,  | 4, 0, -3, -2, 3, 2, 1,
+    1, 2, -2, -3, 0, 3, 4,  | 4, 3, 0, -3, -2, 2, 1,
+    1, 2, -3, 0, 3, 4, -2,  | -2, 4, 3, 0, -3, 2, 1,
+    1, 2, -3, 4, 0, 3, -2,  | -2, 3, 0, 4, -3, 2, 1,
+    """
+    forward = []
+    backward = []
+
+    pointer = dll
+    while pointer is not None:
+        # print(pointer.value, end=", ")
+        forward.append(pointer.value)
+
+        pointer = pointer.next
+        if pointer == dll:
+            break
+    # print(" | ", end="")
+
+    pointer = dll.prev
+    while pointer is not None:
+        # print(pointer.value, end=", ")
+        backward.append(pointer.value)
+
+        pointer = pointer.prev
+        if pointer == dll.prev:
+            break
+
+    if forward != backward[::-1]:
+        print("ERROR")
+        exit()
+    # print(len(forward), len(backward))
+    # print("")
 
 
 def prove_its_circle(dll):
@@ -178,11 +390,10 @@ class Day20:
     @staticmethod
     def part1(filename: str) -> int:
         data = parse(filename)
-        return p1(data)
+        return p1(data, 1)
 
     @staticmethod
     def part2(filename: str) -> int:
         data = parse(filename)
-        if len(data) <= 20:
-            print(data)
-        return -2
+        data = [x * 811589153 for x in data]
+        return p1(data, 10)
