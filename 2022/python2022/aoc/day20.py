@@ -131,45 +131,7 @@ def mix(dll, ilookup):
         my_new_prev = current
         my_new_next = current
 
-        ## Reduce current.value to an altValue using mod
-        altValue = 0
-        sign = 1 if value > 0 else -1
-
-        def add(value):
-            nonlocal altValue, sign, ilookup
-            slashed = new_mod(value, len(ilookup))
-            cycles = abs(value) // len(ilookup)
-
-            altValue += slashed
-            if cycles < len(ilookup):
-                altValue += cycles * sign
-            else:
-                add(cycles * sign)
-
-        add(current.value)
-
-        ## I had to do something strange above ^^^
-        ## I'm taking the modulus, but I'm also adding 1
-        ## for reach time I "Wrap around" the list. If the
-        ## "wrap around" count is way too high, I have to do this
-        ## recursively. Every time I mod the value, I add 1 for every
-        ## "wrap around".
-        ## I don't really get it, here's an example of me doing it
-        ## twice without recursion:
-
-        ##############################
-        # cycles = abs(current.value) // len(ilookup)
-        # altValue = new_mod(current.value, len(ilookup))
-
-        # leftovers = 0
-        # leftovers = abs(cycles) // len(ilookup)
-        # cycles = new_mod(cycles, len(ilookup))
-
-        # if altValue >= 0:
-        #     altValue += cycles + leftovers
-        # elif altValue < 0:
-        #     altValue -= cycles + leftovers
-        ##########################
+        altValue = new_mod(value, len(ilookup) - 1)
 
         if value > 0:
             old_prev.next = old_next
@@ -177,6 +139,8 @@ def mix(dll, ilookup):
 
             for _ in range(altValue):
                 my_new_prev = my_new_prev.next
+            if my_new_prev == current:
+                my_new_prev = my_new_prev.prev
 
             tmp = my_new_prev.next
             my_new_prev.next = current
@@ -189,6 +153,8 @@ def mix(dll, ilookup):
 
             for _ in range(abs(altValue)):
                 my_new_next = my_new_next.prev
+            if my_new_next == current:
+                my_new_next = my_new_next.next
 
             tmp = my_new_next.prev
             my_new_next.prev = current
