@@ -4,7 +4,6 @@ Advent Of Code 2022 Day 20
 https://adventofcode.com/2022/day/20
 """
 from typing import List
-import re
 from random import randint
 
 
@@ -78,10 +77,6 @@ def p1(data, mix_amount):
             pointer = pointer.next
         specials.append(pointer.value)
 
-    print(specials)
-
-    # (You guessed 18121.)
-    # (You guessed 8494.)
     return sum(specials)
 
 
@@ -120,17 +115,14 @@ def p1(data, mix_amount):
 #    c.next = mnn
 
 
-def newMod(a, b):
+def new_mod(a, b):
+    """mod that returns negatives"""
     res = a % b
     return res if not res else res - b if a < 0 else res
 
 
 def mix(dll, ilookup):
-    print("")
-    debug_view(dll)
     for i in sorted(ilookup.keys()):
-        debug = False
-
         current = ilookup[i]
         value = current.value
 
@@ -139,18 +131,13 @@ def mix(dll, ilookup):
         my_new_prev = current
         my_new_next = current
 
-        my_new_prev2 = current
-        my_new_next2 = current
-
-        if debug:
-            print("BEFORE: ", current.prev, "---- ", current, " ----", current.next)
-
+        ## Reduce current.value to an altValue using mod
         altValue = 0
         sign = 1 if value > 0 else -1
 
         def add(value):
             nonlocal altValue, sign, ilookup
-            slashed = newMod(value, len(ilookup))
+            slashed = new_mod(value, len(ilookup))
             cycles = abs(value) // len(ilookup)
 
             altValue += slashed
@@ -160,27 +147,23 @@ def mix(dll, ilookup):
                 add(cycles * sign)
 
         add(current.value)
-        cycles = None
-        leftovers = None
 
-        # add(current.value)
-
-        # while True:
-        #     slashed = newMod(current.value, len(ilookup))
-        #     cycles = abs(current.value) // len(ilookup)
-
-        #     if current.value >= 0:
-        #         altValue += slashed
-        #     else:
-        #         altValue -= slashed
+        ## I had to do something strange above ^^^
+        ## I'm taking the modulus, but I'm also adding 1
+        ## for reach time I "Wrap around" the list. If the
+        ## "wrap around" count is way too high, I have to do this
+        ## recursively. Every time I mod the value, I add 1 for every
+        ## "wrap around".
+        ## I don't really get it, here's an example of me doing it
+        ## twice without recursion:
 
         ##############################
         # cycles = abs(current.value) // len(ilookup)
-        # altValue = newMod(current.value, len(ilookup))
+        # altValue = new_mod(current.value, len(ilookup))
 
         # leftovers = 0
         # leftovers = abs(cycles) // len(ilookup)
-        # cycles = newMod(cycles, len(ilookup))
+        # cycles = new_mod(cycles, len(ilookup))
 
         # if altValue >= 0:
         #     altValue += cycles + leftovers
@@ -188,55 +171,12 @@ def mix(dll, ilookup):
         #     altValue -= cycles + leftovers
         ##########################
 
-        # altValue = newMod((altValue + cycles), len(ilookup))
-        # if value != current.value:
-        #     print(value, current.value)
-
-        # if debug:
-        #     print(f"Current: {current}, {value}")
-        #     print(f"Old Prev: {old_prev}, old next: {old_next}")
-        #     print(f"My new prev: {my_new_prev}, my new next: {my_new_next}")
-
-        # print(f"Processing {current.value} ", end=" ")
-        # debug_view2(dll)
         if value > 0:
-            #### AAAAAAAAAAAA
-            # if my_new_prev == current:
-            #     my_new_prev = my_new_prev.next
-            # if my_new_prev == current:
-            # my_new_prev = my_new_prev.next
-
-            # for _ in range(altValue):
-            #     my_new_prev2 = my_new_prev2.next
-            #     if my_new_prev2 == current:
-            #         my_new_prev2 = my_new_prev2.next
-
             old_prev.next = old_next
             old_next.prev = old_prev
 
             for _ in range(altValue):
                 my_new_prev = my_new_prev.next
-            # useNew = True
-            # if useNew:
-            #     for _ in range(current.value):
-            #         my_new_prev2 = my_new_prev2.next
-            #     for _ in range(altValue):
-            #         my_new_prev = my_new_prev.next
-            # else:
-            #     for _ in range(current.value):
-            #         my_new_prev = my_new_prev.next
-            #     for _ in range(altValue):
-            #         my_new_prev2 = my_new_prev2.next
-
-            # if my_new_prev == my_new_prev2:
-            #     pass
-            #     # print(
-            #     #     f"OK {my_new_prev} == {my_new_prev2} | {current.value} | alt {altValue} | cycles {cycles} | leftovers {leftovers}"
-            #     # )
-            # else:
-            #     print(
-            #         f"BAD {my_new_prev} != {my_new_prev2} | {current.value} | alt {altValue} | cycles {cycles} | leftovers {leftovers}"
-            #     )
 
             tmp = my_new_prev.next
             my_new_prev.next = current
@@ -244,32 +184,11 @@ def mix(dll, ilookup):
             tmp.prev = current
             current.prev = my_new_prev
         elif value < 0:
-
-            #### AAAAAAAAAAAA
-            # if my_new_next == current:
-            #     my_new_next = my_new_next.prev
-            # if my_new_next == current:
-            # my_new_next = my_new_next.prev
-
             old_prev.next = old_next
             old_next.prev = old_prev
 
             for _ in range(abs(altValue)):
                 my_new_next = my_new_next.prev
-
-            # for _ in range(abs(current.value)):
-            #     my_new_next = my_new_next.prev
-            # for _ in range(abs(altValue)):
-            #     my_new_next2 = my_new_next2.prev
-
-            # if my_new_next == my_new_next2:
-            #     print(
-            #         f"OK {my_new_prev} == {my_new_prev2} | {current.value} | {altValue} | {cycles} | {leftovers}"
-            #     )
-            # else:
-            #     print(
-            #         f"BAD {my_new_prev} != {my_new_prev2} | {current.value} | {altValue} | {cycles} | {leftovers}"
-            #     )
 
             tmp = my_new_next.prev
             my_new_next.prev = current
@@ -279,20 +198,10 @@ def mix(dll, ilookup):
         else:
             continue
 
-        if debug:
-            print("AFTER: ", current.prev, "---- ", current, " ----", current.next)
-
-        # print(i)
-        # debug_view(dll)
-        # if i == 500:
-        #     break
-
-    debug_view2(dll)
     return dll
 
 
-def debug_view2(dll):
-    return
+def debug_view(dll):
     """
     1, 2, -3, 3, -2, 0, 4,  | 4, 0, -2, 3, -3, 2, 1,
     1, -3, 3, -2, 0, 4, 2,  | 2, 4, 0, -2, 3, -3, 1,
@@ -328,60 +237,6 @@ def debug_view2(dll):
         print("ERROR")
         exit()
     print(len(forward), len(backward))
-
-
-def debug_view(dll):
-    """
-    1, 2, -3, 3, -2, 0, 4,  | 4, 0, -2, 3, -3, 2, 1,
-    1, -3, 3, -2, 0, 4, 2,  | 2, 4, 0, -2, 3, -3, 1,
-    1, -3, 2, 3, -2, 0, 4,  | 4, 0, -2, 3, 2, -3, 1,
-    1, 2, 3, -2, -3, 0, 4,  | 4, 0, -3, -2, 3, 2, 1,
-    1, 2, -2, -3, 0, 3, 4,  | 4, 3, 0, -3, -2, 2, 1,
-    1, 2, -3, 0, 3, 4, -2,  | -2, 4, 3, 0, -3, 2, 1,
-    1, 2, -3, 4, 0, 3, -2,  | -2, 3, 0, 4, -3, 2, 1,
-    """
-    forward = []
-    backward = []
-
-    pointer = dll
-    while pointer is not None:
-        # print(pointer.value, end=", ")
-        forward.append(pointer.value)
-
-        pointer = pointer.next
-        if pointer == dll:
-            break
-    # print(" | ", end="")
-
-    pointer = dll.prev
-    while pointer is not None:
-        # print(pointer.value, end=", ")
-        backward.append(pointer.value)
-
-        pointer = pointer.prev
-        if pointer == dll.prev:
-            break
-
-    if forward != backward[::-1]:
-        print("ERROR")
-        exit()
-    # print(len(forward), len(backward))
-    # print("")
-
-
-def prove_its_circle(dll):
-    pointer = dll
-    prevPointer = None
-
-    while pointer is not None:
-        print(pointer)
-        prevPointer = pointer
-        pointer = pointer.next
-    print("--back")
-    pointer = prevPointer
-    while pointer is not None:
-        print(pointer)
-        pointer = pointer.prev
 
 
 class Day20:
