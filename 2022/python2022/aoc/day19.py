@@ -191,7 +191,7 @@ def test_blueprint(rules, max_minutes):
             q_by_bots_and_minutes[(n.bots, n.minutes)].add(n)
 
     m = max(final_states, key=lambda s: s.ores[GEODE])
-    print("We can get ", m.ores[GEODE], " geodes in ", m.minutes, " minutes")
+    # print("We can get ", m.ores[GEODE], " geodes in ", m.minutes, " minutes")
 
     # print("How we got there: ")
     # z = m

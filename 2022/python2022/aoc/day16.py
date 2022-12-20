@@ -209,7 +209,7 @@ def p1(valves, vmap):
         max_press_for[snp] = s.pressure_released
 
         i += 1
-        if i % 100000 == 0:
+        if i % 500000 == 0:
             maxp = 0
             if len(final_states) > 0:
                 maxp = max(s.pressure_released for s in final_states)
@@ -226,7 +226,7 @@ def p1(valves, vmap):
             final_states.append(s)
 
     m = max(final_states, key=lambda s: s.pressure_released)
-    print(m)
+    # print(m)
     return m.pressure_released
 
 
@@ -256,7 +256,7 @@ def p2(valves, vmap):
         max_press_for[snp] = s.pressure_released
 
         i += 1
-        if i % 100000 == 0:
+        if i % 500000 == 0:
             maxp = 0
             if len(final_states) > 0:
                 maxp = max(s.pressure_released for s in final_states)
@@ -278,8 +278,8 @@ def p2(valves, vmap):
             )
 
     m = max(final_states, key=lambda s: s.pressure_released)
-    print("Final state count:", i)
-    print(m)
+    # print("Final state count:", i)
+    # print(m)
     return m.pressure_released
 
 

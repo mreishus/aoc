@@ -92,11 +92,10 @@ class Day14:
 
     @staticmethod
     def part1(filename: str) -> int:
-        print("")
         data = parse(filename)
         g = Grid()
         g.load_data(data)
-        g.display()
+        # g.display()
 
         count = 0
         while True:
@@ -105,16 +104,15 @@ class Day14:
                 break
             count += 1
             # g.display()
-        print("Added", count, "new sand")
+        # print("Added", count, "new sand")
         return count
 
     @staticmethod
     def part2(filename: str) -> int:
-        print("")
         data = parse(filename)
         g = Grid()
         g.load_data(data)
-        g.display()
+        # g.display()
 
         count = 0
         while True:
@@ -122,5 +120,5 @@ class Day14:
             if not added_new_sand:
                 break
             count += 1
-        print("Added", count, "new sand")
+        # print("Added", count, "new sand")
         return count

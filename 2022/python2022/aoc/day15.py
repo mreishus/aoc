@@ -32,19 +32,19 @@ class Grid:
 
     def eliminate(self, y_to_compute):
         for (sx, sy), (bx, by) in self.sensors.items():
-            print(f"Eliminating sensor {sx} {sy} |  {bx} {by}")
+            # print(f"Eliminating sensor {sx} {sy} |  {bx} {by}")
             distance = abs(sx - bx) + abs(sy - by)
             for x in range(sx - distance, sx + distance + 1):
-                distance_remaining = distance - abs(sx - x)
+                # distance_remaining = distance - abs(sx - x)
+                # for y in range(sy - distance_remaining, sy + distance_remaining + 1):
                 for y in [y_to_compute]:
-                    # for y in range(sy - distance_remaining, sy + distance_remaining + 1):
                     if abs(x - sx) + abs(y - sy) <= distance:
                         if self.grid[x, y] == ".":
                             self.grid[x, y] = "#"
 
     def eliminate2(self, max_x, max_y):
         for (sx, sy), (bx, by) in self.sensors.items():
-            print(f"Eliminating2 sensor {sx} {sy} |  {bx} {by}")
+            # print(f"Eliminating2 sensor {sx} {sy} |  {bx} {by}")
             distance = abs(sx - bx) + abs(sy - by)
 
             ## Range 1: [0, max_x]
@@ -52,10 +52,6 @@ class Grid:
             ## Overlap:
             xrange = range(max(0, sx - distance), min(max_x, sx + distance) + 1)
 
-            xlower = max(0, sx - distance)
-            xupper = min(max_x, sx + distance)
-
-            # for x in range(0, max_x + 1):
             for x in xrange:
                 # print(x)
                 distance_remaining = distance - abs(sx - x)
@@ -87,19 +83,15 @@ class Grid:
             clear_to = 0
             for (low, high) in exes:
                 if low > clear_to:
-                    print("Found it! ", x, clear_to)
+                    # print("Found it! ", x, clear_to)
                     return x * 4000000 + clear_to
                 clear_to = max(clear_to, high + 1)
-
-            # for y in range(0, max_y + 1):
-            #     if self.grid[x, y] == ".":
-            #         self.grid[x, y] = "#"
 
     def search_old(self, max_x, max_y):
         for x in range(0, max_x + 1):
             for y in range(0, max_y + 1):
                 if self.grid[x, y] == ".":
-                    print("Found it! ", x, y)
+                    # print("Found it! ", x, y)
                     return x * 4000000 + y
 
     def display(self):
@@ -131,14 +123,13 @@ class Day15:
         if "input_small.txt" in filename:
             y_to_compute = 10
 
-        # print(y_to_compute)
         g = Grid()
         g.load_data(data)
         g.eliminate(y_to_compute)
         return g.row_count_hash(y_to_compute)
 
     @staticmethod
-    def part2(filename: str) -> int:
+    def part2(filename: str):
         data = parse(filename)
 
         min_x = 0
@@ -152,6 +143,5 @@ class Day15:
         g = Grid()
         g.load_data(data)
         g.eliminate2(max_x, max_y)
-        # g.display()
         val = g.search(max_x, max_y)
         return val
