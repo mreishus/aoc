@@ -19,6 +19,7 @@ class Grid:
         self.grid = defaultdict(lambda: " ")
         self.max_x = 0
         self.max_y = 0
+        self.init_blizzards = []
         self.blizzards = []
         self.start = None
         self.end = None
@@ -32,6 +33,7 @@ class Grid:
                 for x, c in enumerate(line):
                     if ["<", ">", "^", "v"].count(c) > 0:
                         self.blizzards.append((x, y, c))
+                        self.init_blizzards.append((x, y, c))
                         self.grid[(x, y)] = "."
                     else:
                         self.grid[(x, y)] = c
@@ -114,9 +116,19 @@ class Grid:
     def init_state(self):
         return State(self.start, tuple(self.blizzards), 0)
 
-    def bfs(self):
+    def bfs(self, b, minutes=0):
+        init = State(self.start, b, minutes)
+        goal = self.end
+        return self.bfs_(init, goal)
+
+    def backwards_bfs(self, b, minutes=0):
+        init = State(self.end, b, minutes)
+        goal = self.start
+        return self.bfs_(init, goal)
+
+    def bfs_(self, init, goal):
         seen = set()
-        queue = deque([self.init_state()])
+        queue = deque([init])
         i = 0
         while queue:
             loc, blizzards, minutes = queue.popleft()
@@ -124,18 +136,19 @@ class Grid:
                 continue
             seen.add((loc, blizzards))
 
-            if i % 1000 == 0:
+            if i % 10000 == 0:
                 print(
                     f"Seen {i} states | {len(queue)} in queue | {len(seen)} seen | loc {loc} | mins {minutes}"
                 )
             i += 1
 
-            if loc == self.end:
-                return minutes
+            if loc == goal:
+                return loc, minutes, blizzards
 
             for n_loc, n_blizzards in self.get_neighbors(loc, blizzards):
                 queue.append(State(n_loc, n_blizzards, minutes + 1))
-        return None
+
+        return None, None, None
 
     def display(self, b, loc=None):
         dct = self.blizzards_to_dct(b)
@@ -164,16 +177,14 @@ class Day24:
     def part1(filename: str) -> int:
         g = Grid()
         g.parse(filename)
-        return g.bfs()
-        # print("")
-        # g.advance_blizzards()
-        # for _ in range(5):
-        #     g.advance_blizzards()
-        g.display()
-        return -1
+        loc, minutes, blizzards = g.bfs(tuple(g.init_blizzards))
+        return minutes
 
     @staticmethod
     def part2(filename: str) -> int:
-        data = parse(filename)
-        print(data)
-        return -2
+        g = Grid()
+        g.parse(filename)
+        loc, minutes, blizzards = g.bfs(tuple(g.init_blizzards))
+        loc, minutes, blizzards = g.backwards_bfs(blizzards, minutes)
+        loc, minutes, blizzards = g.bfs(blizzards, minutes)
+        return minutes
