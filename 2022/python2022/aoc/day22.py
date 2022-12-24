@@ -54,7 +54,7 @@ class Grid:
                 if char != " ":
                     self.grid[x, y] = char
                     if self.init is None and y == 0:
-                        print("Setting init to ", x, y)
+                        # print("Setting init to ", x, y)
                         self.init = (x, y)
                 self.max_x = max(self.max_x, x)
             self.max_y = max(self.max_y, y)
@@ -145,11 +145,11 @@ class Grid:
         xx = x + 1
         yy = y + 1
 
-        print("Done:", xx, yy)
-        print("Facing: ", self.dir)
-        print("Facing index: ", self.dirs.index(self.dir))
+        # print("Done:", xx, yy)
+        # print("Facing: ", self.dir)
+        # print("Facing index: ", self.dirs.index(self.dir))
         pw = 1000 * yy + 4 * xx + self.dirs.index(self.dir)
-        print("Final password: ", pw)
+        # print("Final password: ", pw)
         return pw
 
     def next_tile(self, loc):
@@ -158,7 +158,7 @@ class Grid:
         x += dx
         y += dy
         if self.grid[x, y] == " ":
-            print("Trying to warp")
+            # print("Trying to warp")
             ## Warp like pacman
             if self.dir == (1, 0):
                 x = 0
@@ -183,10 +183,10 @@ class Grid:
         x, y = loc
         xx, yy = self.next_tile(loc)
         if self.grid[xx, yy] == "#":
-            print("Hit a wall")
+            # print("Hit a wall")
             return loc
         if self.grid[xx, yy] == " ":
-            print("Hit a warp- Should not happen")
+            # print("Hit a warp- Should not happen")
             exit()
         return xx, yy
 
@@ -201,7 +201,34 @@ class Grid:
     def get_dir(self, i):
         return self.dirs[i % 4]
 
+    def warp_map_small(self):
+        """
+                1111
+                1111
+                1111
+                1111
+        222233334444
+        222233334444
+        222233334444
+        222233334444
+                55556666
+                55556666
+                55556666
+                55556666
+        """
+        #                0     1    2   3
+        #  directions = right down left up
+        return {
+            (2, 1): (5, 3),  # Region 2 facing down: Warps to region 5 facing up
+            (3, 3): (1, 0),  # Region 3 facing up: Warps to region 1 facing right
+            (4, 0): (6, 1),  # Region 4 facing right: Warps to region 6 facing down
+            (5, 1): (2, 3),  # Region 5 facing down: Warps to region 2 facing up
+            (6, 1): (2, 0),  # Region 6 facing down: Warps to region 2 facing right
+        }
+
     def warp_map(self, small_input=False):
+        if small_input:
+            return self.warp_map_small()
         """
         ...1#.2#
         ...##.##
@@ -237,7 +264,7 @@ class Grid:
     def p2(self, instructions, small_input=False):
         loc = self.init
         for inst in instructions:
-            print(" ==> ", inst)
+            # print(" ==> ", inst)
             if inst == "L":
                 self.turn_left()
             elif inst == "R":
@@ -245,17 +272,17 @@ class Grid:
             else:
                 for _ in range(inst):
                     loc = self.move2(loc, small_input=small_input)
-                    print(loc)
+                    # print(loc)
 
         (x, y) = loc
         xx = x + 1
         yy = y + 1
 
-        print("Done:", xx, yy)
-        print("Facing: ", self.dir)
-        print("Facing index: ", self.dirs.index(self.dir))
+        # print("Done:", xx, yy)
+        # print("Facing: ", self.dir)
+        # print("Facing index: ", self.dirs.index(self.dir))
         pw = 1000 * yy + 4 * xx + self.dirs.index(self.dir)
-        print("Final password: ", pw)
+        # print("Final password: ", pw)
         return pw
 
     def display(self):
@@ -268,10 +295,10 @@ class Grid:
         x, y = loc
         xx, yy, next_dir = self.next_tile2(loc, small_input=small_input)
         if self.grid[xx, yy] == "#":
-            print("Hit a wall")
+            # print("Hit a wall", self.dir)
             return loc
         if self.grid[xx, yy] == " ":
-            print("Hit a warp- Should not happen")
+            # print("Hit a warp- Should not happen")
             exit()
         self.dir = next_dir
         return xx, yy
@@ -298,19 +325,24 @@ class Grid:
             current_region = self.regions[origx, origy]
             current_dir = self.dirs.index(self.dir)
 
+            width = 50
+            if small_input:
+                width = 4
+
             offset = None
             #                0     1    2   3
             #  directions = right down left up
             if current_dir == 0:
-                offset = y % 50
+                # offset = y % 50
+                offset = y % width
             elif current_dir == 1:
-                offset = x % 50
+                offset = x % width
             elif current_dir == 2:
-                offset = y % 50
+                offset = y % width
             elif current_dir == 3:
-                offset = x % 50
+                offset = x % width
 
-            m = self.warp_map()
+            m = self.warp_map(small_input=small_input)
             if (current_region, current_dir) not in m:
                 print(
                     f"Don't know how to warp from region={current_region} dir={current_dir}, WARPS={WARPS+1}"
@@ -319,19 +351,26 @@ class Grid:
             next_region, next_dir = m[current_region, current_dir]
 
             flip = False
+            ## Warp from facing down to facing up, or any other opposite = Flip
             if (next_dir + 2) % 4 == current_dir:
                 flip = True
-            if flip:
-                offset = (49 - offset) % 50
 
-            print(
-                f"Trying to warp from: region={current_region}, dir={current_dir}, offset={offset}, loc={x} {y}"
-            )
-            print(f"Warp to: region={next_region}, dir={next_dir}, offset={offset}")
+            ## I might be missing some flip cases
+            if current_dir == 0 and next_dir == 1:
+                flip = True
+
+            if flip:
+                # offset = (49 - offset) % 50
+                offset = ((width - 1) - offset) % width
+
+            # print(
+            #     f"Trying to warp from: region={current_region}, dir={current_dir}, offset={offset}, loc={x} {y}"
+            # )
+            # print(f"Warp to: region={next_region}, dir={next_dir}, offset={offset}")
 
             ((newx1, newx2), (newy1, newy2)) = self.regions2[next_region]
-            print("Target region X: ", newx1, newx2)
-            print("Target region Y: ", newy1, newy2)
+            # print("Target region X: ", newx1, newx2)
+            # print("Target region Y: ", newy1, newy2)
 
             if next_dir == 0:  # Right
                 x = newx1
@@ -345,9 +384,9 @@ class Grid:
             elif next_dir == 3:  # up
                 x = newx1 + offset
                 y = newy2
-            print(
-                f"Loc: ({oldx}, {oldy}) -> ({x}, {y}), dir=({self.dir_index_to_name(current_dir)} -> {self.dir_index_to_name(next_dir)})"
-            )
+            # print(
+            #     f"Loc: ({oldx}, {oldy}) -> ({x}, {y}), dir=({self.dir_index_to_name(current_dir)} -> {self.dir_index_to_name(next_dir)})"
+            # )
             # self.dir = self.get_dir(next_dir)
             WARPS += 1
             # if WARPS >= 13:
