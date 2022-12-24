@@ -96,20 +96,20 @@ def latest_15():
 
 def latest():
     """Scratchpad to work on."""
-    # print("2022 Day 23 Part 1 (small):", end=" ")
-    # print(Day23.part1("../inputs/23/input_small.txt"))
+    # print("2022 Day 21 Part 1 (small):", end=" ")
+    # print(Day21.part1("../inputs/21/input_small.txt"))
 
-    # print("2022 Day 23 Part 1 (small2):", end=" ")
-    # print(Day23.part1("../inputs/23/input_small2.txt"))
+    # print("2022 Day 21 Part 1 (small2):", end=" ")
+    # print(Day21.part1("../inputs/21/input_small2.txt"))
 
-    # print("2022 Day 23 Part 1:", end=" ")
-    # print(Day23.part1("../inputs/23/input.txt"))
+    # print("2022 Day 21 Part 1:", end=" ")
+    # print(Day21.part1("../inputs/21/input.txt"))
 
-    # print("2022 Day 23 Part 2 (small):", end=" ")
-    # print(Day23.part2("../inputs/23/input_small.txt"))
+    # print("2022 Day 21 Part 2 (small):", end=" ")
+    # print(Day21.part2("../inputs/21/input_small.txt"))
 
-    print("2022 Day 23 Part 2:", end=" ")
-    print(Day23.part2("../inputs/23/input.txt"))
+    print("2022 Day 21 Part 2:", end=" ")
+    print(Day21.part2("../inputs/21/input.txt"))
 
 
 if __name__ == "__main__":

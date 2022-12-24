@@ -46,7 +46,7 @@ def get_value(data, label_in):
             elif y == "-":
                 return x - z
             elif y == "/":
-                return x // z
+                return x / z
 
 
 def get_value2(data, label_in, num):
@@ -61,18 +61,8 @@ def get_value2(data, label_in, num):
             (x, y, z) = equation
             x = get_value2(data, x, num)
             z = get_value2(data, z, num)
-            print(num, "ROOT ", x, z, x == z, x // 1000000000, z // 1000000000, z - x)
-            if x == z:
-                print("FOUND")
-                print("FOUND")
-                print("FOUND")
-                print("FOUND")
-                print(num)
-                print("FOUND")
-                print("FOUND")
-                print("FOUND")
-                print("FOUND")
-                exit()
+            # print(num, "ROOT ", x, z, x == z, x // 1000000000, z // 1000000000, z - x)
+            return z - x
 
         else:
             (x, y, z) = equation
@@ -85,7 +75,7 @@ def get_value2(data, label_in, num):
             elif y == "-":
                 return x - z
             elif y == "/":
-                return x // z
+                return x / z
 
 
 def p1(data):
@@ -112,20 +102,18 @@ class Day21:
     def part2(filename: str) -> int:
         data = parse(filename)
         data = tuple(data)
-        # for i in range(15):
-        #     j = 10**i + random.randint(0, 10**i)
-        #     p2(data, j)
-        start = 3423156653201
-        start = 3423276653201
-        start = 3423279853201
-        start = 3423279931201
-        start = 3423279932861
+
+        invert = "input_small.txt" in filename
+
+        low = 1
+        high = 10**13
         while True:
-            # num = int(input())
-            # print("")
-            start += 1
-            num = start
-            print(num)
-            p2(data, num)
-            # print(p2(data, num))
-        return -2
+            mid = (low + high) // 2
+            z = p2(data, mid)
+            # print(f"mid {mid} = {z}")
+            if z == 0:
+                return mid
+            elif (z > 0 and not invert) or (z < 0 and invert):
+                high = mid
+            elif (z < 0 and not invert) or (z > 0 and invert):
+                low = mid
