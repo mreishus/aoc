@@ -95,7 +95,7 @@ class Day21:
     def part1(filename: str) -> int:
         data = parse(filename)
         data = tuple(data)
-        print(data)
+        # print(data)
         return p1(data)
 
     @staticmethod

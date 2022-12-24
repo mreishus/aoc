@@ -165,12 +165,12 @@ class Day23:
     def part1(filename: str) -> int:
         g = parse(filename)
         # print(g.grid)
-        g.display()
+        # g.display()
 
         for _ in range(10):
             g.tick()
-            print("")
-            g.display()
+            # print("")
+            # g.display()
 
         return g.count_empty_tiles()
 

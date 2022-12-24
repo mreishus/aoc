@@ -57,9 +57,9 @@ def p1(data, mix_amount):
     pointer = dll
 
     for mix_i in range(mix_amount):
-        print("Begin mix", mix_i)
+        # print("Begin mix", mix_i)
         dll = mix(dll, ilookup)
-        print("Finished mix", mix_i)
+        # print("Finished mix", mix_i)
 
     ## Debugger
     # pointer = dll
