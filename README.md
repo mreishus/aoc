@@ -19,9 +19,9 @@
 
 ## 2022
 
-| Day    | Comment                  | Python                                   |
-| ------ | ------------------------ | ---------------------------------------- |
-| Day 01 | Summing lists, max N     | [Python](./2022/python2022/aoc/day01.py) |
+| Day    | Comment                  | Python                                   | Go                                    |
+| ------ | ------------------------ | ---------------------------------------- | ------------------------------------- |
+| Day 01 | Summing lists, max N     | [Python](./2022/python2022/aoc/day01.py) | [Go](./2022/go2022/go_day01/day01.go) |
 | Day 02 | Rock Paper Scissors      | [Python](./2022/python2022/aoc/day02.py) |
 | Day 03 | Overlapping strings      | [Python](./2022/python2022/aoc/day03.py) |
 | Day 04 | Overlapping ranges       | [Python](./2022/python2022/aoc/day04.py) |
@@ -613,5 +613,5 @@ now.
 
 ```
 Created:       Mon 02 Dec 2019 05:12:40 PM CST
-Last Modified: Mon 19 Dec 2022 07:33:22 PM CST
+Last Modified: Wed 08 Feb 2023 10:39:30 PM CST
 ```
