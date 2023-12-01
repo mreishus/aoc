@@ -37,11 +37,11 @@ def latest():
     print("2023 Day 01 Part 1 (small):", end=" ")
     print(Day01.part1("../inputs/01/input_small.txt"))
 
-    print("2023 Day 01 Part 1:", end=" ")
-    print(Day01.part1("../inputs/01/input.txt"))
+    # print("2023 Day 01 Part 1:", end=" ")
+    # print(Day01.part1("../inputs/01/input.txt"))
 
     print("2023 Day 01 Part 2 (small):", end=" ")
-    print(Day01.part2("../inputs/01/input_small.txt"))
+    print(Day01.part2("../inputs/01/input_small2.txt"))
 
     print("2023 Day 01 Part 2:", end=" ")
     print(Day01.part2("../inputs/01/input.txt"))
