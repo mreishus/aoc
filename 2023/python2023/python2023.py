@@ -1,16 +1,18 @@
 #!/usr/bin/env python
 """
-Main program runner for Advent of Code 2022 in Python.
+Main program runner for Advent of Code 2023 in Python.
 This is a series of programming problems available at
-https://adventofcode.com/2022
+https://adventofcode.com/2023
 """
 from timeit import default_timer as timer
 from aoc.day01 import Day01
+from aoc.day02 import Day02
 
 
 def alldays():
     solvers = [
         (Day01.part1, Day01.part2),
+        (Day02.part1, Day02.part2),
     ]
     for i, (p1, p2) in enumerate(solvers, 1):
         path = f"../inputs/{i:02}/input.txt"
@@ -34,19 +36,19 @@ def alldays():
 
 def latest():
     """Scratchpad to work on."""
-    print("2023 Day 01 Part 1 (small):", end=" ")
-    print(Day01.part1("../inputs/01/input_small.txt"))
+    print("2023 Day 02 Part 1 (small):", end=" ")
+    print(Day02.part1("../inputs/02/input_small.txt"))
 
-    # print("2023 Day 01 Part 1:", end=" ")
-    # print(Day01.part1("../inputs/01/input.txt"))
+    print("2023 Day 02 Part 1:", end=" ")
+    print(Day02.part1("../inputs/02/input.txt"))
 
-    print("2023 Day 01 Part 2 (small):", end=" ")
-    print(Day01.part2("../inputs/01/input_small2.txt"))
+    print("2023 Day 02 Part 2 (small):", end=" ")
+    print(Day02.part2("../inputs/02/input_small.txt"))
 
-    print("2023 Day 01 Part 2:", end=" ")
-    print(Day01.part2("../inputs/01/input.txt"))
+    print("2023 Day 02 Part 2:", end=" ")
+    print(Day02.part2("../inputs/02/input.txt"))
 
 
 if __name__ == "__main__":
-    # alldays()
-    latest()
+    alldays()
+    # latest()
