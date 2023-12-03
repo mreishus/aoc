@@ -3,7 +3,8 @@
 Advent Of Code 2023 Day 3
 https://adventofcode.com/2023/day/3
 """
-import re
+from functools import reduce
+import operator
 
 
 class Grid:
@@ -12,6 +13,8 @@ class Grid:
         self.max_x = 0
         self.max_y = 0
         self.part_numbers = set()
+        self.digit_locations = {}  ## (x, y) -> digit_index
+        self.digit_values = {}  ## digit_index -> value
 
     def parse(self, filename: str):
         self.max_x = 0
@@ -36,8 +39,28 @@ class Grid:
                     for xx, yy in self.get_neighbors(x, y):
                         self.part_numbers.add((xx, yy))
 
+    def part2(self):
+        total = 0
+        for y in range(self.max_y):
+            for x in range(self.max_x):
+                if self.grid[x, y] == "*":
+                    digits_seen = set()
+                    digit_values = []
+                    for xx, yy in self.get_neighbors(x, y):
+                        if (xx, yy) in self.digit_locations:
+                            digit_index = self.digit_locations[xx, yy]
+                            digits_seen.add(digit_index)
+                    if len(digits_seen) == 2:
+                        digits = []
+                        for digit_index in digits_seen:
+                            digits.append(self.digit_values[digit_index])
+                        gear_ratio = reduce(operator.mul, digits, 1)
+                        total += gear_ratio
+        return total
+
     def part1(self):
         total = 0
+        digit_index = 1
         for y in range(self.max_y):
             x = 0
             this_digit = 0
@@ -53,24 +76,39 @@ class Grid:
                     x += 1
                 else:
                     if looking_at_digit:
-                        print(f"Found digit {this_digit} at {digit_xs}, {y}")
+                        # print(f"Found digit {this_digit} at {digit_xs}, {y}")
                         ## Just finished a digit
+                        ## Record in digit_locations
+                        for xx in digit_xs:
+                            self.digit_locations[xx, y] = digit_index
+                        self.digit_values[digit_index] = this_digit
+                        digit_index += 1
+
+                        ## Check if this is a part number
                         for xx in digit_xs:
                             if (xx, y) in self.part_numbers:
-                                print("  This is a part number")
+                                # print("  This is a part number")
                                 total += this_digit
                                 break
                         this_digit = 0
                         digit_xs = []
                     looking_at_digit = False
                     x += 1
+
             ## Before we go to the next line, check if we just finished a digit
             if looking_at_digit:
-                print(f"Found digit {this_digit} at {digit_xs}, {y}")
+                # print(f"Found digit {this_digit} at {digit_xs}, {y}")
                 ## Just finished a digit
+                ## Record in digit_locations
+                for xx in digit_xs:
+                    self.digit_locations[xx, y] = digit_index
+                self.digit_values[digit_index] = this_digit
+                digit_index += 1
+
+                ## Check if this is a part number
                 for xx in digit_xs:
                     if (xx, y) in self.part_numbers:
-                        print("  This is a part number")
+                        # print("  This is a part number")
                         total += this_digit
                         break
 
@@ -101,4 +139,6 @@ class Day03:
     def part2(filename: str) -> int:
         g = Grid()
         g.parse(filename)
-        return -1
+        g.compute_part_numbers()
+        g.part1()
+        return g.part2()
