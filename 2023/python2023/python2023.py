@@ -48,8 +48,8 @@ def latest():
     # print("2023 Day 05 Part 1:", end=" ")
     # print(Day05.part1("../inputs/05/input.txt"))
 
-    # print("2023 Day 05 Part 2 (small):", end=" ")
-    # print(Day05.part2("../inputs/05/input_small.txt"))
+    print("2023 Day 05 Part 2 (small):", end=" ")
+    print(Day05.part2("../inputs/05/input_small.txt"))
 
     print("2023 Day 05 Part 2:", end=" ")
     print(Day05.part2("../inputs/05/input.txt"))

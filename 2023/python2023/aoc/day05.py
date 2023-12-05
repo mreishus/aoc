@@ -60,11 +60,6 @@ def seed_to(target: str, x: int, block_map: dict):
     while have != target:
         (next_have, data) = block_map[have]
 
-        index = binary_search(data, x)
-        if index is not None:
-            _, source_start, _, source_end, offset = data[index]
-            x += offset
-
         # Linear search replaced by binary search
         # for dest_start, source_start, length, source_end, offset in data:
         #     if source_start <= x <= source_end:
@@ -72,6 +67,12 @@ def seed_to(target: str, x: int, block_map: dict):
         #         break
         #     if source_start > x:
         #         break
+
+        index = binary_search(data, x)
+        if index is not None:
+            _, source_start, _, source_end, offset = data[index]
+            x += offset
+
         have = next_have
     return x
 
@@ -83,49 +84,73 @@ class Day05:
     def part1(filename: str) -> int:
         (seeds, block_map) = parse(filename)
 
-        location_min = float("inf")
+        location_min = 9999999999
         for i in seeds:
             loc = seed_to("location", i, block_map)
             location_min = min(location_min, loc)
         return location_min
 
     @staticmethod
-    def part2(filename: str) -> int:
-        (seeds, block_map) = parse(filename)
+    def part2_large(seeds, block_map) -> int:
+        location_min = 9999999999
+        j_min = 9999999999
 
-        location_min = float("inf")
-        j_min = float("inf")
+        ## Pass 1: Stride 1_000_000
         for i in range(0, len(seeds), 2):
-            stride = 1
+            stride = 1_000_000
             seeds_range = range(seeds[i], seeds[i] + seeds[i + 1], stride)
-
-            if seeds[i + 1] < 10000:
-                # Small case, just run
-                pass
-            elif (
-                1799906802 in seeds_range
-            ):  # Found this by hand by setting stride = 6000
-                # Out of the 10 ranges they give us, we can focus on one
-
-                # print(i, "this seed range is interesting")
-                # print(seeds[i], seeds[i] + seeds[i + 1])
-
-                ## Can narrow down further with:
-                # stride = 200
-                # seeds_range = list(range(seeds[i], seeds[i] + seeds[i + 1], stride))
-
-                # Now just narrow in around the lowest j we've found so far
-                seeds_range = list(range(1799904702 - 10000, 1799904702 + 10000))
-            else:
-                # print(i, "not a seed range we're interested in")
-                continue
-
-            # print(len(seeds_range), seeds_range)
             for j in seeds_range:
                 loc = seed_to("location", j, block_map)
                 if loc < location_min:
                     location_min = loc
                     j_min = j
+
+        seed_low = None
+        seed_high = None
+        ## Pass 2: We're only interested in the seed range that contains the j_min found in pass 1
+        for i in range(0, len(seeds), 2):
+            stride = 1
+            seeds_range = range(seeds[i], seeds[i] + seeds[i + 1], stride)
+
+            if j_min in seeds_range:
+                seed_low = seeds[i]
+                seed_high = seeds[i] + seeds[i + 1]
+                break
+
+        if seed_low is None or seed_high is None:
+            raise Exception("couldn't find seed range")
+
+        ## Pass 3: Stride 10_000, but only in the seed range we're interested in
+        for j in range(seed_low, seed_high, 10_000):
+            loc = seed_to("location", j, block_map)
+            if loc < location_min:
+                location_min = loc
+                j_min = j
+
+        ## Pass 4:  +/- 5_000 around the j_min found in pass 3
+        for j in range(j_min - 5_000, j_min + 5_000):
+            loc = seed_to("location", j, block_map)
+            if loc < location_min:
+                location_min = loc
+                j_min = j
+
         # print(f"found loc={location_min}, at j={j_min}")
         return location_min
-        # 78777155 - Too High
+
+    @staticmethod
+    def part2_small(seeds, block_map) -> int:
+        location_min = 9999999999
+        for i in range(0, len(seeds), 2):
+            seeds_range = range(seeds[i], seeds[i] + seeds[i + 1])
+            for j in seeds_range:
+                loc = seed_to("location", j, block_map)
+                location_min = min(location_min, loc)
+
+        return location_min
+
+    @staticmethod
+    def part2(filename: str) -> int:
+        (seeds, block_map) = parse(filename)
+        if seeds[1] > 1_000_000:
+            return Day05.part2_large(seeds, block_map)
+        return Day05.part2_small(seeds, block_map)
