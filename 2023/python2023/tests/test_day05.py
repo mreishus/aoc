@@ -18,7 +18,7 @@ class TestDay05(unittest.TestCase):
     def test_part2(self):
         """Test part2"""
         self.assertEqual(Day05.part2("../inputs/05/input_small.txt"), 46)
-        ##self.assertEqual(Day05.part2("../inputs/05/input.txt"), 10378710)
+        self.assertEqual(Day05.part2("../inputs/05/input.txt"), 78775051)
 
 
 if __name__ == "__main__":
