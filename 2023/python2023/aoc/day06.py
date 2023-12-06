@@ -43,16 +43,13 @@ def p1_num_ways(race_time, distance):
     for hold_time in range(1, race_time):
         if travel_distance(hold_time, race_time) > distance:
             true_begin = hold_time
-            true_end = race_time
             break
 
     if true_begin is None:
         return 0
 
-    for hold_time in reversed(range(1, race_time)):
-        if travel_distance(hold_time, race_time) > distance:
-            true_end = hold_time
-            break
+    ## Symmetry
+    true_end = race_time - true_begin
 
     return true_end - true_begin + 1
 
