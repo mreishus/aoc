@@ -43,7 +43,6 @@ class Day04:
                         score *= 2
 
             total += score
-            print(winners, nums, score)
         return total
 
     @staticmethod
@@ -53,15 +52,10 @@ class Day04:
         i = 1
         copies = defaultdict(int)
         for winners, nums in data:
-            print(i, winners, nums)
-            print(" We have", copies[i], "copies")
             offset = 1
             winners = set(winners)
             for num in nums:
                 if num in winners:
-                    print(
-                        f"   {num}=Winner! Incrementing {i + offset} by {1 + copies[i]}"
-                    )
                     copies[i + offset] += 1 + copies[i]
                     offset += 1
             i += 1
