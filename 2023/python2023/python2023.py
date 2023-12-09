@@ -59,8 +59,8 @@ def latest():
     print("2023 Day 09 Part 2 (small):", end=" ")
     print(Day09.part2("../inputs/09/input_small.txt"))
 
-    print("2023 Day 09 Part 2:", end=" ")
-    print(Day09.part2("../inputs/09/input.txt"))
+    # print("2023 Day 09 Part 2:", end=" ")
+    # print(Day09.part2("../inputs/09/input.txt"))
 
 
 if __name__ == "__main__":

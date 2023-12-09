@@ -20,6 +20,10 @@ def get_diffs(line):
     return [line[i + 1] - line[i] for i in range(len(line) - 1)]
 
 
+def get_diffs2(line):
+    return [line[i] - line[i + 1] for i in range(len(line) - 1)]
+
+
 class Day09:
     """AoC 2023 Day 09"""
 
@@ -44,21 +48,11 @@ class Day09:
         total = 0
         for line in data:
             x = []
-            differences = get_diffs(line)
+            differences = get_diffs2(line)
             while not all(d == 0 for d in differences):
                 x.append(differences)
-                differences = get_diffs(differences)
+                differences = get_diffs2(differences)
 
-            for i in range(len(x) - 1, -1, -1):
-                j = i + 1
-                new_here = 0
-                if j < len(x):
-                    new_here = x[i][0] - x[j][0]
-                else:
-                    new_here = x[i][0]
-
-                x[i] = [new_here] + x[i]
-
-            next_num = line[0] - x[0][0]
+            next_num = line[0] + sum([item[0] for item in x])
             total += next_num
         return total
