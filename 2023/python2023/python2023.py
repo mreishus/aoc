@@ -52,20 +52,23 @@ def alldays():
 
 def latest():
     """Scratchpad to work on."""
-    print("2023 Day 10 Part 1 (small):", end=" ")
-    print(Day10.part1("../inputs/10/input_small3.txt"))
+    # print("2023 Day 10 Part 1 (small):", end=" ")
+    # print(Day10.part1("../inputs/10/input_small3.txt"))
 
-    print("2023 Day 10 Part 1 (small):", end=" ")
-    print(Day10.part1("../inputs/10/input_small4.txt"))
+    # print("2023 Day 10 Part 1 (small):", end=" ")
+    # print(Day10.part1("../inputs/10/input_small4.txt"))
 
-    print("2023 Day 10 Part 1:", end=" ")
-    print(Day10.part1("../inputs/10/input.txt"))
+    # print("2023 Day 10 Part 1:", end=" ")
+    # print(Day10.part1("../inputs/10/input.txt"))
+
+    print("2023 Day 10 Part 2 (small):", end=" ")
+    print(Day10.part2("../inputs/10/input_small8.txt"))
 
     # print("2023 Day 10 Part 2 (small):", end=" ")
-    # print(Day10.part2("../inputs/10/input_small.txt"))
+    # print(Day10.part2("../inputs/10/input_small6.txt"))
 
-    # print("2023 Day 10 Part 2:", end=" ")
-    # print(Day10.part2("../inputs/10/input.txt"))
+    print("2023 Day 10 Part 2:", end=" ")
+    print(Day10.part2("../inputs/10/input.txt"))
 
 
 if __name__ == "__main__":
