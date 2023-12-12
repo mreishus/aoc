@@ -53,9 +53,10 @@ class Grid:
 
     def calculate_range(self, start, end, expanding, expand_by):
         step = -1 if start > end else 1
-        distance = 0
-        for z in range(start, end, step):
-            distance += 1 + (expand_by if z in expanding else 0)
+
+        range_set = set(range(start, end, step))
+        expanding_count = len(range_set.intersection(expanding))
+        distance = len(range_set) + expanding_count * expand_by
         return distance
 
     def part1(self, expand_by=1):
