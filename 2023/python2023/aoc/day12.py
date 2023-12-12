@@ -57,19 +57,6 @@ def process(line):
             qis = [qi - length_of_full_match for qi in qis]
             return process((new_line, nums[1:], qis))
 
-    ## Some sort of (def+indef) cutoff, I don't think this actually helps though...
-    can_use_hash = True
-    match = re.match(r"^(\.*?)(#+)(\?+)[\.$]", grid)
-    if match:
-        definite_hash = match.group(2)
-        indef_extension = match.group(3)
-        if len(definite_hash) > nums[0]:
-            return 0
-        if len(definite_hash) == nums[0]:
-            can_use_hash = False
-        if len(definite_hash) + len(indef_extension) < nums[0]:
-            return 0
-
     # if random.random() < 0.0001:
     #     print(grid, nums, qis)
 
@@ -92,9 +79,8 @@ def process(line):
     total_valid += process((with_dot, nums, qis[1:]))
 
     if count_of_hashes < sum_nums:
-        if can_use_hash:
-            with_hash = grid[:first_qi] + "#" + grid[first_qi + 1 :]
-            total_valid += process((with_hash, nums, qis[1:]))
+        with_hash = grid[:first_qi] + "#" + grid[first_qi + 1 :]
+        total_valid += process((with_hash, nums, qis[1:]))
 
     memo[(grid, tuple(nums))] = total_valid
     return total_valid
