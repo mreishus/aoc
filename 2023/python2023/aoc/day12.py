@@ -5,6 +5,7 @@ https://adventofcode.com/2023/day/12
 """
 import re
 from typing import List
+import random
 from collections import defaultdict
 
 
@@ -23,10 +24,6 @@ def parse_line(line):
     return grid, nums, qis
 
 
-def ints(s: str) -> List[int]:
-    return list(map(int, re.findall(r"(?:(?<!\d)-)?\d+", s)))
-
-
 def process(line):
     grid, nums, qis = line
 
@@ -36,6 +33,10 @@ def process(line):
         else:
             return 0
 
+    if random.random() < 0.01:
+        print(grid, nums, qis)
+    # print(grid, nums, qis)
+
     total_valid = 0
 
     sum_nums = sum(nums)
@@ -44,7 +45,13 @@ def process(line):
     first_qi = qis[0]
 
     if count_of_hashes + len(qis) < sum_nums:
+        # print("   --- return early 1")
         return 0
+
+    if not is_valid_definite_prefix(grid, nums):
+        # print("   --- return early 2")
+        return 0
+
     with_dot = grid[:first_qi] + "." + grid[first_qi + 1 :]
     total_valid += process((with_dot, nums, qis[1:]))
 
@@ -56,6 +63,9 @@ def process(line):
 
 
 def is_valid(grid, nums):
+    if sum(nums) != grid.count("#"):
+        return False
+
     in_run = False
     l = 0
     new_nums = []
@@ -79,14 +89,37 @@ def is_valid(grid, nums):
     return new_nums == nums
 
 
+def is_valid_definite_prefix(grid, nums):
+    in_run = False
+    l = 0
+    new_nums_index = 0
+
+    for c in grid:
+        # Stop at the first '?'
+        if c == "?":
+            break
+
+        if c == ".":
+            if in_run:
+                if new_nums_index < len(nums) and l != nums[new_nums_index]:
+                    return False
+                new_nums_index += 1
+                in_run = False
+            l = 0
+        elif c == "#":
+            if not in_run:
+                in_run = True
+            l += 1
+
+        if in_run and new_nums_index < len(nums) and l > nums[new_nums_index]:
+            return False
+
+    # potentially valid
+    return True
+
+
 class Day12:
     """AoC 2023 Day 12"""
-
-    """
-    . operational
-    # damaged
-    ? unknown
-    """
 
     @staticmethod
     def part1(filename: str) -> int:
@@ -99,5 +132,18 @@ class Day12:
     @staticmethod
     def part2(filename: str) -> int:
         data = parse(filename)
-        print(data)
-        return 1
+        total = 0
+        for line in data:
+            grid, nums, qis = line
+            grid = "?".join([grid] * 5)
+            nums = nums + nums + nums + nums + nums
+            qis = []
+            for i, c in enumerate(grid):
+                if c == "?":
+                    qis.append(i)
+
+            line = grid, nums, qis
+            x = process(line)
+            print(x)
+            total += x
+        return total

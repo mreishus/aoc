@@ -56,8 +56,8 @@ def alldays():
 
 def latest():
     """Scratchpad to work on."""
-    print("2023 Day 12 Part 1 (small):", end=" ")
-    print(Day12.part1("../inputs/12/input_small.txt"))
+    # print("2023 Day 12 Part 1 (small):", end=" ")
+    # print(Day12.part1("../inputs/12/input_small2.txt"))
 
     print("2023 Day 12 Part 1:", end=" ")
     print(Day12.part1("../inputs/12/input.txt"))
