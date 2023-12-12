@@ -35,6 +35,7 @@ class Grid:
         self.max_y = 0
         self.galaxies = []
         self.galaxy_cache = {}
+        self.part2_mode = False
 
     def parse(self, filename: str):
         x = 0
@@ -78,7 +79,7 @@ class Grid:
         loc_end = self.galaxies[g_end]
 
         ### Dijkstra's
-        dist_to = defaultdict(lambda: 999_999)
+        dist_to = defaultdict(lambda: 999_999_999_999_999_999_999_999_999_999_999)
         edge_to = {}
         open_set = heapdict()
 
@@ -119,6 +120,10 @@ class Grid:
                 total += pathlen
         return total
 
+    def part2(self):
+        self.part2_mode = True
+        return self.part1()
+
     def display(self):
         for y in range(self.max_y):
             for x in range(self.max_x):
@@ -126,10 +131,12 @@ class Grid:
             print()
 
     def available_moves(self, loc):
-        moves = []
         for x, y in self.get_neighbours(loc):
             if self.grid[(x, y)] == "2":
-                yield Move((x, y), 2)
+                distance = 2
+                if self.part2_mode:
+                    distance = 1000000
+                yield Move((x, y), distance)
             else:
                 yield Move((x, y), 1)
 
@@ -156,6 +163,6 @@ class Day11:
 
     @staticmethod
     def part2(filename: str) -> int:
-        data = parse(filename)
-        print(data)
-        return -1
+        g = Grid()
+        g.parse(filename)
+        return g.part2()

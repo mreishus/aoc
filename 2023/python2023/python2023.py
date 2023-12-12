@@ -54,17 +54,17 @@ def alldays():
 
 def latest():
     """Scratchpad to work on."""
-    print("2023 Day 11 Part 1 (small):", end=" ")
-    print(Day11.part1("../inputs/11/input_small.txt"))
+    # print("2023 Day 11 Part 1 (small):", end=" ")
+    # print(Day11.part1("../inputs/11/input_small.txt"))
 
-    print("2023 Day 11 Part 1:", end=" ")
-    print(Day11.part1("../inputs/11/input.txt"))
+    # print("2023 Day 11 Part 1:", end=" ")
+    # print(Day11.part1("../inputs/11/input.txt"))
 
     # print("2023 Day 11 Part 2 (small):", end=" ")
     # print(Day11.part2("../inputs/11/input_small.txt"))
 
-    # print("2023 Day 11 Part 2:", end=" ")
-    # print(Day11.part2("../inputs/11/input.txt"))
+    print("2023 Day 11 Part 2:", end=" ")
+    print(Day11.part2("../inputs/11/input.txt"))
 
 
 if __name__ == "__main__":
