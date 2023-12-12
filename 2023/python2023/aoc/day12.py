@@ -82,7 +82,7 @@ def process(line):
         with_hash = grid[:first_qi] + "#" + grid[first_qi + 1 :]
         total_valid += process((with_hash, nums, qis[1:]))
 
-    memo[(grid, tuple(nums))] = total_valid
+    memo[k] = total_valid
     return total_valid
 
 
@@ -92,25 +92,26 @@ def is_valid(grid, nums):
 
     in_run = False
     l = 0
-    new_nums = []
-    for i, c in enumerate(grid):
+    new_nums_index = 0
+    for c in grid:
         if c == ".":
             if in_run:
-                if len(new_nums) < len(nums) and l != nums[len(new_nums)]:
+                if new_nums_index < len(nums) and l != nums[new_nums_index]:
                     return False
-                new_nums.append(l)
+                new_nums_index += 1
                 in_run = False
             l = 0
         if c == "#":
             if not in_run:
                 in_run = True
             l += 1
+
     if in_run:
-        if len(new_nums) < len(nums) and l != nums[len(new_nums)]:
+        if in_run and new_nums_index < len(nums) and l > nums[new_nums_index]:
             return False
-        new_nums.append(l)
         in_run = False
-    return new_nums == nums
+
+    return True
 
 
 def is_valid_definite_prefix(grid, nums):
