@@ -38,11 +38,20 @@ def process(line):
 
     total_valid = 0
 
+    sum_nums = sum(nums)
+    count_of_hashes = grid.count("#")
+
     first_qi = qis[0]
+
+    if count_of_hashes + len(qis) < sum_nums:
+        return 0
     with_dot = grid[:first_qi] + "." + grid[first_qi + 1 :]
-    with_hash = grid[:first_qi] + "#" + grid[first_qi + 1 :]
     total_valid += process((with_dot, nums, qis[1:]))
-    total_valid += process((with_hash, nums, qis[1:]))
+
+    if count_of_hashes < sum_nums:
+        with_hash = grid[:first_qi] + "#" + grid[first_qi + 1 :]
+        total_valid += process((with_hash, nums, qis[1:]))
+
     return total_valid
 
 
