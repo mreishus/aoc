@@ -57,8 +57,8 @@ def latest():
     # print("2023 Day 11 Part 1 (small):", end=" ")
     # print(Day11.part1("../inputs/11/input_small.txt"))
 
-    # print("2023 Day 11 Part 1:", end=" ")
-    # print(Day11.part1("../inputs/11/input.txt"))
+    print("2023 Day 11 Part 1:", end=" ")
+    print(Day11.part1("../inputs/11/input.txt"))
 
     # print("2023 Day 11 Part 2 (small):", end=" ")
     # print(Day11.part2("../inputs/11/input_small.txt"))
@@ -68,5 +68,5 @@ def latest():
 
 
 if __name__ == "__main__":
-    # alldays()
-    latest()
+    alldays()
+    # latest()
