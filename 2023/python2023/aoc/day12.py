@@ -24,8 +24,17 @@ def parse_line(line):
     return grid, nums, qis
 
 
+memo = {}
+
+
 def process(line):
     grid, nums, qis = line
+    if len(nums) == 0:
+        return 1
+
+    k = (grid, tuple(nums))
+    if k in memo:
+        return memo[k]
 
     if len(qis) == 0:
         if is_valid(grid, nums):
@@ -33,9 +42,36 @@ def process(line):
         else:
             return 0
 
-    if random.random() < 0.01:
-        print(grid, nums, qis)
-    # print(grid, nums, qis)
+    ## Help deal with long lines
+    match = re.match(r"^(\.*?)(#+)[\.$]", grid)
+    if match:
+        first_hash = match.group(2)
+        if len(first_hash) > nums[0]:
+            return 0
+        if len(first_hash) == nums[0]:
+            length_of_full_match = match.end()
+            new_line = grid[
+                length_of_full_match:
+            ]  # Slice from the end of the entire match
+            ## For each number in qis, subtract the length of the full match
+            qis = [qi - length_of_full_match for qi in qis]
+            return process((new_line, nums[1:], qis))
+
+    ## Some sort of (def+indef) cutoff, I don't think this actually helps though...
+    can_use_hash = True
+    match = re.match(r"^(\.*?)(#+)(\?+)[\.$]", grid)
+    if match:
+        definite_hash = match.group(2)
+        indef_extension = match.group(3)
+        if len(definite_hash) > nums[0]:
+            return 0
+        if len(definite_hash) == nums[0]:
+            can_use_hash = False
+        if len(definite_hash) + len(indef_extension) < nums[0]:
+            return 0
+
+    # if random.random() < 0.0001:
+    #     print(grid, nums, qis)
 
     total_valid = 0
 
@@ -56,9 +92,11 @@ def process(line):
     total_valid += process((with_dot, nums, qis[1:]))
 
     if count_of_hashes < sum_nums:
-        with_hash = grid[:first_qi] + "#" + grid[first_qi + 1 :]
-        total_valid += process((with_hash, nums, qis[1:]))
+        if can_use_hash:
+            with_hash = grid[:first_qi] + "#" + grid[first_qi + 1 :]
+            total_valid += process((with_hash, nums, qis[1:]))
 
+    memo[(grid, tuple(nums))] = total_valid
     return total_valid
 
 
@@ -126,7 +164,8 @@ class Day12:
         data = parse(filename)
         total = 0
         for line in data:
-            total += process(line)
+            x = process(line)
+            total += x
         return total
 
     @staticmethod
