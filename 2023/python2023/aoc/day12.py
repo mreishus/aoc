@@ -110,7 +110,7 @@ def is_valid(grid, nums):
     for i, c in enumerate(grid):
         if c == ".":
             if in_run:
-                if len(new_nums) >= len(nums) or l != nums[len(new_nums)]:
+                if len(new_nums) < len(nums) and l != nums[len(new_nums)]:
                     return False
                 new_nums.append(l)
                 in_run = False
@@ -120,7 +120,7 @@ def is_valid(grid, nums):
                 in_run = True
             l += 1
     if in_run:
-        if len(new_nums) >= len(nums) or l != nums[len(new_nums)]:
+        if len(new_nums) < len(nums) and l != nums[len(new_nums)]:
             return False
         new_nums.append(l)
         in_run = False
