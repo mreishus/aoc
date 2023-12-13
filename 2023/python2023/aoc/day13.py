@@ -22,48 +22,51 @@ def parse_line(line: str):
     return [1 if char == "#" else 0 for char in line]
 
 
-def find_reflections(block):
-    ### First, look for vertical reflections.
-
-    ## Draw a line between each pair of columns, then see if
-    ## flipping the left side l-r matches the right side, after
-    ## discarding any columns that don't overlap.
-
+def find_reflections(block, ignore_this=None):
+    # vertical reflections
     for col in range(1, len(block[0])):
         left = np.fliplr(block[:, :col])
         right = block[:, col:]
 
-        ## We need to find the larger out of left and right
-        ## And then cut them down so they're the same size
+        # reshape
         if left.shape[1] > right.shape[1]:
             left = left[:, : right.shape[1]]
         elif right.shape[1] > left.shape[1]:
             right = right[:, : left.shape[1]]
 
-        if np.array_equal(left, right):
+        if np.array_equal(left, right) and col != ignore_this:
             # print("Found vertical reflection", col)
             return col
 
-    ### Next, look for horizontal reflections.
-
+    # horizontal reflections
     for row in range(1, len(block)):
         top = np.flipud(block[:row, :])
         bottom = block[row:, :]
 
-        # print("")
-        # print(f"--before shape-- {row}")
-        # print(top)
-        # print(bottom)
-        ## We need to find the larger out of top and bottom
-        ## And then cut them down so they're the same size
+        # reshape
         if top.shape[0] > bottom.shape[0]:
             top = top[: bottom.shape[0], :]
         elif bottom.shape[0] > top.shape[0]:
             bottom = bottom[: top.shape[0], :]
 
-        if np.array_equal(top, bottom):
+        if np.array_equal(top, bottom) and row * 100 != ignore_this:
             # print("Found horizontal reflection", row)
             return row * 100
+    return 0
+
+
+def find_smudge_reflections(block):
+    original_num = find_reflections(block)
+
+    for row in range(len(block)):
+        for col in range(len(block[0])):
+            smudged = block.copy()
+            smudged[row][col] = 1 - smudged[row][col]
+
+            num = find_reflections(smudged, original_num)
+            if num != original_num and num != 0:
+                return num
+
     return 0
 
 
@@ -72,7 +75,6 @@ class Day13:
 
     @staticmethod
     def part1(filename: str) -> int:
-        print(f"Day 13 Part 1: {filename}")
         data = parse(filename)
         total = 0
         for block in data:
@@ -83,5 +85,8 @@ class Day13:
     @staticmethod
     def part2(filename: str) -> int:
         data = parse(filename)
-        print(data)
-        return -1
+        total = 0
+        for block in data:
+            num = find_smudge_reflections(block)
+            total += num
+        return total
