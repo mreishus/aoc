@@ -4,9 +4,7 @@ Advent Of Code 2023 Day 12
 https://adventofcode.com/2023/day/12
 """
 import re
-from typing import List
 import random
-from collections import defaultdict
 
 
 def parse(filename: str):
@@ -16,27 +14,23 @@ def parse(filename: str):
 
 def parse_line(line):
     grid, nums = line.split(" ")
-    nums = list(map(int, nums.split(",")))
-    qis = []
-    for i, c in enumerate(grid):
-        if c == "?":
-            qis.append(i)
-    return grid, nums, qis
+    nums = tuple(list(map(int, nums.split(","))))
+    return grid, nums
 
 
 memo = {}
 
 
 def process(line):
-    grid, nums, qis = line
+    grid, nums = line
     if len(nums) == 0:
         return 1
 
-    k = (grid, tuple(nums))
-    if k in memo:
-        return memo[k]
+    if line in memo:
+        return memo[line]
 
-    if len(qis) == 0:
+    count_of_qs = grid.count("?")
+    if count_of_qs == 0:
         if is_valid(grid, nums):
             return 1
         else:
@@ -53,21 +47,17 @@ def process(line):
             new_line = grid[
                 length_of_full_match:
             ]  # Slice from the end of the entire match
-            ## For each number in qis, subtract the length of the full match
-            qis = [qi - length_of_full_match for qi in qis]
-            return process((new_line, nums[1:], qis))
+            return process((new_line, nums[1:]))
 
     # if random.random() < 0.0001:
-    #     print(grid, nums, qis)
+    #     print(grid, nums)
 
     total_valid = 0
 
     sum_nums = sum(nums)
     count_of_hashes = grid.count("#")
 
-    first_qi = qis[0]
-
-    if count_of_hashes + len(qis) < sum_nums:
+    if count_of_hashes + count_of_qs < sum_nums:
         # print("   --- return early 1")
         return 0
 
@@ -75,14 +65,16 @@ def process(line):
         # print("   --- return early 2")
         return 0
 
+    first_qi = grid.find("?")
+
     with_dot = grid[:first_qi] + "." + grid[first_qi + 1 :]
-    total_valid += process((with_dot, nums, qis[1:]))
+    total_valid += process((with_dot, nums))
 
     if count_of_hashes < sum_nums:
         with_hash = grid[:first_qi] + "#" + grid[first_qi + 1 :]
-        total_valid += process((with_hash, nums, qis[1:]))
+        total_valid += process((with_hash, nums))
 
-    memo[k] = total_valid
+    memo[line] = total_valid
     return total_valid
 
 
@@ -160,16 +152,11 @@ class Day12:
         data = parse(filename)
         total = 0
         for line in data:
-            grid, nums, qis = line
+            grid, nums = line
             grid = "?".join([grid] * 5)
             nums = nums + nums + nums + nums + nums
-            qis = []
-            for i, c in enumerate(grid):
-                if c == "?":
-                    qis.append(i)
 
-            line = grid, nums, qis
-            x = process(line)
-            print(x)
+            x = process((grid, nums))
+            # print(x)
             total += x
         return total
