@@ -6,6 +6,8 @@ https://adventofcode.com/2023/day/12
 import re
 import random
 
+FINDER = re.compile(r"^(\.*?)(#+)[\.$]")
+
 
 def parse(filename: str):
     with open(filename) as file:
@@ -37,7 +39,7 @@ def process(line):
             return 0
 
     ## Help deal with long lines
-    match = re.match(r"^(\.*?)(#+)[\.$]", grid)
+    match = FINDER.match(grid)
     if match:
         first_hash = match.group(2)
         if len(first_hash) > nums[0]:
