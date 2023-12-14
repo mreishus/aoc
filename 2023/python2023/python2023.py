@@ -60,14 +60,14 @@ def alldays():
 
 def latest():
     """Scratchpad to work on."""
-    print("2023 Day 14 Part 1 (small):", end=" ")
-    print(Day14.part1("../inputs/14/input_small.txt"))
+    # print("2023 Day 14 Part 1 (small):", end=" ")
+    # print(Day14.part1("../inputs/14/input_small.txt"))
 
-    print("2023 Day 14 Part 1:", end=" ")
-    print(Day14.part1("../inputs/14/input.txt"))
+    # print("2023 Day 14 Part 1:", end=" ")
+    # print(Day14.part1("../inputs/14/input.txt"))
 
-    # print("2023 Day 14 Part 2 (small):", end=" ")
-    # print(Day14.part2("../inputs/14/input_small.txt"))
+    print("2023 Day 14 Part 2 (small):", end=" ")
+    print(Day14.part2("../inputs/14/input_small.txt"))
 
     # print("2023 Day 14 Part 2:", end=" ")
     # print(Day14.part2("../inputs/14/input.txt"))

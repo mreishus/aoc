@@ -36,6 +36,12 @@ class Grid:
             # print(f" Inverse row number {self.max_y - y} ", end="")
             print()
 
+    def cycle(self):
+        self.slide_north()
+        self.slide_west()
+        self.slide_south()
+        self.slide_east()
+
     def slide_north(self):
         for y in range(self.max_y):
             if y == 0:
@@ -46,6 +52,45 @@ class Grid:
                     yy = y
                     while yy > 0 and self.grid[(xx, yy - 1)] == ".":
                         yy -= 1
+                    self.grid[(x, y)] = "."
+                    self.grid[(xx, yy)] = "O"
+
+    def slide_south(self):
+        for y in reversed(range(self.max_y)):
+            if y == self.max_y:
+                continue
+            for x in range(self.max_x):
+                if self.grid[(x, y)] == "O":
+                    xx = x
+                    yy = y
+                    while yy < (self.max_y - 1) and self.grid[(xx, yy + 1)] == ".":
+                        yy += 1
+                    self.grid[(x, y)] = "."
+                    self.grid[(xx, yy)] = "O"
+
+    def slide_east(self):
+        for x in reversed(range(self.max_x)):
+            if x == self.max_x:
+                continue
+            for y in range(self.max_y):
+                if self.grid[(x, y)] == "O":
+                    xx = x
+                    yy = y
+                    while xx < (self.max_x - 1) and self.grid[(xx + 1, yy)] == ".":
+                        xx += 1
+                    self.grid[(x, y)] = "."
+                    self.grid[(xx, yy)] = "O"
+
+    def slide_west(self):
+        for x in range(self.max_x):
+            if x == 0:
+                continue
+            for y in range(self.max_y):
+                if self.grid[(x, y)] == "O":
+                    xx = x
+                    yy = y
+                    while xx > 0 and self.grid[(xx - 1, yy)] == ".":
+                        xx -= 1
                     self.grid[(x, y)] = "."
                     self.grid[(xx, yy)] = "O"
 
@@ -67,14 +112,21 @@ class Day14:
         g = Grid()
         g.parse(filename)
         print("")
-        # g.display()
+        g.display()
         print("")
         g.slide_north()
-        # g.display()
+        g.display()
         return g.get_load()
 
     @staticmethod
     def part2(filename: str) -> int:
-        data = parse(filename)
-        print(data)
-        return -1
+        g = Grid()
+        g.parse(filename)
+        print("")
+        g.display()
+        print("")
+        for i in range(1000000000):
+            if i % 100000 == 0:
+                print(f"Cycle {i}. Percent complete: {i/10000000}%")
+            g.cycle()
+        return g.get_load()
