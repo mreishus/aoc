@@ -103,6 +103,13 @@ class Grid:
                     load += weight
         return load
 
+    def grid_to_string(self):
+        s = ""
+        for y in range(self.max_y):
+            for x in range(self.max_x):
+                s += self.grid[(x, y)]
+        return s
+
 
 class Day14:
     """AoC 2023 Day 14"""
@@ -125,8 +132,30 @@ class Day14:
         print("")
         g.display()
         print("")
-        for i in range(1000000000):
+
+        seen = {}
+        seen_rev = defaultdict(list)
+
+        i = 0
+        while i < 1000000000:
             if i % 100000 == 0:
                 print(f"Cycle {i}. Percent complete: {i/10000000}%")
             g.cycle()
+
+            ## Found period = 7 on small
+            ## Found period = 102 on large
+            for x in [9, 8, 7, 6, 5, 4, 3, 2, 1]:
+                y = 102**x
+                if (i + y) < 1000000000:
+                    i += y
+
+            ######### CYCLE FINDER ####
+            # load = g.grid_to_string()
+            # if load in seen_rev:
+            #     print(f"Cycle {i}. Load {load} seen before at {seen_rev[load]}")
+            # seen[i] = load
+            # seen_rev[load].append(i)
+
+            i += 1
+
         return g.get_load()
