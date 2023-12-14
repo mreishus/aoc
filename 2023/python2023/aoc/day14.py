@@ -118,44 +118,42 @@ class Day14:
     def part1(filename: str) -> int:
         g = Grid()
         g.parse(filename)
-        print("")
-        g.display()
-        print("")
         g.slide_north()
-        g.display()
         return g.get_load()
 
     @staticmethod
     def part2(filename: str) -> int:
         g = Grid()
         g.parse(filename)
-        print("")
-        g.display()
-        print("")
 
-        seen = {}
-        seen_rev = defaultdict(list)
-
+        ## Find the cycle_period ##
+        seen = defaultdict(list)
         i = 0
-        while i < 1000000000:
-            if i % 100000 == 0:
-                print(f"Cycle {i}. Percent complete: {i/10000000}%")
+        cycle_period = 0
+        while True:
             g.cycle()
-
-            ## Found period = 7 on small
-            ## Found period = 102 on large
-            for x in [9, 8, 7, 6, 5, 4, 3, 2, 1]:
-                y = 102**x
-                if (i + y) < 1000000000:
-                    i += y
-
-            ######### CYCLE FINDER ####
-            # load = g.grid_to_string()
-            # if load in seen_rev:
-            #     print(f"Cycle {i}. Load {load} seen before at {seen_rev[load]}")
-            # seen[i] = load
-            # seen_rev[load].append(i)
-
             i += 1
+            gridstr = g.grid_to_string()
+            if gridstr in seen:
+                # print(f"Cycle {i}. gridstr seen before at {seen[gridstr]}")
+                cycle_period = i - seen[gridstr][-1]
+                break
+            seen[gridstr].append(i)
+
+        ### Reset ###
+        g = Grid()
+        g.parse(filename)
+
+        ### Cycle a billion times ###
+        i = 0
+        NUM = 1000000000
+        while i < NUM:
+            g.cycle()
+            i += 1
+
+            for x in [9, 8, 7, 6, 5, 4, 3, 2, 1]:
+                y = cycle_period**x
+                if (i + y) < NUM:
+                    i += y
 
         return g.get_load()
