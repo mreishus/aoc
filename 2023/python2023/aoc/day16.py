@@ -3,8 +3,6 @@
 Advent Of Code 2023 Day 16
 https://adventofcode.com/2023/day/16
 """
-import re
-from typing import List
 from collections import defaultdict
 
 
@@ -29,6 +27,56 @@ class Grid:
                 x = 0
                 self.max_y = max(self.max_y, y)
 
+    def reset_lit(self):
+        self.is_lit = defaultdict(bool)
+
+    def part2(self):
+        a = self.fire_all_right_edge_lasers()
+        b = self.fire_all_left_edge_lasers()
+        c = self.fire_all_top_edge_lasers()
+        d = self.fire_all_bottom_edge_lasers()
+        return max(a, b, c, d)
+
+    def fire_all_left_edge_lasers(self):
+        max_seen = 0
+        for y in range(self.max_y):
+            self.reset_lit()
+            self.fire_laser(((0, y), "R"))
+            lit = self.count_lit()
+            # print(f"Left edge laser at {y} lit {lit}")
+            max_seen = max(max_seen, lit)
+        return max_seen
+
+    def fire_all_right_edge_lasers(self):
+        max_seen = 0
+        for y in range(self.max_y):
+            self.reset_lit()
+            self.fire_laser(((self.max_x - 1, y), "L"))
+            lit = self.count_lit()
+            # print(f"Right edge laser at {y} lit {lit}")
+            max_seen = max(max_seen, lit)
+        return max_seen
+
+    def fire_all_top_edge_lasers(self):
+        max_seen = 0
+        for x in range(self.max_x):
+            self.reset_lit()
+            self.fire_laser(((x, 0), "D"))
+            lit = self.count_lit()
+            # print(f"Top edge laser at {x} lit {lit}")
+            max_seen = max(max_seen, lit)
+        return max_seen
+
+    def fire_all_bottom_edge_lasers(self):
+        max_seen = 0
+        for x in range(self.max_x):
+            self.reset_lit()
+            self.fire_laser(((x, self.max_y - 1), "U"))
+            lit = self.count_lit()
+            # print(f"Bottom edge laser at {x} lit {lit}")
+            max_seen = max(max_seen, lit)
+        return max_seen
+
     def display(self):
         for y in range(self.max_y):
             for x in range(self.max_x):
@@ -47,9 +95,10 @@ class Grid:
                     print(".", end="")
             print()
 
-    def fire_laser(self):
+    def fire_laser(self, laser=None):
         ## How should I define directions?
-        laser = ((0, 0), "R")
+        if laser is None:
+            laser = ((0, 0), "R")
         q = [laser]
         seen = set()
         while len(q) > 0:
@@ -69,12 +118,12 @@ class Grid:
             if self.grid[loc] == ".":
                 next_loc = self.next_loc(loc, direction)
                 q.append((next_loc, direction))
-                print(f"SIMPLE Moving from {loc} to {next_loc}")
+                # print(f"SIMPLE Moving from {loc} to {next_loc}")
             elif self.grid[loc] == "/" or self.grid[loc] == "\\":
                 next_direction = self.next_direction(direction, self.grid[loc])
                 next_loc = self.next_loc(loc, next_direction)
                 q.append((next_loc, next_direction))
-                print(f"ROTATE Moving from {loc} to {next_loc}")
+                # print(f"ROTATE Moving from {loc} to {next_loc}")
             elif self.grid[loc] == "|" or self.grid[loc] == "-":  ## Splitter
                 ## Determine if the beam entered the pointy end or the flat end
                 ## of the splitter
@@ -99,7 +148,7 @@ class Grid:
                 if is_pointy:
                     ## In this case, just treat it like empty space.
                     next_loc = self.next_loc(loc, direction)
-                    print(f"POINTY Moving from {loc} to {next_loc}")
+                    # print(f"POINTY Moving from {loc} to {next_loc}")
                     q.append((next_loc, direction))
                 elif is_flat:
                     ## In this case, we need to split the beam.
@@ -107,12 +156,12 @@ class Grid:
                     next_direction1 = self.next_direction(direction, "/")
                     next_loc1 = self.next_loc(loc, next_direction1)
                     q.append((next_loc1, next_direction1))
-                    print(f"FLAT1 Moving from {loc} to {next_loc1}")
+                    # print(f"FLAT1 Moving from {loc} to {next_loc1}")
 
                     next_direction2 = self.next_direction(direction, "\\")
                     next_loc2 = self.next_loc(loc, next_direction2)
                     q.append((next_loc2, next_direction2))
-                    print(f"FLAT2 Moving from {loc} to {next_loc2}")
+                    # print(f"FLAT2 Moving from {loc} to {next_loc2}")
                     # print(f"q is now {q}")
                 else:
                     raise Exception(
@@ -163,24 +212,6 @@ class Grid:
         return sum(self.is_lit.values())
 
 
-def parse(filename: str):
-    with open(filename) as file:
-        return [parse_line(line.strip()) for line in file.readlines()]
-
-
-def parse_line(line):
-    return line
-    _label, rest = line.split(":")
-    winners, nums = rest.split("|")
-    winners = ints(winners)
-    nums = ints(nums)
-    return winners, nums
-
-
-def ints(s: str) -> List[int]:
-    return list(map(int, re.findall(r"(?:(?<!\d)-)?\d+", s)))
-
-
 class Day16:
     """AoC 2023 Day 16"""
 
@@ -196,6 +227,6 @@ class Day16:
 
     @staticmethod
     def part2(filename: str) -> int:
-        data = parse(filename)
-        print(data)
-        return -1
+        g = Grid()
+        g.parse(filename)
+        return g.part2()
