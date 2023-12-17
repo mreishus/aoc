@@ -83,5 +83,5 @@ def latest():
 
 
 if __name__ == "__main__":
-    # alldays()
-    latest()
+    alldays()
+    # latest()

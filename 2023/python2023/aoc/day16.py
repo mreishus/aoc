@@ -43,7 +43,6 @@ class Grid:
             self.reset_lit()
             self.fire_laser(((0, y), "R"))
             lit = self.count_lit()
-            # print(f"Left edge laser at {y} lit {lit}")
             max_seen = max(max_seen, lit)
         return max_seen
 
@@ -53,7 +52,6 @@ class Grid:
             self.reset_lit()
             self.fire_laser(((self.max_x - 1, y), "L"))
             lit = self.count_lit()
-            # print(f"Right edge laser at {y} lit {lit}")
             max_seen = max(max_seen, lit)
         return max_seen
 
@@ -63,7 +61,6 @@ class Grid:
             self.reset_lit()
             self.fire_laser(((x, 0), "D"))
             lit = self.count_lit()
-            # print(f"Top edge laser at {x} lit {lit}")
             max_seen = max(max_seen, lit)
         return max_seen
 
@@ -73,7 +70,6 @@ class Grid:
             self.reset_lit()
             self.fire_laser(((x, self.max_y - 1), "U"))
             lit = self.count_lit()
-            # print(f"Bottom edge laser at {x} lit {lit}")
             max_seen = max(max_seen, lit)
         return max_seen
 
@@ -81,12 +77,9 @@ class Grid:
         for y in range(self.max_y):
             for x in range(self.max_x):
                 print(self.grid[(x, y)], end="")
-            # print(f" Row number {y} ", end="")
-            # print(f" Inverse row number {self.max_y - y} ", end="")
             print()
 
     def display_is_lit(self):
-        return
         for y in range(self.max_y):
             for x in range(self.max_x):
                 if self.is_lit[(x, y)]:
@@ -103,7 +96,6 @@ class Grid:
         seen = set()
         while len(q) > 0:
             loc, direction = q.pop(0)
-            self.display_is_lit()
 
             x, y = loc
             ## out of bound check
@@ -118,15 +110,11 @@ class Grid:
             if self.grid[loc] == ".":
                 next_loc = self.next_loc(loc, direction)
                 q.append((next_loc, direction))
-                # print(f"SIMPLE Moving from {loc} to {next_loc}")
             elif self.grid[loc] == "/" or self.grid[loc] == "\\":
                 next_direction = self.next_direction(direction, self.grid[loc])
                 next_loc = self.next_loc(loc, next_direction)
                 q.append((next_loc, next_direction))
-                # print(f"ROTATE Moving from {loc} to {next_loc}")
             elif self.grid[loc] == "|" or self.grid[loc] == "-":  ## Splitter
-                ## Determine if the beam entered the pointy end or the flat end
-                ## of the splitter
                 is_pointy = None
                 is_flat = None
 
@@ -148,21 +136,16 @@ class Grid:
                 if is_pointy:
                     ## In this case, just treat it like empty space.
                     next_loc = self.next_loc(loc, direction)
-                    # print(f"POINTY Moving from {loc} to {next_loc}")
                     q.append((next_loc, direction))
                 elif is_flat:
                     ## In this case, we need to split the beam.
-                    ## Add both directions to the queue.
                     next_direction1 = self.next_direction(direction, "/")
                     next_loc1 = self.next_loc(loc, next_direction1)
                     q.append((next_loc1, next_direction1))
-                    # print(f"FLAT1 Moving from {loc} to {next_loc1}")
 
                     next_direction2 = self.next_direction(direction, "\\")
                     next_loc2 = self.next_loc(loc, next_direction2)
                     q.append((next_loc2, next_direction2))
-                    # print(f"FLAT2 Moving from {loc} to {next_loc2}")
-                    # print(f"q is now {q}")
                 else:
                     raise Exception(
                         "Impossible state: Mirror is neither pointy nor flat"
@@ -219,10 +202,10 @@ class Day16:
     def part1(filename: str) -> int:
         g = Grid()
         g.parse(filename)
-        print("")
-        g.display()
+        # print("")
+        # g.display()
         g.fire_laser()
-        g.display_is_lit()
+        # g.display_is_lit()
         return g.count_lit()
 
     @staticmethod
