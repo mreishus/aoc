@@ -10,6 +10,8 @@ from aoc.heapdict import heapdict
 State = namedtuple("State", ("loc", "direction", "streak"))
 Move = namedtuple("Move", ("state", "distance"))
 
+OPPOSITES = {"N": "S", "S": "N", "E": "W", "W": "E"}
+
 
 class Grid:
     def __init__(self):
@@ -53,7 +55,7 @@ class Grid:
                     # print(self.grid[loc], end="")
             print()
 
-    def pathfind(self, is_part2=False):
+    def pathfind(self, is_part2=False, return_path=False):
         loc_start = (0, 0)
         loc_end = (self.max_x - 1, self.max_y - 1)
 
@@ -70,8 +72,12 @@ class Grid:
 
             if state.loc == loc_end:
                 if not is_part2 or state.streak >= 4:
-                    return length, None
-                    return length, self.reconstruct_path(edge_to, state_start, state)
+                    if return_path:
+                        return length, self.reconstruct_path(
+                            edge_to, state_start, state
+                        )
+                    else:
+                        return length, None
 
             moves = []
             if not is_part2:
@@ -83,7 +89,8 @@ class Grid:
                 new_state = move.state
                 if dist_to[new_state] > dist_to[state] + move.distance:
                     dist_to[new_state] = dist_to[state] + move.distance
-                    # edge_to[new_state] = state
+                    if return_path:
+                        edge_to[new_state] = state
                     open_set[new_state] = dist_to[new_state]
 
     def reconstruct_path(self, edge_to, start_state, end_state):
@@ -100,75 +107,64 @@ class Grid:
         old_direction = state.direction
 
         moves = []
-        opposites = {"N": "S", "S": "N", "E": "W", "W": "E"}
         for direction in ["N", "S", "E", "W"]:
-            if direction == opposites.get(old_direction):
+            if direction == OPPOSITES.get(old_direction):
                 continue
 
-            x, y = self.move(loc, direction)
+            x, y = loc
+            if direction == "N":
+                y -= 1
+            elif direction == "S":
+                y += 1
+            elif direction == "E":
+                x += 1
+            elif direction == "W":
+                x -= 1
+
             if x < 0 or x >= self.max_x or y < 0 or y >= self.max_y:
                 continue
 
             distance = int(self.grid[(x, y)])
-
             streak = 1
             if old_direction == direction:
                 streak = state.streak + 1
             if streak > 3:
                 continue
-
             new_state = State((x, y), direction, streak)
             moves.append(Move(new_state, distance))
-
         return moves
-
-    def move(self, loc: tuple, direction: str) -> tuple:
-        x = loc[0]
-        y = loc[1]
-
-        if direction == "N":
-            y -= 1
-        elif direction == "S":
-            y += 1
-        elif direction == "E":
-            x += 1
-        elif direction == "W":
-            x -= 1
-        else:
-            raise ValueError(f"Invalid direction: {direction}")
-
-        return (x, y)
 
     def available_moves2(self, state: State) -> List[Move]:
         loc = state.loc
         old_direction = state.direction
+        allowed_to_turn = state.streak >= 4 or old_direction == ""
 
         moves = []
-        opposites = {"N": "S", "S": "N", "E": "W", "W": "E"}
         for direction in ["N", "S", "E", "W"]:
-            if direction == opposites.get(old_direction):
+            if direction == OPPOSITES.get(old_direction):
                 continue
-
-            ## In order to turn, we have to move at least 4 spaces.
-            allowed_to_turn = False
-            if state.streak >= 4 or old_direction == "":
-                allowed_to_turn = True
-
             if not allowed_to_turn and old_direction != direction:
                 continue
 
-            x, y = self.move(loc, direction)
+            x, y = loc[0], loc[1]
+            if direction == "N":
+                y -= 1
+            elif direction == "S":
+                y += 1
+            elif direction == "E":
+                x += 1
+            elif direction == "W":
+                x -= 1
+
             if x < 0 or x >= self.max_x or y < 0 or y >= self.max_y:
                 continue
 
             distance = int(self.grid[(x, y)])
-
             streak = 1
             if old_direction == direction:
                 streak = state.streak + 1
             if streak > 10:
                 continue
-
             new_state = State((x, y), direction, streak)
             moves.append(Move(new_state, distance))
 
@@ -182,7 +178,7 @@ class Day17:
     def part1(filename: str) -> int:
         g = Grid()
         g.parse(filename)
-        length, path = g.pathfind()
+        length, _ = g.pathfind()
         # g.display2(path)
         return length
 
@@ -190,6 +186,6 @@ class Day17:
     def part2(filename: str) -> int:
         g = Grid()
         g.parse(filename)
-        length, path = g.pathfind(True)
+        length, _ = g.pathfind(True)
         # g.display2(path)
         return length
