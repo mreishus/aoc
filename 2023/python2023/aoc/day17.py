@@ -14,7 +14,6 @@ Move = namedtuple("Move", ("state", "distance"))
 class Grid:
     def __init__(self):
         self.grid = {}
-        self.is_lit = defaultdict(bool)
         self.max_x = 0
         self.max_y = 0
 
@@ -54,17 +53,13 @@ class Grid:
                     # print(self.grid[loc], end="")
             print()
 
-    def pathfind(self):
-        """
-        State = namedtuple("State", ("loc", "direction", "streak"))
-        Move = namedtuple("Move", ("state", "distance"))
-        """
+    def pathfind(self, is_part2=False):
         loc_start = (0, 0)
         loc_end = (self.max_x - 1, self.max_y - 1)
 
         state_start = State(loc_start, "", 0)
 
-        dist_to = defaultdict(lambda: 999_999_999_999_999_999_999_999)
+        dist_to = defaultdict(lambda: 999_999)
         edge_to = {}
         open_set = heapdict()
 
@@ -74,18 +69,21 @@ class Grid:
             (state, length) = open_set.popitem()
 
             if state.loc == loc_end:
-                return length, self.reconstruct_path(edge_to, state_start, state)
+                if not is_part2 or state.streak >= 4:
+                    return length, None
+                    return length, self.reconstruct_path(edge_to, state_start, state)
 
-            moves = self.available_moves(state)
-            # print("first try")
-            # print("state", state)
-            # print("moves", moves)
+            moves = []
+            if not is_part2:
+                moves = self.available_moves(state)
+            else:
+                moves = self.available_moves2(state)
 
             for move in moves:
                 new_state = move.state
                 if dist_to[new_state] > dist_to[state] + move.distance:
                     dist_to[new_state] = dist_to[state] + move.distance
-                    edge_to[new_state] = state
+                    # edge_to[new_state] = state
                     open_set[new_state] = dist_to[new_state]
 
     def reconstruct_path(self, edge_to, start_state, end_state):
@@ -141,15 +139,47 @@ class Grid:
 
         return (x, y)
 
+    def available_moves2(self, state: State) -> List[Move]:
+        loc = state.loc
+        old_direction = state.direction
+
+        moves = []
+        opposites = {"N": "S", "S": "N", "E": "W", "W": "E"}
+        for direction in ["N", "S", "E", "W"]:
+            if direction == opposites.get(old_direction):
+                continue
+
+            ## In order to turn, we have to move at least 4 spaces.
+            allowed_to_turn = False
+            if state.streak >= 4 or old_direction == "":
+                allowed_to_turn = True
+
+            if not allowed_to_turn and old_direction != direction:
+                continue
+
+            x, y = self.move(loc, direction)
+            if x < 0 or x >= self.max_x or y < 0 or y >= self.max_y:
+                continue
+
+            distance = int(self.grid[(x, y)])
+
+            streak = 1
+            if old_direction == direction:
+                streak = state.streak + 1
+            if streak > 10:
+                continue
+
+            new_state = State((x, y), direction, streak)
+            moves.append(Move(new_state, distance))
+
+        return moves
+
 
 class Day17:
     """AoC 2023 Day 17"""
 
     @staticmethod
     def part1(filename: str) -> int:
-        """
-        Incorrect gguesses: 692
-        """
         g = Grid()
         g.parse(filename)
         length, path = g.pathfind()
@@ -158,6 +188,8 @@ class Day17:
 
     @staticmethod
     def part2(filename: str) -> int:
-        data = parse(filename)
-        print(data)
-        return -1
+        g = Grid()
+        g.parse(filename)
+        length, path = g.pathfind(True)
+        # g.display2(path)
+        return length
