@@ -5,7 +5,7 @@ https://adventofcode.com/2023/day/17
 """
 from typing import List
 from collections import defaultdict, namedtuple
-from aoc.heapdict import heapdict
+import heapq
 
 State = namedtuple("State", ("loc", "direction", "streak"))
 Move = namedtuple("Move", ("state", "distance"))
@@ -63,12 +63,12 @@ class Grid:
 
         dist_to = defaultdict(lambda: 999_999)
         edge_to = {}
-        open_set = heapdict()
+        open_set = []
 
         dist_to[state_start] = 0
-        open_set[state_start] = 0
+        heapq.heappush(open_set, (0, state_start))
         while len(open_set) > 0:
-            (state, length) = open_set.popitem()
+            (length, state) = heapq.heappop(open_set)
 
             if state.loc == loc_end:
                 if not is_part2 or state.streak >= 4:
@@ -91,7 +91,7 @@ class Grid:
                     dist_to[new_state] = dist_to[state] + move.distance
                     if return_path:
                         edge_to[new_state] = state
-                    open_set[new_state] = dist_to[new_state]
+                    heapq.heappush(open_set, (dist_to[new_state], new_state))
 
     def reconstruct_path(self, edge_to, start_state, end_state):
         path = []
@@ -186,6 +186,6 @@ class Day17:
     def part2(filename: str) -> int:
         g = Grid()
         g.parse(filename)
-        length, _ = g.pathfind(True)
+        length, _ = g.pathfind(is_part2=True)
         # g.display2(path)
         return length
