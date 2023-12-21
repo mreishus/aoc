@@ -3,9 +3,8 @@
 Advent Of Code 2023 Day 20
 https://adventofcode.com/2023/day/20
 """
-import re
-from typing import List
-from collections import defaultdict, namedtuple
+from collections import namedtuple
+import math
 
 PulseBase = namedtuple("Pulse", ["to", "level", "frm"])
 
@@ -38,17 +37,15 @@ class Module:
         elif self.mtype == "conjunction":
             return f"Module<{self.name} {self.mtype} -> {self.outputs} ({self.input_states})>"
         else:
-            return f"Module<{self.name} {self.mtype} -> {self.outputs} ({self.state})>"
+            return f"Module<{self.name} {self.mtype} -> {self.outputs}>"
 
 
 class Collection:
     def __init__(self, modules):
         self.modules = modules
         self.pulses = []
-        self.pulse_count = 0
         self.pulse_low_count = 0
         self.pulse_high_count = 0
-        self.button_count = 0
 
     def __repr__(self):
         return f"Collection<{self.modules}>"
@@ -67,7 +64,7 @@ class Collection:
         for mod in self.modules.values():
             print(mod)
 
-    def push_button(self):
+    def push_button(self, do_process=True):
         ## Find the broadcaster
         broadcaster = None
         for mod in self.modules.values():
@@ -77,10 +74,10 @@ class Collection:
         if broadcaster is None:
             raise Exception("No broadcaster found")
 
-        self.button_count += 1
         pulse = Pulse(broadcaster.name, 0, None)
         self.pulses.append(pulse)
-        self.process_pulses()
+        if do_process:
+            self.process_pulses()
 
     def process_pulses(self, debug=False):
         while len(self.pulses) > 0:
@@ -88,7 +85,6 @@ class Collection:
             if debug:
                 print(f"Pulse: {pulse}")
             self.process_pulse(pulse)
-            self.pulse_count += 1
             if pulse.level == 0:
                 self.pulse_low_count += 1
             else:
@@ -98,10 +94,6 @@ class Collection:
         return self.pulse_low_count * self.pulse_high_count
 
     def process_pulse(self, pulse):
-        if pulse.to == "rx" and pulse.level == 0:
-            print(f"Button pressed {self.button_count} times")
-            return self.button_count
-
         if pulse.to not in self.modules:
             # print(f"Warning: Module {pulse.to} not found")
             return
@@ -135,8 +127,6 @@ class Collection:
             self.pulses.append(new_pulse)
 
     def process_conjunction(self, mod, pulse):
-        interesting = ["th", "sv", "gh", "ch"]
-
         level = pulse.level
         ## When a pulse is received, update its memory for that input.
         mod.input_states[pulse.frm] = level
@@ -149,12 +139,25 @@ class Collection:
                 self.pulses.append(new_pulse)
         else:
             for output in mod.outputs:
-                if mod.name in interesting:
-                    print(
-                        f"{mod.name} Sending high pulse to {output} | {self.button_count}"
-                    )
                 new_pulse = Pulse(output, 1, mod.name)
                 self.pulses.append(new_pulse)
+
+    def find_cycle(self, name):
+        cycle = []
+        ## We want to keep pressing the button,
+        ## Then detect when we see name sending a high pulse.
+        ## How many button presses between each high pulse?
+        button_count = 0
+        while True:
+            self.push_button(do_process=False)
+            button_count += 1
+            while len(self.pulses) > 0:
+                pulse = self.pulses.pop(0)
+                if pulse.frm == name and pulse.level == 1:
+                    cycle.append(button_count)
+                    if len(cycle) > 1:
+                        return cycle[-1] - cycle[-2]
+                self.process_pulse(pulse)
 
 
 def parse(filename: str):
@@ -189,11 +192,9 @@ class Day20:
         c = Collection(data)
         c.init_conjunctions()
 
-        for i in range(1000):
+        for _ in range(1000):
             c.push_button()
-        print(c.magic_number())
-
-        return -1
+        return c.magic_number()
 
     @staticmethod
     def part2(filename: str) -> int:
@@ -201,46 +202,37 @@ class Day20:
         c = Collection(data)
         c.init_conjunctions()
 
-        for i in range(999999999):
-            if i % 10000 == 0:
-                print(f"Pushing button {i} times")
-            c.push_button()
-        return -1
+        ### Automate the manual work I did
+
+        ## Find the input to rx
+        to_rx = None
+        for mod in c.modules.values():
+            if "rx" in mod.outputs:
+                to_rx = mod.name
+
+        ## Find the 4 inputs to to_rx
+        # interesting = ["th", "sv", "gh", "ch"]
+        interesting_mods = []
+        for mod in c.modules.values():
+            if to_rx in mod.outputs:
+                interesting_mods.append(mod.name)
+
+        ## Find the cycle length for each of the 4 inputs
+        cycle_lengths = []
+        for name in interesting_mods:
+            l = c.find_cycle(name)
+            cycle_lengths.append(l)
+
+        return math.lcm(*cycle_lengths)
 
 
 """
+Manual work for Part 2:
+
 &th -> cn
 &sv -> cn
 &gh -> cn
 &ch -> cn
-
-Pushing button 0 times
-ch Sending high pulse to cn | 3917
-gh Sending high pulse to cn | 3943
-th Sending high pulse to cn | 3947
-sv Sending high pulse to cn | 4001
-ch Sending high pulse to cn | 7834
-gh Sending high pulse to cn | 7886
-th Sending high pulse to cn | 7894
-sv Sending high pulse to cn | 8002
-Pushing button 10000 times
-ch Sending high pulse to cn | 11751
-gh Sending high pulse to cn | 11829
-th Sending high pulse to cn | 11841
-sv Sending high pulse to cn | 12003
-ch Sending high pulse to cn | 15668
-gh Sending high pulse to cn | 15772
-th Sending high pulse to cn | 15788
-sv Sending high pulse to cn | 16004
-ch Sending high pulse to cn | 19585
-gh Sending high pulse to cn | 19715
-th Sending high pulse to cn | 19735
-Pushing button 20000 times
-sv Sending high pulse to cn | 20005
-ch Sending high pulse to cn | 23502
-gh Sending high pulse to cn | 23658
-th Sending high pulse to cn | 23682
-sv Sending high pulse to cn | 24006
 
 sv Sending high pulse to cn | 4001
 sv Sending high pulse to cn | 8002
