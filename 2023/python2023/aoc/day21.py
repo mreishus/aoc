@@ -6,6 +6,8 @@ https://adventofcode.com/2023/day/21
 import re
 from typing import List
 from collections import defaultdict, deque
+import time
+import random
 
 
 class Grid:
@@ -48,6 +50,7 @@ class Grid:
             print()
 
     def bfs(self, start=None, max_dist=6, extras=None):
+        sizes = list(reversed(sorted(extras.keys())))
         if extras is None:
             extras = {}
         if start is None:
@@ -60,26 +63,45 @@ class Grid:
         while queue:
             i += 1
             loc, dist = queue.pop()
-            if i % 10000 == 0:
+            if i % 500000 == 0:
                 print(loc, dist, " | ", len(queue), len(visited), len(finish_locations))
             if (loc, dist) not in visited:
                 visited.add((loc, dist))
                 if dist == max_dist:
                     finish_locations.add(loc)
-                # queue.extend(self.get_neighbors(node))
+
                 if dist < max_dist:
                     (x, y, x_quot, y_quot) = loc
-                    if (x, y) in extras and dist + 20 < max_dist:
-                        for xx, yy, aa, bb in extras[(x, y)]:
-                            queue.append(
-                                ((xx, yy, x_quot + aa, y_quot + bb), dist + 20)
-                            )
-                    else:
+
+                    found_extra = False
+                    for size in sizes:
+                        this_extras = extras[size]
+                        if (x, y) in this_extras and dist + size <= max_dist:
+                            z = 0
+                            for xx, yy, aa, bb in this_extras[(x, y)][0]:
+                                new_loc = (xx, yy, x_quot + aa, y_quot + bb)
+                                if (new_loc, dist + size) in visited:
+                                    continue
+                                queue.append((new_loc, dist + size))
+                                z += 1
+                            # print("Added", z, "extras using size", size)
+                            found_extra = True
+                            break
+
+                    if not found_extra:
+                        # print(f"No extras. dist={dist}, x={x}, y={y}")
+                        # for size in sizes:
+                        #     this_extras = extras[size]
+                        #     print(this_extras.keys())
+                        # if random.randint(0, 10) == 5 and max_dist > 100:
+                        #     exit(1)
                         for n in self.get_neighbors(loc):
+                            if (n, dist + 1) in visited:
+                                continue
                             queue.append((n, dist + 1))
         self.visited = visited
         self.finish_locations = finish_locations
-        return finish_locations
+        return finish_locations, visited
 
     def get_neighbors(self, node):
         neighbors = []
@@ -127,17 +149,42 @@ class Day21:
         g.parse(filename)
         g.display()
 
+        # The whole extras thing is not working out
+        # how I thought it would. :(
         extras = {}
-        for y in range(g.max_y):
-            for x in range(g.max_x):
-                if g.grid[(x, y)] == ".":
-                    here = g.bfs((x, y), 20)
-                    extras[(x, y)] = here
+        for size in [
+            10,
+            30,
+            50,
+            70,
+            90,
+            110,
+            130,
+            150,
+            170,
+            190,
+        ]:
+            print("Computing extras for size", size)
+            time_begin = time.time()
+            if size not in extras:
+                extras[size] = {}
+            for y in range(g.max_y):
+                print(f"row {y}")
+                for x in range(g.max_x):
+                    if g.grid[(x, y)] == ".":
+                        here = g.bfs((x, y), size, extras=extras)
+                        extras[size][(x, y)] = here
+            time_end = time.time()
+            print("  Time", time_end - time_begin)
 
-        print(extras.keys())
-        z = g.bfs(None, 100, extras=extras)
+        # print(extras.keys())
+        print("Computing main")
+        time_begin = time.time()
+        z = g.bfs(None, 300, extras=extras)
+        time_end = time.time()
+        print("Time", time_end - time_begin)
 
         # 200 = 7 seconds
         # 300 = 25 seconds
         # 400 = 64 seconds
-        return len(z)
+        return len(z[0])
