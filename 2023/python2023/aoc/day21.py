@@ -5,7 +5,7 @@ https://adventofcode.com/2023/day/21
 """
 import re
 from typing import List
-from collections import defaultdict
+from collections import defaultdict, deque
 
 
 class Grid:
@@ -47,12 +47,19 @@ class Grid:
                     print(self.grid[(x, y)], end="")
             print()
 
-    def bfs(self, start, max_dist=6):
+    def bfs(self, max_dist=6):
+        if self.start is None:
+            raise Exception("No start location")
+        start = (self.start[0], self.start[1], 0, 0)
         visited = set()
         finish_locations = set()
-        queue = [(start, 0)]
+        queue = deque([(start, 0)])
+        i = 0
         while queue:
-            loc, dist = queue.pop(0)
+            i += 1
+            loc, dist = queue.pop()
+            if i % 10000 == 0:
+                print(loc, dist, " | ", len(queue), len(visited), len(finish_locations))
             if (loc, dist) not in visited:
                 visited.add((loc, dist))
                 if dist == max_dist:
@@ -67,7 +74,7 @@ class Grid:
 
     def get_neighbors(self, node):
         neighbors = []
-        x, y = node
+        x, y, x_quot, y_quot = node
         possibilities = [
             (x - 1, y),
             (x + 1, y),
@@ -75,13 +82,23 @@ class Grid:
             (x, y + 1),
         ]
         for xx, yy in possibilities:
+            ## x wrap around: xx = xx % self.max_x
+            ## y wrap around: yy = yy % self.max_y
+            this_x_quot = x_quot
+            this_y_quot = y_quot
+            if xx < 0:
+                this_x_quot -= 1
+            elif xx >= self.max_x:
+                this_x_quot += 1
+            if yy < 0:
+                this_y_quot -= 1
+            elif yy >= self.max_y:
+                this_y_quot += 1
+            xx = xx % self.max_x
+            yy = yy % self.max_y
             if (xx, yy) in self.grid and self.grid[(xx, yy)] != "#":
-                neighbors.append((xx, yy))
+                neighbors.append((xx, yy, this_x_quot, this_y_quot))
         return neighbors
-
-
-def ints(s: str) -> List[int]:
-    return list(map(int, re.findall(r"(?:(?<!\d)-)?\d+", s)))
 
 
 class Day21:
@@ -92,11 +109,16 @@ class Day21:
         g = Grid()
         g.parse(filename)
         g.display()
-        x = g.bfs(g.start, 64)
+        x = g.bfs(64)
         return len(x)
 
     @staticmethod
     def part2(filename: str) -> int:
-        data = parse(filename)
-        print(data)
-        return 0
+        g = Grid()
+        g.parse(filename)
+        g.display()
+        x = g.bfs(500)
+        # 200 = 7 seconds
+        # 300 = 25 seconds
+        # 400 = 64 seconds
+        return len(x)
