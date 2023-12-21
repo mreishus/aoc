@@ -48,6 +48,7 @@ class Collection:
         self.pulse_count = 0
         self.pulse_low_count = 0
         self.pulse_high_count = 0
+        self.button_count = 0
 
     def __repr__(self):
         return f"Collection<{self.modules}>"
@@ -76,7 +77,7 @@ class Collection:
         if broadcaster is None:
             raise Exception("No broadcaster found")
 
-            # to          #level   #from
+        self.button_count += 1
         pulse = Pulse(broadcaster.name, 0, None)
         self.pulses.append(pulse)
         self.process_pulses()
@@ -97,6 +98,10 @@ class Collection:
         return self.pulse_low_count * self.pulse_high_count
 
     def process_pulse(self, pulse):
+        if pulse.to == "rx" and pulse.level == 0:
+            print(f"Button pressed {self.button_count} times")
+            return self.button_count
+
         if pulse.to not in self.modules:
             # print(f"Warning: Module {pulse.to} not found")
             return
@@ -130,6 +135,8 @@ class Collection:
             self.pulses.append(new_pulse)
 
     def process_conjunction(self, mod, pulse):
+        interesting = ["th", "sv", "gh", "ch"]
+
         level = pulse.level
         ## When a pulse is received, update its memory for that input.
         mod.input_states[pulse.frm] = level
@@ -142,6 +149,10 @@ class Collection:
                 self.pulses.append(new_pulse)
         else:
             for output in mod.outputs:
+                if mod.name in interesting:
+                    print(
+                        f"{mod.name} Sending high pulse to {output} | {self.button_count}"
+                    )
                 new_pulse = Pulse(output, 1, mod.name)
                 self.pulses.append(new_pulse)
 
@@ -174,11 +185,9 @@ class Day20:
 
     @staticmethod
     def part1(filename: str) -> int:
-        print("")
         data = parse(filename)
         c = Collection(data)
         c.init_conjunctions()
-        c.display()
 
         for i in range(1000):
             c.push_button()
@@ -189,5 +198,83 @@ class Day20:
     @staticmethod
     def part2(filename: str) -> int:
         data = parse(filename)
-        print(data)
+        c = Collection(data)
+        c.init_conjunctions()
+
+        for i in range(999999999):
+            if i % 10000 == 0:
+                print(f"Pushing button {i} times")
+            c.push_button()
         return -1
+
+
+"""
+&th -> cn
+&sv -> cn
+&gh -> cn
+&ch -> cn
+
+Pushing button 0 times
+ch Sending high pulse to cn | 3917
+gh Sending high pulse to cn | 3943
+th Sending high pulse to cn | 3947
+sv Sending high pulse to cn | 4001
+ch Sending high pulse to cn | 7834
+gh Sending high pulse to cn | 7886
+th Sending high pulse to cn | 7894
+sv Sending high pulse to cn | 8002
+Pushing button 10000 times
+ch Sending high pulse to cn | 11751
+gh Sending high pulse to cn | 11829
+th Sending high pulse to cn | 11841
+sv Sending high pulse to cn | 12003
+ch Sending high pulse to cn | 15668
+gh Sending high pulse to cn | 15772
+th Sending high pulse to cn | 15788
+sv Sending high pulse to cn | 16004
+ch Sending high pulse to cn | 19585
+gh Sending high pulse to cn | 19715
+th Sending high pulse to cn | 19735
+Pushing button 20000 times
+sv Sending high pulse to cn | 20005
+ch Sending high pulse to cn | 23502
+gh Sending high pulse to cn | 23658
+th Sending high pulse to cn | 23682
+sv Sending high pulse to cn | 24006
+
+sv Sending high pulse to cn | 4001
+sv Sending high pulse to cn | 8002
+sv Sending high pulse to cn | 12003
+sv Sending high pulse to cn | 16004
+sv Sending high pulse to cn | 20005
+sv Sending high pulse to cn | 24006
+
+ch Sending high pulse to cn | 3917
+ch Sending high pulse to cn | 7834
+ch Sending high pulse to cn | 11751
+ch Sending high pulse to cn | 15668
+ch Sending high pulse to cn | 19585
+ch Sending high pulse to cn | 23502
+
+gh Sending high pulse to cn | 3943
+gh Sending high pulse to cn | 7886
+gh Sending high pulse to cn | 11829
+gh Sending high pulse to cn | 15772
+gh Sending high pulse to cn | 19715
+gh Sending high pulse to cn | 23658
+
+th Sending high pulse to cn | 3947
+th Sending high pulse to cn | 7894
+th Sending high pulse to cn | 11841
+th Sending high pulse to cn | 15788
+th Sending high pulse to cn | 19735
+th Sending high pulse to cn | 23682
+
+
+sv = +4001 each time.
+ch = +3917 each time.
+gh = +3943
+th = +3947
+
+np.lcm.reduce([4001, 3917, 3943, 3947]) = 243902373381257
+"""
