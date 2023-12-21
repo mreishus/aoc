@@ -47,10 +47,12 @@ class Grid:
                     print(self.grid[(x, y)], end="")
             print()
 
-    def bfs(self, max_dist=6):
-        if self.start is None:
-            raise Exception("No start location")
-        start = (self.start[0], self.start[1], 0, 0)
+    def bfs(self, start=None, max_dist=6, extras=None):
+        if extras is None:
+            extras = {}
+        if start is None:
+            start = self.start
+        start = (start[0], start[1], 0, 0)
         visited = set()
         finish_locations = set()
         queue = deque([(start, 0)])
@@ -66,8 +68,15 @@ class Grid:
                     finish_locations.add(loc)
                 # queue.extend(self.get_neighbors(node))
                 if dist < max_dist:
-                    for n in self.get_neighbors(loc):
-                        queue.append((n, dist + 1))
+                    (x, y, x_quot, y_quot) = loc
+                    if (x, y) in extras and dist + 20 < max_dist:
+                        for xx, yy, aa, bb in extras[(x, y)]:
+                            queue.append(
+                                ((xx, yy, x_quot + aa, y_quot + bb), dist + 20)
+                            )
+                    else:
+                        for n in self.get_neighbors(loc):
+                            queue.append((n, dist + 1))
         self.visited = visited
         self.finish_locations = finish_locations
         return finish_locations
@@ -117,8 +126,18 @@ class Day21:
         g = Grid()
         g.parse(filename)
         g.display()
-        x = g.bfs(500)
+
+        extras = {}
+        for y in range(g.max_y):
+            for x in range(g.max_x):
+                if g.grid[(x, y)] == ".":
+                    here = g.bfs((x, y), 20)
+                    extras[(x, y)] = here
+
+        print(extras.keys())
+        z = g.bfs(None, 100, extras=extras)
+
         # 200 = 7 seconds
         # 300 = 25 seconds
         # 400 = 64 seconds
-        return len(x)
+        return len(z)
