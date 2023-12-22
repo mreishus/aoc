@@ -3,11 +3,8 @@
 Advent Of Code 2023 Day 21
 https://adventofcode.com/2023/day/21
 """
-import re
-from typing import List
-from collections import defaultdict, deque
-import time
-import random
+from collections import deque
+import numpy as np
 
 
 class Grid:
@@ -49,12 +46,12 @@ class Grid:
                     print(self.grid[(x, y)], end="")
             print()
 
-    def bfs(self, start=None, max_dist=6, extras=None):
-        sizes = list(reversed(sorted(extras.keys())))
-        if extras is None:
-            extras = {}
+    def bfs(self, start=None, max_dist=6):
         if start is None:
             start = self.start
+        if start is None:
+            raise Exception("No start location")
+
         start = (start[0], start[1], 0, 0)
         visited = set()
         finish_locations = set()
@@ -71,37 +68,13 @@ class Grid:
                     finish_locations.add(loc)
 
                 if dist < max_dist:
-                    (x, y, x_quot, y_quot) = loc
-
-                    found_extra = False
-                    for size in sizes:
-                        this_extras = extras[size]
-                        if (x, y) in this_extras and dist + size <= max_dist:
-                            z = 0
-                            for xx, yy, aa, bb in this_extras[(x, y)][0]:
-                                new_loc = (xx, yy, x_quot + aa, y_quot + bb)
-                                if (new_loc, dist + size) in visited:
-                                    continue
-                                queue.append((new_loc, dist + size))
-                                z += 1
-                            # print("Added", z, "extras using size", size)
-                            found_extra = True
-                            break
-
-                    if not found_extra:
-                        # print(f"No extras. dist={dist}, x={x}, y={y}")
-                        # for size in sizes:
-                        #     this_extras = extras[size]
-                        #     print(this_extras.keys())
-                        # if random.randint(0, 10) == 5 and max_dist > 100:
-                        #     exit(1)
-                        for n in self.get_neighbors(loc):
-                            if (n, dist + 1) in visited:
-                                continue
-                            queue.append((n, dist + 1))
+                    for n in self.get_neighbors(loc):
+                        if (n, dist + 1) in visited:
+                            continue
+                        queue.append((n, dist + 1))
         self.visited = visited
         self.finish_locations = finish_locations
-        return finish_locations, visited
+        return finish_locations
 
     def get_neighbors(self, node):
         neighbors = []
@@ -139,52 +112,40 @@ class Day21:
     def part1(filename: str) -> int:
         g = Grid()
         g.parse(filename)
-        g.display()
-        x = g.bfs(64)
+        # g.display()
+        x = g.bfs(None, 64)
         return len(x)
 
     @staticmethod
     def part2(filename: str) -> int:
         g = Grid()
         g.parse(filename)
-        g.display()
+        # g.display()
 
-        # The whole extras thing is not working out
-        # how I thought it would. :(
-        extras = {}
-        for size in [
-            10,
-            30,
-            50,
-            70,
-            90,
-            110,
-            130,
-            150,
-            170,
-            190,
-        ]:
-            print("Computing extras for size", size)
-            time_begin = time.time()
-            if size not in extras:
-                extras[size] = {}
-            for y in range(g.max_y):
-                print(f"row {y}")
-                for x in range(g.max_x):
-                    if g.grid[(x, y)] == ".":
-                        here = g.bfs((x, y), size, extras=extras)
-                        extras[size][(x, y)] = here
-            time_end = time.time()
-            print("  Time", time_end - time_begin)
+        points = []
+        ## Had to spoil myself on this solution
+        # g.start = (65, 65)
+        # g.max_x, g.max_y = 131, 131
+        # Each row/column is a straight shot to the next grid w/ no obstacles
+        # Our search expands in a diamond shape, so it's a quadratic equation
+        for i in [65, 65 + 131, 65 + 131 + 131]:
+            z = g.bfs(None, i)
+            print(f"{i}: Found {len(z)} locations")
+            new_point = [i, len(z)]
+            points.append(new_point)
 
-        # print(extras.keys())
-        print("Computing main")
-        time_begin = time.time()
-        z = g.bfs(None, 300, extras=extras)
-        time_end = time.time()
-        print("Time", time_end - time_begin)
+        x1, y1 = points[0]
+        x2, y2 = points[1]
+        x3, y3 = points[2]
 
-        # 200 = 7 seconds
-        # 300 = 25 seconds
-        # 400 = 64 seconds
-        return len(z[0])
+        A = np.array([[x1**2, x1, 1], [x2**2, x2, 1], [x3**2, x3, 1]])
+        b = np.array([y1, y2, y3])
+
+        # Solving the system of equations
+        a, b, c = np.linalg.solve(A, b)
+        # print(f"The quadratic equation is: f(x) = {a}x^2 + {b}x + {c}")
+
+        def estimate_point(x):
+            return int(a * x**2 + b * x + c)
+
+        return estimate_point(26501365)
