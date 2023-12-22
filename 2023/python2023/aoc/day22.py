@@ -35,6 +35,7 @@ class Field:
 
     def settle(self):
         did_something = True
+        pieces_that_dropped = set()
         while did_something:
             did_something = False
             self.build_lookup()
@@ -42,9 +43,11 @@ class Field:
             for i in range(len(self.pieces)):
                 # if self.drop_piece(i):
                 if self.drop_piece_new(i):
-                    print(f"dropped {i} --> {self.pieces[i]}")
+                    pieces_that_dropped.add(i)
+                    # print(f"dropped {i} --> {self.pieces[i]}")
                     did_something = True
                     break
+        return len(pieces_that_dropped)
 
     def drop_piece(self, j):
         squares = self.pieces[j]
@@ -99,6 +102,9 @@ class Field:
             if drop_amount == 0:
                 break
 
+        if len(possible_drop_amounts) == 0:
+            return False
+
         drop_amount = min(possible_drop_amounts)
         if drop_amount == 0:
             return False
@@ -151,34 +157,14 @@ class Field:
                 return False
         return True
 
-    def chain_reaction_count(self, i, other_pieces=None):
-        if other_pieces is None:
-            other_pieces = set()
+    def chain_reaction_count(self, i):
+        piece_copy = self.pieces.copy()
+        self.pieces[i] = []
+        print(f"chain reaction count for {i}")
+        v = self.settle()
+        self.pieces = piece_copy
 
-        vaporized = set()
-        """If piece i was disintegrated, how many pieces would fall?"""
-        ## Which do I support?
-        if len(self.supports[i]) == 0:
-            return set()
-
-        ## Otherwise, check the ones that I support. If they all have some other
-        ## block supporting them, then it's ok to be disintegrated.
-        these_others = []
-        for j in self.supports[i]:
-            consider = self.is_supported_by[j]
-
-            consider_temp = [x for x in consider if x != i and x not in other_pieces]
-            if len(consider_temp) == 0:
-                vaporized.add(j)
-                these_others.append(j)
-
-        for j in these_others:
-            sub = self.chain_reaction_count(j, other_pieces | {i} | set(these_others))
-            vaporized = vaporized | sub
-
-        # count = len(vaporized)
-        # print(f"chain reaction count for {i} | {other_pieces} = {count}")
-        return vaporized
+        return v
 
 
 class Day22:
@@ -245,9 +231,10 @@ class Day22:
         total = 0
         for i in range(len(f.pieces)):
             print(f"Piece {i}: {f.pieces[i]} -- ", end="")
-            c_count = len(f.chain_reaction_count(i))
+            c_count = f.chain_reaction_count(i)
             total += c_count
             print(f"chain reaction count: {c_count}")
             # else:
             #     print("cannot be disintegrated")
         return total
+        ## Wrong: 20569
