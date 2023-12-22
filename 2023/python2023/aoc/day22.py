@@ -6,6 +6,7 @@ https://adventofcode.com/2023/day/22
 import re
 from typing import List
 from collections import defaultdict
+from functools import cache
 
 
 def parse(filename: str):
@@ -150,6 +151,35 @@ class Field:
                 return False
         return True
 
+    def chain_reaction_count(self, i, other_pieces=None):
+        if other_pieces is None:
+            other_pieces = set()
+
+        vaporized = set()
+        """If piece i was disintegrated, how many pieces would fall?"""
+        ## Which do I support?
+        if len(self.supports[i]) == 0:
+            return set()
+
+        ## Otherwise, check the ones that I support. If they all have some other
+        ## block supporting them, then it's ok to be disintegrated.
+        these_others = []
+        for j in self.supports[i]:
+            consider = self.is_supported_by[j]
+
+            consider_temp = [x for x in consider if x != i and x not in other_pieces]
+            if len(consider_temp) == 0:
+                vaporized.add(j)
+                these_others.append(j)
+
+        for j in these_others:
+            sub = self.chain_reaction_count(j, other_pieces | {i} | set(these_others))
+            vaporized = vaporized | sub
+
+        # count = len(vaporized)
+        # print(f"chain reaction count for {i} | {other_pieces} = {count}")
+        return vaporized
+
 
 class Day22:
     """AoC 2023 Day 22"""
@@ -191,5 +221,33 @@ class Day22:
     @staticmethod
     def part2(filename: str) -> int:
         data = parse(filename)
-        print(data)
-        return 0
+
+        f = Field()
+
+        for (a, b, c), (x, y, z) in data:
+            squares = []
+            for i in range(a, x + 1):
+                for j in range(b, y + 1):
+                    for k in range(c, z + 1):
+                        squares.append((i, j, k))
+
+            f.add_piece(squares)
+
+        print("start to settle")
+        f.settle()
+        print("start to build tree")
+        f.build_support_tree()
+        print("--")
+        # print("Is supported by")
+        # print(f.is_supported_by)
+        # print("Supports")
+        # print(f.supports)
+        total = 0
+        for i in range(len(f.pieces)):
+            print(f"Piece {i}: {f.pieces[i]} -- ", end="")
+            c_count = len(f.chain_reaction_count(i))
+            total += c_count
+            print(f"chain reaction count: {c_count}")
+            # else:
+            #     print("cannot be disintegrated")
+        return total
