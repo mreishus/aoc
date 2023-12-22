@@ -6,7 +6,6 @@ https://adventofcode.com/2023/day/22
 import re
 from typing import List
 from collections import defaultdict
-from functools import cache
 
 
 def parse(filename: str):
@@ -30,55 +29,27 @@ class Field:
         self.is_supported_by = defaultdict(list)
         self.supports = defaultdict(list)
 
+    def sort_pieces_by_z(self):
+        self.pieces.sort(key=lambda piece: min(z for _, _, z in piece))
+
     def add_piece(self, piece):
         self.pieces.append(piece)
 
     def settle(self):
         did_something = True
         pieces_that_dropped = set()
+        self.sort_pieces_by_z()
         while did_something:
             did_something = False
             self.build_lookup()
             # print("built lookup")
             for i in range(len(self.pieces)):
-                # if self.drop_piece(i):
                 if self.drop_piece_new(i):
                     pieces_that_dropped.add(i)
                     # print(f"dropped {i} --> {self.pieces[i]}")
                     did_something = True
                     break
         return len(pieces_that_dropped)
-
-    def drop_piece(self, j):
-        squares = self.pieces[j]
-
-        below_squares = []
-        for square in squares:
-            if square[2] <= 1:
-                return False
-            below_squares.append((square[0], square[1], square[2] - 1))
-
-        can_drop = True
-        for i in range(len(self.pieces)):
-            if not can_drop:
-                break
-            if i == j:
-                continue
-
-            for that_square in self.pieces[i]:
-                if not can_drop:
-                    break
-
-                for this_square in below_squares:
-                    if this_square == that_square:
-                        can_drop = False
-                        break
-
-        if can_drop:
-            print(f"dropping {j}")
-            self.pieces[j] = below_squares
-            return True
-        return False
 
     def drop_piece_new(self, j):
         ## We assume lookup has been built.
@@ -159,8 +130,8 @@ class Field:
 
     def chain_reaction_count(self, i):
         piece_copy = self.pieces.copy()
-        self.pieces[i] = []
-        print(f"chain reaction count for {i}")
+        # self.pieces[i] = []
+        self.pieces.pop(i)
         v = self.settle()
         self.pieces = piece_copy
 
@@ -186,22 +157,15 @@ class Day22:
             f.add_piece(squares)
 
         print("start to settle")
+        f.sort_pieces_by_z()
         f.settle()
         print("start to build tree")
         f.build_support_tree()
         print("--")
-        # print("Is supported by")
-        # print(f.is_supported_by)
-        # print("Supports")
-        # print(f.supports)
         d_count = 0
         for i in range(len(f.pieces)):
-            # print(f"Piece {i}: {f.pieces[i]} -- ", end="")
             if f.can_be_disintegrated(i):
                 d_count += 1
-                # print("CAN be disintegrated")
-            # else:
-            #     print("cannot be disintegrated")
         return d_count
 
     @staticmethod
@@ -224,17 +188,10 @@ class Day22:
         print("start to build tree")
         f.build_support_tree()
         print("--")
-        # print("Is supported by")
-        # print(f.is_supported_by)
-        # print("Supports")
-        # print(f.supports)
         total = 0
         for i in range(len(f.pieces)):
             print(f"Piece {i}: {f.pieces[i]} -- ", end="")
             c_count = f.chain_reaction_count(i)
             total += c_count
             print(f"chain reaction count: {c_count}")
-            # else:
-            #     print("cannot be disintegrated")
         return total
-        ## Wrong: 20569
