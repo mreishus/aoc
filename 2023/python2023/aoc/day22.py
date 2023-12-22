@@ -29,6 +29,17 @@ class Field:
         self.is_supported_by = defaultdict(list)
         self.supports = defaultdict(list)
 
+    def load_pieces(self, filename):
+        data = parse(filename)
+        for (a, b, c), (x, y, z) in data:
+            squares = []
+            for i in range(a, x + 1):
+                for j in range(b, y + 1):
+                    for k in range(c, z + 1):
+                        squares.append((i, j, k))
+
+            self.add_piece(squares)
+
     def sort_pieces_by_z(self):
         self.pieces.sort(key=lambda piece: min(z for _, _, z in piece))
 
@@ -42,16 +53,14 @@ class Field:
         while did_something:
             did_something = False
             self.build_lookup()
-            # print("built lookup")
             for i in range(len(self.pieces)):
-                if self.drop_piece_new(i):
+                if self.drop_piece(i):
                     pieces_that_dropped.add(i)
                     # print(f"dropped {i} --> {self.pieces[i]}")
                     did_something = True
-                    break
         return len(pieces_that_dropped)
 
-    def drop_piece_new(self, j):
+    def drop_piece(self, j):
         ## We assume lookup has been built.
         squares = self.pieces[j]
 
@@ -130,7 +139,6 @@ class Field:
 
     def chain_reaction_count(self, i):
         piece_copy = self.pieces.copy()
-        # self.pieces[i] = []
         self.pieces.pop(i)
         v = self.settle()
         self.pieces = piece_copy
@@ -143,25 +151,11 @@ class Day22:
 
     @staticmethod
     def part1(filename: str) -> int:
-        data = parse(filename)
-
         f = Field()
+        f.load_pieces(filename)
 
-        for (a, b, c), (x, y, z) in data:
-            squares = []
-            for i in range(a, x + 1):
-                for j in range(b, y + 1):
-                    for k in range(c, z + 1):
-                        squares.append((i, j, k))
-
-            f.add_piece(squares)
-
-        print("start to settle")
-        f.sort_pieces_by_z()
         f.settle()
-        print("start to build tree")
         f.build_support_tree()
-        print("--")
         d_count = 0
         for i in range(len(f.pieces)):
             if f.can_be_disintegrated(i):
@@ -170,27 +164,16 @@ class Day22:
 
     @staticmethod
     def part2(filename: str) -> int:
-        data = parse(filename)
-
         f = Field()
+        f.load_pieces(filename)
 
-        for (a, b, c), (x, y, z) in data:
-            squares = []
-            for i in range(a, x + 1):
-                for j in range(b, y + 1):
-                    for k in range(c, z + 1):
-                        squares.append((i, j, k))
-
-            f.add_piece(squares)
-
-        print("start to settle")
         f.settle()
-        print("start to build tree")
         f.build_support_tree()
-        print("--")
         total = 0
         for i in range(len(f.pieces)):
             print(f"Piece {i}: {f.pieces[i]} -- ", end="")
+            if f.can_be_disintegrated(i):
+                continue
             c_count = f.chain_reaction_count(i)
             total += c_count
             print(f"chain reaction count: {c_count}")
