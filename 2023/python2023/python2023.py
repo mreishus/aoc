@@ -17,7 +17,8 @@ from aoc.day09 import Day09
 from aoc.day10 import Day10
 from aoc.day11 import Day11
 from aoc.day12 import Day12
-from aoc.day13 import Day13
+
+# from aoc.day13 import Day13
 from aoc.day14 import Day14
 from aoc.day15 import Day15
 from aoc.day16 import Day16
@@ -25,7 +26,8 @@ from aoc.day17 import Day17
 from aoc.day18 import Day18
 from aoc.day19 import Day19
 from aoc.day20 import Day20
-from aoc.day21 import Day21
+
+# from aoc.day21 import Day21
 from aoc.day22 import Day22
 from aoc.day23 import Day23
 
@@ -44,7 +46,7 @@ def alldays():
         (Day10.part1, Day10.part2),
         (Day11.part1, Day11.part2),
         (Day12.part1, Day12.part2),
-        (Day13.part1, Day13.part2),
+        # (Day13.part1, Day13.part2),
         (Day14.part1, Day14.part2),
         (Day15.part1, Day15.part2),
         (Day16.part1, Day16.part2),
@@ -52,7 +54,7 @@ def alldays():
         (Day18.part1, Day18.part2),
         (Day19.part1, Day19.part2),
         (Day20.part1, Day20.part2),
-        (Day21.part1, Day21.part2),
+        # (Day21.part1, Day21.part2),
         (Day22.part1, Day22.part2),
         (Day23.part1, Day23.part2),
     ]
@@ -96,8 +98,9 @@ def latest19():
 
 def latest():
     """Scratchpad to work on."""
-    print("2023 Day 23 Part 1 (small):", end=" ")
-    print(Day23.part1("../inputs/23/input_small.txt"))
+    # print("2023 Day 23 Part 1 (small):", end=" ")
+    # print(Day23.part1("../inputs/23/input_small.txt"))
+    # exit()
 
     print("2023 Day 23 Part 1:", end=" ")
     print(Day23.part1("../inputs/23/input.txt"))
