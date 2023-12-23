@@ -37,15 +37,6 @@ class Grid:
                 print(self.grid[(x, y)], end="")
             print()
 
-    def display_with_visited(self):
-        for y in range(self.max_y):
-            for x in range(self.max_x):
-                if (x, y) in self.finish_locations:
-                    print("O", end="")
-                else:
-                    print(self.grid[(x, y)], end="")
-            print()
-
     def bfs(self, start=None, max_dist=6):
         if start is None:
             start = self.start
@@ -60,8 +51,8 @@ class Grid:
         while queue:
             i += 1
             loc, dist = queue.pop()
-            if i % 500000 == 0:
-                print(loc, dist, " | ", len(queue), len(visited), len(finish_locations))
+            # if i % 500000 == 0:
+            #     print(loc, dist, " | ", len(queue), len(visited), len(finish_locations))
             if (loc, dist) not in visited:
                 visited.add((loc, dist))
                 if dist == max_dist:
@@ -130,7 +121,7 @@ class Day21:
         # Our search expands in a diamond shape, so it's a quadratic equation
         for i in [65, 65 + 131, 65 + 131 + 131]:
             z = g.bfs(None, i)
-            print(f"{i}: Found {len(z)} locations")
+            # print(f"{i}: Found {len(z)} locations")
             new_point = [i, len(z)]
             points.append(new_point)
 

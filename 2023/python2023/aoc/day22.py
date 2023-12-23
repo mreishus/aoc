@@ -171,10 +171,10 @@ class Day22:
         f.build_support_tree()
         total = 0
         for i in range(len(f.pieces)):
-            print(f"Piece {i}: {f.pieces[i]} -- ", end="")
+            # print(f"Piece {i}: {f.pieces[i]} -- ", end="")
             if f.can_be_disintegrated(i):
                 continue
             c_count = f.chain_reaction_count(i)
             total += c_count
-            print(f"chain reaction count: {c_count}")
+            # print(f"chain reaction count: {c_count}")
         return total
