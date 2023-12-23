@@ -40,7 +40,7 @@ class Grid:
                 self.end = (x, y)
                 break
 
-        self.start, self.end = self.end, self.start
+        # self.start, self.end = self.end, self.start
 
     def display(self):
         for y in range(self.max_y):
@@ -97,8 +97,6 @@ class Grid:
                         max_winner,
                     )
                 continue
-                # self.display_with_visited(visited)
-                # return steps
 
             ## Extra constraints.
             ## Never step on the same spot twice.
@@ -113,13 +111,7 @@ class Grid:
                 prev = x, y
                 to_add = set()
                 inc = 1
-                z = 0
                 while loc in ns and len(ns[loc]) == 2:
-                    z += 1
-                    # if z > 20:
-                    #     break
-                    # if loc in visited:
-                    #     break
                     ## pick the one that isn't the previous location
                     if ns[loc][0] == prev:
                         to_add.add(loc)
@@ -151,18 +143,18 @@ class Grid:
 
     def neighbors(self, x, y):
         ## For slope tiles, we can only move in the direction of the slope.
-        # if self.grid[(x, y)] == ">":
-        #     yield (x + 1, y)
-        #     return
-        # elif self.grid[(x, y)] == "<":
-        #     yield (x - 1, y)
-        #     return
-        # elif self.grid[(x, y)] == "^":
-        #     yield (x, y - 1)
-        #     return
-        # elif self.grid[(x, y)] == "v":
-        #     yield (x, y + 1)
-        #     return
+        if self.grid[(x, y)] == ">":
+            yield (x + 1, y)
+            return
+        elif self.grid[(x, y)] == "<":
+            yield (x - 1, y)
+            return
+        elif self.grid[(x, y)] == "^":
+            yield (x, y - 1)
+            return
+        elif self.grid[(x, y)] == "v":
+            yield (x, y + 1)
+            return
 
         for dx, dy in [(-1, 0), (0, -1), (1, 0), (0, 1)]:
             if x + dx < 0 or x + dx >= self.max_x:
