@@ -29,6 +29,7 @@ from aoc.day21 import Day21
 from aoc.day22 import Day22
 from aoc.day23 import Day23
 from aoc.day24 import Day24
+from aoc.day25 import Day25
 
 
 def alldays():
@@ -57,6 +58,7 @@ def alldays():
         (Day22.part1, Day22.part2),
         (Day23.part1, Day23.part2),
         (Day24.part1, Day24.part2),
+        (Day25.part1, Day25.part2),
     ]
     for i, (p1, p2) in enumerate(solvers, 1):
         path = f"../inputs/{i:02}/input.txt"
@@ -78,39 +80,22 @@ def alldays():
             print("")
 
 
-def latest19():
-    """Scratchpad to work on."""
-    # print("2023 Day 19 Part 1 (small):", end=" ")
-    # print(Day19.part1("../inputs/19/input_small.txt"))
-
-    print("2023 Day 19 Part 1:", end=" ")
-    print(Day19.part1("../inputs/19/input.txt"))
-
-    print("2023 Day 19 Part 2 (small):", end=" ")
-    print(Day19.part2("../inputs/19/input_small.txt"))
-
-    # print("2023 Day 19 Part 2 (small):", end=" ")
-    # print(Day19.part2("../inputs/19/input_small3.txt"))
-
-    print("2023 Day 19 Part 2:", end=" ")
-    print(Day19.part2("../inputs/19/input.txt"))
-
-
 def latest():
     """Scratchpad to work on."""
-    # print("2023 Day 24 Part 1 (small):", end=" ")
-    # print(Day24.part1("../inputs/24/input_small.txt"))
+    print("2023 Day 25 Part 1 (small):", end=" ")
+    print(Day25.part1("../inputs/25/input_small.txt"))
+    exit()
 
-    # print("2023 Day 24 Part 1:", end=" ")
-    # print(Day24.part1("../inputs/24/input.txt"))
+    # print("2023 Day 25 Part 1:", end=" ")
+    # print(Day25.part1("../inputs/25/input.txt"))
 
-    # print("2023 Day 24 Part 2 (small):", end=" ")
-    # print(Day24.part2("../inputs/24/input_small.txt"))
+    # print("2023 Day 25 Part 2 (small):", end=" ")
+    # print(Day25.part2("../inputs/25/input_small.txt"))
 
-    print("2023 Day 24 Part 2:", end=" ")
-    print(Day24.part2("../inputs/24/input.txt"))
+    # print("2023 Day 25 Part 2:", end=" ")
+    # print(Day25.part2("../inputs/25/input.txt"))
 
 
 if __name__ == "__main__":
-    # alldays()
-    latest()
+    alldays()
+    # latest()
