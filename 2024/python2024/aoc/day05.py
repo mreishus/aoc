@@ -19,31 +19,31 @@ def parse(filename):
         page_lists = page_lists.split("\n")
         page_lists = [ ints(l) for l in page_lists ]
 
-    rules_say_before_this_for = defaultdict(list)
-    rules_say_after_this_for  = defaultdict(list)
+    must_be_before_page = defaultdict(list)
+    must_be_after_page  = defaultdict(list)
     for l, r in rules:
-        rules_say_before_this_for[r].append(l)
-        rules_say_after_this_for[l].append(r)
+        must_be_before_page[r].append(l)
+        must_be_after_page[l].append(r)
 
-    return rules, page_lists, rules_say_before_this_for, rules_say_after_this_for
+    return page_lists, must_be_before_page, must_be_after_page
 
-def first_rule_broken( page_list, rules_say_before_this_for, rules_say_after_this_for ):
+def first_rule_broken( page_list, must_be_before_page, must_be_after_page ):
     for i, page in enumerate(page_list):
-        rules_say_before_this = rules_say_before_this_for[page]
-        rules_say_after_this = rules_say_after_this_for[page]
+        must_befores = must_be_before_page[page]
+        must_afters = must_be_after_page[page]
 
         for j in range(len(page_list)):
             if j < i:
                 # left
                 target_page = page_list[j]
-                if target_page in rules_say_after_this:
+                if target_page in must_afters:
                     return j, i
             elif j == i:
                 continue
             else:
                 # right
                 target_page = page_list[j]
-                if target_page in rules_say_before_this:
+                if target_page in must_befores:
                     return i, j
     return None, None
 
@@ -52,48 +52,45 @@ class Day05:
 
     @staticmethod
     def part1(filename: str) -> int:
-        rules, page_lists, rules_say_before_this_for, rules_say_after_this_for = parse(filename)
+        page_lists, must_be_before_page, must_be_after_page = parse(filename)
 
         valid_total = 0
         for page_list in page_lists:
             is_valid = True
             for i, page in enumerate(page_list):
-                rules_say_before_this = set(rules_say_before_this_for[page])
-                rules_say_after_this = set(rules_say_after_this_for[page])
+                must_befores = set(must_be_before_page[page])
+                must_afters = set(must_be_after_page[page])
 
                 before = set(page_list[:i])
                 after = set(page_list[i+1:])
 
-                violate1 = before & rules_say_after_this
-                violate2 = after & rules_say_before_this
-
-                if (len(violate1) > 0 or len(violate2) > 0):
+                if (len(before & must_afters) > 0 or len(after & must_befores) > 0):
                     is_valid = False
                     break
             if is_valid:
-                middle_page = page_list[ len(page_list) // 2 ]
+                middle_page = page_list[len(page_list) // 2]
                 valid_total += middle_page
 
         return valid_total
 
     @staticmethod
     def part2(filename: str) -> int:
-        rules, page_lists, rules_say_before_this_for, rules_say_after_this_for = parse(filename)
+        page_lists, must_be_before_page, must_be_after_page = parse(filename)
 
         fixed_total = 0
         for page_list in page_lists:
             rules_broken = 0
             while True:
-                i1, i2 = first_rule_broken( page_list, rules_say_before_this_for, rules_say_after_this_for )
+                i1, i2 = first_rule_broken(page_list, must_be_before_page, must_be_after_page)
                 if i1 is None or i2 is None:
                     break
                 rules_broken += 1
 
-                # use the information in X to swap
+                # use the broken rule information to swap pages
                 page_list[i1], page_list[i2] = page_list[i2], page_list[i1]
 
             if rules_broken > 0:
-                middle_page = page_list[ len(page_list) // 2 ]
+                middle_page = page_list[len(page_list) // 2]
                 fixed_total += middle_page
 
         return fixed_total
