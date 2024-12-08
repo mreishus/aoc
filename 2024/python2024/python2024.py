@@ -54,10 +54,13 @@ def latest():
     # print(Day08.part1("../inputs/08/input.txt"))
     # exit()
 
-    print("2024 Day 08 Part 2 (small):", end=" ")
-    print(Day08.part2("../inputs/08/input_small.txt"))
-    exit()
+    # print("2024 Day 08 Part 2 (small):", end=" ")
+    # print(Day08.part2("../inputs/08/input_small4.txt"))
+    #
+    # print("2024 Day 08 Part 2 (small):", end=" ")
+    # print(Day08.part2("../inputs/08/input_small.txt"))
 
+    #wrong: 1421, 1510, 1129
     print("2024 Day 08 Part 2:", end=" ")
     print(Day08.part2("../inputs/08/input.txt"))
 

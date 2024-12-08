@@ -4,9 +4,8 @@ Advent Of Code 2024 Day 08
 https://adventofcode.com/2024/day/7
 """
 from typing import List
-import re
 from collections import deque, defaultdict
-from math import sqrt
+from math import sqrt, isclose
 
 class Grid:
     def __init__(self):
@@ -47,13 +46,45 @@ class Grid:
 
     def p1(self):
         self.add_anis()
-        self.display()
         return len( self.all_anis )
-        return 0
+
+    def p2(self):
+        self.add_resonant_anis()
+        return len( self.all_anis )
+
+    def add_resonant_anis(self):
+        for tipe in self.ant_types:
+            locations = self.ant_map[tipe]
+            for i in range(len(locations)):
+                for j in range(i+1, len(locations)):
+                    (n1x, n1y) = locations[i]
+                    (n2x, n2y) = locations[j]
+                    x_dist = n2x - n1x
+                    y_dist = n2y - n1y
+                    slope = y_dist / x_dist
+
+                    candidates = [(n1x, n1y), (n2x, n2y)]
+                    # Scan to the right
+                    yy = n1y
+                    for xx in range(n1x+1, self.max_x):
+                        yy += slope
+                        if (isclose(round(yy), yy, abs_tol=1e-09)):
+                            candidates.append((xx, round(yy)))
+
+                    # Scan to the left
+                    yy = n1y
+                    for xx in reversed(range(0, n1x)):
+                        yy -= slope
+                        if (isclose(round(yy), yy, abs_tol=1e-09)):
+                            candidates.append((xx, round(yy)))
+
+                    for (new_x, new_y) in candidates:
+                        if 0 <= new_x < self.max_x:
+                            if 0 <= new_y < self.max_y:
+                                self.all_anis.add( (new_x, new_y) )
 
     def add_anis(self):
         for tipe in self.ant_types:
-            print(tipe)
             locations = self.ant_map[tipe]
             for i in range(len(locations)):
                 for j in range(i+1, len(locations)):
@@ -62,17 +93,14 @@ class Grid:
 
                     x_dist = n2x - n1x
                     y_dist = n2y - n1y
-                    dist = sqrt( x_dist ** 2 + y_dist ** 2 )
                     slope = y_dist / x_dist
 
                     new_x_right = max(n1x, n2x) + abs(x_dist)
                     new_x_left  = min(n1x, n2x) - abs(x_dist)
                     if slope >= 0: # Remember, my "0" is on top, slope is "reversed"
-                        pass
                         new_y_right = max(n1y, n2y) + abs(y_dist)
                         new_y_left  = min(n1y, n2y) - abs(y_dist)
                     else:
-                        pass
                         new_y_right = min(n1y, n2y) - abs(y_dist)
                         new_y_left  = max(n1y, n2y) + abs(y_dist)
 
@@ -85,7 +113,6 @@ class Grid:
                             if 0 <= new_y < self.max_y:
                                 self.all_anis.add( (new_x, new_y) )
 
-
 class Day08:
     """AoC 2024 Day 08"""
 
@@ -93,17 +120,10 @@ class Day08:
     def part1(filename: str) -> int:
         g = Grid()
         g.parse(filename)
-        # print(g.grid)
-        # print(g.ant_types)
-        # print(g.ant_map)
         return g.p1()
 
     @staticmethod
     def part2(filename: str) -> int:
-        data = parse(filename)
-        count = 0
-        for (test_value, nums) in data:
-            sol = dfs(nums, test_value, is_p2=True)
-            if sol:
-                count += test_value
-        return count
+        g = Grid()
+        g.parse(filename)
+        return g.p2()
