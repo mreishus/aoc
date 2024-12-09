@@ -3,11 +3,6 @@
 Advent Of Code 2024 Day 09
 https://adventofcode.com/2024/day/7
 """
-from typing import List
-import re
-from collections import defaultdict, namedtuple
-
-# Range = namedtuple("Range", ("id", "begin", "end"))
 class Range:
     def __init__(self, id, begin, end):
         self.id = id
@@ -21,9 +16,31 @@ class Range:
 
 def parse(filename):
     with open(filename) as file:
-        for line in file:
-            return line.strip()
+        text = file.read().strip()
 
+    disk = []
+    is_data = True
+    i = 0
+    id = 0
+    #text = "12345"
+    for char in text:
+        num = int(char)
+
+        begin = i
+        end = i + num - 1
+        # print(num)
+        if is_data and num > 0:
+            r = Range(id, begin, end)
+            id += 1
+        elif num > 0:
+            r = Range('.', begin, end)
+
+        if num > 0:
+            disk.append(r)
+
+        i = end+1
+        is_data = not is_data
+    return disk, id-1
 
 def checksum(disk):
     chk = 0
@@ -67,6 +84,55 @@ def display(disk):
         i += 1
     print("")
 
+def consolidate_whole_files_method(disk, file_id):
+    data_ptr = len(disk) - 1
+    while file_id > 0:
+        # Look for file from the right
+        data_block = disk[data_ptr]
+        while data_block.id != file_id:
+            data_ptr -= 1
+            data_block = disk[data_ptr]
+        # print("Found file_id?", file_id, data_block)
+
+        data_len  = data_block.end - data_block.begin + 1
+        # Start left and look for enough open space
+        space_ptr = 0
+        success = False
+        while space_ptr <= len(disk) - 1 and space_ptr < data_ptr:
+            space_block = disk[space_ptr]
+            space_len = space_block.end - space_block.begin + 1
+            if space_block.id == '.' and space_len >= data_len:
+                success = True
+                break
+            space_ptr += 1
+
+        if success:
+            #print("  Found match ", space_block)
+            # Clear out data on right side
+            data_block.id = '.'
+            disk[data_ptr] = data_block
+
+            if not space_block or not space_len:
+                raise ValueError
+            if data_len == space_len:
+                # Update empty space block to have id=whatever
+                space_block.id = file_id
+                disk[space_ptr] = space_block
+            elif data_len < space_len:
+                # Prepare new data block to insert
+                new_data_block = Range(file_id, space_block.begin, space_block.begin + data_len - 1)
+
+                # Shorten existing space block
+                space_block.begin = space_block.begin + data_len - 1 + 1
+                disk[space_ptr] = space_block
+
+                #Insert new data block
+                disk.insert( space_ptr, new_data_block)
+
+        # Go next
+        file_id -= 1
+    return disk
+
 def consolidate(disk):
     # Find first empty space
     space_ptr = 0
@@ -91,6 +157,7 @@ def consolidate(disk):
     if space_block.begin > data_block.end:
         #print("Done!")
         return disk, False
+
     space_len = space_block.end - space_block.begin + 1
     data_len  = data_block.end - data_block.begin + 1
     xfer_len = min(space_len, data_len)
@@ -128,11 +195,10 @@ def consolidate(disk):
         space_block.begin = space_block.begin + xfer_len - 1 + 1
         disk[space_ptr] = space_block
 
-        #Insert new data block
+        # Insert new data block
         disk.insert( space_ptr, new_data_block)
     else:
         raise ValueError("Not expect to see xfer_len > space_len")
-
 
     return disk, True
 
@@ -141,42 +207,17 @@ class Day09:
 
     @staticmethod
     def part1(filename: str) -> int:
-        data = parse(filename)
+        disk, _max_file_id = parse(filename)
 
-        disk = []
-        is_data = True
-        i = 0
-        id = 0
-        if data is None:
-            return -1
-        #data = "12345"
-        for char in data:
-            num = int(char)
-
-            begin = i
-            end = i + num - 1
-            # print(num)
-            if is_data and num > 0:
-                r = Range(id, begin, end)
-                id += 1
-            elif num > 0:
-                r = Range('.', begin, end)
-
-            if num > 0:
-                disk.append(r)
-
-            i = end+1
-            is_data = not is_data
-        display(disk)
         while True:
             disk, did_consolidate = consolidate(disk)
             if not did_consolidate:
                 break
-        display(disk)
         return checksum(disk)
 
     @staticmethod
     def part2(filename: str) -> int:
-        data = parse(filename)
-        print(data)
-        return -1
+        disk, max_file_id = parse(filename)
+
+        disk = consolidate_whole_files_method(disk, max_file_id)
+        return checksum(disk)
