@@ -14,6 +14,7 @@ from aoc.day06 import Day06
 from aoc.day07 import Day07
 from aoc.day08 import Day08
 from aoc.day09 import Day09
+from aoc.day10 import Day10
 
 def alldays():
     solvers = [
@@ -26,6 +27,7 @@ def alldays():
         (Day07.part1, Day07.part2),
         (Day08.part1, Day08.part2),
         (Day09.part1, Day09.part2),
+        (Day10.part1, Day10.part2),
     ]
     for i, (p1, p2) in enumerate(solvers, 1):
         path = f"../inputs/{i:02}/input.txt"
@@ -49,17 +51,17 @@ def alldays():
 
 def latest():
     """Scratchpad to work on."""
-    print("2024 Day 09 Part 1 (small):", end=" ")
-    print(Day09.part1("../inputs/09/input_small.txt"))
+    print("2024 Day 10 Part 1 (small):", end=" ")
+    print(Day10.part1("../inputs/10/input_small4.txt"))
 
-    print("2024 Day 09 Part 1:", end=" ")
-    print(Day09.part1("../inputs/09/input.txt"))
+    print("2024 Day 10 Part 1:", end=" ")
+    print(Day10.part1("../inputs/10/input.txt"))
 
-    print("2024 Day 09 Part 2 (small):", end=" ")
-    print(Day09.part2("../inputs/09/input_small.txt"))
+    # print("2024 Day 10 Part 2 (small):", end=" ")
+    # print(Day10.part2("../inputs/10/input_small.txt"))
 
-    print("2024 Day 09 Part 2:", end=" ")
-    print(Day09.part2("../inputs/09/input.txt"))
+    # print("2024 Day 10 Part 2:", end=" ")
+    # print(Day10.part2("../inputs/10/input.txt"))
 
 
 if __name__ == "__main__":
