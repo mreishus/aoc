@@ -3,8 +3,6 @@
 Advent Of Code 2024 Day 10
 https://adventofcode.com/2024/day/10
 """
-import re
-from typing import List
 from collections import deque
 
 class Grid:
@@ -33,11 +31,9 @@ class Grid:
                 self.max_y = max(self.max_y, y)
 
     def get_trailhead_count(self, start_loc):
-        queue = deque(
-            [
-                start_loc
-            ]
-        )
+        queue = deque([
+            start_loc
+        ])
         visited = set()
         trailheads = 0
         while queue:
@@ -50,37 +46,62 @@ class Grid:
             visited.add(loc)
 
             if h == 9:
-                # print(f"!!! Trailhead at {x} {y}")
                 trailheads += 1
 
             for xx, yy in self.get_neighbors(x, y):
                 hh = self.grid[(xx, yy)]
                 if hh == h + 1:
-                    # print(f"Append {x} {y} @ {h} --> {xx} {yy} @ {hh}")
                     queue.append( (xx, yy) )
         return trailheads
 
+    def get_rating_count(self, start_loc):
+        queue = deque([
+            (start_loc, frozenset())
+        ])
+        visited = set()
+        trailheads = 0
+        while queue:
+            (loc, path) = queue.pop()
+            (x, y) = loc
+            h = self.grid[loc]
 
+            if (loc, path) in visited:
+                continue
+            visited.add((loc, path))
+
+            if h == 9:
+                trailheads += 1
+
+            for xx, yy in self.get_neighbors(x, y):
+                hh = self.grid[(xx, yy)]
+                if hh == h + 1:
+                    this_path = list(path)
+                    this_path.append((x, y))
+                    queue.append( ( (xx, yy), frozenset(this_path) ) )
+        return trailheads
 
     def get_neighbors(self, x, y):
-        for dx in [-1, 0, 1]:
-            for dy in [-1, 0, 1]:
-                if dx == 0 and dy == 0:
-                    continue
-                if dx != 0 and dy != 0:
-                    continue
-                if (x + dx, y + dy) in self.grid:
-                    yield (x + dx, y + dy)
+        for (dx, dy) in [
+            (-1, 0),
+            (1, 0),
+            (0, -1),
+            (0, 1),
+        ]:
+            if (x + dx, y + dy) in self.grid:
+                yield (x + dx, y + dy)
 
     def part1(self):
         total = 0
-
-        # print("")
-        # print(self.get_trailhead_count(self.zeros[4]))
-        # exit()
-        for i, loc in enumerate(self.zeros):
+        for loc in self.zeros:
             trailhead_count = self.get_trailhead_count(loc)
-            # print(f" {i} {loc} = {trailhead_count}")
+            total += trailhead_count
+
+        return total
+
+    def part2(self):
+        total = 0
+        for loc in self.zeros:
+            trailhead_count = self.get_rating_count(loc)
             total += trailhead_count
 
         return total
