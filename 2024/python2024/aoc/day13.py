@@ -5,13 +5,7 @@ https://adventofcode.com/2024/day/13
 """
 from typing import List
 import re
-from collections import namedtuple, defaultdict
-from aoc.heapdict import heapdict
-Spell = namedtuple("Spell", ("name", "cost", "damage", "heal", "effect_time"))
-
-MachineState = namedtuple("MachineState", ("x", "y", "a_press", "b_press"))
-def ms_to_loc(machine_state):
-    return (machine_state.x, machine_state.y)
+# from z3 import Optimize, sat, Ints, Or
 
 class Machine:
     def __init__(self, ax, ay, bx, by, px, py):
@@ -22,49 +16,53 @@ class Machine:
         self.px = px
         self.py = py
 
-    def advance_state(self, m_state, press):
-        if press == 'a':
-            return MachineState( m_state.x + self.ax, m_state.y + self.ay, m_state.a_press + 1, m_state.b_press )
-        if press == 'b':
-            return MachineState( m_state.x + self.bx, m_state.y + self.by, m_state.a_press, m_state.b_press + 1 )
+    # def solve_alt(self):
+    #     opt = Optimize()
+    #     pressA, pressB = Ints("pressA pressB")
+    #
+    #     opt.add(pressA * self.ax + pressB * self.bx == self.px)
+    #     opt.add(pressA * self.ay + pressB * self.by == self.py)
+    #
+    #     cost = pressA * 3 + pressB * 1
+    #     opt.minimize(cost)
+    #
+    #     if opt.check() == sat:
+    #         m = opt.model()
+    #         return {
+    #             'pressA': m[pressA].as_long(),
+    #             'pressB': m[pressB].as_long(),
+    #             'cost': m.eval(cost).as_long()
+    #         }
+    #     return None
+
 
     def solve(self):
-        init_state = MachineState(0, 0, 0, 0)
-        dist_to = defaultdict(lambda: 999_999)
-        edge_to = {}
-        open_set = heapdict()
+        det = self.ax * self.by - self.bx * self.ay
+        if det == 0:
+            return None
 
-        dist_to[ms_to_loc(init_state)] = 0
-        open_set[init_state] = 0
-        while len(open_set) > 0:
-            (state, length) = open_set.popitem()
+        # cramer's rule
+        pressA_float = (self.px * self.by - self.bx * self.py) / det
+        pressB_float = (self.ax * self.py - self.px * self.ay) / det
 
-            if state.x == self.px and state.y == self.py:
-                return length
+        # if either number is more than 0.01 away from an integer, no solution
+        fractA = abs(pressA_float - round(pressA_float))
+        fractB = abs(pressB_float - round(pressB_float))
+        if fractA > 0.01 or fractB > 0.01:
+            return None
 
-            available_presses = []
-            if state.a_press <= 100 and state.b_press <= 100:
-                available_presses = ['a', 'b']
-            elif state.a_press <= 100:
-                available_presses = ['a']
-            elif state.b_press <= 100:
-                available_presses = ['b']
-            else:
-                return 0
+        pressA = round(pressA_float)
+        pressB = round(pressB_float)
 
-            for press in available_presses:
-                cost = 3
-                if press == 'b':
-                    cost = 1
-                new_state = self.advance_state(state, press)
-
-                new_state_loc = ms_to_loc(new_state)
-                state_loc = ms_to_loc(state)
-                if dist_to[new_state_loc] > dist_to[state_loc] + cost:
-                    dist_to[new_state_loc] = dist_to[state_loc] + cost
-                    edge_to[new_state] = (state, press)
-                    open_set[new_state] = dist_to[new_state_loc]
-        return 0
+        # verify
+        if (pressA * self.ax + pressB * self.bx == self.px and
+            pressA * self.ay + pressB * self.by == self.py):
+            return {
+                'pressA': pressA,
+                'pressB': pressB,
+                'cost': 3 * pressA + pressB
+            }
+        return None
 
     def __str__(self):
         return f"#Machine({self.ax}, {self.ay})"
@@ -96,11 +94,21 @@ class Day13:
 
         total = 0
         for m in machines:
-            p1_for_m = m.solve()
-            total += p1_for_m
-            # print(m, p1_for_m)
+            sol = m.solve()
+            if sol is not None:
+                total += sol['cost']
         return total
 
     @staticmethod
     def part2(filename: str) -> int:
-        return
+        machines = parse(filename)
+
+        total = 0
+        for m in machines:
+            m.px += 10000000000000
+            m.py += 10000000000000
+
+            sol = m.solve()
+            if sol is not None:
+                total += sol['cost']
+        return total
