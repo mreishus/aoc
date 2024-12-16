@@ -39,10 +39,13 @@ class Grid:
                 x = 0
                 self.max_y = max(self.max_y, y)
 
-    def display(self):
+    def display(self, extra=[]):
         for y in range(self.max_y):
             for x in range(self.max_x):
-                print(self.grid[(x, y)], end="")
+                if (x, y) in extra:
+                    print("O", end="")
+                else:
+                    print(self.grid[(x, y)], end="")
             print()
             self.max_y = max(self.max_y, y)
 
@@ -101,6 +104,64 @@ class Grid:
 
         return 0
 
+    def solve2(self):
+        init_state = (self.start, self.dir)
+        dist_to = defaultdict(lambda: 999_999)
+        edge_to = defaultdict(list)  # a list of previous states for each state
+        open_set = heapdict()
+        dist_to[init_state] = 0
+        open_set[init_state] = 0
+
+        while len(open_set) > 0:
+            (state, length) = open_set.popitem()
+            (loc, _dir) = state
+
+            if loc == self.end:
+                continue  # keep finding other paths
+
+            for (new_state, cost, name) in self.next_states(state):
+                new_dist = dist_to[state] + cost
+
+                if new_dist < dist_to[new_state]:
+                    # if it's a strictly better path, clear old prevstates
+                    edge_to[new_state] = [ (state, name) ]
+                    dist_to[new_state] = new_dist
+                    open_set[new_state] = new_dist
+                elif new_dist == dist_to[new_state]:
+                    # found another way to get there
+                    edge_to[new_state].append((state, name))
+
+        def find_all_paths(state):
+            if state not in edge_to:
+                return [[state]]  # base case: just this state
+
+            paths = []
+            for (prev_state, _name) in edge_to[state]:
+                prev_paths = find_all_paths(prev_state)
+                for path in prev_paths:
+                    # add current state
+                    paths.append(path + [state])
+
+            return paths
+
+        # find all end states
+        final_states = []
+        for state in edge_to.keys():
+            if state[0] == self.end:
+                final_states.append(state)
+
+        # work backwards and find all paths leading to end states
+        all_paths = []
+        for final_state in final_states:
+            for p in find_all_paths(final_state):
+                all_paths.append(p)
+
+        # tally visited locations on all paths
+        visited = set()
+        for path in all_paths:
+            for ((loc, dir)) in path:
+                visited.add(loc)
+        return len(visited)
 
 def ints(s: str) -> List[int]:
     return list(map(int, re.findall(r"(?:(?<!\d)-)?\d+", s)))
@@ -112,11 +173,12 @@ class Day16:
     def part1(filename: str) -> int:
         g = Grid()
         g.parse(filename)
-        g.display()
+        # g.display()
         return g.solve()
 
     @staticmethod
     def part2(filename: str) -> int:
-        data = parse(filename)
-        total = -1
-        return total
+        g = Grid()
+        g.parse(filename)
+        # g.display()
+        return g.solve2()
