@@ -60,7 +60,7 @@ class Grid:
         dir = lookup[chardir]
 
         destination = tuple_add(self.robot, dir)
-        print(f"{self.robot} | {dir} | {destination}")
+        #print(f"{self.robot} | {dir} | {destination}")
         if self.grid[destination] == 'O':
             # Found a rock in destination. Need to make sure
             # it's an optional string of rocks and then a empty space
@@ -226,14 +226,14 @@ class Day15:
         grid, dirs = parse(filename)
         for char in list(dirs.strip()):
             grid.move_robot(char)
-        grid.display()
+        #grid.display()
         return grid.gps()
 
     @staticmethod
     def part2(filename: str) -> int:
         grid, dirs = parse(filename)
         grid.scaleup()
-        grid.display()
+        #grid.display()
         i = 0
         for char in list(dirs.strip()):
             i += 1

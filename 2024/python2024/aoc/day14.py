@@ -103,7 +103,7 @@ class Day14:
             if q is not None:
                 quads.append(q)
         qc = Counter(quads)
-        display(robots, max_x, max_y)
+        # display(robots, max_x, max_y)
 
         safety = 1
         for c in qc.values():
@@ -129,8 +129,7 @@ class Day14:
             move_count += 1
             if has_line(robots, max_x, max_y, 10):
                 break
-        print("Matched at ", i)
-        display(robots, max_x, max_y)
-        print("Matched at ", i, move_count)
-
-        return -1
+        # print("Matched at ", i)
+        # display(robots, max_x, max_y)
+        # print("Matched at ", i, move_count)
+        return move_count
