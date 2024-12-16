@@ -11,13 +11,13 @@ from functools import lru_cache
 def count_descendants(num, steps):
     if steps == 0:
         return 1
-    
+
     if num == 0:
         return count_descendants(1, steps - 1)
     elif len(str(num)) % 2 == 0:
         s = str(num)
         mid = len(s)//2
-        return (count_descendants(int(s[:mid]), steps - 1) + 
+        return (count_descendants(int(s[:mid]), steps - 1) +
                 count_descendants(int(s[mid:]), steps - 1))
     else:
         return count_descendants(num * 2024, steps - 1)
