@@ -50,14 +50,14 @@ class Computer:
             print("Refusing to execute; is halted")
         self.state = "running"
         while True:
-            # print("Iter", self.pc)
             if self.pc >= len(self.program):
-                print(" .. halted")
+                # print(" .. halted")
                 self.state = "halted"
                 break
             # print("Did not halt")
             instruction = self.program[self.pc]
             operand = self.program[self.pc + 1]
+            # print(f"pc={self.pc} i={instruction} b={self.b}")
             # operand = None
             # if self.pc+1 < len(self.program):
 
@@ -103,7 +103,6 @@ def ints(s: str) -> List[int]:
 def parse(filename):
     with open(filename) as file:
         string = file.read().strip()
-    data = []
     lines = string.split("\n")
     return ints(lines[0])[0], ints(lines[1])[0], ints(lines[2])[0], ints(lines[4])
 
@@ -135,6 +134,81 @@ class Day17:
 
     @staticmethod
     def part2(filename: str) -> int:
-        data = parse(filename)
-        print(data)
-        return -1
+
+        (a, b, c, program) = parse(filename)
+        """
+        Program: 2,4,1,5,7,5,1,6,4,1,5,5,0,3,3,0
+        Program: 2,4 ,1,5 ,7,5 ,1,6 ,4,1 ,5,5 ,0,3 ,3,0
+
+        [0]  2 4 b = a % 8
+        [2]  1 5 b = b ^ 5
+        [4]  7 5 c = a // (2 ** b)
+        [6]  1 6 b = b ^ 6
+        [8]  4 1 b = b ^ c
+        [10] 5 5 output: b % 8
+        0 3 a = a // (2 ** 3)
+        3 0 jump to beginning unless A is 0
+        """
+
+        def get_outputs(this_a):
+            cpu = Computer(this_a, b, c, program)
+            cpu.execute()
+            return cpu.outputs
+
+        iii = 0
+        for z in range(8):
+            for y in range(8):
+                for x in range(8):
+                    for v in range(8):
+                        for u in range(8):
+                            for t in range(8):
+                                for m in range(8):
+                                    a  = 3 * 8**15
+                                    a += 0 * 8**14
+                                    a += 3 * 8**13
+                                    a += 3 * 8**12
+                                    a += 0 * 8**11
+                                    a += 4 * 8**10
+                                    a += 6 * 8**9
+                                    a += 3 * 8**8
+                                    a += 3 * 8**7
+                                    a += m * 8**6
+                                    a += t * 8**5
+                                    a += u * 8**4
+                                    a += v * 8**3
+                                    a += x * 8**2
+                                    a += y * 8**1
+                                    a += z * 8**0
+                                    g = get_outputs(a)
+                                    iii += 1
+                                    if iii % 300000 == 0:
+                                        print(g, program)
+                                    if g == program:
+                                        print("FOUND")
+                                        print(a)
+
+        # I Used this to help get the top ones
+        # # print('  got:' + str(get_outputs(a)))
+        # print("")
+        # print(' want:' + str(program))
+        # for x in range(10):
+        #     a = 0
+        #     a += 3 * 8**15
+        #     a += 0 * 8**14
+        #     a += 3 * 8**13
+        #     a += 3 * 8**12
+        #     a += 0 * 8**11
+        #     a += 4 * 8**10
+        #     a += 6 * 8**9
+        #     a += 3 * 8**8
+        #     a += 3 * 8**7
+        #     a += 0 * 8**6
+        #     a += 0 * 8**5
+        #     a += 0 * 8**4
+        #     a += 0 * 8**3
+        #     a += 0 * 8**2
+        #     a += 0 * 8**1
+        #     a += 0 * 8**0
+        #
+        #     g = get_outputs(a)
+        #     print('  got:' + str(get_outputs(a)) + ' ' + str(x) + ' ' + str(a))
