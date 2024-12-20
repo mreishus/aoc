@@ -64,11 +64,11 @@ class Grid:
                     queue.append( ((xx, yy), steps + 1) )
         return None, None
 
-    def bfs2(self, start_loc):
+    def bfs2(self, start_loc, cheat_steps_param=2):
         c1loc = (None, None)
         c2loc = (None, None)
         queue = deque([
-            (start_loc, 0, c1loc, c2loc)
+            (start_loc, 0, c1loc, c2loc, cheat_steps_param)
         ])
 
         visited = set()
@@ -76,7 +76,7 @@ class Grid:
         cheat_times = {}
 
         while queue:
-            loc, steps, c1loc, c2loc = queue.popleft()
+            loc, steps, c1loc, c2loc, cheat_steps = queue.popleft()
             (x, y) = loc
 
             if (loc, c1loc, c2loc) in visited:
@@ -86,32 +86,36 @@ class Grid:
             if (c1loc, c2loc) in cheats_found_end:
                 continue
 
-            if (x, y) == self.end:
-                cheats_found_end.add((c1loc, c2loc ))
+            already_cheated = c1loc != (None, None) and c2loc != (None, None)
+            did_not_start_cheat = c1loc == (None, None) and c2loc == (None, None)
+
+            if (x, y) == self.end and ( already_cheated or did_not_start_cheat ):
+                cheats_found_end.add((c1loc, c2loc))
                 cheat_times[ (c1loc, c2loc) ] = steps
                 continue
 
             # Already cheated
-            if ( c1loc != (None, None) and c2loc != (None, None) ):
+            if ( already_cheated ):
                 dist_to_end = self.dist_map[x, y]
-                queue.append( ( self.end, steps + dist_to_end, c1loc, c2loc ) )
+                queue.append( ( self.end, steps + dist_to_end, c1loc, c2loc, cheat_steps ) )
 
             # Regular step
-            if (
-                ( c1loc == (None, None) and c2loc == (None, None) )
-            ):
+            if did_not_start_cheat:
                 for xx, yy in self.get_neighbors(x, y):
-                    queue.append( ((xx, yy), steps + 1, c1loc, c2loc) )
+                    queue.append( ((xx, yy), steps + 1, c1loc, c2loc, cheat_steps ) )
 
             # Start Cheat
             if c1loc == (None, None):
-                for xx, yy in self.start_cheat(x, y):
-                    queue.append( ((xx, yy), steps + 1, (xx, yy), c2loc) )
+                for xx, yy in self.get_neighbors_raw(x, y):
+                    queue.append( ((xx, yy), steps + 1, (x, y), c2loc, cheat_steps - 1 ) )
 
-            # End Cheat
-            if c2loc == (None, None) and c1loc != (None, None):
+            if c2loc == (None, None) and c1loc != (None, None) and cheat_steps >= 1:
+                # Continue to walk in walls during cheat
+                for xx, yy in self.get_neighbors_raw(x, y):
+                    queue.append( ((xx, yy), steps + 1, c1loc, c2loc, cheat_steps - 1 ) )
+                # End Cheat
                 for xx, yy in self.end_cheat(x, y):
-                    queue.append( ((xx, yy), steps + 1, c1loc, (xx, yy)) )
+                    queue.append( ((xx, yy), steps + 1, c1loc, (xx, yy), cheat_steps - 1 ) )
 
         return cheat_times
 
@@ -156,27 +160,34 @@ class Day20:
     """AoC 2024 Day 20"""
 
     @staticmethod
-    def part1(filename: str) -> int:
+    def p1p2(filename: str, cheat_time) -> int:
         g = Grid()
         g.parse(filename)
         g.populate_distance_map()
 
-        cheat_times = g.bfs2(g.start)
+        cheat_times = g.bfs2(g.start, cheat_time)
 
         no_cheat_time = cheat_times[ ( (None, None), (None, None) ) ]
         save = defaultdict(int)
         for x in cheat_times.keys():
+            (c1loc, c2loc) = x
+            if c2loc == (None, None):
+                continue
             time = cheat_times[x]
             time_saved = no_cheat_time - time
             save[time_saved] += 1
 
         save_100 = 0
         for k in sorted(save.keys()):
-            print (k, save[k])
+            # print (k, save[k])
             if k >= 100:
                 save_100 += save[k]
         return save_100
 
     @staticmethod
+    def part1(filename: str) -> int:
+        return Day20.p1p2(filename, 2)
+
+    @staticmethod
     def part2(filename: str) -> int:
-        return -1
+        return Day20.p1p2(filename, 20)
