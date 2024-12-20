@@ -12,7 +12,7 @@ class Grid:
         self.max_y = 0
         self.start = (-1, -1)
         self.end = (-1, -1)
-        self.dir = (1, 0)
+        self.dist_map = {}
 
     def parse(self, filename: str):
         x = 0
@@ -35,11 +35,40 @@ class Grid:
                 x = 0
                 self.max_y = max(self.max_y, y)
 
-    def bfs(self, start_loc):
+    def bfs_simple(self, start_loc):
+        queue = deque([
+            (start_loc, 0)
+        ])
+        visited = set()
+        edge_to = {start_loc: None}
+        while queue:
+            loc, steps = queue.pop()
+            (x, y) = loc
+
+            if loc in visited:
+                continue
+            visited.add(loc)
+
+            if (x, y) == self.end:
+                path = []
+                current = loc
+                while current is not None:
+                    path.append(current)
+                    current = edge_to[current]
+                return path[::-1], steps
+
+            for xx, yy in self.get_neighbors(x, y):
+                next_loc = (xx, yy)
+                if next_loc not in edge_to:
+                    edge_to[next_loc] = loc
+                    queue.append( ((xx, yy), steps + 1) )
+        return None, None
+
+    def bfs2(self, start_loc):
         c1loc = (None, None)
         c2loc = (None, None)
         queue = deque([
-            (start_loc, 0, c1loc, c2loc)
+            (start_loc, 0, c1loc, c2loc, set())
         ])
 
         visited = set()
@@ -47,7 +76,7 @@ class Grid:
         cheat_times = {}
 
         while queue:
-            loc, steps, c1loc, c2loc = queue.popleft()
+            loc, steps, c1loc, c2loc, this_visited = queue.popleft()
             (x, y) = loc
 
             if (loc, c1loc, c2loc) in visited:
@@ -62,24 +91,33 @@ class Grid:
                 cheat_times[ (c1loc, c2loc) ] = steps
                 continue
 
+            # Already cheated
+            if ( c1loc != (None, None) and c2loc != (None, None) ):
+                dist_to_end = self.dist_map[x, y]
+                queue.append( ( self.end, steps + dist_to_end, c1loc, c2loc, this_visited) )
+
             # Regular step
             if (
                 ( c1loc == (None, None) and c2loc == (None, None) )
-                or
-                ( c1loc != (None, None) and c2loc != (None, None) )
             ):
                 for xx, yy in self.get_neighbors(x, y):
-                    queue.append( ((xx, yy), steps + 1, c1loc, c2loc) )
+                    if (xx, yy) not in this_visited:
+                        nv = this_visited | set([(xx, yy)])
+                        queue.append( ((xx, yy), steps + 1, c1loc, c2loc, nv) )
 
             # Start Cheat
             if c1loc == (None, None):
                 for xx, yy in self.start_cheat(x, y):
-                    queue.append( ((xx, yy), steps + 1, (xx, yy), c2loc) )
+                    if (xx, yy) not in this_visited:
+                        nv = this_visited | set([(xx, yy)])
+                        queue.append( ((xx, yy), steps + 1, (xx, yy), c2loc, nv) )
 
             # End Cheat
             if c2loc == (None, None) and c1loc != (None, None):
                 for xx, yy in self.end_cheat(x, y):
-                    queue.append( ((xx, yy), steps + 1, c1loc, (xx, yy)) )
+                    if (xx, yy) not in this_visited:
+                        nv = this_visited | set([(xx, yy)])
+                        queue.append( ((xx, yy), steps + 1, c1loc, (xx, yy), nv) )
 
         return cheat_times
 
@@ -108,6 +146,18 @@ class Grid:
             if self.grid[ (xx, yy) ] != '#':
                 yield (xx, yy)
 
+    def populate_distance_map(self):
+        for y in range(self.max_y):
+            for x in range(self.max_x):
+                if (x, y) in self.dist_map:
+                    continue
+                if self.grid[(x, y)] == '#':
+                    continue
+                path, steps = self.bfs_simple((x, y))
+                for (xx, yy) in path:
+                    self.dist_map[(xx, yy)] = steps
+                    steps -= 1
+
 class Day20:
     """AoC 2024 Day 20"""
 
@@ -115,7 +165,9 @@ class Day20:
     def part1(filename: str) -> int:
         g = Grid()
         g.parse(filename)
-        cheat_times = g.bfs(g.start)
+        g.populate_distance_map()
+
+        cheat_times = g.bfs2(g.start)
 
         no_cheat_time = cheat_times[ ( (None, None), (None, None) ) ]
         save = defaultdict(int)
