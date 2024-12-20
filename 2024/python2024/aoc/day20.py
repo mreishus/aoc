@@ -64,11 +64,11 @@ class Grid:
                     queue.append( ((xx, yy), steps + 1) )
         return None, None
 
-    def bfs2(self, start_loc, cheat_steps_param=2):
+    def bfs2(self, start_loc, cheat_steps=2):
         c1loc = (None, None)
         c2loc = (None, None)
         queue = deque([
-            (start_loc, 0, c1loc, c2loc, cheat_steps_param)
+            (start_loc, 0, c1loc, c2loc )
         ])
 
         visited = set()
@@ -76,7 +76,7 @@ class Grid:
         cheat_times = {}
 
         while queue:
-            loc, steps, c1loc, c2loc, cheat_steps = queue.popleft()
+            loc, steps, c1loc, c2loc = queue.popleft()
             (x, y) = loc
 
             if (loc, c1loc, c2loc) in visited:
@@ -97,25 +97,26 @@ class Grid:
             # Already cheated
             if ( already_cheated ):
                 dist_to_end = self.dist_map[x, y]
-                queue.append( ( self.end, steps + dist_to_end, c1loc, c2loc, cheat_steps ) )
+                queue.append( ( self.end, steps + dist_to_end, c1loc, c2loc ) )
 
             # Regular step
             if did_not_start_cheat:
                 for xx, yy in self.get_neighbors(x, y):
-                    queue.append( ((xx, yy), steps + 1, c1loc, c2loc, cheat_steps ) )
+                    queue.append( ((xx, yy), steps + 1, c1loc, c2loc ) )
 
             # Start Cheat
             if c1loc == (None, None):
-                for xx, yy in self.get_neighbors_raw(x, y):
-                    queue.append( ((xx, yy), steps + 1, (x, y), c2loc, cheat_steps - 1 ) )
-
-            if c2loc == (None, None) and c1loc != (None, None) and cheat_steps >= 1:
-                # Continue to walk in walls during cheat
-                for xx, yy in self.get_neighbors_raw(x, y):
-                    queue.append( ((xx, yy), steps + 1, c1loc, c2loc, cheat_steps - 1 ) )
-                # End Cheat
-                for xx, yy in self.end_cheat(x, y):
-                    queue.append( ((xx, yy), steps + 1, c1loc, (xx, yy), cheat_steps - 1 ) )
+                dist_from_here = self.dist_map[(x, y)]
+                for (xx, yy) in self.points_within_taxicab_distance(x, y, cheat_steps):
+                    if (xx, yy) not in self.dist_map:
+                        continue
+                    if (xx, yy) == (x, y):
+                        continue
+                    dist = abs(xx - x) + abs(yy - y)
+                    dist_from_there = self.dist_map[(xx, yy)]
+                    if dist_from_there > dist_from_here:
+                        continue
+                    queue.append( ((xx, yy), steps + dist, (x, y), (xx, yy) ) )
 
         return cheat_times
 
@@ -133,6 +134,17 @@ class Grid:
         for (xx, yy) in self.get_neighbors_raw(x, y):
             if self.grid[ (xx, yy) ] != '#':
                 yield (xx, yy)
+
+    def points_within_taxicab_distance(self, x, y, max_dist):
+        points = []
+        # Only need to check points from -max_dist to +max_dist in each direction
+        for dx in range(-max_dist, max_dist + 1):
+            # For each dx, we can only use remaining distance for dy
+            remaining_dist = max_dist - abs(dx)
+            for dy in range(-remaining_dist, remaining_dist + 1):
+                new_x, new_y = x + dx, y + dy
+                points.append((new_x, new_y))
+        return points
 
     def start_cheat(self, x, y):
         for (xx, yy) in self.get_neighbors_raw(x, y):
