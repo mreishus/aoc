@@ -68,7 +68,7 @@ class Grid:
         c1loc = (None, None)
         c2loc = (None, None)
         queue = deque([
-            (start_loc, 0, c1loc, c2loc, set())
+            (start_loc, 0, c1loc, c2loc)
         ])
 
         visited = set()
@@ -76,7 +76,7 @@ class Grid:
         cheat_times = {}
 
         while queue:
-            loc, steps, c1loc, c2loc, this_visited = queue.popleft()
+            loc, steps, c1loc, c2loc = queue.popleft()
             (x, y) = loc
 
             if (loc, c1loc, c2loc) in visited:
@@ -94,30 +94,24 @@ class Grid:
             # Already cheated
             if ( c1loc != (None, None) and c2loc != (None, None) ):
                 dist_to_end = self.dist_map[x, y]
-                queue.append( ( self.end, steps + dist_to_end, c1loc, c2loc, this_visited) )
+                queue.append( ( self.end, steps + dist_to_end, c1loc, c2loc ) )
 
             # Regular step
             if (
                 ( c1loc == (None, None) and c2loc == (None, None) )
             ):
                 for xx, yy in self.get_neighbors(x, y):
-                    if (xx, yy) not in this_visited:
-                        nv = this_visited | set([(xx, yy)])
-                        queue.append( ((xx, yy), steps + 1, c1loc, c2loc, nv) )
+                    queue.append( ((xx, yy), steps + 1, c1loc, c2loc) )
 
             # Start Cheat
             if c1loc == (None, None):
                 for xx, yy in self.start_cheat(x, y):
-                    if (xx, yy) not in this_visited:
-                        nv = this_visited | set([(xx, yy)])
-                        queue.append( ((xx, yy), steps + 1, (xx, yy), c2loc, nv) )
+                    queue.append( ((xx, yy), steps + 1, (xx, yy), c2loc) )
 
             # End Cheat
             if c2loc == (None, None) and c1loc != (None, None):
                 for xx, yy in self.end_cheat(x, y):
-                    if (xx, yy) not in this_visited:
-                        nv = this_visited | set([(xx, yy)])
-                        queue.append( ((xx, yy), steps + 1, c1loc, (xx, yy), nv) )
+                    queue.append( ((xx, yy), steps + 1, c1loc, (xx, yy)) )
 
         return cheat_times
 
