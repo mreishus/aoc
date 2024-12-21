@@ -11,7 +11,7 @@ class Hashabledict(dict):
     def __hash__(self):
         return hash(frozenset(self)) # only covers keys, trust needed
 
-State = namedtuple("State", ("numloc", "code", "arrow1loc"))
+State = namedtuple("State", ("numloc", "code", "arrow1loc", "arrow2loc"))
 
 class KeypadNum:
     def __init__(self):
@@ -46,7 +46,7 @@ class KeypadNum:
         final_code = tuple(list(final_code))
 
         # init_state = (self.begin_loc, ())
-        init_state = State(self.begin_loc, (), self.begin_loc_arrow)
+        init_state = State(self.begin_loc, (), self.begin_loc_arrow, self.begin_loc_arrow)
 
         dist_to = defaultdict(lambda: 999_999)
         edge_to = defaultdict(list)  # a list of previous states for each state
@@ -57,7 +57,7 @@ class KeypadNum:
 
         while len(open_set) > 0:
             (state, length) = open_set.popitem()
-            (numloc, code, arrow1loc) = state
+            (numloc, code, arrow1loc, arrow2loc) = state
             if code == final_code:
                 final_state = state
                 break  # We found our target
@@ -85,6 +85,7 @@ class KeypadNum:
         numloc = state.numloc
         output = state.code
         arrow1loc = state.arrow1loc
+        arrow2loc = state.arrow2loc
 
         returns = []
         valid = len(output) <= len(self.target_code) and all(a == b for a, b in zip(output, self.target_code))
@@ -93,59 +94,47 @@ class KeypadNum:
 
         (xn, yn) = numloc
         (xa, ya) = arrow1loc
+        (xb, yb) = arrow2loc
+
         dirs = {
             '^': (0, -1),
             'v': (0, 1),
             '<': (-1, 0),
             '>': (1, 0),
         }
+        # Move arrow 2 location
         for (dir_name, (dx, dy)) in dirs.items():
-            if (dx+xa, dy+ya) in self.arrowgrid:
-                new_state = State(numloc, output, (dx+xa, dy+ya))
+            if (dx+xb, dy+yb) in self.arrowgrid:
+                new_state = State(numloc, output, arrow1loc, (dx+xb, dy+yb))
                 returns.append(( new_state, 1, dir_name))
 
-        # press A on arrow1
-        under_arrow1 = self.arrowgrid[arrow1loc]
-        if under_arrow1 in dirs:
-            (dx, dy) = dirs[under_arrow1]
-            if (dx+xn, dy+yn) in self.numgrid:
-                new_state = State((dx+xn, dy+yn), output, arrow1loc)
-                returns.append(( new_state, 1, 'A'))
-        elif under_arrow1 == "A":
-            # Only allow pressing 'A' if the resulting code would still be a valid prefix
-            digit = str(self.numgrid[numloc])
-            new_output = tuple(list(output) + [digit])
-            if len(new_output) <= len(self.target_code) and all(a == b for a, b in zip(new_output, self.target_code)):
-                new_state = State(numloc, new_output, arrow1loc)
-                returns.append(( new_state, 1, 'A'))
+        under_arrow2 = self.arrowgrid[arrow2loc]
+        if under_arrow2 in dirs:
+            # press direction on arrow2 - makes arrow1 move
+            (dx, dy) = dirs[under_arrow2]
+            if (dx+xa, dy+ya) in self.arrowgrid:
+                new_state = State(numloc, output, (dx+xa, dy+ya), arrow2loc)
+                returns.append(( new_state, 1, under_arrow2))
+        elif under_arrow2 == "A":
+            under_arrow1 = self.arrowgrid[arrow1loc]
+            if under_arrow1 in dirs:
+                (dx, dy) = dirs[under_arrow1]
+                if (dx+xn, dy+yn) in self.numgrid:
+                    new_state = State((dx+xn, dy+yn), output, arrow1loc, arrow2loc)
+                    returns.append(( new_state, 1, 'A'))
+            elif under_arrow1 == "A":
+                # Only allow pressing 'A' if the resulting code would still be a valid prefix
+                digit = str(self.numgrid[numloc])
+                new_output = tuple(list(output) + [digit])
+                if len(new_output) <= len(self.target_code) and all(a == b for a, b in zip(new_output, self.target_code)):
+                    new_state = State(numloc, new_output, arrow1loc, arrow2loc)
+                    returns.append(( new_state, 1, 'A'))
+            else:
+                raise ValueError("key1 unexpected")
         else:
-            raise ValueError("key1 unexpected")
+            raise ValueError()
 
         return returns
-
-    # def next_states(self, state):
-    #     numloc = state.numloc
-    #     output = state.code
-    #     arrow1loc = state.arrow1loc
-    #
-    #     (x, y) = numloc
-    #     dirs = {
-    #         '^': (0, -1),
-    #         'v': (0, 1),
-    #         '<': (-1, 0),
-    #         '>': (1, 0),
-    #     }
-    #     for (dir_name, (dx, dy)) in dirs.items():
-    #         if (dx+x, dy+y) in self.numgrid:
-    #             new_state = State((dx+x, dy+y), output, arrow1loc)
-    #             yield new_state, 1, dir_name
-    #
-    #     # Only allow pressing 'A' if the resulting code would still be a valid prefix
-    #     digit = str(self.numgrid[numloc])
-    #     new_output = tuple(list(output) + [digit])
-    #     if len(new_output) <= len(self.target_code) and all(a == b for a, b in zip(new_output, self.target_code)):
-    #         new_state = State(numloc, new_output, arrow1loc)
-    #         yield new_state, 1, 'A'
 
 
 class KeypadArrow:
@@ -174,12 +163,14 @@ class Day21:
 
     @staticmethod
     def part1(filename: str) -> int:
-        kn = KeypadNum()
-        print(kn.search( '029A' ))
-
-        # stuff = parse(filename)
-        # print(stuff)
-        return -1
+        codes = parse(filename)
+        total = 0
+        for code in codes:
+            kn = KeypadNum()
+            (ln, path) = kn.search( code )
+            numeric = int(code[:3])
+            total += numeric * ln
+        return total
 
     @staticmethod
     def part2(filename: str) -> int:
