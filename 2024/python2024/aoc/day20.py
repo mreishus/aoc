@@ -146,16 +146,6 @@ class Grid:
                 points.append((new_x, new_y))
         return points
 
-    def start_cheat(self, x, y):
-        for (xx, yy) in self.get_neighbors_raw(x, y):
-            if self.grid[ (xx, yy) ] == '#':
-                yield (xx, yy)
-
-    def end_cheat(self, x, y):
-        for (xx, yy) in self.get_neighbors_raw(x, y):
-            if self.grid[ (xx, yy) ] != '#':
-                yield (xx, yy)
-
     def populate_distance_map(self):
         for y in range(self.max_y):
             for x in range(self.max_x):
@@ -182,9 +172,6 @@ class Day20:
         no_cheat_time = cheat_times[ ( (None, None), (None, None) ) ]
         save = defaultdict(int)
         for x in cheat_times.keys():
-            (c1loc, c2loc) = x
-            if c2loc == (None, None):
-                continue
             time = cheat_times[x]
             time_saved = no_cheat_time - time
             save[time_saved] += 1
