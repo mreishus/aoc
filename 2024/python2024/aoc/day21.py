@@ -5,11 +5,13 @@ https://adventofcode.com/2024/day/21
 """
 from functools import lru_cache
 from aoc.heapdict import heapdict
-from collections import defaultdict
+from collections import defaultdict, namedtuple
 
 class Hashabledict(dict):
     def __hash__(self):
         return hash(frozenset(self)) # only covers keys, trust needed
+
+State = namedtuple("State", ("numloc", "code", "arrowloc"))
 
 class KeypadNum:
     def __init__(self):
@@ -28,11 +30,15 @@ class KeypadNum:
             (2, 3): 'A',
         }
         self.begin_loc = (2, 3)
+        self.begin_loc_keypad = (2, 0)
 
     def search(self, final_code):
         self.target_code = tuple(list(final_code))
         final_code = tuple(list(final_code))
-        init_state = (self.begin_loc, ())
+
+        # init_state = (self.begin_loc, ())
+        init_state = State(self.begin_loc, (), self.begin_loc_keypad)
+
         dist_to = defaultdict(lambda: 999_999)
         edge_to = defaultdict(list)  # a list of previous states for each state
         open_set = heapdict()
@@ -42,7 +48,7 @@ class KeypadNum:
 
         while len(open_set) > 0:
             (state, length) = open_set.popitem()
-            (loc, code) = state
+            (numloc, code, arrowloc) = state
             if code == final_code:
                 final_state = state
                 break  # We found our target
@@ -67,8 +73,11 @@ class KeypadNum:
         return len(path), path
 
     def next_states(self, state):
-        (loc, output) = state
-        (x, y) = loc
+        numloc = state.numloc
+        output = state.code
+        arrowloc = state.arrowloc
+
+        (x, y) = numloc
         dirs = {
             '^': (0, -1),
             'v': (0, 1),
@@ -77,14 +86,14 @@ class KeypadNum:
         }
         for (dir_name, (dx, dy)) in dirs.items():
             if (dx+x, dy+y) in self.grid:
-                new_state = ((dx+x, dy+y), output)
+                new_state = State((dx+x, dy+y), output, arrowloc)
                 yield new_state, 1, dir_name
 
         # Only allow pressing 'A' if the resulting code would still be a valid prefix
-        digit = str(self.grid[loc])
+        digit = str(self.grid[numloc])
         new_output = tuple(list(output) + [digit])
         if len(new_output) <= len(self.target_code) and all(a == b for a, b in zip(new_output, self.target_code)):
-            new_state = (loc, new_output)
+            new_state = State(numloc, new_output, arrowloc)
             yield new_state, 1, 'A'
 
 
