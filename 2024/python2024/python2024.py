@@ -26,6 +26,7 @@ from aoc.day18 import Day18
 from aoc.day19 import Day19
 from aoc.day20 import Day20
 from aoc.day21 import Day21
+from aoc.day21b import Day21b
 
 def alldays():
     solvers = [
@@ -73,11 +74,18 @@ def alldays():
 
 def latest():
     """Scratchpad to work on."""
-    print("2024 Day 21 Part 1 (small):", end=" ")
-    print(Day21.part1("../inputs/21/input_small.txt"))
+    # print("2024 Day 21b Part 1 (small):", end=" ")
+    # print(Day21b.part1("../inputs/21/input_small.txt"))
+    # print("2024 Day 21 Part 1 (small):", end=" ")
+    # print(Day21.part1("../inputs/21/input_small.txt"))
 
+
+    # print("2024 Day 21b Part 1:", end=" ")
+    # print(Day21b.part1("../inputs/21/input.txt"))
+    #
     print("2024 Day 21 Part 1:", end=" ")
     print(Day21.part1("../inputs/21/input.txt"))
+
 
     # print("2024 Day 21 Part 2 (small):", end=" ")
     # print(Day21.part2("../inputs/21/input_small.txt"))
