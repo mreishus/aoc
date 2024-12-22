@@ -7,7 +7,9 @@ from typing import List
 import re
 from aoc.heapdict import heapdict
 from collections import defaultdict
+
 # from z3 import Optimize, sat, Ints, Or
+
 
 class Grid:
     def __init__(self):
@@ -25,12 +27,12 @@ class Grid:
         with open(filename) as file:
             for line in file:
                 for char in line.strip():
-                    if char == 'S':
+                    if char == "S":
                         self.start = (x, y)
-                        self.grid[(x, y)] = '.'
-                    elif char == 'E':
+                        self.grid[(x, y)] = "."
+                    elif char == "E":
                         self.end = (x, y)
-                        self.grid[(x, y)] = '.'
+                        self.grid[(x, y)] = "."
                     else:
                         self.grid[(x, y)] = char
                     x += 1
@@ -67,17 +69,14 @@ class Grid:
 
     def next_states(self, state):
         (loc, dir) = state
-        r1 = ((loc, self.rotate_cc(dir)), 1000, 'cc')
-        r2 = ((loc, self.rotate_cw(dir)), 1000, 'cw')
-        returns = [
-            r1,
-            r2
-        ]
+        r1 = ((loc, self.rotate_cc(dir)), 1000, "cc")
+        r2 = ((loc, self.rotate_cw(dir)), 1000, "cw")
+        returns = [r1, r2]
         (loc_x, loc_y) = loc
         (dir_x, dir_y) = dir
         new_loc = (loc_x + dir_x, loc_y + dir_y)
-        if new_loc in self.grid and self.grid[new_loc] != '#':
-            r3 = ((new_loc, dir), 1, 'forward')
+        if new_loc in self.grid and self.grid[new_loc] != "#":
+            r3 = ((new_loc, dir), 1, "forward")
             returns.append(r3)
         return returns
 
@@ -96,7 +95,7 @@ class Grid:
             if loc == self.end:
                 return length
 
-            for (new_state, cost, name) in self.next_states(state):
+            for new_state, cost, name in self.next_states(state):
                 if dist_to[new_state] > dist_to[state] + cost:
                     dist_to[new_state] = dist_to[state] + cost
                     edge_to[new_state] = (state, name)
@@ -119,12 +118,12 @@ class Grid:
             if loc == self.end:
                 continue  # keep finding other paths
 
-            for (new_state, cost, name) in self.next_states(state):
+            for new_state, cost, name in self.next_states(state):
                 new_dist = dist_to[state] + cost
 
                 if new_dist < dist_to[new_state]:
                     # if it's a strictly better path, clear old prevstates
-                    edge_to[new_state] = [ (state, name) ]
+                    edge_to[new_state] = [(state, name)]
                     dist_to[new_state] = new_dist
                     open_set[new_state] = new_dist
                 elif new_dist == dist_to[new_state]:
@@ -136,7 +135,7 @@ class Grid:
                 return [[state]]  # base case: just this state
 
             paths = []
-            for (prev_state, _name) in edge_to[state]:
+            for prev_state, _name in edge_to[state]:
                 prev_paths = find_all_paths(prev_state)
                 for path in prev_paths:
                     # add current state
@@ -159,12 +158,14 @@ class Grid:
         # tally visited locations on all paths
         visited = set()
         for path in all_paths:
-            for ((loc, dir)) in path:
+            for loc, dir in path:
                 visited.add(loc)
         return len(visited)
 
+
 def ints(s: str) -> List[int]:
     return list(map(int, re.findall(r"(?:(?<!\d)-)?\d+", s)))
+
 
 class Day16:
     """AoC 2024 Day 16"""

@@ -8,6 +8,7 @@ from collections import defaultdict, namedtuple
 
 State = namedtuple("State", ("numloc", "code", "arrowlocs"))
 
+
 class KeypadNum:
     def __init__(self, n=2):
         self.numgrid = {
@@ -22,17 +23,17 @@ class KeypadNum:
             (2, 2): 3,
             # (0, 3): ?, # Not there
             (1, 3): 0,
-            (2, 3): 'A',
+            (2, 3): "A",
         }
         self.begin_loc = (2, 3)
 
         self.arrowgrid = {
-            #(0, 0): 7, # Not There
-            (1, 0): '^',
-            (2, 0): 'A',
-            (0, 1): '<',
-            (1, 1): 'v',
-            (2, 1): '>',
+            # (0, 0): 7, # Not There
+            (1, 0): "^",
+            (2, 0): "A",
+            (0, 1): "<",
+            (1, 1): "v",
+            (2, 1): ">",
         }
         self.begin_loc_arrow = (2, 0)
         self.n = n
@@ -57,17 +58,21 @@ class KeypadNum:
             # print(state)
             (numloc, code, arrow_locs) = state
             # print(state)
-            if (finish_state is None and code == final_code) or (finish_state is not None and state == finish_state):
+            if (finish_state is None and code == final_code) or (
+                finish_state is not None and state == finish_state
+            ):
                 final_state = state
                 break  # We found our target
 
-            for (new_state, cost, name) in self.next_states(state):
+            for new_state, cost, name in self.next_states(state):
                 if dist_to[new_state] > dist_to[state] + cost:
                     dist_to[new_state] = dist_to[state] + cost
                     edge_to[new_state] = (state, name, cost)
 
                     if finish_state is not None:
-                        open_set[new_state] = dist_to[new_state] + self.h3_build_memo(new_state, finish_state)
+                        open_set[new_state] = dist_to[new_state] + self.h3_build_memo(
+                            new_state, finish_state
+                        )
                     else:
                         open_set[new_state] = dist_to[new_state] + 0
 
@@ -86,13 +91,14 @@ class KeypadNum:
 
         path.reverse()  # Since we built it backwards
         return total_cost, path
-        #return len(path), path
+        # return len(path), path
 
     def h1(self, state):
         remaining = len(self.target_code) - len(state.code)
         # Suppose we assume 2 presses minimum per remaining digit.
         # This is naive but guaranteed not to overestimate for large keypads.
         return remaining * 2
+
     def h2(self, state):
         remaining = len(self.target_code) - len(state.code)
         if remaining == 0:
@@ -125,8 +131,8 @@ class KeypadNum:
         # print("new   ", new_state)
         # print("final ", finish_state)
 
-        new_arrows    = list(reversed( new_state.arrowlocs ))
-        finish_arrows = list(reversed( finish_state.arrowlocs ))
+        new_arrows = list(reversed(new_state.arrowlocs))
+        finish_arrows = list(reversed(finish_state.arrowlocs))
         w = 1
         score = 0
         for i in range(len(new_arrows)):
@@ -167,7 +173,7 @@ class KeypadNum:
         arrow_count = len(state.arrowlocs)
         w = 2
         terms = []
-        #for i, arrow_pos in list(enumerate(state.arrowlocs)):
+        # for i, arrow_pos in list(enumerate(state.arrowlocs)):
         for i, arrow_pos in reversed(list(enumerate(state.arrowlocs[1:]))):
             (ax, ay) = arrow_pos
             # Manhattan distance to (2,0)
@@ -187,15 +193,17 @@ class KeypadNum:
         arrowlocs = state.arrowlocs
 
         returns = []
-        valid = len(output) <= len(self.target_code) and all(a == b for a, b in zip(output, self.target_code))
+        valid = len(output) <= len(self.target_code) and all(
+            a == b for a, b in zip(output, self.target_code)
+        )
         if not valid:
             return []
 
         dirs = {
-            '^': (0, -1),
-            'v': (0, 1),
-            '<': (-1, 0),
-            '>': (1, 0),
+            "^": (0, -1),
+            "v": (0, 1),
+            "<": (-1, 0),
+            ">": (1, 0),
         }
 
         i = self.n - 1
@@ -204,15 +212,20 @@ class KeypadNum:
         min_length = 3
         m = Memo()
         used_memo = False
-        if len(arrowlocs) >= min_length and arrowlocs[-suffix_length:] == ((2,0),) * suffix_length:
+        if (
+            len(arrowlocs) >= min_length
+            and arrowlocs[-suffix_length:] == ((2, 0),) * suffix_length
+        ):
             # Start from longest possible length and work down
             for memo_length in range(len(arrowlocs), min_length - 1, -1):
                 memo_key = arrowlocs[-memo_length:]
                 if memo_key in m.memo:
-                    for (locs2, length) in m.memo[memo_key]:
-                        newarrowlocs = tuple(list(arrowlocs[:-memo_length]) + list(locs2))
+                    for locs2, length in m.memo[memo_key]:
+                        newarrowlocs = tuple(
+                            list(arrowlocs[:-memo_length]) + list(locs2)
+                        )
                         new_state = State(numloc, output, newarrowlocs)
-                        returns.append((new_state, length, 'skip'))
+                        returns.append((new_state, length, "skip"))
                         # print(f"  Found memo of length {memo_length} --> ", locs2, length)
                     used_memo = True
                     break
@@ -231,11 +244,11 @@ class KeypadNum:
         # Outermost: can move it
         if not m.flag:
             (x, y) = arrowlocs[i]
-            for (dir_name, (dx, dy)) in dirs.items():
-                if (dx+x, dy+y) in self.arrowgrid:
-                    new_arrows = tuple( list(arrowlocs[:-1]) + [(dx+x, dy+y)] )
+            for dir_name, (dx, dy) in dirs.items():
+                if (dx + x, dy + y) in self.arrowgrid:
+                    new_arrows = tuple(list(arrowlocs[:-1]) + [(dx + x, dy + y)])
                     new_state = State(numloc, output, new_arrows)
-                    returns.append(( new_state, 1, dir_name))
+                    returns.append((new_state, 1, dir_name))
 
         # Outermost: Can press
         while i >= 0:
@@ -251,13 +264,15 @@ class KeypadNum:
                 # Normal case: j >= 0, so dealing with another arrowpad
                 if j >= 0:
                     (xx, yy) = arrowlocs[j]
-                    if (dx+xx, dy+yy) in self.arrowgrid:
+                    if (dx + xx, dy + yy) in self.arrowgrid:
                         # print(f"  decided to move arrowloc {j}")
                         new_arrows = tuple(
-                            list(arrowlocs[:j]) + [(dx+xx, dy+yy)] + list(arrowlocs[j+1:])
+                            list(arrowlocs[:j])
+                            + [(dx + xx, dy + yy)]
+                            + list(arrowlocs[j + 1 :])
                         )
                         new_state = State(numloc, output, new_arrows)
-                        returns.append((new_state, 1, 'Ac'))
+                        returns.append((new_state, 1, "Ac"))
                     else:
                         pass
                         # print(f"  cannot move arrowloc {j} because {dx+xx},{dy+yy} is not in arrowgrid")
@@ -265,9 +280,9 @@ class KeypadNum:
                 elif j == -1:
                     # Special Case: j = -1, so move the numpad
                     (xx, yy) = numloc
-                    if (dx+xx, dy+yy) in self.numgrid:
-                        new_state = State((dx+xx, dy+yy), output, arrowlocs)
-                        returns.append((new_state, 1, 'Ab'))
+                    if (dx + xx, dy + yy) in self.numgrid:
+                        new_state = State((dx + xx, dy + yy), output, arrowlocs)
+                        returns.append((new_state, 1, "Ab"))
                     break
                 else:
                     raise ValueError()
@@ -282,15 +297,18 @@ class KeypadNum:
             # Only allow pressing 'A' if the resulting code would still be a valid prefix
             digit = str(self.numgrid[numloc])
             new_output = tuple(list(output) + [digit])
-            if len(new_output) <= len(self.target_code) and all(a == b for a, b in zip(new_output, self.target_code)):
+            if len(new_output) <= len(self.target_code) and all(
+                a == b for a, b in zip(new_output, self.target_code)
+            ):
                 new_state = State(numloc, new_output, arrowlocs)
-                returns.append(( new_state, 1, 'A'))
+                returns.append((new_state, 1, "A"))
 
         # print('--')
         # print('Input state: ', state)
         # for r in returns:
         #     print(r)
         return returns
+
 
 class Singleton(type):
     _instances = {}
@@ -300,15 +318,18 @@ class Singleton(type):
             cls._instances[cls] = super().__call__(*args, **kwargs)
         return cls._instances[cls]
 
+
 class Memo(metaclass=Singleton):
     def __init__(self):
         self.memo = defaultdict(list)
         self.flag = False
 
+
 def parse(filename):
     with open(filename) as file:
         string = file.read().strip()
     return string.split("\n")
+
 
 def generate_memos(max_length=5):
     m = Memo()
@@ -316,8 +337,9 @@ def generate_memos(max_length=5):
     # Generate all valid location pairs
     kn = KeypadNum(3)
     locations = list(kn.arrowgrid.keys())
-    loc_pairs = [(loc1, loc2) for loc1 in locations
-                 for loc2 in locations if loc1 != loc2]
+    loc_pairs = [
+        (loc1, loc2) for loc1 in locations for loc2 in locations if loc1 != loc2
+    ]
 
     # For each memo length from 3 to max_length
     for memo_length in range(2, max_length + 1):
@@ -326,8 +348,8 @@ def generate_memos(max_length=5):
         # For each pair of starting locations
         for loc1, loc2 in loc_pairs:
             # Create arrowlocs with one location + (length-1) copies of (2,0)
-            arrowlocs1 = tuple([loc1] + list(((2,0),) * (memo_length - 1)))
-            arrowlocs2 = tuple([loc2] + list(((2,0),) * (memo_length - 1)))
+            arrowlocs1 = tuple([loc1] + list(((2, 0),) * (memo_length - 1)))
+            arrowlocs2 = tuple([loc2] + list(((2, 0),) * (memo_length - 1)))
 
             state1 = State(numloc=(2, 3), code=(), arrowlocs=arrowlocs1)
             state2 = State(numloc=(2, 3), code=(), arrowlocs=arrowlocs2)
@@ -343,6 +365,7 @@ def generate_memos(max_length=5):
                     print(p)
             m.memo[arrowlocs1].append((arrowlocs2, length))
     m.flag = True
+
 
 class Day21:
     """AoC 2024 Day 21"""
@@ -389,12 +412,12 @@ class Day21:
         #     print(p)
 
     @staticmethod
-    def part1or2(filename: str, n:int) -> int:
+    def part1or2(filename: str, n: int) -> int:
         codes = parse(filename)
         total = 0
         for code in codes:
             kn = KeypadNum(n)
-            (ln, path) = kn.search( code )
+            (ln, path) = kn.search(code)
             numeric = int(code[:3])
             total += numeric * ln
         return total
@@ -412,7 +435,6 @@ class Day21:
         exit()
         print("Start calculate")
         return Day21.part1or2(filename, 10)
-
 
     @staticmethod
     def part2(filename: str) -> int:

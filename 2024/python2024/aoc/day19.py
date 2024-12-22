@@ -5,9 +5,11 @@ https://adventofcode.com/2024/day/19
 """
 from functools import lru_cache
 
+
 class Hashabledict(dict):
     def __hash__(self):
-        return hash(frozenset(self)) # only covers keys, trust needed
+        return hash(frozenset(self))  # only covers keys, trust needed
+
 
 @lru_cache(maxsize=None)
 def is_possible(design, patterns):
@@ -23,13 +25,14 @@ def is_possible(design, patterns):
     our_possible = False
     for cand in patterns[first_letter]:
         lc = len(cand)
-        if (design[0:lc] == cand):
+        if design[0:lc] == cand:
             this_possible = is_possible(design[lc:], patterns)
             if this_possible:
                 our_possible = True
                 break
 
     return our_possible
+
 
 @lru_cache(maxsize=None)
 def is_possible2(design, patterns):
@@ -45,10 +48,11 @@ def is_possible2(design, patterns):
     our_possible = 0
     for cand in patterns[first_letter]:
         lc = len(cand)
-        if (design[0:lc] == cand):
+        if design[0:lc] == cand:
             our_possible += is_possible2(design[lc:], patterns)
 
     return our_possible
+
 
 def parse(filename):
     with open(filename) as file:
@@ -61,9 +65,10 @@ def parse(filename):
         if first_letter in patterns:
             patterns[first_letter].append(the_pattern)
         else:
-            patterns[first_letter] = [ the_pattern ]
+            patterns[first_letter] = [the_pattern]
     designs = designs.split("\n")
     return patterns, designs
+
 
 class Day19:
     """AoC 2024 Day 19"""

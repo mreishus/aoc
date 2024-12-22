@@ -5,6 +5,7 @@ https://adventofcode.com/2024/day/12
 """
 from collections import deque, defaultdict
 
+
 class Region:
     def __init__(self, grid, coords, letter=None):
         self.grid = grid
@@ -20,22 +21,22 @@ class Region:
 
         tmp_sides = defaultdict(list)
 
-        for (x, y) in self.coords:
+        for x, y in self.coords:
             this_p = 0
             region_neighbors = list(self.grid.get_neighbors_same_letter(x, y))
-            for (dx, dy, orient, side) in [
+            for dx, dy, orient, side in [
                 (-1, 0, "vert", "left"),
                 (1, 0, "vert", "right"),
                 (0, -1, "horiz", "top"),
                 (0, 1, "horiz", "bottom"),
             ]:
-                if (x+dx, y+dy) not in region_neighbors:
+                if (x + dx, y + dy) not in region_neighbors:
                     this_p += 1
                     if orient == "vert":
-                        key = (x+dx, side)
+                        key = (x + dx, side)
                         val = y
                     elif orient == "horiz":
-                        key = (y+dy, side)
+                        key = (y + dy, side)
                         val = x
                     else:
                         raise ValueError()
@@ -54,7 +55,7 @@ class Region:
 
         runs = 1
         for i in range(1, len(nums)):
-            if nums[i] != nums[i-1] + 1:
+            if nums[i] != nums[i - 1] + 1:
                 runs += 1
 
         return runs
@@ -83,7 +84,7 @@ class Grid:
                 self.max_y = max(self.max_y, y)
 
     def get_neighbors(self, x, y):
-        for (dx, dy) in [
+        for dx, dy in [
             (-1, 0),
             (1, 0),
             (0, -1),
@@ -99,9 +100,7 @@ class Grid:
                 yield (xx, yy)
 
     def bfs(self, start_loc):
-        queue = deque([
-            start_loc
-        ])
+        queue = deque([start_loc])
         visited = set()
         while queue:
             loc = queue.pop()
@@ -112,7 +111,7 @@ class Grid:
             visited.add(loc)
 
             for xx, yy in self.get_neighbors_same_letter(x, y):
-                queue.append( (xx, yy) )
+                queue.append((xx, yy))
         return visited
 
     def sum_regions(self, use_sides=False):
@@ -125,7 +124,7 @@ class Grid:
                     r.compute()
                     self.regions.append(r)
 
-                    for (xx, yy) in seen:
+                    for xx, yy in seen:
                         self.is_in_region[(xx, yy)] = True
         score = 0
         for r in self.regions:
@@ -156,4 +155,3 @@ class Day12:
         g = Grid()
         g.parse(filename)
         return g.part2()
-

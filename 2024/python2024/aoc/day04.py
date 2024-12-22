@@ -5,6 +5,7 @@ https://adventofcode.com/2024/day/4
 """
 import re
 
+
 class Grid:
     def __init__(self):
         self.grid = {}
@@ -30,15 +31,15 @@ class Grid:
 
         # horizontal left to right and right to left
         for y in range(self.max_y):
-            line = [ self.grid[(x, y)] for x in range(self.max_x) ]
-            lines.append( ''.join(line) )
-            lines.append( ''.join(reversed(line)) )
+            line = [self.grid[(x, y)] for x in range(self.max_x)]
+            lines.append("".join(line))
+            lines.append("".join(reversed(line)))
 
         # vertical up to down and down to up
         for x in range(self.max_x):
-             line = [ self.grid[(x, y)] for y in range(self.max_y) ]
-             lines.append( ''.join(line) )
-             lines.append( ''.join(reversed(line)) )
+            line = [self.grid[(x, y)] for y in range(self.max_y)]
+            lines.append("".join(line))
+            lines.append("".join(reversed(line)))
 
         # diag top left to bottom right, and reversed - top edge start
         for start_x in range(self.max_x):
@@ -46,8 +47,8 @@ class Grid:
             this_line = []
             for xx, yy in self.go_downright(start_x, start_y):
                 this_line.append(self.grid[(xx, yy)])
-            lines.append( ''.join(this_line) )
-            lines.append( ''.join(reversed(this_line)) )
+            lines.append("".join(this_line))
+            lines.append("".join(reversed(this_line)))
 
         # diag top left to bottom right, and reversed - left edge start
         for start_y in range(self.max_y):
@@ -57,8 +58,8 @@ class Grid:
             this_line = []
             for xx, yy in self.go_downright(start_x, start_y):
                 this_line.append(self.grid[(xx, yy)])
-            lines.append( ''.join(this_line) )
-            lines.append( ''.join(reversed(this_line)) )
+            lines.append("".join(this_line))
+            lines.append("".join(reversed(this_line)))
 
         # diag top right to bottom left, and reversed - top edge start
         for start_x in range(self.max_x):
@@ -66,8 +67,8 @@ class Grid:
             this_line = []
             for xx, yy in self.go_downleft(start_x, start_y):
                 this_line.append(self.grid[(xx, yy)])
-            lines.append( ''.join(this_line) )
-            lines.append( ''.join(reversed(this_line)) )
+            lines.append("".join(this_line))
+            lines.append("".join(reversed(this_line)))
 
         # diag top right to bottom left, and reversed - right edge start
         for start_y in range(self.max_y):
@@ -77,11 +78,11 @@ class Grid:
             this_line = []
             for xx, yy in self.go_downleft(start_x, start_y):
                 this_line.append(self.grid[(xx, yy)])
-            lines.append( ''.join(this_line) )
-            lines.append( ''.join(reversed(this_line)) )
+            lines.append("".join(this_line))
+            lines.append("".join(reversed(this_line)))
 
         count = 0
-        pattern = r'XMAS'
+        pattern = r"XMAS"
         for line in lines:
             matches = re.findall(pattern, line)
             count += len(matches)
@@ -96,20 +97,24 @@ class Grid:
                     continue
 
                 # Verify center is A
-                if self.grid[(x+1, y+1)] != 'A':
+                if self.grid[(x + 1, y + 1)] != "A":
                     continue
 
                 slash_one_a = self.grid[(x, y)]
-                slash_one_b = self.grid[(x+2, y+2)]
+                slash_one_b = self.grid[(x + 2, y + 2)]
 
-                v = (slash_one_a == 'M' and slash_one_b == 'S') or (slash_one_a == 'S' and slash_one_b == 'M')
+                v = (slash_one_a == "M" and slash_one_b == "S") or (
+                    slash_one_a == "S" and slash_one_b == "M"
+                )
                 if not v:
                     continue
 
-                slash_two_a = self.grid[(x+2, y)]
-                slash_two_b = self.grid[(x, y+2)]
+                slash_two_a = self.grid[(x + 2, y)]
+                slash_two_b = self.grid[(x, y + 2)]
 
-                v = (slash_two_a == 'M' and slash_two_b == 'S') or (slash_two_a == 'S' and slash_two_b == 'M')
+                v = (slash_two_a == "M" and slash_two_b == "S") or (
+                    slash_two_a == "S" and slash_two_b == "M"
+                )
                 if not v:
                     continue
 
@@ -117,7 +122,7 @@ class Grid:
         return found_count
 
     def go_downright(self, x, y):
-        size = max( self.max_x, self.max_y )
+        size = max(self.max_x, self.max_y)
         for d in range(size):
             if (x + d, y + d) in self.grid:
                 yield (x + d, y + d)
@@ -125,7 +130,7 @@ class Grid:
                 break
 
     def go_downleft(self, x, y):
-        size = max( self.max_x, self.max_y )
+        size = max(self.max_x, self.max_y)
         for d in range(size):
             if (x - d, y + d) in self.grid:
                 yield (x - d, y + d)

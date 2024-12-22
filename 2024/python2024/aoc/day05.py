@@ -7,27 +7,30 @@ import re
 from typing import List
 from collections import defaultdict
 
+
 def ints(s: str) -> List[int]:
     return list(map(int, re.findall(r"(?:(?<!\d)-)?\d+", s)))
+
 
 def parse(filename):
     with open(filename) as file:
         lines = file.read().strip()
         rules, page_lists = lines.split("\n\n")
         rules = rules.split("\n")
-        rules = [ ints(rl) for rl in rules ]
+        rules = [ints(rl) for rl in rules]
         page_lists = page_lists.split("\n")
-        page_lists = [ ints(l) for l in page_lists ]
+        page_lists = [ints(l) for l in page_lists]
 
     must_be_before_page = defaultdict(list)
-    must_be_after_page  = defaultdict(list)
+    must_be_after_page = defaultdict(list)
     for l, r in rules:
         must_be_before_page[r].append(l)
         must_be_after_page[l].append(r)
 
     return page_lists, must_be_before_page, must_be_after_page
 
-def first_rule_broken( page_list, must_be_before_page, must_be_after_page ):
+
+def first_rule_broken(page_list, must_be_before_page, must_be_after_page):
     for i, page in enumerate(page_list):
         must_befores = must_be_before_page[page]
         must_afters = must_be_after_page[page]
@@ -47,6 +50,7 @@ def first_rule_broken( page_list, must_be_before_page, must_be_after_page ):
                     return i, j
     return None, None
 
+
 class Day05:
     """AoC 2024 Day 05"""
 
@@ -62,9 +66,9 @@ class Day05:
                 must_afters = set(must_be_after_page[page])
 
                 before = set(page_list[:i])
-                after = set(page_list[i+1:])
+                after = set(page_list[i + 1 :])
 
-                if (len(before & must_afters) > 0 or len(after & must_befores) > 0):
+                if len(before & must_afters) > 0 or len(after & must_befores) > 0:
                     is_valid = False
                     break
             if is_valid:
@@ -81,7 +85,9 @@ class Day05:
         for page_list in page_lists:
             rules_broken = 0
             while True:
-                i1, i2 = first_rule_broken(page_list, must_be_before_page, must_be_after_page)
+                i1, i2 = first_rule_broken(
+                    page_list, must_be_before_page, must_be_after_page
+                )
                 if i1 is None or i2 is None:
                     break
                 rules_broken += 1
@@ -94,4 +100,3 @@ class Day05:
                 fixed_total += middle_page
 
         return fixed_total
-

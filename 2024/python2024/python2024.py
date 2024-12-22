@@ -28,6 +28,7 @@ from aoc.day20 import Day20
 from aoc.day21 import Day21
 from aoc.day22 import Day22
 
+
 def alldays():
     solvers = [
         (Day01.part1, Day01.part2),
@@ -46,7 +47,7 @@ def alldays():
         (Day14.part1, Day14.part2),
         (Day15.part1, Day15.part2),
         (Day16.part1, Day16.part2),
-        #(Day17.part1, Day17.part2),
+        # (Day17.part1, Day17.part2),
         (Day18.part1, Day18.part2),
         (Day19.part1, Day19.part2),
         (Day20.part1, Day20.part2),

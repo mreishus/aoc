@@ -5,6 +5,7 @@ https://adventofcode.com/2024/day/10
 """
 from collections import deque
 
+
 class Grid:
     def __init__(self):
         self.grid = {}
@@ -31,9 +32,7 @@ class Grid:
                 self.max_y = max(self.max_y, y)
 
     def get_trailhead_count(self, start_loc):
-        queue = deque([
-            start_loc
-        ])
+        queue = deque([start_loc])
         visited = set()
         trailheads = 0
         while queue:
@@ -51,13 +50,11 @@ class Grid:
             for xx, yy in self.get_neighbors(x, y):
                 hh = self.grid[(xx, yy)]
                 if hh == h + 1:
-                    queue.append( (xx, yy) )
+                    queue.append((xx, yy))
         return trailheads
 
     def get_rating_count(self, start_loc):
-        queue = deque([
-            (start_loc, frozenset())
-        ])
+        queue = deque([(start_loc, frozenset())])
         visited = set()
         trailheads = 0
         while queue:
@@ -77,11 +74,11 @@ class Grid:
                 if hh == h + 1:
                     this_path = list(path)
                     this_path.append((x, y))
-                    queue.append( ( (xx, yy), frozenset(this_path) ) )
+                    queue.append(((xx, yy), frozenset(this_path)))
         return trailheads
 
     def get_neighbors(self, x, y):
-        for (dx, dy) in [
+        for dx, dy in [
             (-1, 0),
             (1, 0),
             (0, -1),
@@ -105,6 +102,7 @@ class Grid:
             total += trailhead_count
 
         return total
+
 
 class Day10:
     """AoC 2024 Day 10"""

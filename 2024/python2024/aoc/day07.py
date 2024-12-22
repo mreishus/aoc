@@ -16,12 +16,15 @@ def parse(filename):
             data.append((test_value, rest))
     return data
 
+
 def ints(s: str) -> List[int]:
     return list(map(int, re.findall(r"(?:(?<!\d)-)?\d+", s)))
 
+
 def myconcat(a, b):
     blen = len(str(b))
-    return (a * (10 ** blen)) + b
+    return (a * (10**blen)) + b
+
 
 def dfs(start, goal, is_p2=False):
     q = [start]
@@ -36,18 +39,16 @@ def dfs(start, goal, is_p2=False):
 
         if len(nums) > 1:
             ## Can "+"
-            new_nums = [ nums[0] + nums[1] ] + nums[2:]
-            q.append(
-                new_nums
-            )
+            new_nums = [nums[0] + nums[1]] + nums[2:]
+            q.append(new_nums)
             ## Can "*"
-            new_nums = [ nums[0] * nums[1] ] + nums[2:]
+            new_nums = [nums[0] * nums[1]] + nums[2:]
             q.append(
                 new_nums,
             )
             if is_p2:
                 ## Can "||"
-                new_nums = [ myconcat( nums[0], nums[1] ) ] + nums[2:]
+                new_nums = [myconcat(nums[0], nums[1])] + nums[2:]
                 q.append(
                     new_nums,
                 )
@@ -61,7 +62,7 @@ class Day07:
     def part1(filename: str) -> int:
         data = parse(filename)
         count = 0
-        for (test_value, nums) in data:
+        for test_value, nums in data:
             sol = dfs(nums, test_value)
             if sol:
                 count += test_value
@@ -71,7 +72,7 @@ class Day07:
     def part2(filename: str) -> int:
         data = parse(filename)
         count = 0
-        for (test_value, nums) in data:
+        for test_value, nums in data:
             sol = dfs(nums, test_value, is_p2=True)
             if sol:
                 count += test_value

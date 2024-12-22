@@ -7,6 +7,7 @@ from typing import List
 import re
 from functools import lru_cache
 
+
 class Grid:
     def __init__(self):
         self.grid = {}
@@ -22,9 +23,9 @@ class Grid:
         for line in str.split("\n"):
             for char in line.strip():
                 self.grid[(x, y)] = char
-                if (char == '@'):
+                if char == "@":
                     self.robot = (x, y)
-                    self.grid[(x, y)] = '.'
+                    self.grid[(x, y)] = "."
                 x += 1
                 self.max_x = max(self.max_x, x)
             y += 1
@@ -35,7 +36,7 @@ class Grid:
         score = 0
         for y in range(self.max_y):
             for x in range(self.max_x):
-                if self.grid[(x, y)] == 'O':
+                if self.grid[(x, y)] == "O":
                     score += 100 * y + x
         return score
 
@@ -43,58 +44,16 @@ class Grid:
         score = 0
         for y in range(self.max_y):
             for x in range(self.max_x):
-                if self.grid[(x, y)] == '[':
+                if self.grid[(x, y)] == "[":
                     score += 100 * y + x
         return score
 
     def move_robot(self, chardir):
         lookup = {
-            '^': (0, -1),
-            'v': (0, 1),
-            '<': (-1, 0),
-            '>': (1, 0),
-        }
-        if chardir not in lookup:
-            # print("cd=", chardir)
-            return
-        dir = lookup[chardir]
-
-        destination = tuple_add(self.robot, dir)
-        #print(f"{self.robot} | {dir} | {destination}")
-        if self.grid[destination] == 'O':
-            # Found a rock in destination. Need to make sure
-            # it's an optional string of rocks and then a empty space
-            num_bots = 1
-            dest2 = destination
-            while True:
-                dest2 = tuple_add(dest2, dir)
-                if self.grid[dest2] != 'O':
-                    break
-                num_bots += 1
-
-            if self.grid[dest2] == '#':
-                # Cannot push. Do nothing.
-                pass
-            elif self.grid[dest2] == '.':
-                # Push!
-                self.grid[destination] = '.'
-                self.grid[dest2] = 'O'
-                self.robot = destination
-            else:
-                raise ValueError('wtf is dest2?')
-        elif self.grid[destination] == '.':
-            self.robot = destination
-        elif self.grid[destination] == '#':
-            pass
-        else:
-            raise ValueError("Something happened")
-
-    def move_robot2(self, chardir):
-        lookup = {
-            '^': (0, -1),
-            'v': (0, 1),
-            '<': (-1, 0),
-            '>': (1, 0),
+            "^": (0, -1),
+            "v": (0, 1),
+            "<": (-1, 0),
+            ">": (1, 0),
         }
         if chardir not in lookup:
             # print("cd=", chardir)
@@ -103,14 +62,56 @@ class Grid:
 
         destination = tuple_add(self.robot, dir)
         # print(f"{self.robot} | {dir} | {destination}")
-        if self.grid[destination] == '[' or self.grid[destination] == ']':
+        if self.grid[destination] == "O":
+            # Found a rock in destination. Need to make sure
+            # it's an optional string of rocks and then a empty space
+            num_bots = 1
+            dest2 = destination
+            while True:
+                dest2 = tuple_add(dest2, dir)
+                if self.grid[dest2] != "O":
+                    break
+                num_bots += 1
+
+            if self.grid[dest2] == "#":
+                # Cannot push. Do nothing.
+                pass
+            elif self.grid[dest2] == ".":
+                # Push!
+                self.grid[destination] = "."
+                self.grid[dest2] = "O"
+                self.robot = destination
+            else:
+                raise ValueError("wtf is dest2?")
+        elif self.grid[destination] == ".":
+            self.robot = destination
+        elif self.grid[destination] == "#":
+            pass
+        else:
+            raise ValueError("Something happened")
+
+    def move_robot2(self, chardir):
+        lookup = {
+            "^": (0, -1),
+            "v": (0, 1),
+            "<": (-1, 0),
+            ">": (1, 0),
+        }
+        if chardir not in lookup:
+            # print("cd=", chardir)
+            return
+        dir = lookup[chardir]
+
+        destination = tuple_add(self.robot, dir)
+        # print(f"{self.robot} | {dir} | {destination}")
+        if self.grid[destination] == "[" or self.grid[destination] == "]":
             # Found a robot in destination. Need to make sure
             # it's an optional string of robots and then a empty space
 
             push_canceled = False
             pushingset = set()
             pushingchars = {}
-            q = [ destination ]
+            q = [destination]
             while len(q) > 0 and not push_canceled:
                 item = q.pop()
 
@@ -121,37 +122,37 @@ class Grid:
                 char = self.grid[item]
                 pushingchars[item] = char
 
-                if char == '[':
-                    q.append(tuple_add( item, (1, 0) ))
-                elif char == ']':
-                    q.append(tuple_add( item, (-1, 0) ))
-                elif char == '#':
+                if char == "[":
+                    q.append(tuple_add(item, (1, 0)))
+                elif char == "]":
+                    q.append(tuple_add(item, (-1, 0)))
+                elif char == "#":
                     push_canceled = True
-                elif char == '.':
+                elif char == ".":
                     pass
                 else:
                     raise ValueError("Dunno")
 
                 push_neighbor = tuple_add(item, dir)
-                if self.grid[push_neighbor] == '[' or self.grid[push_neighbor] == ']':
+                if self.grid[push_neighbor] == "[" or self.grid[push_neighbor] == "]":
                     q.append(push_neighbor)
-                elif self.grid[push_neighbor] == '#':
+                elif self.grid[push_neighbor] == "#":
                     push_canceled = True
 
             if not push_canceled:
                 # print("About to push")
                 # print(pushingset)
                 for loc in pushingset:
-                    self.grid[loc] = '.'
+                    self.grid[loc] = "."
                 for loc in pushingset:
                     newloc = tuple_add(loc, dir)
                     newchar = pushingchars[loc]
                     self.grid[newloc] = newchar
                 self.robot = tuple_add(self.robot, dir)
 
-        elif self.grid[destination] == '.':
+        elif self.grid[destination] == ".":
             self.robot = destination
-        elif self.grid[destination] == '#':
+        elif self.grid[destination] == "#":
             pass
         else:
             raise ValueError("Something happened")
@@ -171,17 +172,17 @@ class Grid:
 
                 char = self.grid[(x, y)]
                 if char == "#":
-                    newgrid[(xx, y)] = '#'
+                    newgrid[(xx, y)] = "#"
                     xx += 1
-                    newgrid[(xx, y)] = '#'
+                    newgrid[(xx, y)] = "#"
                 elif char == "O":
-                    newgrid[(xx, y)] = '['
+                    newgrid[(xx, y)] = "["
                     xx += 1
-                    newgrid[(xx, y)] = ']'
+                    newgrid[(xx, y)] = "]"
                 elif char == ".":
-                    newgrid[(xx, y)] = '.'
+                    newgrid[(xx, y)] = "."
                     xx += 1
-                    newgrid[(xx, y)] = '.'
+                    newgrid[(xx, y)] = "."
 
                 xx += 1
 
@@ -199,10 +200,12 @@ class Grid:
             print()
             self.max_y = max(self.max_y, y)
 
+
 def tuple_add(t1, t2):
     (x1, y1) = t1
     (x2, y2) = t2
-    return (x1+x2, y1+y2)
+    return (x1 + x2, y1 + y2)
+
 
 def parse(filename):
     with open(filename) as file:
@@ -215,8 +218,10 @@ def parse(filename):
     grid.parse_str(maze)
     return grid, dirs
 
+
 def ints(s: str) -> List[int]:
     return list(map(int, re.findall(r"(?:(?<!\d)-)?\d+", s)))
+
 
 class Day15:
     """AoC 2024 Day 15"""
@@ -226,14 +231,14 @@ class Day15:
         grid, dirs = parse(filename)
         for char in list(dirs.strip()):
             grid.move_robot(char)
-        #grid.display()
+        # grid.display()
         return grid.gps()
 
     @staticmethod
     def part2(filename: str) -> int:
         grid, dirs = parse(filename)
         grid.scaleup()
-        #grid.display()
+        # grid.display()
         i = 0
         for char in list(dirs.strip()):
             i += 1
@@ -241,4 +246,3 @@ class Day15:
             grid.move_robot2(char)
             # grid.display()
         return grid.gps2()
-

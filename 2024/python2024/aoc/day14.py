@@ -7,6 +7,7 @@ from typing import List
 import re
 from collections import Counter, defaultdict
 
+
 class Robot:
     def __init__(self, x, y, vx, vy):
         self.x = x
@@ -40,6 +41,7 @@ class Robot:
         elif self.x > x_mid and self.y > y_mid:
             return 4
 
+
 def display(robots, max_x, max_y):
     grid = defaultdict(int)
     for r in robots:
@@ -50,9 +52,10 @@ def display(robots, max_x, max_y):
             if (x, y) in grid:
                 print(grid[x, y], end="")
             else:
-                print('.', end="")
+                print(".", end="")
             pass
         print("")
+
 
 def has_line(robots, max_x, max_y, target):
     grid = defaultdict(int)
@@ -71,8 +74,10 @@ def has_line(robots, max_x, max_y, target):
             pass
     return False
 
+
 def ints(s: str) -> List[int]:
     return list(map(int, re.findall(r"(?:(?<!\d)-)?\d+", s)))
+
 
 def parse(filename):
     with open(filename) as file:
@@ -83,6 +88,7 @@ def parse(filename):
         data.append(Robot(px, py, vx, vy))
     return data
 
+
 class Day14:
     """AoC 2024 Day 14"""
 
@@ -91,7 +97,7 @@ class Day14:
         robots = parse(filename)
         max_x = 101
         max_y = 103
-        if (len(robots) < 20):
+        if len(robots) < 20:
             max_x = 11
             max_y = 7
 
@@ -115,7 +121,7 @@ class Day14:
         robots = parse(filename)
         max_x = 101
         max_y = 103
-        if (len(robots) < 20):
+        if len(robots) < 20:
             max_x = 11
             max_y = 7
 

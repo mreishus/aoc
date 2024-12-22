@@ -7,6 +7,7 @@ from typing import List
 import re
 from collections import deque
 
+
 class Grid:
     def __init__(self):
         self.grid = {}
@@ -34,11 +35,10 @@ class Grid:
             self.max_x = 71
             self.max_y = 71
 
-
     def load_bytes(self, myrange):
         for i in myrange:
             [x, y] = self.bytes_list[i]
-            self.grid[(x, y)] = '#'
+            self.grid[(x, y)] = "#"
 
     def display(self, extra=[]):
         for y in range(self.max_y):
@@ -51,9 +51,7 @@ class Grid:
             self.max_y = max(self.max_y, y)
 
     def bfs(self, start_loc):
-        queue = deque([
-            (start_loc, 0)
-        ])
+        queue = deque([(start_loc, 0)])
         visited = set()
         while queue:
             loc, steps = queue.popleft()
@@ -66,29 +64,31 @@ class Grid:
             visited.add(loc)
 
             for xx, yy in self.get_neighbors(x, y):
-                queue.append(( (xx, yy), steps + 1 ))
+                queue.append(((xx, yy), steps + 1))
         return -1
 
     def get_neighbors(self, x, y):
-        for (dx, dy) in [
+        for dx, dy in [
             (-1, 0),
             (1, 0),
             (0, -1),
             (0, 1),
         ]:
-            xx = x+dx
-            yy = y+dy
+            xx = x + dx
+            yy = y + dy
             if 0 <= xx and xx < self.max_x:
                 if 0 <= yy and yy < self.max_y:
-                    if (xx, yy) not in self.grid or self.grid[(xx, yy)] != '#':
+                    if (xx, yy) not in self.grid or self.grid[(xx, yy)] != "#":
                         # if (xx == 0):
                         #     not_in_grid = (xx, yy) in self.grid
                         #     print("y", xx, yy, not_in_grid)
                         #     print(self.grid)
                         yield (xx, yy)
 
+
 def ints(s: str) -> List[int]:
     return list(map(int, re.findall(r"(?:(?<!\d)-)?\d+", s)))
+
 
 class Day18:
     """AoC 2024 Day 18"""

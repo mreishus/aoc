@@ -17,7 +17,6 @@ class TestDay11(unittest.TestCase):
     def test_part2(self):
         """Test part2"""
         self.assertEqual(Day11.part2("../inputs/11/input.txt"), 272673043446478)
-        
 
 
 if __name__ == "__main__":

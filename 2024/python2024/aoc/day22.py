@@ -8,33 +8,39 @@ from typing import List
 import re
 from functools import lru_cache
 
+
 def parse(filename):
     with open(filename) as file:
         string = file.read().strip()
     return list(map(int, string.split("\n")))
 
+
 def ints(s: str) -> List[int]:
     return list(map(int, re.findall(r"(?:(?<!\d)-)?\d+", s)))
+
 
 def mix(num1, num2):
     return num1 ^ num2
 
+
 def prune(num):
     return num % 16777216
 
+
 def advance(num):
     num64 = num * 64
-    num = mix( num64, num )
-    num = prune( num )
+    num = mix(num64, num)
+    num = prune(num)
 
     num32 = num // 32
-    num = mix( num, num32 )
-    num = prune( num )
+    num = mix(num, num32)
+    num = prune(num)
 
     num2k = num * 2048
-    num = mix( num, num2k )
+    num = mix(num, num2k)
     num = prune(num)
     return num
+
 
 def find_subsequence_index(A, B):
     len_a = len(A)
@@ -43,7 +49,7 @@ def find_subsequence_index(A, B):
     # Iterate through B up to the point where A can fully fit
     for i in range(len_b - len_a + 1):
         # Check if the slice of B starting at i matches A
-        if B[i:i + len_a] == A:
+        if B[i : i + len_a] == A:
             return i  # Return the starting index
 
     return -1  # Return -1 if the subsequence is not found

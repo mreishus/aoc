@@ -5,7 +5,9 @@ https://adventofcode.com/2024/day/13
 """
 from typing import List
 import re
+
 # from z3 import Optimize, sat, Ints, Or
+
 
 class Machine:
     def __init__(self, ax, ay, bx, by, px, py):
@@ -35,7 +37,6 @@ class Machine:
     #         }
     #     return None
 
-
     def solve(self):
         det = self.ax * self.by - self.bx * self.ay
         if det == 0:
@@ -55,22 +56,23 @@ class Machine:
         pressB = round(pressB_float)
 
         # verify
-        if (pressA * self.ax + pressB * self.bx == self.px and
-            pressA * self.ay + pressB * self.by == self.py):
-            return {
-                'pressA': pressA,
-                'pressB': pressB,
-                'cost': 3 * pressA + pressB
-            }
+        if (
+            pressA * self.ax + pressB * self.bx == self.px
+            and pressA * self.ay + pressB * self.by == self.py
+        ):
+            return {"pressA": pressA, "pressB": pressB, "cost": 3 * pressA + pressB}
         return None
 
     def __str__(self):
         return f"#Machine({self.ax}, {self.ay})"
+
     def __repr__(self):
         return self.__str__()
 
+
 def ints(s: str) -> List[int]:
     return list(map(int, re.findall(r"(?:(?<!\d)-)?\d+", s)))
+
 
 def parse(filename):
     with open(filename) as file:
@@ -82,8 +84,9 @@ def parse(filename):
         [ax, ay] = ints(lines[0])
         [bx, by] = ints(lines[1])
         [px, py] = ints(lines[2])
-        machines.append( Machine( ax, ay, bx, by, px, py ) )
+        machines.append(Machine(ax, ay, bx, by, px, py))
     return machines
+
 
 class Day13:
     """AoC 2024 Day 13"""
@@ -96,7 +99,7 @@ class Day13:
         for m in machines:
             sol = m.solve()
             if sol is not None:
-                total += sol['cost']
+                total += sol["cost"]
         return total
 
     @staticmethod
@@ -110,5 +113,5 @@ class Day13:
 
             sol = m.solve()
             if sol is not None:
-                total += sol['cost']
+                total += sol["cost"]
         return total

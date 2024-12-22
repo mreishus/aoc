@@ -7,6 +7,7 @@ from typing import List
 import re
 from functools import lru_cache
 
+
 @lru_cache(maxsize=None)
 def count_descendants(num, steps):
     if steps == 0:
@@ -16,14 +17,17 @@ def count_descendants(num, steps):
         return count_descendants(1, steps - 1)
     elif len(str(num)) % 2 == 0:
         s = str(num)
-        mid = len(s)//2
-        return (count_descendants(int(s[:mid]), steps - 1) +
-                count_descendants(int(s[mid:]), steps - 1))
+        mid = len(s) // 2
+        return count_descendants(int(s[:mid]), steps - 1) + count_descendants(
+            int(s[mid:]), steps - 1
+        )
     else:
         return count_descendants(num * 2024, steps - 1)
 
+
 def ints(s: str) -> List[int]:
     return list(map(int, re.findall(r"(?:(?<!\d)-)?\d+", s)))
+
 
 class Day11:
     """AoC 2024 Day 11"""

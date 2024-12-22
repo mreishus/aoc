@@ -7,11 +7,14 @@ from functools import lru_cache
 from aoc.heapdict import heapdict
 from collections import defaultdict, namedtuple
 
+
 class Hashabledict(dict):
     def __hash__(self):
-        return hash(frozenset(self)) # only covers keys, trust needed
+        return hash(frozenset(self))  # only covers keys, trust needed
+
 
 State = namedtuple("State", ("numloc", "code", "arrow1loc", "arrow2loc"))
+
 
 class KeypadNum:
     def __init__(self):
@@ -27,17 +30,17 @@ class KeypadNum:
             (2, 2): 3,
             # (0, 3): ?, # Not there
             (1, 3): 0,
-            (2, 3): 'A',
+            (2, 3): "A",
         }
         self.begin_loc = (2, 3)
 
         self.arrowgrid = {
-            #(0, 0): 7, # Not There
-            (1, 0): '^',
-            (2, 0): 'A',
-            (0, 1): '<',
-            (1, 1): 'v',
-            (2, 1): '>',
+            # (0, 0): 7, # Not There
+            (1, 0): "^",
+            (2, 0): "A",
+            (0, 1): "<",
+            (1, 1): "v",
+            (2, 1): ">",
         }
         self.begin_loc_arrow = (2, 0)
 
@@ -46,7 +49,9 @@ class KeypadNum:
         final_code = tuple(list(final_code))
 
         # init_state = (self.begin_loc, ())
-        init_state = State(self.begin_loc, (), self.begin_loc_arrow, self.begin_loc_arrow)
+        init_state = State(
+            self.begin_loc, (), self.begin_loc_arrow, self.begin_loc_arrow
+        )
 
         dist_to = defaultdict(lambda: 999_999)
         edge_to = defaultdict(list)  # a list of previous states for each state
@@ -61,7 +66,7 @@ class KeypadNum:
             if code == final_code:
                 final_state = state
                 break  # We found our target
-            for (new_state, cost, name) in self.next_states(state):
+            for new_state, cost, name in self.next_states(state):
                 if dist_to[new_state] > dist_to[state] + cost:
                     dist_to[new_state] = dist_to[state] + cost
                     edge_to[new_state] = (state, name)
@@ -88,7 +93,9 @@ class KeypadNum:
         arrow2loc = state.arrow2loc
 
         returns = []
-        valid = len(output) <= len(self.target_code) and all(a == b for a, b in zip(output, self.target_code))
+        valid = len(output) <= len(self.target_code) and all(
+            a == b for a, b in zip(output, self.target_code)
+        )
         if not valid:
             return []
 
@@ -97,38 +104,40 @@ class KeypadNum:
         (xb, yb) = arrow2loc
 
         dirs = {
-            '^': (0, -1),
-            'v': (0, 1),
-            '<': (-1, 0),
-            '>': (1, 0),
+            "^": (0, -1),
+            "v": (0, 1),
+            "<": (-1, 0),
+            ">": (1, 0),
         }
         # Move arrow 2 location
-        for (dir_name, (dx, dy)) in dirs.items():
-            if (dx+xb, dy+yb) in self.arrowgrid:
-                new_state = State(numloc, output, arrow1loc, (dx+xb, dy+yb))
-                returns.append(( new_state, 1, dir_name))
+        for dir_name, (dx, dy) in dirs.items():
+            if (dx + xb, dy + yb) in self.arrowgrid:
+                new_state = State(numloc, output, arrow1loc, (dx + xb, dy + yb))
+                returns.append((new_state, 1, dir_name))
 
         under_arrow2 = self.arrowgrid[arrow2loc]
         if under_arrow2 in dirs:
             # press direction on arrow2 - makes arrow1 move
             (dx, dy) = dirs[under_arrow2]
-            if (dx+xa, dy+ya) in self.arrowgrid:
-                new_state = State(numloc, output, (dx+xa, dy+ya), arrow2loc)
-                returns.append(( new_state, 1, under_arrow2))
+            if (dx + xa, dy + ya) in self.arrowgrid:
+                new_state = State(numloc, output, (dx + xa, dy + ya), arrow2loc)
+                returns.append((new_state, 1, under_arrow2))
         elif under_arrow2 == "A":
             under_arrow1 = self.arrowgrid[arrow1loc]
             if under_arrow1 in dirs:
                 (dx, dy) = dirs[under_arrow1]
-                if (dx+xn, dy+yn) in self.numgrid:
-                    new_state = State((dx+xn, dy+yn), output, arrow1loc, arrow2loc)
-                    returns.append(( new_state, 1, 'Ac'))
+                if (dx + xn, dy + yn) in self.numgrid:
+                    new_state = State((dx + xn, dy + yn), output, arrow1loc, arrow2loc)
+                    returns.append((new_state, 1, "Ac"))
             elif under_arrow1 == "A":
                 # Only allow pressing 'A' if the resulting code would still be a valid prefix
                 digit = str(self.numgrid[numloc])
                 new_output = tuple(list(output) + [digit])
-                if len(new_output) <= len(self.target_code) and all(a == b for a, b in zip(new_output, self.target_code)):
+                if len(new_output) <= len(self.target_code) and all(
+                    a == b for a, b in zip(new_output, self.target_code)
+                ):
                     new_state = State(numloc, new_output, arrow1loc, arrow2loc)
-                    returns.append(( new_state, 1, 'A'))
+                    returns.append((new_state, 1, "A"))
             else:
                 raise ValueError("key1 unexpected")
         else:
@@ -147,12 +156,12 @@ class KeypadArrow:
 
     def fill(self):
         self.grid = {
-            #(0, 0): 7, # Not There
-            (1, 0): '^',
-            (2, 0): 'A',
-            (0, 1): '<',
-            (1, 1): 'v',
-            (2, 1): '>',
+            # (0, 0): 7, # Not There
+            (1, 0): "^",
+            (2, 0): "A",
+            (0, 1): "<",
+            (1, 1): "v",
+            (2, 1): ">",
         }
         self.begin_loc = (2, 0)
 
@@ -161,6 +170,7 @@ def parse(filename):
     with open(filename) as file:
         string = file.read().strip()
     return string.split("\n")
+
 
 class Day21b:
     """AoC 2024 Day 21"""
@@ -176,10 +186,9 @@ class Day21b:
         # kn.next_states(test_state1)
         # return
 
-
         for code in codes:
             kn = KeypadNum()
-            (ln, path) = kn.search( code )
+            (ln, path) = kn.search(code)
             numeric = int(code[:3])
             total += numeric * ln
             break
@@ -188,4 +197,3 @@ class Day21b:
     @staticmethod
     def part2(filename: str) -> int:
         pass
-

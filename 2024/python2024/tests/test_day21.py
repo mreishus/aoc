@@ -27,5 +27,6 @@ class TestDay21(unittest.TestCase):
         """Test part2"""
         pass
 
+
 if __name__ == "__main__":
     unittest.main()

@@ -10,15 +10,16 @@ import re
 def ints(s: str) -> List[int]:
     return list(map(int, re.findall(r"(?:(?<!\d)-)?\d+", s)))
 
+
 class Day03:
     """AoC 2024 Day 03"""
 
     @staticmethod
     def part1(filename: str) -> int:
         with open(filename) as file:
-            string = ''.join(file.read().split())
+            string = "".join(file.read().split())
 
-        pattern = r'mul\(\d+,\d+\)'
+        pattern = r"mul\(\d+,\d+\)"
         mult_instructions = re.findall(pattern, string)
         total = 0
         for instr in mult_instructions:
@@ -29,18 +30,22 @@ class Day03:
     @staticmethod
     def part2(filename: str) -> int:
         with open(filename) as file:
-            string = ''.join(file.read().split())
+            string = "".join(file.read().split())
 
-        do_dont_pattern = r'(do\(\)|don\'t\(\))'
+        do_dont_pattern = r"(do\(\)|don\'t\(\))"
         data = re.split(do_dont_pattern, string)
 
         active = True
         total = 0
-        pattern = r'mul\(\d+,\d+\)'
-        for input in data: # input is either "do()", "don't()", or unparsed partially corrupted data
-            if input == 'don\'t()':
+        pattern = r"mul\(\d+,\d+\)"
+        for (
+            input
+        ) in (
+            data
+        ):  # input is either "do()", "don't()", or unparsed partially corrupted data
+            if input == "don't()":
                 active = False
-            elif input == 'do()':
+            elif input == "do()":
                 active = True
             elif active:
                 mult_instructions = re.findall(pattern, input)

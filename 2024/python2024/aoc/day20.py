@@ -5,6 +5,7 @@ https://adventofcode.com/2024/day/20
 """
 from collections import deque, defaultdict
 
+
 class Grid:
     def __init__(self):
         self.grid = {}
@@ -21,12 +22,12 @@ class Grid:
         with open(filename) as file:
             for line in file:
                 for char in line.strip():
-                    if char == 'S':
+                    if char == "S":
                         self.start = (x, y)
-                        self.grid[(x, y)] = '.'
-                    elif char == 'E':
+                        self.grid[(x, y)] = "."
+                    elif char == "E":
                         self.end = (x, y)
-                        self.grid[(x, y)] = '.'
+                        self.grid[(x, y)] = "."
                     else:
                         self.grid[(x, y)] = char
                     x += 1
@@ -36,9 +37,7 @@ class Grid:
                 self.max_y = max(self.max_y, y)
 
     def bfs_simple(self, start_loc):
-        queue = deque([
-            (start_loc, 0)
-        ])
+        queue = deque([(start_loc, 0)])
         visited = set()
         edge_to = {start_loc: None}
         while queue:
@@ -61,15 +60,13 @@ class Grid:
                 next_loc = (xx, yy)
                 if next_loc not in edge_to:
                     edge_to[next_loc] = loc
-                    queue.append( ((xx, yy), steps + 1) )
+                    queue.append(((xx, yy), steps + 1))
         return None, None
 
     def bfs2(self, start_loc, cheat_steps=2):
         c1loc = (None, None)
         c2loc = (None, None)
-        queue = deque([
-            (start_loc, 0, c1loc, c2loc )
-        ])
+        queue = deque([(start_loc, 0, c1loc, c2loc)])
 
         visited = set()
         cheats_found_end = set()
@@ -89,25 +86,25 @@ class Grid:
             already_cheated = c1loc != (None, None) and c2loc != (None, None)
             did_not_start_cheat = c1loc == (None, None) and c2loc == (None, None)
 
-            if (x, y) == self.end and ( already_cheated or did_not_start_cheat ):
+            if (x, y) == self.end and (already_cheated or did_not_start_cheat):
                 cheats_found_end.add((c1loc, c2loc))
-                cheat_times[ (c1loc, c2loc) ] = steps
+                cheat_times[(c1loc, c2loc)] = steps
                 continue
 
             # Already cheated
-            if ( already_cheated ):
+            if already_cheated:
                 dist_to_end = self.dist_map[x, y]
-                queue.append( ( self.end, steps + dist_to_end, c1loc, c2loc ) )
+                queue.append((self.end, steps + dist_to_end, c1loc, c2loc))
 
             # Regular step
             if did_not_start_cheat:
                 for xx, yy in self.get_neighbors(x, y):
-                    queue.append( ((xx, yy), steps + 1, c1loc, c2loc ) )
+                    queue.append(((xx, yy), steps + 1, c1loc, c2loc))
 
             # Start Cheat
             if c1loc == (None, None):
                 dist_from_here = self.dist_map[(x, y)]
-                for (xx, yy) in self.points_within_taxicab_distance(x, y, cheat_steps):
+                for xx, yy in self.points_within_taxicab_distance(x, y, cheat_steps):
                     if (xx, yy) not in self.dist_map:
                         continue
                     if (xx, yy) == (x, y):
@@ -116,23 +113,23 @@ class Grid:
                     dist_from_there = self.dist_map[(xx, yy)]
                     if dist_from_there > dist_from_here:
                         continue
-                    queue.append( ((xx, yy), steps + dist, (x, y), (xx, yy) ) )
+                    queue.append(((xx, yy), steps + dist, (x, y), (xx, yy)))
 
         return cheat_times
 
     def get_neighbors_raw(self, x, y):
-        for (dx, dy) in [
+        for dx, dy in [
             (-1, 0),
             (1, 0),
             (0, -1),
             (0, 1),
         ]:
             if (x + dx, y + dy) in self.grid:
-                yield (x+dx, y+dy)
+                yield (x + dx, y + dy)
 
     def get_neighbors(self, x, y):
-        for (xx, yy) in self.get_neighbors_raw(x, y):
-            if self.grid[ (xx, yy) ] != '#':
+        for xx, yy in self.get_neighbors_raw(x, y):
+            if self.grid[(xx, yy)] != "#":
                 yield (xx, yy)
 
     def points_within_taxicab_distance(self, x, y, max_dist):
@@ -151,12 +148,13 @@ class Grid:
             for x in range(self.max_x):
                 if (x, y) in self.dist_map:
                     continue
-                if self.grid[(x, y)] == '#':
+                if self.grid[(x, y)] == "#":
                     continue
                 path, steps = self.bfs_simple((x, y))
-                for (xx, yy) in path:
+                for xx, yy in path:
                     self.dist_map[(xx, yy)] = steps
                     steps -= 1
+
 
 class Day20:
     """AoC 2024 Day 20"""
@@ -169,7 +167,7 @@ class Day20:
 
         cheat_times = g.bfs2(g.start, cheat_time)
 
-        no_cheat_time = cheat_times[ ( (None, None), (None, None) ) ]
+        no_cheat_time = cheat_times[((None, None), (None, None))]
         save = defaultdict(int)
         for x in cheat_times.keys():
             time = cheat_times[x]

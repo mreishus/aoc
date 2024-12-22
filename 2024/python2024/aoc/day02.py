@@ -16,8 +16,10 @@ def parse(filename: str):
         out1.append(ints(line))
     return out1
 
+
 def ints(s: str) -> List[int]:
     return list(map(int, re.findall(r"(?:(?<!\d)-)?\d+", s)))
+
 
 def is_safe(level):
     direction = None
@@ -38,11 +40,12 @@ def is_safe(level):
         last_seen = item
     return True
 
+
 def is_safe2(level):
     if is_safe(level):
         return True
     for i in range(len(level)):
-        newlist = level[:i] + level[i+1:]
+        newlist = level[:i] + level[i + 1 :]
         if is_safe(newlist):
             return True
     return False

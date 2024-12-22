@@ -42,5 +42,5 @@ class Day01:
         simscore = 0
         for item1 in l1:
             count = c2[item1]
-            simscore += (item1 * count)
+            simscore += item1 * count
         return simscore

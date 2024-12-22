@@ -7,6 +7,7 @@ from typing import List
 import re
 from collections import defaultdict
 
+
 class OP:
     ADV = 0
     BXL = 1
@@ -16,6 +17,7 @@ class OP:
     OUT = 5
     BDV = 6
     CDV = 7
+
 
 class Computer:
     def __init__(self, a, b, c, program):
@@ -84,7 +86,7 @@ class Computer:
                 self.b ^= self.c
                 self.pc += 2
             elif instruction == OP.OUT:
-                self.outputs.append( self.get_combo(operand) % 8 )
+                self.outputs.append(self.get_combo(operand) % 8)
                 self.pc += 2
             elif instruction == OP.BDV:
                 num = self.a
@@ -97,14 +99,17 @@ class Computer:
                 self.c = num // denom
                 self.pc += 2
 
+
 def ints(s: str) -> List[int]:
     return list(map(int, re.findall(r"(?:(?<!\d)-)?\d+", s)))
+
 
 def parse(filename):
     with open(filename) as file:
         string = file.read().strip()
     lines = string.split("\n")
     return ints(lines[0])[0], ints(lines[1])[0], ints(lines[2])[0], ints(lines[4])
+
 
 class Day17:
     """AoC 2024 Day 17"""
@@ -163,7 +168,7 @@ class Day17:
                         for u in range(8):
                             for t in range(8):
                                 for m in range(8):
-                                    a  = 3 * 8**15
+                                    a = 3 * 8**15
                                     a += 0 * 8**14
                                     a += 3 * 8**13
                                     a += 3 * 8**12
