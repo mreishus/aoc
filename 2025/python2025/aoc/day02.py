@@ -67,35 +67,37 @@ def solve2(data):
 def get_invalid_ids2(low, high):
     # print(f"--> Get invalids [{low}] [{high}]")
     invalids = []
-    invalids_seen = set()
+    seen = set()
 
-    low_digit_len = len(str(low))
-    high_digit_len = len(str(high))
+    low_digits = len(str(low))
+    high_digits = len(str(high))
 
-    repeat_len_low = 1
-    repeat_len_high = max(low_digit_len, high_digit_len) // 2
-    for repeat_len in range(repeat_len_low, repeat_len_high+1):
-        orig_repeat = int('1' + ('0' * (repeat_len-1)))
-        # print("Considering ", repeat_len, orig_repeat)
+    max_block_len = max(low_digits, high_digits) // 2
+    for block_len in range(1, max_block_len+1):
+        # Smallest possible block with this length (1, 10, 100.. etc)
+        block_start = int('1' + ('0' * (block_len-1)))
+        # print("Considering ", block_len, block_start)
 
-        times_low = low_digit_len // repeat_len
-        times_high = high_digit_len // repeat_len
-        for times in range(times_low, times_high+1):
+        ## Min/max times we can repeat the block, given digit lengths
+        min_times = low_digits // block_len
+        max_times = high_digits // block_len
+        for times in range(min_times, max_times+1):
+            # Repeating once isn't "repeated"
             if times == 1:
                 continue
-            repeat = orig_repeat
+            block = block_start
             while True:
-                s_repeat = str(repeat) # "12"
-                if len(s_repeat) != repeat_len: # We got too big?
+                block_str = str(block) # "12"
+                if len(block_str) != block_len: # We got too big?
                     break
-                candidate = int(s_repeat * times) # 121212121212
-                if candidate >= low and candidate <= high and candidate not in invalids_seen:
-                    # print("Adding ", candidate, "because", s_repeat, " times ", times)
+                candidate = int(block_str * times) # 121212121212
+                if candidate >= low and candidate <= high and candidate not in seen:
+                    # print("Adding ", candidate, "because", block_str, " times ", times)
                     invalids.append(candidate)
-                    invalids_seen.add(candidate)
+                    seen.add(candidate)
                 if candidate > high:
                     break
-                repeat += 1
+                block += 1
     return invalids
 
 
@@ -106,7 +108,6 @@ class Day02:
     def part1(filename: str) -> int:
         data = parse(filename)
         return solve1(data)
-        # Manually submitted +11 because my program doesn't do # [1] [15]
 
     @staticmethod
     def part2(filename: str) -> int:
