@@ -38,14 +38,14 @@ def latest():
     # print(Day02.part1("../inputs/02/input_small.txt"))
     # return
 
-    print("2025 Day 25 Part 1:", end=" ")
-    print(Day02.part1("../inputs/02/input.txt"))
+    # print("2025 Day 25 Part 1:", end=" ")
+    # print(Day02.part1("../inputs/02/input.txt"))
 
     # print("2025 Day 25 Part 2 (small):", end=" ")
     # print(Day02.part2("../inputs/02/input_small.txt"))
     #
-    # print("2025 Day 25 Part 2 (small):", end=" ")
-    # print(Day02.part2("../inputs/02/input.txt"))
+    print("2025 Day 25 Part 2 (small):", end=" ")
+    print(Day02.part2("../inputs/02/input.txt"))
     # exit()
 
 
