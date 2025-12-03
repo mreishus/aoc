@@ -13,26 +13,26 @@ def parse(filename: str):
 def solve1(data):
     total = 0
     for line in data:
-        total += best1(line)
+        total += best2(line, 2)
     return total
 
-def best1(line):
-    print('---')
-    print(line)
-    all_but_last = line[:len(line)-1]
-
-    index1_max = max(range(len(all_but_last)), key=all_but_last.__getitem__)
-    print(index1_max, all_but_last[index1_max])
-
-    left = line[index1_max+1:]
-    index2_max_left = max(range(len(left)), key=left.__getitem__)
-    index2_max = index2_max_left + index1_max + 1
-
-    return 10 * line[index1_max] + line[index2_max]
-
-
 def solve2(data):
-    return -1
+    total = 0
+    for line in data:
+        total += best2(line, 12)
+    return total
+
+def best2(line, digits):
+    rtn = 0
+    left = 0
+    while digits > 0:
+        consider = line[left:len(line)+1-digits]
+        index_max = left + max(range(len(consider)), key=consider.__getitem__)
+        rtn = rtn * 10 + line[index_max]
+        left = index_max+1
+        digits -= 1
+    return rtn
+
 
 class Day03:
     """AoC 2025 Day 03"""
@@ -40,7 +40,6 @@ class Day03:
     @staticmethod
     def part1(filename: str) -> int:
         data = parse(filename)
-        print(data)
         return solve1(data)
 
     @staticmethod
